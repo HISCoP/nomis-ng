@@ -1,2 +1,2 @@
 # nomis-ng
-National OVC Management Information system for Nigeria
+National OVC Management Information System for Nigeria
