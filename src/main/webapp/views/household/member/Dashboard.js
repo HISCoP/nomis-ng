@@ -1,112 +1,124 @@
 import React from "react";
 import { CCol, CRow, CWidgetIcon, CCard,
     CCardBody,
-    CLink,
     CCardHeader,} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { Button, List, Container, Divider } from 'semantic-ui-react'
+import { Icon, Label} from 'semantic-ui-react'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import ChildCareIcon from '@material-ui/icons/ChildCare';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import ServiceHistoryPage from '../widgets/ServiceHistoryPage';
 
-const HouseholdDashboard = () => {
+const Dashboard = () => {
 
     return (
         <>
-                <CRow>
-                    <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="Total Services" header="21,345"  color="success" iconPadding={false}>
-                    <CIcon width={24} name="cil-notes"/>
-                </CWidgetIcon>
-                    </CCol>
-                    <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total People" header="10" color="success"  iconPadding={false}>
-                            <CIcon width={24} name="cil-people"/>
-                        </CWidgetIcon>
-                    </CCol>
-                        <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total OVC" header="2" color="success" iconPadding={false}>
-                            <CIcon width={24} name="cil-user"/>
-                        </CWidgetIcon>
-                        </CCol>
-                </CRow>
-        <CRow>
+              <TopDashboardStats />
+              <MidDashboardStats />
+            <CRow>
+                <CCol xs="12" >
+              <RecentServiceOffered />
+                </CCol>
             <CCol xs="12" >
-            <CCard>
-                <CCardHeader>Recent Service Forms
-                    <div className="card-header-actions">
-                        <CLink className="card-header-action">
-                            <CIcon name="cil-list" /> View All
-                        </CLink>
-                    </div>
-                </CCardHeader>
-                <CCardBody>
-                <List divided verticalAlign='middle'>
-                    <List.Item>
-                        <List.Content floated='right'>
-                            <Button>View</Button>
-                        </List.Content>
-                        <List.Content>Household Vunerabilty Assessment - Ada Kindu</List.Content>
-                        <List.Description>29/10/2020 15:09 PM </List.Description>
-                    </List.Item>
-                    <List.Item>
-                        <List.Content floated='right'>
-                            <Button>View</Button>
-                        </List.Content>
-                        <List.Content>Caregiver Form - Amos Kindu</List.Content>
-                        <List.Description>29/10/2020 15:09 PM </List.Description>
-                    </List.Item>
-
-                    <List.Item>
-                        <List.Content floated='right'>
-                            <Button>View</Button>
-                        </List.Content>
-                        <List.Content>Household Followup Assessment - Amos Kindu</List.Content>
-                        <List.Description>29/10/2020 15:09 PM </List.Description>
-                    </List.Item>
-                </List>
-                </CCardBody>
-            </CCard>
+               <ServiceHistoryPage />
             </CCol>
 
-            <CCol xs="12" >
-                <CCard>
-                    <CCardHeader>OVCs
-                        <div className="card-header-actions">
-                            <CLink className="card-header-action">
-                                <CIcon name="cil-list" /> View All
-                            </CLink>
-                        </div>
-                    </CCardHeader>
-
-                    <CCardBody>
-                    <List divided verticalAlign='middle'>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Amos Kindu - Female</List.Content>
-                            <List.Description>12 years </List.Description>
-                        </List.Item>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Ada Kindu - Male</List.Content>
-                            <List.Description>5 years</List.Description>
-                        </List.Item>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Soma Kindu</List.Content>
-                            <List.Description>3 years</List.Description>
-                        </List.Item>
-                    </List>
-                    </CCardBody>
-                </CCard>
-            </CCol>
     </CRow>
     </>
 
     )
 }
 
-export default HouseholdDashboard;
+const TopDashboardStats = (props) => {
+    const isCareGiver = false;
+    return (
+        <CRow>
+            <CCol xs="12" sm="6" lg="4">
+                <CWidgetIcon text="HIV Status" header="Negative"  color="success" iconPadding={false}>
+                    <FavoriteBorderIcon />
+                </CWidgetIcon>
+            </CCol>
+            {isCareGiver ?
+                <CCol xs="12" sm="6" lg="4">
+                    <CWidgetIcon text="Viral Load" header="1000 copies/ml" color="success" iconPadding={false}>
+                        <CIcon width={24} name="cil-graph"/>
+                    </CWidgetIcon>
+                </CCol> :
+                <CCol xs="12" sm="6" lg="4">
+                    <CWidgetIcon text="Weight" header="50 kg" color="success"  iconPadding={false}>
+                        <CIcon width={24} name="cil-graph"/>
+                    </CWidgetIcon>
+                </CCol>
+            }
+            {isCareGiver ?
+                <CCol xs="12" sm="6" lg="4">
+                    <CWidgetIcon text="Children" header="2" color="success" iconPadding={false}>
+                        <ChildCareIcon/>
+                    </CWidgetIcon>
+                </CCol>
+                :
+
+                <CCol xs="12" sm="6" lg="4">
+                    <CWidgetIcon text="BMI" header="6 - Underweight" color="success" iconPadding={false}>
+                        <AccessibilityNewIcon/>
+                    </CWidgetIcon>
+                </CCol>
+            }
+        </CRow>
+    );
+}
+
+const MidDashboardStats = () => {
+    return (
+        <>
+            <CRow>
+                <CCol xs="12" sm="6" lg="6" >
+                    <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
+                        <CCardHeader> <Icon name='home' /> Household Information</CCardHeader>
+                        <CCardBody>
+
+                                <span>Household ID: <small>FCT/FGH/12/2020 </small></span><br/>
+                                <span>Address: <small>No 20, Apata Road, Ibadan </small></span><br/>
+                                <span>Date Of Assessment: <small>12/11/2020</small> </span><br/>
+                                <span>Primary Caregiver Name: <small>Moses Lambo </small></span><br/>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+                <CCol xs="12" sm="6" lg="6">
+                    <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
+                        <CCardHeader> <Icon name='user' /> Caregiver Information</CCardHeader>
+                        <CCardBody>
+
+                            <span>Caregiver Name: <small>Amina Lambo </small></span><br/>
+                            <span>Age: <small>30 years</small></span><br/>
+                            <span>Sex: <small>Female</small> </span><br/>
+                            <span>Phone Number: <small>07069969954 </small></span><br/>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
+        </>
+    )
+}
+
+const RecentServiceOffered = () => {
+    return (
+        <>
+                    <CCard>
+                        <CCardHeader>Recent Service Offered
+                            <div className="card-header-actions">
+                                18-02-2020 12:00 PM
+                            </div>
+                        </CCardHeader>
+                        <CCardBody>
+                            <Label.Group color='blue' >
+                                        <Label>Health Education</Label>
+                                        <Label>HIV Care & Support </Label>
+                                        <Label>Water Treatment </Label>
+                            </Label.Group>
+                        </CCardBody>
+                    </CCard>
+            </>
+    );
+}
+export default Dashboard;
