@@ -19,7 +19,7 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'HH Members',
-    to: '/household/household',
+    to: '/household-member/home',
     icon: 'cilPeople',
   },
   {
