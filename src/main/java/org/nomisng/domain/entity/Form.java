@@ -50,6 +50,10 @@ public class Form extends JsonBEntity {
     @Column(name = "service_id")
     private Long serviceId;
 
+    @Basic
+    @Column(name = "archived")
+    private int archived;
+
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore

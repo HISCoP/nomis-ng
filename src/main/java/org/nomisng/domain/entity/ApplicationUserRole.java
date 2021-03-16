@@ -47,7 +47,7 @@ public class ApplicationUserRole {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     public ApplicationUser getApplicationUserByUserId() {
         return applicationUserByUserId;
     }
@@ -57,7 +57,7 @@ public class ApplicationUserRole {
     }
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", insertable = false, updatable = false)
     public Role getRoleByRoleId() {
         return roleByRoleId;
     }

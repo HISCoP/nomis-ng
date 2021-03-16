@@ -54,7 +54,7 @@ public class HouseholdContact {
     private Long stateId;
 
     @Basic
-    @Column(name = "household_id", nullable = false)
+    @Column(name = "province_id", nullable = false)
     private Long provinceId;
 
     @Basic

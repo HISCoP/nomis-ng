@@ -141,7 +141,7 @@ public class StandardCodeset {
     }
 
     @ManyToOne
-    @JoinColumn(name = "standard_codeset_source_id", referencedColumnName = "id")
+    @JoinColumn(name = "standard_codeset_source_id", referencedColumnName = "id", insertable = false, updatable = false)
     public StandardCodesetSource getStandardCodesetSourceByStandardCodesetSourceId() {
         return standardCodesetSourceByStandardCodesetSourceId;
     }
