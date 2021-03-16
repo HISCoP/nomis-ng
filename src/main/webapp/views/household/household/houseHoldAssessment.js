@@ -13,8 +13,6 @@ import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
 
-
-
 const fields = ['name','registered', 'role', 'status']
 
 const Tables = () => {
@@ -60,8 +58,8 @@ const Tables = () => {
                               <MenuList style={{hover:"#eee"}}>
                               <MenuItem >
                                 <Link
-                                      to={{pathname: "/theme/household4"}}>
-                                      First View
+                                      to={{pathname: "/household/home"}}>
+                                      View Dashboard
                                 </Link>
                                 
                               </MenuItem>
