@@ -1,16 +1,17 @@
 import React from "react";
-import { CCol, CRow, CButton} from "@coreui/react";
+import { CCol, CRow, CButton, CAlert, CLink} from "@coreui/react";
 import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
 import MaterialTable from 'material-table';
 import { Tab } from 'semantic-ui-react'
 
 const ServiceHomePage = () => {
 
-
+    const [index, setIndex] = React.useState(0);
+    const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
         {
             menuItem: 'Household Member Services',
-            render: () => <ServicePage/>,
+            render: () => <ServicePage setIndex={setIndex}/>,
         },
         {
             menuItem: 'Pending Forms (All unfilled supporting forms)',
@@ -19,16 +20,31 @@ const ServiceHomePage = () => {
     ]
 
     return (
-        <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+        <Tab menu={{ secondary: true, pointing: true }} panes={panes} activeIndex={index}  onTabChange={handleTabChange}/>
     );
 }
 
-const ServicePage = () => {
+const ServicePage = (props) => {
+    const [open, setOpen] = React.useState(false);
+    const handleButtonClick = () => setOpen(!open)
+    const handleConfirm = () => setOpen(false)
+    const handleCancel = () => setOpen(false)
+
     return (
         <>
             <CRow>
                 <CCol xs="12">
+                <CAlert
+                    color="success"
+                    closeButton
+                    show={open}
+                >
+                    Service Saved!  <CLink className="alert-link" onClick={() => props.setIndex(1)}>Click here to fill all supporting forms!</CLink>.
+                </CAlert>
+                </CCol>
+                <CCol xs="12">
                     <CButton color={"primary"} className={"float-right mr-1 mb-1"}> Provide Service</CButton> {" "}
+                    <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "}
                 </CCol>
                 <hr />
             </CRow>
