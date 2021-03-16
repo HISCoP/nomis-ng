@@ -1,12 +1,10 @@
 import React from "react";
 import { CCol, CRow, CWidgetIcon, CCard,
     CCardBody,
-    CLink,
     CCardHeader,} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { Button, List} from 'semantic-ui-react'
 import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
-import {Link} from "react-router-dom";
 
 const HouseholdDashboard = () => {
 
@@ -23,7 +21,7 @@ const HouseholdDashboard = () => {
                             <CIcon width={24} name="cil-people"/>
                         </CWidgetIcon>
                     </CCol>
-                        <CCol xs="12" sm="6" lg="4">
+                    <CCol xs="12" sm="6" lg="4">
                         <CWidgetIcon text="Total OVC" header="2" color="success" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
@@ -67,6 +65,7 @@ const HouseholdDashboard = () => {
                 </CCard>
             </CCol>
     </CRow>
+
     </>
 
     )

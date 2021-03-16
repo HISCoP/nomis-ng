@@ -4,7 +4,6 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CButton,
   CRow
 } from '@coreui/react'
 
@@ -12,8 +11,6 @@ import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
-
-const fields = ['name','registered', 'role', 'status']
 
 const Tables = () => {
   return (
@@ -24,11 +21,6 @@ const Tables = () => {
           <CCard>
             <CCardHeader>
               Household Members
-
-              {/*<CButton */}
-              {/*    color="primary" */}
-              {/*    className="float-right"*/}
-              {/*  >Add New Household Assessment</CButton>*/}
             </CCardHeader>
             <CCardBody>
             <MaterialTable

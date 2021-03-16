@@ -9,7 +9,7 @@ const MemberSearch = React.lazy(() => import('./views/household/member/MemberSea
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/households', name: 'Household Members', component: houseHoldAssessment },
+  { path: '/households', name: 'Households', component: houseHoldAssessment },
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage },
   { path: '/household-member/home', name: 'Household Member', component: HouseholdMemberHomePage },
   { path: '/household-members', name: 'Household Members', component: MemberSearch },
