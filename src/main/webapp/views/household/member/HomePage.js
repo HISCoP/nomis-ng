@@ -8,7 +8,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
-import ServicePage from "./ServicePage";
+import ServiceHomePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -96,7 +96,7 @@ const HomePage = () => {
                             <Dashboard />
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                            <ServicePage />
+                            <ServiceHomePage />
                         </CTabPane>
 
                     </CTabContent>
