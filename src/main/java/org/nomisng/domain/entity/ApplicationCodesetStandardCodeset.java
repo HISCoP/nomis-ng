@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "application_codeset_standard_codeset")
-public class ApplicationCodesetStandardCodeset {
+public class ApplicationCodesetStandardCodeset extends Audit<String> {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

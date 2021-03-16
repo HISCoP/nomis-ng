@@ -1,114 +1,84 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-public class Form {
-    private Long id;
-    private String name;
-    private String code;
-    private Object resourceObject;
-    private Long formTypeId;
-    private Long serviceId;
-    private ApplicationCodeset applicationCodesetByFormTypeId;
-    private Service serviceByServiceId;
+@Data
+@EqualsAndHashCode
+@Table(name = "form")
+public class Form extends JsonBEntity {
 
     @Id
-    @Column(name = "id")
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "id", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Basic
     @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private String name;
 
     @Basic
     @Column(name = "code")
-    public String getCode() {
-        return code;
-    }
+    private String code;
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    @Basic
-    @Column(name = "resource_object")
-    public Object getResourceObject() {
-        return resourceObject;
-    }
-
-    public void setResourceObject(Object resourceObject) {
-        this.resourceObject = resourceObject;
-    }
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "resource_object", nullable = false, columnDefinition = "jsonb")
+    private Object resourceObject;
 
     @Basic
     @Column(name = "form_type_id")
-    public Long getFormTypeId() {
-        return formTypeId;
-    }
+    private Long formTypeId;
 
-    public void setFormTypeId(Long formTypeId) {
-        this.formTypeId = formTypeId;
-    }
+    @Basic
+    @Column(name = "resource_path")
+    private Long resourcePath;
 
     @Basic
     @Column(name = "service_id")
-    public Long getServiceId() {
-        return serviceId;
-    }
+    private Long serviceId;
 
-    public void setServiceId(Long serviceId) {
-        this.serviceId = serviceId;
-    }
+    @CreatedBy
+    @Column(name = "created_by", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private String createdBy;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Form form = (Form) o;
-        return Objects.equals(id, form.id) &&
-                Objects.equals(name, form.name) &&
-                Objects.equals(code, form.code) &&
-                Objects.equals(resourceObject, form.resourceObject) &&
-                Objects.equals(formTypeId, form.formTypeId) &&
-                Objects.equals(serviceId, form.serviceId);
-    }
+    @CreatedDate
+    @Column(name = "date_created", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private Timestamp dateCreated;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, code, resourceObject, formTypeId, serviceId);
-    }
+    @LastModifiedBy
+    @Column(name = "modified_by")
+    @JsonIgnore
+    @ToString.Exclude
+    private String modifiedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "form_type_id", referencedColumnName = "id")
-    public ApplicationCodeset getApplicationCodesetByFormTypeId() {
-        return applicationCodesetByFormTypeId;
-    }
-
-    public void setApplicationCodesetByFormTypeId(ApplicationCodeset applicationCodesetByFormTypeId) {
-        this.applicationCodesetByFormTypeId = applicationCodesetByFormTypeId;
-    }
+    @LastModifiedDate
+    @Column(name = "date_modified")
+    @JsonIgnore
+    @ToString.Exclude
+    private Timestamp dateModified;
 
     @ManyToOne
-    @JoinColumn(name = "service_id", referencedColumnName = "id")
-    public Service getServiceByServiceId() {
-        return serviceByServiceId;
-    }
+    @JoinColumn(name = "form_type_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private ApplicationCodeset applicationCodesetByFormTypeId;
 
-    public void setServiceByServiceId(Service serviceByServiceId) {
-        this.serviceByServiceId = serviceByServiceId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "service_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private Service serviceByServiceId;
 }

@@ -1,91 +1,74 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "form_data", schema = "public", catalog = "nomis")
-public class FormData {
-    private Long id;
-    private Long encounterId;
-    private Object data;
-    private Long organisationalUnitId;
-    private Encounter encounterByEncounterId;
-    private OrganisationUnit organisationUnitByOrganisationalUnitId;
+@Data
+@EqualsAndHashCode
+@Table(name = "form_data")
+public class FormData extends JsonBEntity{
 
     @Id
-    @Column(name = "id")
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "id", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Basic
     @Column(name = "encounter_id")
-    public Long getEncounterId() {
-        return encounterId;
-    }
+    private Long encounterId;
 
-    public void setEncounterId(Long encounterId) {
-        this.encounterId = encounterId;
-    }
-
-    @Basic
-    @Column(name = "data")
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "data", nullable = false, columnDefinition = "jsonb")
+    private Object data;
 
     @Basic
     @Column(name = "organisational_unit_id")
-    public Long getOrganisationalUnitId() {
-        return organisationalUnitId;
-    }
+    private Long organisationalUnitId;
 
-    public void setOrganisationalUnitId(Long organisationalUnitId) {
-        this.organisationalUnitId = organisationalUnitId;
-    }
+    @CreatedBy
+    @Column(name = "created_by", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private String createdBy;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FormData formData = (FormData) o;
-        return Objects.equals(id, formData.id) &&
-                Objects.equals(encounterId, formData.encounterId) &&
-                Objects.equals(data, formData.data) &&
-                Objects.equals(organisationalUnitId, formData.organisationalUnitId);
-    }
+    @CreatedDate
+    @Column(name = "date_created", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private Timestamp dateCreated;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, encounterId, data, organisationalUnitId);
-    }
+    @LastModifiedBy
+    @Column(name = "modified_by")
+    @JsonIgnore
+    @ToString.Exclude
+    private String modifiedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "encounter_id", referencedColumnName = "id", nullable = false)
-    public Encounter getEncounterByEncounterId() {
-        return encounterByEncounterId;
-    }
-
-    public void setEncounterByEncounterId(Encounter encounterByEncounterId) {
-        this.encounterByEncounterId = encounterByEncounterId;
-    }
+    @LastModifiedDate
+    @Column(name = "date_modified")
+    @JsonIgnore
+    @ToString.Exclude
+    private Timestamp dateModified;
 
     @ManyToOne
-    @JoinColumn(name = "organisational_unit_id", referencedColumnName = "id", nullable = false)
-    public OrganisationUnit getOrganisationUnitByOrganisationalUnitId() {
-        return organisationUnitByOrganisationalUnitId;
-    }
+    @JoinColumn(name = "encounter_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @ToString.Exclude
+    public Encounter encounterByEncounterId;
 
-    public void setOrganisationUnitByOrganisationalUnitId(OrganisationUnit organisationUnitByOrganisationalUnitId) {
-        this.organisationUnitByOrganisationalUnitId = organisationUnitByOrganisationalUnitId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "organisational_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @ToString.Exclude
+    public OrganisationUnit organisationUnitByOrganisationalUnitId;
 }

@@ -1,100 +1,45 @@
 package org.nomisng.domain.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Data
+@EqualsAndHashCode
+@Table(name = "household")
 public class Household {
-    private Long id;
-    private String uniqueId;
-    private String status;
-    private Long organisationalUnitId;
-    private OrganisationUnit organisationUnitById;
-    private Collection<HouseholdContact> householdContactsById;
-    private Collection<HouseholdMember> householdMembersById;
-
     @Id
-    @Column(name = "id")
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "id", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Basic
     @Column(name = "unique_id")
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
+    private String uniqueId;
 
     @Basic
     @Column(name = "status")
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    private String status;
 
     @Basic
-    @Column(name = "organisational_unit_id")
-    public Long getOrganisationalUnitId() {
-        return organisationalUnitId;
-    }
-
-    public void setOrganisationalUnitId(Long organisationalUnitId) {
-        this.organisationalUnitId = organisationalUnitId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Household household = (Household) o;
-        return Objects.equals(id, household.id) &&
-                Objects.equals(uniqueId, household.uniqueId) &&
-                Objects.equals(status, household.status) &&
-                Objects.equals(organisationalUnitId, household.organisationalUnitId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, uniqueId, status, organisationalUnitId);
-    }
+    @Column(name = "cbo_id")
+    private Long cboId;
 
     @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
-    public OrganisationUnit getOrganisationUnitById() {
-        return organisationUnitById;
-    }
-
-    public void setOrganisationUnitById(OrganisationUnit organisationUnitById) {
-        this.organisationUnitById = organisationUnitById;
-    }
+    @JoinColumn(name = "id", referencedColumnName = "id", updatable = false, insertable = false)
+    @ToString.Exclude
+    public OrganisationUnit organisationUnitById;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
-    public Collection<HouseholdContact> getHouseholdContactsById() {
-        return householdContactsById;
-    }
-
-    public void setHouseholdContactsById(Collection<HouseholdContact> householdContactsById) {
-        this.householdContactsById = householdContactsById;
-    }
+    @ToString.Exclude
+    public Collection<HouseholdContact> householdContactsById;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
-    public Collection<HouseholdMember> getHouseholdMembersById() {
-        return householdMembersById;
-    }
-
-    public void setHouseholdMembersById(Collection<HouseholdMember> householdMembersById) {
-        this.householdMembersById = householdMembersById;
-    }
+    @ToString.Exclude
+    public Collection<HouseholdMember> householdMembersById;
 }

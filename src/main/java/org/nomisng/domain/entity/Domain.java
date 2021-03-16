@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Data
 @EqualsAndHashCode
 @Table(name = "domain")
-public class Domain {
+public class Domain extends Audit<String> {
 
     @Id
     @Column(name = "id", updatable = false)
@@ -22,6 +23,9 @@ public class Domain {
     private String name;
 
     @Basic
-    @Column(name = "uuid")
-    private String uuid;
+    @Column(name = "code", updatable = false)
+    private String code;
+
+    @OneToMany(mappedBy = "domainByDomainId")
+    public Collection<Service> servicesById;
 }
