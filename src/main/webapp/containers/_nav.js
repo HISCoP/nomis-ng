@@ -37,20 +37,21 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Admin',
-    to: '#',
+    to: '/admin',
     icon: 'cilJustifyCenter',
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Users',
-    to: '/household/household',
-    icon: 'cilUser',
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Setting',
-    to: '#',
-    icon: 'cilApplicationsSettings',
-  },
+   }, 
+   //{
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Users',
+  //   to: '/household/household',
+  //   icon: 'cilUser',
+  // },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Setting',
+  //   to: '#',
+  //   icon: 'cilApplicationsSettings',
+  // },
  
 
 
