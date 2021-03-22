@@ -2,12 +2,13 @@ import React, {createRef, useState} from 'react';
 import {Header, Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent,
-    CTabPane} from "@coreui/react";
+    CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import People from '@material-ui/icons/People';
+
 import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -35,9 +36,9 @@ const HomePage = () => {
                 <CCol sm="3" lg="3">
                     {/*className={'bg-success'}*/}
              <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
-                <Menu.Item header className={'p-4'}>
+                {/* <Menu.Item header className={'p-4'}>
                     <InfoSection/>
-                </Menu.Item>
+                </Menu.Item> */}
                 {/* <Menu.Item
                     name='dashboard'
                     active={activeItem === 'dashboard'}
@@ -115,7 +116,7 @@ const HomePage = () => {
           active={activeItem === 'messages'}
           onClick={handleItemClick}
         >
-        <People fontSize="large" className={'text-left'}/>
+        <People fontSize="small" className={'text-left'}/>
         <span className={'pl-2'}>  User Setup </span>
         </Menu.Item>
         <Menu.Item
@@ -123,26 +124,28 @@ const HomePage = () => {
           active={activeItem === 'messages'}
           onClick={handleItemClick}
         >
-         <DescriptionIcon fontSize="large" className={'text-left'}/>
+         <DescriptionIcon fontSize="small" className={'text-left'}/>
          <span className={'pl-2'}>  Form Builder </span>
         </Menu.Item>
-        <Menu.Item
-          
-        >
-        <FolderIcon fontSize="large" className={'text-center'}/>
+        <Menu.Item>
+        <FolderIcon fontSize="small" className={'text-left'}/>
         <span className={'pl-2'}>  Report Builder  </span>
         </Menu.Item>
-    
-      
 
-        <Dropdown item text='Setting' >    
-        
-        <Dropdown.Menu>
+
+        <Menu.Item>
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>Setting</span>
+        <Dropdown   className={'float-right'} >  
+                
+        <Dropdown.Menu >
             <Dropdown.Item icon='edit' text='OVS' />
             <Dropdown.Item icon='globe' text='Application Code Setup' />
             <Dropdown.Item icon='settings' text='Facilities Setup' />
           </Dropdown.Menu>
         </Dropdown>
+        </Menu.Item>
+
             </Menu>
 
                 </CCol>

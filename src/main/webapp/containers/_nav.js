@@ -12,13 +12,13 @@ const _nav =  [
   
   {
     _tag: 'CSidebarNavItem',
-    name: 'Household',
+    name: 'Household ',
     to: '/household/household',
     icon: 'cilBan',
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'HH Members',
+    name: 'Household Members',
     to: '/household-member/home',
     icon: 'cilPeople',
   },
