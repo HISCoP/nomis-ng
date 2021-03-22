@@ -18,7 +18,7 @@ const CarePlan = () => {
 
                     <Icon name='users' />  Household Careplan(s)
 
-                    <CButton color={"primary"} className="float-right"> New Careplan</CButton>
+                    <CButton color={"primary"} className="float-right"> New Care Plan</CButton>
                     <hr />
                 </CCol>
             </CRow>
