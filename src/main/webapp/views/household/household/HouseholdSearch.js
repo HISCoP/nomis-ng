@@ -26,7 +26,7 @@ const Tables = () => {
               <CButton 
                   color="primary" 
                   className="float-right"
-                >Add New Household Assessment</CButton>
+                >New Household Assessment</CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable

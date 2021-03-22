@@ -14,11 +14,11 @@ const _nav =  [
     _tag: 'CSidebarNavItem',
     name: 'Household',
     to: '/households',
-    icon: 'cilBan',
+    icon: 'cilHouse',
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'HH Members',
+    name: 'Household Members',
     to: '/household-members',
     icon: 'cilPeople',
   },
@@ -30,27 +30,28 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Analytics',
+    name: 'Visualization',
     to: '#',
     icon: 'cilGraph',
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Admin',
-    to: '#',
+    to: '/admin',
     icon: 'cilJustifyCenter',
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Users',
-    to: '/household/household',
-    icon: 'cilUser',
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Setting',
-    to: '#',
-    icon: 'cilApplicationsSettings',
-  },
+   }, 
+   //{
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Users',
+  //   to: '/household/household',
+  //   icon: 'cilUser',
+  // },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Setting',
+  //   to: '#',
+  //   icon: 'cilApplicationsSettings',
+  // },
  
 
 
