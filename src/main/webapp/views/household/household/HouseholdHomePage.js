@@ -13,6 +13,7 @@ import HouseholdMember from "./HouseholdMember";
 import HouseholdService from "./HouseholdService";
 import CarePlan from "./CarePlan";
 
+//main class 
 const HouseholdHomePage = (props) => {
     let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState(props.location.state ? props.location.state : 'dashboard');
