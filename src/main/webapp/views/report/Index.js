@@ -23,12 +23,8 @@ const Tables = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              Household Vulnerability Assessment
+              Report
 
-              <CButton 
-                  color="primary" 
-                  className="float-right"
-                >New Household Assessment</CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable

@@ -1,5 +1,6 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
+import { Icon} from 'semantic-ui-react'
 
 const _nav =  [
   {
@@ -14,7 +15,7 @@ const _nav =  [
     _tag: 'CSidebarNavItem',
     name: 'Household ',
     to: '/household/household',
-    icon: 'cilBan',
+    icon:  <CIcon name="cil-home" customClasses="c-sidebar-nav-icon"/>,
   },
   {
     _tag: 'CSidebarNavItem',
@@ -25,7 +26,7 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Reports',
-    to: '#',
+    to: '/report',
     icon: 'cilList',
   },
   {

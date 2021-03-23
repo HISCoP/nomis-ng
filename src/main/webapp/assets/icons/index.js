@@ -77,6 +77,7 @@ import {
   cilFullscreenExit,
   cilGraph,
   cilHome,
+  cilHouse,
   cilInbox,
   cilIndentDecrease,
   cilIndentIncrease,
