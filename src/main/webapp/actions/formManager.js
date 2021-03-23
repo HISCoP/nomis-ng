@@ -1,76 +1,154 @@
-import axios from "axios";
-import { url } from "api";
-import * as ACTION_TYPES from "./types";
+import axios from 'axios'
+import { url as baseUrl } from '../api/index'
+import * as ACTION_TYPES from './types'
 
+/**
+ * @Actions
+ * Encounter CRUD OPERATIONS
+ * returns API response from server
+ * =================================
+ * @method GET => fetchAll() get all forms
+ * @method GET => fetchById() get form by Id: params{formId}{programCode} || query {null}
+ * create()
+ * update()
+ * Delete()
+ */
 
-export const fetchAll = (onSuccess , onError) => dispatch => {
+export const fetchAll = (onSuccess, onError) => dispatch => {
     axios
-        .get(`${url}programs`)
+        .get(`${baseUrl}forms`)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.FORM_FETCH_ALL,
+                payload: response.data
+            })
+            onSuccess()
+        })
+        .catch(error => {
+            onError()
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
+
+        })
+}
+
+export const fetchAllPrograms = (onSuccess, onError) => dispatch => {
+    axios
+        .get(`${baseUrl}programs`)
         .then(response => {
             dispatch({
                 type: ACTION_TYPES.PROGRAM_FETCH_ALL,
                 payload: response.data
-            });
-            if(onSuccess){
-                onSuccess();
-            }
+            })
+            onSuccess()
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
+            onError()
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
 
-        );
-};
+        })
+}
 
-export const createProgram = (formData, onSuccess , onError) => dispatch => {
+export const fetchById = (id, onSuccess, onError) => dispatch => {
+    dispatch({
+        type: ACTION_TYPES.FORM_FETCH_BY_ID,
+        payload: {}
+    })
+
     axios
-        .post(`${url}programs`, formData)
+        .get(`${baseUrl}forms/${id}/formCode`)
         .then(response => {
-            if(onSuccess){
-                onSuccess();
-            }
+            dispatch({
+                type: ACTION_TYPES.FORM_FETCH_BY_ID,
+                payload: response.data
+            })
+            onSuccess()
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
+            onError()
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Error loading form, something went wrong. Please try again'
+            })
+//onError(error.response)
+        })
+}
 
-        );
-};
-
-export const updateProgram = (id, formData, onSuccess , onError) => dispatch => {
+export const create = (data, onSuccess, onError) => dispatch => {
     axios
-        .put(`${url}programs/${id}`, formData)
+        .post(`${baseUrl}forms/`, data)
         .then(response => {
-            if(onSuccess){
-                onSuccess();
-            }
+            dispatch({
+                type: ACTION_TYPES.FORM_CREATE,
+                payload: response.data
+            })
+            onSuccess()
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
+            onError(error.response)
+        })
+}
 
-        );
-};
-
-export const deleteProgram = (id, onSuccess , onError) => dispatch => {
+export const update = (id, data) => dispatch => {
     axios
-        .delete(`${url}programs/${id}`)
+        .put(`${baseUrl}forms/${id}`, data)
         .then(response => {
-            if(onSuccess){
-                onSuccess();
-            }
+            dispatch({
+                type: ACTION_TYPES.FORM_UPDATE,
+                payload: response.data
+            })
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
+        })
+}
 
-        );
-};
+export const saveEncounter = (data, onSuccess, onError) => dispatch => {
+    axios
+        .post(`${baseUrl}encounters/`, data)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.FORM_SAVE_ENCOUNTER,
+                payload: response.data
+            })
+            onSuccess()
+        })
+        .catch(error => {
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
+            onError(error.response)
+        })
+}
+
+export const updateFormData = (id, data, onSuccess, onError) => dispatch => {
+    axios
+        .put(`${baseUrl}form-data/${id}`, data)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.UPDATE_FORM_DATA,
+                payload: response.data
+            })
+            onSuccess()
+        })
+        .catch(error => {
+            dispatch({
+                type: ACTION_TYPES.FORM_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
+            onError(error.response)
+        })
+}

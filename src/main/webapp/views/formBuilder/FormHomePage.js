@@ -5,7 +5,7 @@ import {fetchAllForms, Delete as Del,} from '../../actions/formBuilder';
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import "react-widgets/dist/css/react-widgets.css";
-import FormRendererModal from "components/Admin/FormRendererModal";
+import FormRendererModal from "./FormRendererModal";
 import { ToastContainer, toast } from "react-toastify";
 import {Menu, MenuButton, MenuItem, MenuList} from '@reach/menu-button';
 import {Link} from 'react-router-dom';

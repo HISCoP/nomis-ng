@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import useForm from "../Functions/UseForm";
-import FormRenderer from "components/FormManager/FormRenderer";
+// import useForm from "../Functions/UseForm";
+import FormRenderer from "./FormRenderer";
 import {
     Col,
     FormGroup,
@@ -18,8 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import MatButton from "@material-ui/core/Button";
 import * as actions from "actions/patients";
 import { connect } from "react-redux";
-import ViewForm from 'components/Admin/FormRendererView';
-import UpdateForm from 'components/Admin/FormRendererUpdate';
+import ViewForm from './FormRendererView';
+import UpdateForm from './FormRendererUpdate';
 
 const FormRendererModal = (props) => {
     const [errorMsg, setErrorMsg] = React.useState("");
