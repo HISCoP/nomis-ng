@@ -4,6 +4,7 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CButton,
   CRow
 } from '@coreui/react'
 
@@ -11,6 +12,8 @@ import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
+
+const fields = ['name','registered', 'role', 'status']
 
 const Tables = () => {
   return (
@@ -20,18 +23,19 @@ const Tables = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              Household Members
+              Report
+
             </CCardHeader>
             <CCardBody>
             <MaterialTable
-                title="Household Member List"
+                title="Household List"
                 columns={[
-                  { title: 'Name', field: 'name' },
-                  { title: 'Address', field: 'surname' },
-                  { title: 'Date', field: 'birthYear', type: 'numeric' },
+                  { title: 'Unique ID', field: 'id' },
+                  { title: 'Date Assessed', field: 'date' },
+                  { title: 'Total OVC', field: 'ovc', type: 'numeric' },
                   {
-                    title: 'State',
-                    field: 'birthCity',
+                    title: 'Status',
+                    field: 'staus',
                     
                   },
                   {
@@ -41,7 +45,7 @@ const Tables = () => {
                   },
                 ]}
                 data={[
-                  { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63, 
+                  { id: '7892', date: 'Baran', ovc: 7, status: 'Vulnerable', 
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
@@ -50,31 +54,37 @@ const Tables = () => {
                               <MenuList style={{hover:"#eee"}}>
                               <MenuItem >
                                 <Link
-                                      to={{pathname: "/household-member/home"}}>
+                                      to={{pathname: "/household/home"}}>
                                       View Dashboard
                                 </Link>
                                 
-                              </MenuItem>
-
-                              </MenuList>
-                          </Menu>
-                  
-                  },
-                  { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34, 
-                  action:<Menu>
-                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                              Action <span aria-hidden>▾</span>
-                            </MenuButton>
-                              <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >{" "}View</MenuItem>
-                              <MenuItem >{" "}Second View</MenuItem>
-                              <MenuItem >{" "}Third View</MenuItem>
+                              </MenuItem>                            
                               <MenuItem >{" "}Edit</MenuItem>
                               <MenuItem >{" "}Delete</MenuItem>
                               </MenuList>
                           </Menu>
-                
-                },
+                  
+                  },
+                  { id: '4758', date: 'Baran', ovc: 7, status: 'Not Vulnerable', 
+                  action:
+                  <Menu>
+                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                              Action <span aria-hidden>▾</span>
+                            </MenuButton>
+                              <MenuList style={{hover:"#eee"}}>
+                              <MenuItem >
+                                <Link
+                                      to={{pathname: "/household/home"}}>
+                                      View Dashboard
+                                </Link>
+                                
+                              </MenuItem>                            
+                              <MenuItem >{" "}Edit</MenuItem>
+                              <MenuItem >{" "}Delete</MenuItem>
+                              </MenuList>
+                          </Menu>
+                  
+                  },
                 ]}        
                 options={{
                   search: true

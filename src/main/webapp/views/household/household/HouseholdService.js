@@ -1,5 +1,6 @@
 import React from "react";
 import { CCol, CRow} from "@coreui/react";
+import {Icon, Menu} from 'semantic-ui-react'
 import ServiceHistoryPage from '../widgets/ServiceHistoryPage';
 import DescriptionIcon from '@material-ui/icons/Description';
 

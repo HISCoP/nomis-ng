@@ -7,7 +7,7 @@ import { Icon, Label} from 'semantic-ui-react'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ChildCareIcon from '@material-ui/icons/ChildCare';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
-import ServiceHistoryPage from '../widgets/ServiceHistoryPage';
+//import ServiceHistoryPage from './../Widgets/ServiceHistoryPage';
 
 const Dashboard = () => {
 
@@ -19,9 +19,9 @@ const Dashboard = () => {
                 <CCol xs="12" >
               <RecentServiceOffered />
                 </CCol>
-            <CCol xs="12" >
+            {/* <CCol xs="12" >
                <ServiceHistoryPage />
-            </CCol>
+            </CCol> */}
 
     </CRow>
     </>

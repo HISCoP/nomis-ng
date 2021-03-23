@@ -1,6 +1,6 @@
 import React from "react";
 import { CCol, CRow, CButton} from "@coreui/react";
-import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
+//import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
 import DescriptionIcon from "@material-ui/icons/Description";
 
 const ServicePage = () => {
@@ -16,9 +16,9 @@ const ServicePage = () => {
                 </CCol>
             </CRow>
             <CRow>
-                    <CCol xs="12" >
+                    {/* <CCol xs="12" >
                         <ServiceHistoryPage isHistory={false} memberId={12} />
-                    </CCol>
+                    </CCol> */}
             </CRow>
             </>
     );
