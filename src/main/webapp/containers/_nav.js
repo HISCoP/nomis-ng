@@ -14,11 +14,11 @@ const _nav =  [
     _tag: 'CSidebarNavItem',
     name: 'Household',
     to: '/households',
-    icon: 'cilBan',
+    icon: 'cilHouse',
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'HH Members',
+    name: 'Household Members',
     to: '/household-members',
     icon: 'cilPeople',
   },
@@ -30,7 +30,7 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Analytics',
+    name: 'Visualization',
     to: '#',
     icon: 'cilGraph',
   },
