@@ -13,6 +13,8 @@ import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
 
+const fields = ['name','registered', 'role', 'status']
+
 const Tables = () => {
   return (
     <>
@@ -21,12 +23,8 @@ const Tables = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              Household Vulnerability Assessment
+              Report
 
-              <CButton 
-                  color="primary" 
-                  className="float-right"
-                >New Household Assessment</CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable
