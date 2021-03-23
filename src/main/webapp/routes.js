@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
-const HouseHoldAssessment = React.lazy(() => import('./views/household/household/HouseHoldAssessment'));
+const HouseHoldAssessment = React.lazy(() => import('./views/household/household/houseHoldAssessment'));
 const HouseholdHomePage = React.lazy(() => import('./views/household/household/HouseholdHomePage'));
 const HouseholdMemberHomePage = React.lazy(() => import('./views/household/member/HomePage'));
 
