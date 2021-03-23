@@ -26,12 +26,12 @@ const Tables = () => {
             <MaterialTable
                 title="Household Member List"
                 columns={[
+                  { title: 'OVC ID', field: 'name' },
+                  { title: 'Date Assessed', field: 'date' },
                   { title: 'Name', field: 'name' },
-                  { title: 'Address', field: 'surname' },
-                  { title: 'Date', field: 'birthYear', type: 'numeric' },
                   {
-                    title: 'State',
-                    field: 'birthCity',
+                    title: 'Age',
+                    field: 'age',
                     
                   },
                   {
@@ -41,7 +41,7 @@ const Tables = () => {
                   },
                 ]}
                 data={[
-                  { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63, 
+                  { name: '94839', date: '23/03/2021', name: 'Decky Usman', age: '23 Years', 
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
@@ -55,20 +55,24 @@ const Tables = () => {
                                 </Link>
                                 
                               </MenuItem>
-
+                              <MenuItem >{" "}Edit</MenuItem>
+                              <MenuItem >{" "}Delete</MenuItem>
                               </MenuList>
                           </Menu>
                   
                   },
-                  { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34, 
+                  {name: '94839', date: '23/03/2021', name: 'Decky Usman', age: '23 Years',
                   action:<Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
                               Action <span aria-hidden>▾</span>
                             </MenuButton>
                               <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >{" "}View</MenuItem>
-                              <MenuItem >{" "}Second View</MenuItem>
-                              <MenuItem >{" "}Third View</MenuItem>
+                              <MenuItem >
+                              <Link
+                                      to={{pathname: "/household-member/home"}}>
+                                      View Dashboard
+                                </Link>
+                              </MenuItem>
                               <MenuItem >{" "}Edit</MenuItem>
                               <MenuItem >{" "}Delete</MenuItem>
                               </MenuList>
