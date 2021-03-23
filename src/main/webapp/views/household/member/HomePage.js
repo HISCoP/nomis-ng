@@ -1,4 +1,4 @@
-import React, {createRef} from 'react';
+import React from 'react';
 import {Header, Menu, Icon, Dropdown} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent,
@@ -8,84 +8,84 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
-import ServicePage from "./ServicePage";
+import ServiceHomePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+    root: {
+        position: "sticky",
+        top: "1rem",
+        minWidth: "275"
+    }
+});
 
 const HomePage = () => {
-    let contextRef = createRef()
+    const classes = useStyles();
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
-    const openHouseHoldPage = () => {
-        window.location.href = "/household/home";
-    }
+
     return (
         <>
             <CRow>
-
                 <CCol sm="3" lg="3">
-                    {/*className={'bg-success'}*/}
-            <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
-                <Menu.Item header className={'p-4'}>
-                    <InfoSection/>
-                </Menu.Item>
-                <Menu.Item
-                    name='dashboard'
-                    active={activeItem === 'dashboard'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
+                    <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+                        <Menu.Item header className={'p-4'}>
+                            <InfoSection/>
+                        </Menu.Item>
+                        <Menu.Item
+                            name='dashboard'
+                            active={activeItem === 'dashboard'}
+                            onClick={handleItemClick}
+                            className={'text-center'}
+                        >
+                            <DashboardIcon fontSize="large" className={'text-center'}/>
+                            <p>Dashboard</p>
+                        </Menu.Item>
 
-                   {/* <Header icon textAlign='center' inverted>
-                        <Icon name='dashboard' size={'small'}/>
-                        <Header.Content>Dashboard</Header.Content>
-                    </Header>*/}
-                    <DashboardIcon fontSize="large" className={'text-center'}/>
-                    <p>Dashboard</p>
-                </Menu.Item>
+                        <Menu.Item
+                            name='services'
+                            active={activeItem === 'services'}
+                            onClick={handleItemClick}
+                            className={'text-center'}
+                        >
+                            <DescriptionIcon fontSize="large" className={'text-center'}/>
+                            <p>Services</p>
 
-                <Menu.Item
-                    name='services'
-                    active={activeItem === 'services'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
-                  <DescriptionIcon fontSize="large" className={'text-center'}/>
-                       <p>Services</p>
+                        </Menu.Item>
 
-                </Menu.Item>
-
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Household</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='more'
-                    active={activeItem === 'more'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                   <SettingsIcon fontSize="large" className={'text-center'}/><br />
-                    <span>More</span>
-                <Dropdown>
-                    <Dropdown.Menu>
-                        <Dropdown.Item icon='edit' text='Edit Profile' />
-                        <Dropdown.Item icon='globe' text='Choose Language' />
-                        <Dropdown.Item icon='settings' text='Account Settings' />
-                    </Dropdown.Menu>
-                </Dropdown>
-                </Menu.Item>
-            </Menu>
+                        <Menu.Item
+                            name='household'
+                            active={activeItem === 'household'}
+                            className={'text-center'}
+                            onClick={()=>{}}
+                        >
+                            <Link color="inherit" to ={{
+                                pathname: "/household/home",
+                            }}  >
+                                <FolderIcon fontSize="large" className={'text-center'}/>
+                                <p>Household</p>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item
+                            name='more'
+                            active={activeItem === 'more'}
+                            className={'text-center'}
+                            onClick={()=>{}}
+                        >
+                            <SettingsIcon fontSize="large" className={'text-center'}/><br />
+                            <span>More</span>
+                            <Dropdown>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item icon='edit' text='Edit Profile' />
+                                    <Dropdown.Item icon='globe' text='Choose Language' />
+                                    <Dropdown.Item icon='settings' text='Account Settings' />
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </Menu.Item>
+                    </Menu>
 
                 </CCol>
 
@@ -96,14 +96,14 @@ const HomePage = () => {
                             <Dashboard />
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                            <ServicePage />
+                            <ServiceHomePage />
                         </CTabPane>
 
                     </CTabContent>
 
                 </CCol>
-                </CRow>
-            </>
+            </CRow>
+        </>
     )
 }
 

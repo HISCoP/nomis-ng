@@ -14,7 +14,7 @@ const HouseholdMember = () => {
                 <Icon name='users' />  Household Members
 
                 <CButton color={"primary"} className={"float-right mr-1 mb-1"}> New Caregiver</CButton> {" "}
-                <CButton color={"primary"} className="float-right"> New OVC</CButton>
+                <CButton color={"primary"} className={"float-right mr-1 mb-1"}> New OVC</CButton>{" "}
            <hr />
                 </CCol>
             </CRow>

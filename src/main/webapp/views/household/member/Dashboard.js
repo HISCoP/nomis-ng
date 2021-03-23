@@ -17,13 +17,13 @@ const Dashboard = () => {
               <MidDashboardStats />
             <CRow>
                 <CCol xs="12" >
-              <RecentServiceOffered />
+                    <RecentServiceOffered />
                 </CCol>
-            <CCol xs="12" >
-               <ServiceHistoryPage />
-            </CCol>
+                <CCol xs="12" >
+                    <ServiceHistoryPage />
+                </CCol>
+            </CRow>
 
-    </CRow>
     </>
 
     )
