@@ -1,5 +1,5 @@
-import React from 'react';
-import {Header, Menu, Icon} from 'semantic-ui-react'
+import React, {createRef} from 'react';
+import {Header, Menu, Icon, Sticky, Rail} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CWidgetDropdown, CTabContent,
     CTabPane} from "@coreui/react";
@@ -12,17 +12,10 @@ import HouseholdDashboard from './HouseholdDashboard'
 import HouseholdMember from "./HouseholdMember";
 import HouseholdService from "./HouseholdService";
 import CarePlan from "./CarePlan";
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-    root: {
-        position: "sticky",
-        top: "1rem",
-        minWidth: "275"
-    }
-});
+//main class 
 const HouseholdHomePage = (props) => {
-    const classes = useStyles();
+    let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState(props.location.state ? props.location.state : 'dashboard');
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
@@ -32,9 +25,10 @@ const HouseholdHomePage = (props) => {
             <CRow>
 
                 <CCol sm="3" lg="3">
-            <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+                    {/*className={'bg-success'}*/}
+            <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
                 <Menu.Item header className={'p-4'}>
-                    <HouseHoldInfo/>
+                    <HouseHoldInfo2/>
                 </Menu.Item>
                 <Menu.Item
                     name='dashboard'
@@ -101,7 +95,7 @@ const HouseholdHomePage = (props) => {
     )
 }
 
-const HouseHoldInfo = () => {
+const HouseHoldInfo2 = () => {
     return (
         <>
             <CRow>
@@ -129,5 +123,31 @@ const HouseHoldInfo = () => {
         </>
     )
 }
+const HouseHoldInfo = () => {
+    return (
+        <>
+            <CRow>
+                <CCol sm="12" lg="12">
+                    <CWidgetDropdown
+                        color="gradient-primary"
+                        header="HOUSEHOLD"
+                        text="Total OVC"
+                        >
+                        <CDropdown>
+                            <CDropdownToggle color="transparent">
+                                <CIcon name="cil-settings"/>
+                            </CDropdownToggle>
+                            <CDropdownMenu className="pt-0" placement="bottom-end">
+                                <CDropdownItem>Action</CDropdownItem>
+                                <CDropdownItem>ADD oVC</CDropdownItem>
+                                <CDropdownItem>View OVC</CDropdownItem>
 
+                            </CDropdownMenu>
+                        </CDropdown>
+                    </CWidgetDropdown>
+                </CCol>
+            </CRow>
+        </>
+    )
+}
 export default HouseholdHomePage;
