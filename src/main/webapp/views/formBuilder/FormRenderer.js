@@ -1,20 +1,19 @@
 import React from "react";
-import Page from "components/Page";
+// import Page from "components/Page";
 import { SubmissionGrid, Form } from "react-formio";
-import * as actions from ".actions/formManager";
+import * as actions from "../../actions/formManager";
 import { connect } from "react-redux";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import { toast } from "react-toastify";
 import {Card, Alert, CardBody, Spinner, ModalBody} from "reactstrap";
-import { fetchLastEncounter } from '_services/form-renderer';
+// import { fetchLastEncounter } from '../../_services/form-renderer';
 import { url } from "api";
 import axios from "axios";
-import { formRendererService } from "_services/form-renderer";
-import { authHeader } from '._helpers/auth-header';
+import { formRendererService } from "../../_services/form-renderer";
+// import { authHeader } from '../../_helpers/auth-header';
 import _ from 'lodash';
-import {fetchByHospitalNumber} from "../patients";
-
+import {fetchByHospitalNumber} from "../../actions/patients";
 
 Moment.locale("en");
 momentLocalizer();
@@ -27,7 +26,7 @@ const FormRenderer = (props) => {
     const [showLoadingForm, setShowLoadingForm] = React.useState(true);
     const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
     const [formId, setFormId] = React.useState()
-    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { patient: props.patient, authHeader: authHeader(), baseUrl: url }}));
+    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { patient: props.patient, baseUrl: url }}));
     const onDismiss = () => setShowErrorMsg(false);
     const options = {
         noAlerts: true,

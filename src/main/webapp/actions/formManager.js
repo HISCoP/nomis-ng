@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { url as baseUrl } from '../api/index'
-import * as ACTION_TYPES from './types'
+import * as ACTION_TYPES from '../../webapp/actions/types'
 
 /**
  * @Actions

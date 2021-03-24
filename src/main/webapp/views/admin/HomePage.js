@@ -2,12 +2,13 @@ import React, {createRef, useState} from 'react';
 import {Header, Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent,
-    CTabPane} from "@coreui/react";
+    CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import People from '@material-ui/icons/People';
+
 import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -35,76 +36,10 @@ const HomePage = () => {
                 <CCol sm="3" lg="3">
                     {/*className={'bg-success'}*/}
              <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
-                <Menu.Item header className={'p-4'}>
-                    <InfoSection/>
-                </Menu.Item>
-                {/* <Menu.Item
-                    name='dashboard'
-                    active={activeItem === 'dashboard'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
 
-                    <DashboardIcon fontSize="large" className={'text-center'}/>
-                    <p>Dashboard</p>
-                </Menu.Item> */}
-
-                {/* <Menu.Item
-                    name='services'
-                    active={activeItem === 'services'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
-                  <People fontSize="large" className={'text-center'}/>
-                       <p>Users</p>
-
-                </Menu.Item>
-
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <DescriptionIcon fontSize="large" className={'text-center'}/>
-                    <p>Form Builder</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Report Builder</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='more'
-                    active={activeItem === 'more'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                   <SettingsIcon fontSize="large" className={'text-center'}/><br />
-                    <span>Setting</span>
-                <Dropdown>
-                    <Dropdown.Menu>
-                        <Dropdown.Item icon='edit' text='Edit Profile' />
-                        <Dropdown.Item icon='globe' text='Choose Language' />
-                        <Dropdown.Item icon='settings' text='Account Settings' />
-                    </Dropdown.Menu>
-                </Dropdown>
-                </Menu.Item> */}
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
+          active={activeItem === 'dashboard'}
           onClick={handleItemClick}
         >
        <DashboardIcon className={'text-left'}/>
@@ -112,32 +47,44 @@ const HomePage = () => {
         </Menu.Item>
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
-          onClick={handleItemClick}>
-        <People fontSize="large" className={'text-left'}/>
+          active={activeItem === 'usersetup'}
+          onClick={handleItemClick}
+        >
+        <People fontSize="small" className={'text-left'}/>
         <span className={'pl-2'}>  User Setup </span>
         </Menu.Item>
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
-          onClick={handleItemClick}
+          active={activeItem === 'formbuilder'}
+          onClick={()=>{}}
         >
-         <DescriptionIcon fontSize="large" className={'text-left'}/>
-         <span className={'pl-2'}>  Form Builder </span>
+            <Link color="inherit" to ={{
+                pathname: "/FormPage",
+            }}  >
+                <DescriptionIcon fontSize="small" className={'text-left'}/>
+                <span className={'pl-2'}>  Form Builder </span>
+            </Link>
+
         </Menu.Item>
         <Menu.Item>
-
-        <FolderIcon fontSize="large" className={'text-center'}/>
+        <FolderIcon fontSize="small" className={'text-left'}/>
         <span className={'pl-2'}>  Report Builder  </span>
         </Menu.Item>
-        <Dropdown item text='Setting' >    
-        
-        <Dropdown.Menu>
+
+
+        <Menu.Item>
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>Setting</span>
+        <Dropdown   className={'float-right'} >  
+                
+        <Dropdown.Menu >
             <Dropdown.Item icon='edit' text='OVS' />
             <Dropdown.Item icon='globe' text='Application Code Setup' />
             <Dropdown.Item icon='settings' text='Facilities Setup' />
           </Dropdown.Menu>
         </Dropdown>
+        </Menu.Item>
+
             </Menu>
 
                 </CCol>

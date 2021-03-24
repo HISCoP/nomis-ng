@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { connect } from "react-redux";
-import { fetchAll, deleteProgram, updateProgram, } from '/actions/programManager';
+import { fetchAll, deleteProgram, updateProgram, } from './../../actions/programManager';
 
 import {
     Card,

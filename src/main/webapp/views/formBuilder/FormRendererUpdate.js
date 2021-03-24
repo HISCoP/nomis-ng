@@ -1,14 +1,13 @@
 import React from 'react';
-import Page from 'components/Page';
 import { Errors, Form } from 'react-formio';
-import * as actions from "actions/formManager";
+import * as actions from "../../actions/formManager";
 import {connect} from 'react-redux';
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import { toast } from 'react-toastify'
 import { Card, Alert, CardBody, Spinner } from 'reactstrap'
-import { formRendererService } from "_services/form-renderer";
-import FormBuilder from '../formBuilder/FormBuilder';
+import { formRendererService } from "../../_services/form-renderer";
+import formBuilder from '../formBuilder/formBuilder';
 
 
 Moment.locale('en')

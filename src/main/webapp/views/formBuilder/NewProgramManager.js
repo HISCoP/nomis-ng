@@ -12,7 +12,7 @@ import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import axios from "axios";
 import { url } from "api";
-import {createProgram, updateProgram } from '/actions/programManager';
+import {createProgram, updateProgram } from './../../actions/programManager';
 import { Spinner } from 'reactstrap';
 
 Moment.locale('en');

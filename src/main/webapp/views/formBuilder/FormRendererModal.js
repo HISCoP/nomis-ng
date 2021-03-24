@@ -16,7 +16,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MatButton from "@material-ui/core/Button";
-import * as actions from "actions/patients";
+import * as actions from "../../actions/patients";
 import { connect } from "react-redux";
 import ViewForm from './FormRendererView';
 import UpdateForm from './FormRendererUpdate';

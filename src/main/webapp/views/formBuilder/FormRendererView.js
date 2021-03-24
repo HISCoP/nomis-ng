@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import { Card, Alert, CardBody, Spinner } from "reactstrap";
-import { formRendererService } from "_services/form-renderer";
+import { formRendererService } from "../../_services/form-renderer";
 
 Moment.locale("en");
 momentLocalizer();

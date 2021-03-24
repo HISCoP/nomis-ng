@@ -1,4 +1,4 @@
-import { url } from "../../../index";
+import { url } from "../api/index";
 import axios from "axios";
 
 export const formRendererService = {

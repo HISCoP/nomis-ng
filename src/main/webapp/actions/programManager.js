@@ -1,5 +1,5 @@
 import axios from "axios";
-import { url } from "api";
+import { url } from "./../api";
 import * as ACTION_TYPES from "./types";
 
 

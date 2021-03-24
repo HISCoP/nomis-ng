@@ -6,7 +6,7 @@ import { Card, CardContent } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 
 import { makeStyles } from "@material-ui/core/styles";
-//mport Title from "view/Title/CardTitle";
+import Title from "../../views/Title/CardTitle";
 import FormHomePage from "./FormHomePage";
 
 
