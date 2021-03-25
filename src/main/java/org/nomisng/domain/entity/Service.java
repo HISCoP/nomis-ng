@@ -1,5 +1,6 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,6 +26,7 @@ public class Service {
     @Column(name = "domain_id")
     private Long domainId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "serviceByServiceId")
     private Collection<Form> formsById;
 

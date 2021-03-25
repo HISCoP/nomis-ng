@@ -1,10 +1,12 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Objects;
@@ -19,46 +21,61 @@ public class ApplicationCodeset extends Audit<String> {
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Basic
     @Column(name = "codeset_group")
+    @NotNull(message = "codesetGroup cannot be null")
     private String codesetGroup;
+
     @Basic
     @Column(name = "display")
+    @NotNull(message = "display cannot be null")
     private String display;
+
     @Basic
     @Column(name = "language")
+    @NotNull(message = "language cannot be null")
     private String language;
+
     @Basic
     @Column(name = "version")
-    private String version;
+    private String version = "1.0";
+
     @Basic
     @Column(name = "code")
     private String code;
+
     @Basic
     @Column(name = "archived")
-    private Integer archived;
+    private Integer archived = 0;
 
     @OneToMany(mappedBy = "applicationCodesetByGenderId")
     @ToString.Exclude
-    public Collection<HouseholdMember> householdMembersByGenderId;
+    @JsonIgnore
+    private Collection<HouseholdMember> householdMembersByGenderId;
 
     @OneToMany(mappedBy = "applicationCodesetByMaritalStatusId")
     @ToString.Exclude
-    public Collection<HouseholdMember> householdMembersByMaritalStatusId;
+    @JsonIgnore
+    private Collection<HouseholdMember> householdMembersByMaritalStatusId;
 
     @OneToMany(mappedBy = "applicationCodesetByEducationId")
     @ToString.Exclude
+    @JsonIgnore
     public Collection<HouseholdMember> householdMembersByEducationId;
 
     @OneToMany(mappedBy = "applicationCodesetByOccupationId")
     @ToString.Exclude
-    public Collection<HouseholdMember> householdMembersByOccupationId;
+    @JsonIgnore
+    private Collection<HouseholdMember> householdMembersByOccupationId;
 
     @OneToMany(mappedBy = "applicationCodesetByApplicationCodesetId")
     @ToString.Exclude
-    public Collection<ApplicationCodesetStandardCodeset> applicationCodesetStandardCodesetsById;
+    @JsonIgnore
+    private Collection<ApplicationCodesetStandardCodeset> applicationCodesetStandardCodesetsById;
 
     @OneToMany(mappedBy = "applicationCodesetByFormTypeId")
     @ToString.Exclude
-    public Collection<Form> formsById;
+    @JsonIgnore
+    private Collection<Form> formsById;
 }

@@ -42,12 +42,12 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Lamisplus")
-                .description("Lamisplus Application Api Documentation")
+                .title("Nomis")
+                .description("OVC Management Information System")
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .termsOfServiceUrl("http://swagger.io/terms/")
-                .version("1.0.0").contact(new Contact("Development Team","http://lamisplus.org/base-module", "info@lamisplus.org"))
+                .version("1.0.0").contact(new Contact("Development Team","Nomis", "Nomis"))
                 .build();
     }
 

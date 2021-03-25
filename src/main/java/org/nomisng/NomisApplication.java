@@ -1,5 +1,6 @@
 package org.nomisng;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -13,6 +14,7 @@ import java.net.URISyntaxException;
 
 @EnableScheduling
 @SpringBootApplication
+@Slf4j
 public class NomisApplication extends SpringBootServletInitializer {
 
 	@Override

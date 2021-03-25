@@ -8,11 +8,12 @@ import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.entity.Form;
 import org.nomisng.domain.mapper.FormMapper;
 import org.nomisng.repository.FormRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-@org.springframework.stereotype.Service
+@Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -34,25 +35,31 @@ public class FormService {
         if (formOptional.isPresent()) {
             throw new RecordExistException(Form.class, "Name", formDTO.getName());
         }
-        Form form = formMapper.toFormDTO(formDTO);
+        Form form = formMapper.toForm(formDTO);
         form.setArchived(UN_ARCHIVED);
 
         return formRepository.save(form);
     }
 
-    public Form getForm(Long id) {
+    public FormDTO getForm(Long id) {
         Optional<Form> formOptional = this.formRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if(!formOptional.isPresent()) throw new EntityNotFoundException(Form.class, "Id", id+"");
 
-        return formOptional.get();
+        Form form = formOptional.get();
+        FormDTO formDTO = formMapper.toFormDTO(form);
+        formDTO.setServiceName(form.getServiceByServiceId().getName());
+        return formDTO;
     }
 
-    public Form getFormsByFormCode(String formCode) {
+    public FormDTO getFormByFormCode(String formCode) {
         Optional<Form> formOptional = formRepository.findByCodeAndArchived(formCode, UN_ARCHIVED);
         if(!formOptional.isPresent()) {
             throw new EntityNotFoundException(Form.class, "Form Code", formCode);
         }
-        return formOptional.get();
+        Form form = formOptional.get();
+        FormDTO formDTO = formMapper.toFormDTO(form);
+        formDTO.setServiceName(form.getServiceByServiceId().getName());
+        return formDTO;
     }
 
     public Form update(Long id, FormDTO formDTO) {
@@ -60,7 +67,7 @@ public class FormService {
         log.info("form optional  is" + formOptional.get());
         if(!formOptional.isPresent())throw new EntityNotFoundException(Form.class, "Id", id +"");
 
-        Form form = formMapper.toFormDTO(formDTO);
+        Form form = formMapper.toForm(formDTO);
         form.setId(id);
         return formRepository.save(form);
     }

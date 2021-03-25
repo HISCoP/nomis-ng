@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 
@@ -21,7 +22,7 @@ import java.sql.Timestamp;
 @Setter(AccessLevel.PUBLIC)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class Audit<U>
+public class Audit<U> implements Serializable
 {
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)

@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -27,6 +28,7 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "name")
+    @NotNull(message = "name cannot be null")
     private String name;
 
     @Basic
@@ -44,7 +46,7 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "resource_path")
-    private Long resourcePath;
+    private String resourcePath;
 
     @Basic
     @Column(name = "service_id")
@@ -52,7 +54,7 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "archived")
-    private int archived;
+    private int archived = 0;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
@@ -80,9 +82,11 @@ public class Form extends JsonBEntity {
 
     @ManyToOne
     @JoinColumn(name = "form_type_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JsonIgnore
     private ApplicationCodeset applicationCodesetByFormTypeId;
 
     @ManyToOne
     @JoinColumn(name = "service_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JsonIgnore
     private Service serviceByServiceId;
 }

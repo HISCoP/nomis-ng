@@ -22,33 +22,33 @@ public class FormController {
 
     @GetMapping
     public ResponseEntity<List<FormDTO>> getAllForms() {
-            return ResponseEntity.ok(this.formService.getAllForms());
+        return ResponseEntity.ok(formService.getAllForms());
     }
 
     @GetMapping("/formCode")
-    public ResponseEntity<Form> getFormsByFormCode(@RequestParam String formCode) {
-            return ResponseEntity.ok(this.formService.getFormsByFormCode(formCode));
+    public ResponseEntity<FormDTO> getFormByFormCode(@RequestParam String formCode) {
+            return ResponseEntity.ok(formService.getFormByFormCode(formCode));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Form> getForm(@PathVariable Long id) {
-        return ResponseEntity.ok(this.formService.getForm(id));
+    public ResponseEntity<FormDTO> getForm(@PathVariable Long id) {
+        return ResponseEntity.ok(formService.getForm(id));
     }
 
     @PostMapping
     public ResponseEntity<Form> save(@RequestBody FormDTO formDTO) {
-        return ResponseEntity.ok(this.formService.save(formDTO));
+        return ResponseEntity.ok(formService.save(formDTO));
 
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Form> update(@PathVariable Long id, @RequestBody FormDTO formDTO) {
-        return ResponseEntity.ok(this.formService.update(id, formDTO));
+        return ResponseEntity.ok(formService.update(id, formDTO));
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(this.formService.delete(id));
+        return ResponseEntity.ok(formService.delete(id));
     }
 }
