@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useHistory  } from "react-router-dom";
 import {
   CButton,
   CCard,
@@ -16,7 +17,15 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
+const process = e => {
+  e.preventDefault();
+  history.push("/dashboard");
+
+
+}
+
 const Login = () => {
+  let history = useHistory();
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
      
@@ -27,7 +36,8 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
+                <form onSubmit={process}>
+                  <CForm onSubmit={process}>
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
@@ -48,13 +58,14 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">Login</CButton>
+                        <CButton color="primary" className="px-4" onClick={process}>Login</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
                         <CButton color="link" className="px-0">Forgot password?</CButton>
                       </CCol>
                     </CRow>
                   </CForm>
+                  </form>
                 </CCardBody>
               </CCard>
               <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
