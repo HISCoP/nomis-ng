@@ -42,7 +42,7 @@ public class ApplicationCodesetService {
 
         final ApplicationCodeset applicationCodeset = applicationCodesetMapper.toApplicationCodeset(applicationCodesetDTO);
         applicationCodeset.setCode(UUID.randomUUID().toString());
-        //applicationCodeset.setArchived(UN_ARCHIVED);
+        applicationCodeset.setArchived(UN_ARCHIVED);
 
         return applicationCodesetRepository.save(applicationCodeset);
     }
@@ -74,9 +74,12 @@ public class ApplicationCodesetService {
     public Integer delete(Long id){
         Optional<ApplicationCodeset> applicationCodesetOptional = applicationCodesetRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if(!applicationCodesetOptional.isPresent()) throw new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+"");
-        applicationCodesetOptional.get().setArchived(ARCHIVED);
+        ApplicationCodeset applicationCodeset = applicationCodesetOptional.get();
+        applicationCodeset.setArchived(ARCHIVED);
 
-        return applicationCodesetOptional.get().getArchived();
+        applicationCodesetRepository.save(applicationCodeset);
+
+        return applicationCodeset.getArchived();
     }
 
     public Boolean exist(String display, String codesetGroup){

@@ -26,6 +26,10 @@ public class Domain extends Audit<String> {
     @Column(name = "code", updatable = false)
     private String code;
 
+    @Basic
+    @Column(name = "archived", updatable = false)
+    private int archived;
+
     @OneToMany(mappedBy = "domainByDomainId")
     public Collection<Service> servicesById;
 }

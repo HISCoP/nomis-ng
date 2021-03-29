@@ -8,7 +8,7 @@ import org.nomisng.domain.entity.ApplicationCodeset;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",  unmappedTargetPolicy = ReportingPolicy.WARN)
+@Mapper(componentModel = "spring")
 public interface ApplicationCodesetMapper {
 
     ApplicationCodeset  toApplicationCodeset(ApplicationCodesetDTO applicationCodesetDTO);

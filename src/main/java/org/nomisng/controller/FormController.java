@@ -38,7 +38,6 @@ public class FormController {
     @PostMapping
     public ResponseEntity<Form> save(@RequestBody FormDTO formDTO) {
         return ResponseEntity.ok(formService.save(formDTO));
-
     }
 
     @PutMapping("/{id}")
