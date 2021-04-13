@@ -7,7 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { makeStyles } from "@material-ui/core/styles";
 import Title from "../../views/Title/CardTitle";
-import FormHomePage from "./FormHomePage";
+// import FormHomePage from "../formBuilder/FormRendererModal";
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +27,10 @@ const GeneralFormSearch = props => {
             <Card className={classes.cardBottom}>
                 <CardContent>
                     <Title>
-                        <Link to="/form-builder">
+
+                            <Link color="inherit" to ={{
+                                pathname: "form-builder",
+                            }}  >
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -41,7 +44,7 @@ const GeneralFormSearch = props => {
                         <br />
                     </Title>
                     <br />
-                    <FormHomePage/>
+                    {/*<FormHomePage/>*/}
                 </CardContent>
             </Card>
         </div>

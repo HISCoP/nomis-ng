@@ -1,18 +1,10 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState}  from 'react';
 import Page from '../page';
 import { connect } from 'react-redux';
 import {  Errors, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import {fetchService, createForm, fetchAllForms} from '../../actions/formBuilder'
-import {
-    FormGroup,
-    Input,
-    Label,
-    Col,
-    Row,
-    Form
-} from 'reactstrap';
+import {FormGroup, Input, Label, Col, Row, Form} from 'reactstrap';
 import MatButton from '@material-ui/core/Button';
 import { TiArrowBack } from "react-icons/ti";
 import Checkbox from '@material-ui/core/Checkbox';
@@ -20,19 +12,21 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import axios from 'axios';
-import { url } from "api";
 import {ToastContainer} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { Alert } from '@material-ui/lab';
+import axios from 'axios';
+import { url } from "./../../api"
+import {createForm, fetchAllForms, fetchService} from './../../actions/formBuilder'
 
 const Create = props => {
     const [res, setRes] = React.useState("");
     const [formData, setFormData] = React.useState({
         resourceObject: null,
         programCode: "",
-        display: ""});
+        display: ""
+    });
     const textAreaRef = useRef(null);
     const [form, setform] = useState([{title: 'Loading', value: ''}]);
     const [useFor, setuseFor] = useState([{title: 'Loading', value: ''}]);
@@ -40,14 +34,15 @@ const Create = props => {
     const [showFileImport, setShowFileImport] = useState(true);
     const toggleShowFileImport = () => setShowFileImport(!showFileImport);
 
-    const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-    const checkedIcon = <CheckBoxIcon fontSize="small" />;
+    const icon = <CheckBoxOutlineBlankIcon fontSize="small"/>;
+    const checkedIcon = <CheckBoxIcon fontSize="small"/>;
     let fileReader;
 
     const handleFileRead = (e) => {
         const content = fileReader.result;
         setFormData(JSON.parse(content));
         setRes(content.resourceObject);
+
     }
 
     const handleFileChosen = (file) => {
@@ -110,9 +105,6 @@ const Create = props => {
         e.preventDefault()
         props.createForm(formData);
     }
-
-
-
     return (
         <Page title="Form Builder" >
             <ToastContainer autoClose={3000} hideProgressBar />
@@ -256,7 +248,6 @@ const Create = props => {
                                     )}
                                 />
                             </FormGroup></Col>
-
                             <Col md={2}> <FormGroup>
                                 <label class="sr-only"></label>
                                 <button type="submit"  class="form-control btn btn-primary mt-4" >Save Form</button>

@@ -13,8 +13,6 @@ import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 
-
-
 const HomePage = () => {
     let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState('dashboard');
@@ -27,8 +25,6 @@ const HomePage = () => {
 
    const [state, setState ]=useState({}) 
 
-   
-    
     return (
         <>
             <CRow>
@@ -59,7 +55,7 @@ const HomePage = () => {
           onClick={()=>{}}
         >
             <Link color="inherit" to ={{
-                pathname: "/FormPage",
+                pathname: "form-home",
             }}  >
                 <DescriptionIcon fontSize="small" className={'text-left'}/>
                 <span className={'pl-2'}>  Form Builder </span>
@@ -88,8 +84,6 @@ const HomePage = () => {
             </Menu>
 
                 </CCol>
-
-
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >

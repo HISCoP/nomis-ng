@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import { connect } from "react-redux";
-import {fetchAllForms, Delete as Del,} from '../../actions/formBuilder';
+import {fetchAllForms, deleteForm} from "../../actions/formBuilder"
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import "react-widgets/dist/css/react-widgets.css";
-import FormRendererModal from "./FormRendererModal";
+import FormRendererModal from "../formBuilder/FormRendererModal";
 import { ToastContainer, toast } from "react-toastify";
 import {Menu, MenuButton, MenuItem, MenuList} from '@reach/menu-button';
 import {Link} from 'react-router-dom';
@@ -165,7 +165,7 @@ const mapStateToProps =  (state = { form:{}}) => {
 
 const mapActionToProps = {
     fetchAllForms: fetchAllForms,
-    deleteForm: Del
+     deleteForm: deleteForm
 };
 
 export default connect(mapStateToProps, mapActionToProps)(FormSearch);

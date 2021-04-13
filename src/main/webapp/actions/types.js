@@ -60,11 +60,7 @@ export const PATIENT_APPOINTMENTS = 'PATIENT_APPOINTMENTS'
 export const PATIENT_RADIOLOGY_ORDERS = 'PATIENT_RADIOLOGY_ORDERS'
 
 
-/**
- * @TYPES
- * ===============================================
- * FORM
- */
+
 
 
 
