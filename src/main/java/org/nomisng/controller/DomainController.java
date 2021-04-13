@@ -2,7 +2,6 @@ package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.audit4j.core.annotation.Audit;
 import org.nomisng.domain.dto.DomainDTO;
 import org.nomisng.domain.entity.Domain;
 import org.nomisng.service.DomainService;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/domains")
 @Slf4j
 @RequiredArgsConstructor
-@Audit
 public class DomainController {
     private final DomainService domainService;
 

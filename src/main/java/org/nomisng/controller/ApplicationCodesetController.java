@@ -3,7 +3,6 @@ package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.audit4j.core.annotation.Audit;
 import org.nomisng.domain.dto.ApplicationCodesetDTO;
 import org.nomisng.domain.entity.ApplicationCodeset;
 import org.nomisng.service.ApplicationCodesetService;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/application-codesets")
 @Slf4j
 @RequiredArgsConstructor
-@Audit
 public class ApplicationCodesetController {
     private final ApplicationCodesetService applicationCodesetService;
 
