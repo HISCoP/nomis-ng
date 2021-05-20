@@ -17,15 +17,20 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
-const process = e => {
-  e.preventDefault();
-  history.push("/dashboard");
 
 
-}
+
 
 const Login = () => {
   let history = useHistory();
+
+  const process = e => {
+    e.preventDefault();
+    history.push("/dashboard");
+  
+  
+  }
+  
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
      
