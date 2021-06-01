@@ -40,11 +40,6 @@
           <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>-->
 		<dependency>
-			<groupId>org.lamisplus.modules</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.foreach.across</groupId>
 			<artifactId>across-test</artifactId>
 			<scope>test</scope>
@@ -88,7 +83,7 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
@@ -101,7 +96,7 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -154,6 +149,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.10.Final</version>
+		</dependency>
+		<!--<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
@@ -191,9 +191,9 @@
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
 			<version>4.2.2</version>
-		</dependency>
+		</dependency>-->
 		<!-- Jasper reports dependency. -->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
@@ -245,19 +245,13 @@
 			<groupId>io.github.jhipster</groupId>
 			<artifactId>jhipster-framework</artifactId>
 			<version>3.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.lamisplus.modules</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
-		<defaultGoal>spring-boot:run</defaultGoal>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
@@ -267,7 +261,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

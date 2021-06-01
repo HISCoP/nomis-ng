@@ -1,0 +1,51 @@
+package org.nomisng.controller;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.nomisng.domain.dto.FormDTO;
+import org.nomisng.domain.entity.Form;
+import org.nomisng.service.FormService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/api/forms")
+@Slf4j
+@RequiredArgsConstructor
+public class FormController {
+    private final FormService formService;
+
+    @GetMapping
+    public ResponseEntity<List<FormDTO>> getAllForms() {
+        return ResponseEntity.ok(formService.getAllForms());
+    }
+
+    @GetMapping("/formCode")
+    public ResponseEntity<FormDTO> getFormByFormCode(@RequestParam String formCode) {
+            return ResponseEntity.ok(formService.getFormByFormCode(formCode));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FormDTO> getForm(@PathVariable Long id) {
+        return ResponseEntity.ok(formService.getForm(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Form> save(@RequestBody FormDTO formDTO) {
+        return ResponseEntity.ok(formService.save(formDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Form> update(@PathVariable Long id, @RequestBody FormDTO formDTO) {
+        return ResponseEntity.ok(formService.update(id, formDTO));
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Integer> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(formService.delete(id));
+    }
+}
