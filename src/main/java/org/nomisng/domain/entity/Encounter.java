@@ -12,7 +12,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "encounter")
-public class Encounter extends Audit<String>{
+public class Encounter extends Audit{
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

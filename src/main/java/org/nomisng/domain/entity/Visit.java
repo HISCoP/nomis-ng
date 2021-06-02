@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "visit")
-public class Visit {
+public class Visit extends Audit{
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

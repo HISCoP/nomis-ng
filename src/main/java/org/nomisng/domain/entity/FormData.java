@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -48,7 +49,7 @@ public class FormData extends JsonBEntity{
     @Column(name = "date_created", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private Timestamp dateCreated;
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
     @LastModifiedBy
     @Column(name = "modified_by")
@@ -60,7 +61,7 @@ public class FormData extends JsonBEntity{
     @Column(name = "date_modified")
     @JsonIgnore
     @ToString.Exclude
-    private Timestamp dateModified;
+    private LocalDateTime dateModified = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "encounter_id", referencedColumnName = "id", updatable = false, insertable = false)

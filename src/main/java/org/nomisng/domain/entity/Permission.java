@@ -1,32 +1,29 @@
 package org.nomisng.domain.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-@Entity
 @Data
+@Entity
 @EqualsAndHashCode
-@Table(name = "permission")
-public class Permission {
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Permission extends Audit {
     @Id
-    @Column(name = "id", updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @Basic
-    @Column(name = "description")
-    private String description;
-
-    @Basic
-    @Column(name = "name")
+    @NonNull
     private String name;
 
-    @OneToMany(mappedBy = "permissionByPermissionId")
+    @NonNull
+    private String description;
+
+    /*@OneToMany(mappedBy = "permissionByPermissionId")
     @ToString.Exclude
-    private Collection<RolePermission> rolePermissionsById;
+    @JsonIgnore
+    public List<RolePermission> rolePermissionsById;*/
 }

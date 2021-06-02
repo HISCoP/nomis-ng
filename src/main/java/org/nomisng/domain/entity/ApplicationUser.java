@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "application_user")
-public class ApplicationUser {
+public class ApplicationUser extends Audit {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,20 +49,6 @@ public class ApplicationUser {
     @Column(name = "active")
     @NonNull
     private Integer active = 1;
-
-    @Basic
-    @Column(name = "date_created")
-    @CreationTimestamp
-    private Date dateCreated;
-
-    @Basic
-    @Column(name = "last_modified_by")
-    private String lastModifiedBy;
-
-    @Basic
-    @Column(name = "date_last_modified")
-    @UpdateTimestamp
-    private Date dateLastModified;
 
     @Basic
     @Column(name = "activation_key")

@@ -5,11 +5,13 @@ import com.foreach.across.core.AcrossModule;
 import com.foreach.across.core.context.configurer.ComponentScanConfigurer;
 import com.foreach.across.modules.hibernate.jpa.AcrossHibernateJpaModule;
 import com.foreach.across.modules.web.AcrossWebModule;
+import org.lamisplus.modules.bootstrap.BootstrapModule;
 
 @AcrossApplication(
         modules = {
                 AcrossWebModule.NAME,
-                AcrossHibernateJpaModule.NAME
+                AcrossHibernateJpaModule.NAME,
+                BootstrapModule.NAME
         }
 )
 public class NomisBaseModule extends AcrossModule {

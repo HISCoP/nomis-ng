@@ -10,7 +10,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "organisation_unit_identifier")
-public class OrganisationUnitIdentifier {
+public class OrganisationUnitIdentifier extends Audit {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

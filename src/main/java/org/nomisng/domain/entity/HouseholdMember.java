@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode
 @Table(name = "household_member")
-public class HouseholdMember {
+public class HouseholdMember extends Audit {
 
     @Id
     @Column(name = "id", updatable = false)

@@ -15,7 +15,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "application_codeset")
-public class ApplicationCodeset extends Audit<String> {
+public class ApplicationCodeset extends Audit {
 
     @Id
     @Column(name = "id", updatable = false)

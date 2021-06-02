@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "domain")
-public class Domain extends Audit<String> {
+public class Domain extends Audit {
 
     @Id
     @Column(name = "id", updatable = false)

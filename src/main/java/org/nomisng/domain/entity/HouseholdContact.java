@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "household_contact")
-public class HouseholdContact {
+public class HouseholdContact extends Audit {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
