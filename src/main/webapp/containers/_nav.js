@@ -26,13 +26,13 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Reports',
-    to: '/report',
+    to: '/dashboard',
     icon: 'cilList',
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Visualization',
-    to: '#',
+    to: '/dashboard',
     icon: 'cilGraph',
   },
   {

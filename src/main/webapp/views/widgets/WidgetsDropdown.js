@@ -20,8 +20,8 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-primary"
-          header="9.823"
-          text="Total OVC"
+          header="29"
+          text="Total Household"
           footerSlot={
             <ChartLineSimple
               pointed
@@ -34,25 +34,15 @@ const WidgetsDropdown = () => {
             />
           }
         >
-          <CDropdown>
-            <CDropdownToggle color="transparent">
-              <CIcon name="cil-settings"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>ADD oVC</CDropdownItem>
-              <CDropdownItem>View OVC</CDropdownItem>
-              
-            </CDropdownMenu>
-          </CDropdown>
+     
         </CWidgetDropdown>
       </CCol>
 
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-info"
-          header="9.823"
-          text="Members online"
+          header="230"
+          text="Total OVC"
           footerSlot={
             <ChartLineSimple
               pointed
@@ -67,15 +57,7 @@ const WidgetsDropdown = () => {
           }
         >
           <CDropdown>
-            <CDropdownToggle caret={false} color="transparent">
-              <CIcon name="cil-location-pin"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
+          <CIcon name="cil-location-pin"/>
           </CDropdown>
         </CWidgetDropdown>
       </CCol>
@@ -83,8 +65,8 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-warning"
-          header="9.823"
-          text="Total Household"
+          header="14"
+          text="Total  OVC Graduated"
           footerSlot={
             <ChartLineSimple
               className="mt-3"
@@ -93,21 +75,16 @@ const WidgetsDropdown = () => {
               dataPoints={[78, 81, 80, 45, 34, 12, 40]}
               options={{ elements: { line: { borderWidth: 2.5 }}}}
               pointHoverBackgroundColor="warning"
-              label="Total Household"
-              labels="months"
+              label="Total"
+              
             />
           }
         >
           <CDropdown>
-            <CDropdownToggle color="transparent">
+            
               <CIcon name="cil-settings"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Add</CDropdownItem>
-              <CDropdownItem>View</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
+           
+           
           </CDropdown>
         </CWidgetDropdown>
       </CCol>
@@ -118,15 +95,15 @@ const WidgetsDropdown = () => {
     <CCol sm="6" lg="3">
       <CWidgetBrand
         rightHeader="12"
-        rightFooter="HH Member"
+        rightFooter="Total OVC Positive"
         leftHeader="4"
-        leftFooter="OVC "
+        leftFooter="Linked To Care "
         color="gradient-warning"
       >
         <CIcon
           name="cil-calendar"
-          height="32"
-          className="my-4"
+          height="20"
+          className="my-3"
         />
       </CWidgetBrand>
     </CCol>

@@ -1,11 +1,20 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { CCol, CRow, CButton, CCard,
     CCardBody,CCardFooter} from "@coreui/react";
 import { Icon} from 'semantic-ui-react'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
+import NewOvc from './NewOvc';
+import NewCareGiver from './NewCareGiver';
+import ProvideService from './ProvideService';
 
 const HouseholdMember = () => {
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
+    const [modal2, setModal2] = useState(false);
+    const toggle2 = () => setModal2(!modal2);
+
+
     return (
         <>
             <CRow>
@@ -13,8 +22,8 @@ const HouseholdMember = () => {
 
                 <Icon name='users' />  Household Members
 
-                <CButton color={"primary"} className={"float-right mr-1 mb-1"}> New Caregiver</CButton> {" "}
-                <CButton color={"primary"} className={"float-right mr-1 mb-1"}> New OVC</CButton>{" "}
+                <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle2}> New Caregiver</CButton> {" "}
+                <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> New OVC</CButton>{" "}
            <hr />
                 </CCol>
             </CRow>
@@ -35,12 +44,19 @@ const HouseholdMember = () => {
                     <MemberCard  member={{type:"Child"}}/>
                 </CCol>
             </CRow>
+            <NewOvc  modal={modal} toggle={toggle}/>
+            <NewCareGiver  modal={modal2} toggle={toggle2}/>
+            
             </>
     );
 }
 
 const MemberCard = (props) => {
+    const [modal3, setModal3] = useState(false);
+    const toggle3 = () => setModal3(!modal3);
+    
     return (
+        <>
         <CCard>
             <CCardBody className={'text-center'}>
                 <p className={'text-left'}><b>{props.member.type || ''}</b></p>
@@ -52,9 +68,11 @@ const MemberCard = (props) => {
 
             </CCardBody>
             <CCardFooter>
-                <CButton color="primary" block >Provide Services</CButton>
+                <CButton color="primary" block onClick={toggle3}>Provide Services</CButton>
             </CCardFooter>
         </CCard>
+        <ProvideService  modal={modal3} toggle={toggle3}/>
+    </>
     );
 }
 export default HouseholdMember;

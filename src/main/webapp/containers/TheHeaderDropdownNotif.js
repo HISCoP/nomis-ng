@@ -29,17 +29,15 @@ const TheHeaderDropdownNotif = () => {
         >
           <strong>You have {itemsCount} notifications</strong>
         </CDropdownItem>
-        <CDropdownItem><CIcon name="cil-user-follow" className="mr-2 text-success" /> New user registered</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-user-unfollow" className="mr-2 text-danger" /> User deleted</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-chart-pie" className="mr-2 text-info" /> Sales report is ready</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-basket" className="mr-2 text-primary" /> New client</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-speedometer" className="mr-2 text-warning" /> Server overloaded</CDropdownItem>
+        <CDropdownItem><CIcon name="cil-user-follow" className="mr-2 text-success" /> USAID HIV Report Tools Form</CDropdownItem>
+        <CDropdownItem><CIcon name="cil-user-unfollow" className="mr-2 text-danger" />New OVC Update Form is available</CDropdownItem>
+
         <CDropdownItem
           header
           tag="div"
           color="light"
         >
-          <strong>Server</strong>
+          <strong>View All</strong>
         </CDropdownItem>
       
       </CDropdownMenu>
