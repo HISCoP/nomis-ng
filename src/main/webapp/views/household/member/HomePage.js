@@ -69,22 +69,7 @@ const HomePage = () => {
                                 <p>Household</p>
                             </Link>
                         </Menu.Item>
-                        <Menu.Item
-                            name='more'
-                            active={activeItem === 'more'}
-                            className={'text-center'}
-                            onClick={()=>{}}
-                        >
-                            <SettingsIcon fontSize="large" className={'text-center'}/><br />
-                            <span>More</span>
-                            <Dropdown>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item icon='edit' text='Edit Profile' />
-                                    <Dropdown.Item icon='globe' text='Choose Language' />
-                                    <Dropdown.Item icon='settings' text='Account Settings' />
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </Menu.Item>
+                        
                     </Menu>
 
                 </CCol>

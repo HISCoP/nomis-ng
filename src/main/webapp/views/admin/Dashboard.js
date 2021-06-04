@@ -14,10 +14,10 @@ const Dashboard = () => {
     return (
         <>
               <TopDashboardStats />
-              <MidDashboardStats />
+              {/* <MidDashboardStats /> */}
             <CRow>
                 <CCol xs="12" >
-              <RecentServiceOffered />
+              {/* <RecentServiceOffered /> */}
                 </CCol>
             {/* <CCol xs="12" >
                <ServiceHistoryPage />
@@ -34,36 +34,23 @@ const TopDashboardStats = (props) => {
     return (
         <CRow>
             <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="HIV Status" header="Negative"  color="success" iconPadding={false}>
+                <CWidgetIcon text="Total Users" header="100"  color="success" iconPadding={false}>
                     <FavoriteBorderIcon />
                 </CWidgetIcon>
             </CCol>
-            {isCareGiver ?
+           
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Viral Load" header="1000 copies/ml" color="success" iconPadding={false}>
+                    <CWidgetIcon text="Total Services" header="50" color="primary" iconPadding={false}>
                         <CIcon width={24} name="cil-graph"/>
                     </CWidgetIcon>
-                </CCol> :
+                </CCol> 
+          
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Weight" header="50 kg" color="success"  iconPadding={false}>
-                        <CIcon width={24} name="cil-graph"/>
-                    </CWidgetIcon>
-                </CCol>
-            }
-            {isCareGiver ?
-                <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Children" header="2" color="success" iconPadding={false}>
+                    <CWidgetIcon text="Total Programmes" header="22" color="info" iconPadding={false}>
                         <ChildCareIcon/>
                     </CWidgetIcon>
                 </CCol>
-                :
-
-                <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="BMI" header="6 - Underweight" color="success" iconPadding={false}>
-                        <AccessibilityNewIcon/>
-                    </CWidgetIcon>
-                </CCol>
-            }
+              
         </CRow>
     );
 }
