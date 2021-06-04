@@ -12,9 +12,9 @@ const _nav =  [
   
   {
     _tag: 'CSidebarNavItem',
-    name: 'Household',
+    icon:  <CIcon name="cil-home" customClasses="c-sidebar-nav-icon"/>,
     to: '/households',
-    icon: 'cilHouse',
+    name: 'Household',
   },
   {
     _tag: 'CSidebarNavItem',
@@ -25,13 +25,13 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Reports',
-    to: '#',
+    to: '/dashboard',
     icon: 'cilList',
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Visualization',
-    to: '#',
+    to: '/dashboard',
     icon: 'cilGraph',
   },
   {
@@ -40,75 +40,8 @@ const _nav =  [
     to: '/admin',
     icon: 'cilJustifyCenter',
    }, 
-   //{
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Users',
-  //   to: '/household/household',
-  //   icon: 'cilUser',
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Setting',
-  //   to: '#',
-  //   icon: 'cilApplicationsSettings',
-  // },
- 
 
 
-
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Disabled',
-  //   icon: 'cil-ban',
-  //   badge: {
-  //     color: 'secondary',
-  //     text: 'NEW',
-  //   },
-  //   addLinkClass: 'c-disabled',
-  //   'disabled': true
-  // },
-  // {
-  //   _tag: 'CSidebarNavDivider',
-  //   className: 'm-2'
-  // },
-  // {
-  //   _tag: 'CSidebarNavTitle',
-  //   _children: ['Labels']
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Label danger',
-  //   to: '',
-  //   icon: {
-  //     name: 'cil-star',
-  //     className: 'text-danger'
-  //   },
-  //   label: true
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Label info',
-  //   to: '',
-  //   icon: {
-  //     name: 'cil-star',
-  //     className: 'text-info'
-  //   },
-  //   label: true
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Label warning',
-  //   to: '',
-  //   icon: {
-  //     name: 'cil-star',
-  //     className: 'text-warning'
-  //   },
-  //   label: true
-  // },
-  // {
-  //   _tag: 'CSidebarNavDivider',
-  //   className: 'm-2'
-  // }
 ]
 
 export default _nav

@@ -44,7 +44,7 @@ const ServicePage = (props) => {
                 </CCol>
                 <CCol xs="12">
                     <CButton color={"primary"} className={"float-right mr-1 mb-1"}> Provide Service</CButton> {" "}
-                    <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "}
+                    {/* <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "} */}
                 </CCol>
                 <hr />
             </CRow>
