@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
   CCard,
   CCardBody,
@@ -12,8 +12,13 @@ import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
+import NewHouseHoldAssessment from './NewHouseHoldAssessment';
 
 const Tables = () => {
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
+
+
   return (
     <>
       
@@ -26,6 +31,7 @@ const Tables = () => {
               <CButton 
                   color="primary" 
                   className="float-right"
+                  onClick={toggle}
                 >New Household Assessment</CButton>
             </CCardHeader>
             <CCardBody>
@@ -96,8 +102,11 @@ const Tables = () => {
           </CCard>
         </CCol>
       </CRow>
+      <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
     </>
+    
   )
+  
 }
 
 export default Tables

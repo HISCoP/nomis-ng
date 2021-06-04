@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {CButton, CCol, CRow, CCard, CDataTable, CCardBody} from "@coreui/react";
 import {Icon} from "semantic-ui-react";
 import {CChartBar} from "@coreui/react-chartjs";
 import MaterialTable from 'material-table';
+import NewCarePlan from './NewCarePlan';
 
 const CarePlan = () => {
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
     const fields = ['dateCreated','totalServices', 'pending', 'inProgress', 'completed', 'Actions']
     const usersData = [
         {pending: 0, totalServices: '10', dateCreated: '2018/01/01', inProgress: '3', completed: '7'},
@@ -18,7 +21,7 @@ const CarePlan = () => {
 
                     <Icon name='users' />  Household Careplan(s)
 
-                    <CButton color={"primary"} className="float-right"> New Care Plan</CButton>
+                    <CButton color={"primary"} className="float-right" onClick={toggle}> New Care Plan</CButton>
                     <hr />
                 </CCol>
             </CRow>
@@ -91,6 +94,7 @@ const CarePlan = () => {
                     />
                 </CCol>
             </CRow>
+            <NewCarePlan  modal={modal} toggle={toggle}/>
         </>
     )
 }

@@ -8,7 +8,7 @@ import {
   CHeaderNavItem,
   CHeaderNavLink,
   CSubheader,
-  CBreadcrumbRouter,
+  CBreadcrumbRouter
 
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -48,7 +48,7 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <CIcon name="logo" height="48" alt="Logo"/>
+        {/* <CIcon name="logo" height="48" alt="Logo"/> */}
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
