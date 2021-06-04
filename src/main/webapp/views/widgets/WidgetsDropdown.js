@@ -11,7 +11,11 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import ChartLineSimple from '../charts/ChartLineSimple'
-import ChartBarSimple from '../charts/ChartBarSimple'
+import ChartBarSimple from '../charts/ChartBarSimple';
+import {TiFlowChildren} from 'react-icons/ti';
+import {GiTeamUpgrade} from 'react-icons/gi';
+import {FaChild} from 'react-icons/fa';
+import {GiFamilyHouse} from 'react-icons/gi'
 
 const WidgetsDropdown = () => {
   // render
@@ -20,7 +24,7 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-primary"
-          header="29"
+          header="290"
           text="Total Household"
           footerSlot={
             <ChartLineSimple
@@ -34,7 +38,9 @@ const WidgetsDropdown = () => {
             />
           }
         >
-     
+          <CDropdown>
+          <GiFamilyHouse />
+          </CDropdown>
         </CWidgetDropdown>
       </CCol>
 
@@ -57,7 +63,7 @@ const WidgetsDropdown = () => {
           }
         >
           <CDropdown>
-          <CIcon name="cil-location-pin"/>
+          <FaChild />
           </CDropdown>
         </CWidgetDropdown>
       </CCol>
@@ -81,10 +87,7 @@ const WidgetsDropdown = () => {
           }
         >
           <CDropdown>
-            
-              <CIcon name="cil-settings"/>
-           
-           
+           <GiTeamUpgrade />           
           </CDropdown>
         </CWidgetDropdown>
       </CCol>
@@ -100,11 +103,13 @@ const WidgetsDropdown = () => {
         leftFooter="Linked To Care "
         color="gradient-warning"
       >
-        <CIcon
-          name="cil-calendar"
-          height="20"
+        
+        <TiFlowChildren
+          height="50"
+          width="50"
+          size="20"
           className="my-3"
-        />
+        /> 
       </CWidgetBrand>
     </CCol>
 
