@@ -1,6 +1,5 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { Icon} from 'semantic-ui-react'
 
 const _nav =  [
   {

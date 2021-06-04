@@ -1,4 +1,4 @@
-import { url } from "../api";
+import { url } from "../api/index";
 import axios from "axios";
 
 export const formRendererService = {
@@ -8,15 +8,15 @@ export const formRendererService = {
 };
 
 function fetchEncounterById(encounterId) {
-   return axios
-      .get(`${url}encounters/${encounterId}`, {})
+    return axios
+        .get(`${url}encounters/${encounterId}`, {})
 }
 
-function fetchFormByFormCode(formCode, formType) {
+function fetchFormByFormCode(formCode) {
     return axios
-       .get(`${url}forms/${formCode}/formCode?formType=${formType ? formType : 0}`, {})
- }
+        .get(`${url}forms/${formCode}/formCode`, {})
+}
 
- function updateFormData(id, data){
+function updateFormData(id, data){
     return axios.put(`${url}form-data/${id}`, data)
- }
+}

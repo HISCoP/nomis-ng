@@ -13,8 +13,6 @@ import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 
-
-
 const HomePage = () => {
     let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState('dashboard');
@@ -27,8 +25,6 @@ const HomePage = () => {
 
    const [state, setState ]=useState({}) 
 
-   
-    
     return (
         <>
             <CRow>
@@ -36,76 +32,10 @@ const HomePage = () => {
                 <CCol sm="3" lg="3">
                     {/*className={'bg-success'}*/}
              <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
-                {/* <Menu.Item header className={'p-4'}>
-                    <InfoSection/>
-                </Menu.Item> */}
-                {/* <Menu.Item
-                    name='dashboard'
-                    active={activeItem === 'dashboard'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
 
-                    <DashboardIcon fontSize="large" className={'text-center'}/>
-                    <p>Dashboard</p>
-                </Menu.Item> */}
-
-                {/* <Menu.Item
-                    name='services'
-                    active={activeItem === 'services'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
-                  <People fontSize="large" className={'text-center'}/>
-                       <p>Users</p>
-
-                </Menu.Item>
-
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <DescriptionIcon fontSize="large" className={'text-center'}/>
-                    <p>Form Builder</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Report Builder</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='more'
-                    active={activeItem === 'more'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                   <SettingsIcon fontSize="large" className={'text-center'}/><br />
-                    <span>Setting</span>
-                <Dropdown>
-                    <Dropdown.Menu>
-                        <Dropdown.Item icon='edit' text='Edit Profile' />
-                        <Dropdown.Item icon='globe' text='Choose Language' />
-                        <Dropdown.Item icon='settings' text='Account Settings' />
-                    </Dropdown.Menu>
-                </Dropdown>
-                </Menu.Item> */}
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
+          active={activeItem === 'dashboard'}
           onClick={handleItemClick}
         >
        <DashboardIcon className={'text-left'}/>
@@ -113,7 +43,7 @@ const HomePage = () => {
         </Menu.Item>
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
+          active={activeItem === 'usersetup'}
           onClick={handleItemClick}
         >
         <People fontSize="small" className={'text-left'}/>
@@ -121,11 +51,16 @@ const HomePage = () => {
         </Menu.Item>
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
-          onClick={handleItemClick}
+          active={activeItem === 'formbuilder'}
+          onClick={()=>{}}
         >
-         <DescriptionIcon fontSize="small" className={'text-left'}/>
-         <span className={'pl-2'}>  Form Builder </span>
+            <Link color="inherit" to ={{
+                pathname: "form-home",
+            }}  >
+                <DescriptionIcon fontSize="small" className={'text-left'}/>
+                <span className={'pl-2'}>  Form Builder </span>
+            </Link>
+
         </Menu.Item>
         <Menu.Item>
         <FolderIcon fontSize="small" className={'text-left'}/>
@@ -149,8 +84,6 @@ const HomePage = () => {
             </Menu>
 
                 </CCol>
-
-
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >

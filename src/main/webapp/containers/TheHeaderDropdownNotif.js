@@ -14,8 +14,7 @@ const TheHeaderDropdownNotif = () => {
   return (
     <CDropdown
       inNav
-      className="c-header-nav-item mx-2"
-    >
+      className="c-header-nav-item mx-2">
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <CIcon name="cil-bell"/>
         <CBadge shape="pill" color="danger">{itemsCount}</CBadge>
@@ -25,8 +24,7 @@ const TheHeaderDropdownNotif = () => {
           header
           tag="div"
           className="text-center"
-          color="light"
-        >
+          color="light">
           <strong>You have {itemsCount} notifications</strong>
         </CDropdownItem>
         <CDropdownItem><CIcon name="cil-user-follow" className="mr-2 text-success" /> USAID HIV Report Tools Form</CDropdownItem>
