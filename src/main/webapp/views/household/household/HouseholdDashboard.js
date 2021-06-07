@@ -12,17 +12,17 @@ const HouseholdDashboard = () => {
         <>
                 <CRow>
                     <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="Total Services" header="21,345"  color="success" iconPadding={false}>
-                    <CIcon width={24} name="cil-notes"/>
+                <CWidgetIcon text="Total OVC" header="21,345"  color="success" iconPadding={false}>
+                    <CIcon width={24} name="cil-people"/>
                 </CWidgetIcon>
                     </CCol>
                     <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total People" header="10" color="success"  iconPadding={false}>
-                            <CIcon width={24} name="cil-people"/>
+                        <CWidgetIcon text="Total Services" header="10" color="success"  iconPadding={false}>
+                            <CIcon width={24} name="cil-notes"/>
                         </CWidgetIcon>
                     </CCol>
                     <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total OVC" header="2" color="success" iconPadding={false}>
+                        <CWidgetIcon text="Total HIV Positive" header="2" color="success" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
                         </CCol>
