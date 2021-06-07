@@ -41,19 +41,19 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "form_type_id")
-    private Long formTypeId;
+    private int formTypeId;
 
     @Basic
     @Column(name = "resource_path")
     private String resourcePath;
 
     @Basic
-    @Column(name = "service_id")
-    private Long serviceId;
+    @Column(name = "service_code")
+    private Long programCode;
 
     @Basic
     @Column(name = "archived")
-    private int archived = 0;
+    private Integer archived = 0;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
@@ -80,12 +80,7 @@ public class Form extends JsonBEntity {
     private Timestamp dateModified;
 
     @ManyToOne
-    @JoinColumn(name = "form_type_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
     @JsonIgnore
-    private ApplicationCodeset applicationCodesetByFormTypeId;
-
-    @ManyToOne
-    @JoinColumn(name = "service_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @JsonIgnore
-    private Service serviceByServiceId;
+    private Program programByProgramCode;
 }

@@ -49,16 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .sessionManagement()
-                .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .authorizeRequests()
-                    .antMatchers("/api/authenticate","/api/application-codesets/codesetGroup", "/api/swagger-ui.html").permitAll()
-                    .antMatchers("/api/**").authenticated()
+                .authorizeRequests()
+                .antMatchers("/api/authenticate","/api/application-codesets/codesetGroup", "/api/swagger-ui.html").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .antMatchers(AUTH_LIST).permitAll()
                 .and().headers().frameOptions().sameOrigin()
                 .and()
-                    .apply(securityConfigurerAdapter())
+                .apply(securityConfigurerAdapter())
                 .and().csrf().disable();
     }
     private JWTConfigurer securityConfigurerAdapter() {
@@ -80,3 +79,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
     }
 }
+

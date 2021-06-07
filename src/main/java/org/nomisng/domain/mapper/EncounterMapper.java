@@ -11,8 +11,8 @@ import org.nomisng.domain.entity.Form;
 public interface EncounterMapper {
     Encounter toEncounter(EncounterDTO encounterDTO);
     @Mappings({
-            @Mapping(source="encounter.id", target="encounterId"),
-            @Mapping(source="encounter.organisationUnitId", target="organisationUnitId")
+            @Mapping(source="encounter.id", target="id"),
+            @Mapping(source="encounter.serviceCode", target="serviceCode")
     })
     EncounterDTO toEncounterDTO(Encounter encounter, Form form);
 }

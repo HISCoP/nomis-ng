@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Data
@@ -31,5 +30,5 @@ public class Domain extends Audit {
     private int archived;
 
     @OneToMany(mappedBy = "domainByDomainId")
-    public Collection<Service> servicesById;
+    public Collection<Program> servicesById;
 }

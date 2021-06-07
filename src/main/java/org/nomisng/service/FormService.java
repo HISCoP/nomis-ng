@@ -31,7 +31,7 @@ public class FormService {
         if(formDTO.getCode() == null || formDTO.getCode().isEmpty()){
             formDTO.setCode(UUID.randomUUID().toString());
         }
-        Optional<Form> formOptional = formRepository.findByNameAndServiceIdAndArchived(formDTO.getName(), formDTO.getServiceId(), UN_ARCHIVED);
+        Optional<Form> formOptional = formRepository.findByNameAndProgramCodeAndArchived(formDTO.getName(), formDTO.getProgramCode(), UN_ARCHIVED);
         if (formOptional.isPresent()) {
             throw new RecordExistException(Form.class, "Name", formDTO.getName());
         }
@@ -47,7 +47,7 @@ public class FormService {
 
         Form form = formOptional.get();
         FormDTO formDTO = formMapper.toFormDTO(form);
-        formDTO.setServiceName(form.getServiceByServiceId().getName());
+        formDTO.setProgramName(form.getProgramByProgramCode().getName());
         return formDTO;
     }
 
@@ -58,13 +58,12 @@ public class FormService {
         }
         Form form = formOptional.get();
         FormDTO formDTO = formMapper.toFormDTO(form);
-        formDTO.setServiceName(form.getServiceByServiceId().getName());
+        formDTO.setProgramName(form.getProgramByProgramCode().getName());
         return formDTO;
     }
 
     public Form update(Long id, FormDTO formDTO) {
         Optional<Form> formOptional = formRepository.findByIdAndArchived(id, UN_ARCHIVED);
-        log.info("form optional  is" + formOptional.get());
         if(!formOptional.isPresent())throw new EntityNotFoundException(Form.class, "Id", id +"");
 
         Form form = formMapper.toForm(formDTO);

@@ -4,8 +4,6 @@ package org.nomisng.service;
 import org.nomisng.domain.entity.User;
 import org.nomisng.repository.UserRepository;
 import org.nomisng.security.UserPrincipal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,8 +16,6 @@ import javax.persistence.PersistenceContext;
 
 @Service
 public class UserDetailService implements UserDetailsService {
-
-    private final Logger log = LoggerFactory.getLogger(UserDetailService.class);
 
     @Autowired
     UserRepository userRepository;

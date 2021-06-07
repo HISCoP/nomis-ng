@@ -73,9 +73,4 @@ public class ApplicationCodeset extends Audit {
     @ToString.Exclude
     @JsonIgnore
     private Collection<ApplicationCodesetStandardCodeset> applicationCodesetStandardCodesetsById;
-
-    @OneToMany(mappedBy = "applicationCodesetByFormTypeId")
-    @ToString.Exclude
-    @JsonIgnore
-    private Collection<Form> formsById;
 }

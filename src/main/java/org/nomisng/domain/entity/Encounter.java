@@ -1,12 +1,12 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,12 +28,17 @@ public class Encounter extends Audit{
 
     @Basic
     @Column(name = "service_code")
-    private Long serviceCode;
+    private String serviceCode;
 
     @Basic
     @Column(name = "organisational_unit_id")
-    private Long organisationalUnitId;
+    private Long organisationUnitId;
 
     @OneToMany(mappedBy = "encounterByEncounterId")
-    public Collection<FormData> getFormDataById;
+    public List<FormData> getFormDataById;
+
+    @ManyToOne
+    @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
+    @JsonIgnore
+    private Program programByProgramCode;
 }
