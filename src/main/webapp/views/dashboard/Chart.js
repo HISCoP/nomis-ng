@@ -17,65 +17,45 @@ var categories = [
 
 var options = {
     chart: {
-        zoomType: 'xy'
+        type: 'column'
     },
     title: {
-        text: 'Total OVC Enrollment For The Last 6 months'
+        text: 'TOtal OVC Enrollment For The Last 6months'
     },
-    
-    xAxis: [{
-        categories: [ 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        crosshair: true
-    }],
-    yAxis: [{ // Primary yAxis
-        labels: {
-            
-        },
-        title: {
-            text: 'TOTAL OVC',
+    xAxis: {
+        categories: ['Jan.', 'Feb.', 'March', 'April', 'May', 'June']
+    },
+    labels: {
+        items: [{
+            html: 'Total HIV Positive',
             style: {
-                color: Highcharts.getOptions().colors[1]
+                left: '50px',
+                top: '18px',
+                color: ( // theme
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || 'black'
             }
-        }
-    }, { // Secondary yAxis
-        title: {
-           
-        },
-        labels: {
-            
-        },
-        
-    }],
-    tooltip: {
-        shared: true
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'left',
-        x: 120,
-        verticalAlign: 'top',
-        y: 100,
-        floating: true,
-        backgroundColor:
-            Highcharts.defaultOptions.legend.backgroundColor || // theme
-            'rgba(255,255,255,0.25)'
+        }]
     },
     series: [{
-        name: 'OVC',
         type: 'column',
-        yAxis: 1,
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0,  54.4],
-        tooltip: {
-            valueSuffix: ' mm'
-        }
-
+        name: 'Total OVC',
+        data: [50, 100, 200, 250, 300]
     }, {
-        name: 'Positive',
+        type: 'column',
+        name: 'Total HIV Positive',
+        data: [20, 30, 50, 70, 60]
+    }, {
         type: 'spline',
-        data: [ 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
-        
-    }]
+        name: 'Average',
+        data: [50, 100, 80, 100, 60],
+        marker: {
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[3],
+            fillColor: 'white'
+        }
+    }, ]
 }
 
 

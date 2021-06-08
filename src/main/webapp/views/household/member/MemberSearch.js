@@ -26,7 +26,7 @@ const Tables = () => {
             <MaterialTable
                 title="Household Member List"
                 columns={[
-                  { title: 'OVC ID', field: 'name' },
+                  { title: 'OVC ID', field: 'id' },
                   { title: 'Date Assessed', field: 'date' },
                   { title: 'Name', field: 'name' },
                   {
@@ -41,7 +41,7 @@ const Tables = () => {
                   },
                 ]}
                 data={[
-                  { name: '94839', date: '23/03/2021', name: 'Decky Usman', age: '23 Years', 
+                  { id: '94839', date: '23/03/2021', name: 'Decky Usman', age: '23 Years', 
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
