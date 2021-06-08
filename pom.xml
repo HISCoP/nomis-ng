@@ -12,7 +12,8 @@
 	<groupId>org.nomis-ng</groupId>
 	<artifactId>nomis-ng</artifactId>
 	<version>0.0.1</version>
-	<name>nomis-app</name>
+	<packaging>war</packaging>
+	<name>nomis-ng</name>
 	<description>OVC Management Information System</description>
 
 	<properties>
@@ -267,17 +268,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>-->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>4.1.2</version>
-			<!-- <exclusions>
-                 <exclusion>
-                     <groupId>com.github.virtuald</groupId>
-                     <artifactId>curvesapi</artifactId>
-                 </exclusion>
-             </exclusions>-->
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
 	<build>
