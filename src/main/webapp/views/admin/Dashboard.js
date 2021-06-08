@@ -4,9 +4,10 @@ import { CCol, CRow, CWidgetIcon, CCard,
     CCardHeader,} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { Icon, Label} from 'semantic-ui-react'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ChildCareIcon from '@material-ui/icons/ChildCare';
-import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import RoomServiceIcon from '@material-ui/icons/RoomService';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 //import ServiceHistoryPage from './../Widgets/ServiceHistoryPage';
 
 const Dashboard = () => {
@@ -35,19 +36,19 @@ const TopDashboardStats = (props) => {
         <CRow>
             <CCol xs="12" sm="6" lg="4">
                 <CWidgetIcon text="Total Users" header="100"  color="success" iconPadding={false}>
-                    <FavoriteBorderIcon />
+                    <PeopleAltIcon />
                 </CWidgetIcon>
             </CCol>
            
                 <CCol xs="12" sm="6" lg="4">
                     <CWidgetIcon text="Total Services" header="50" color="primary" iconPadding={false}>
-                        <CIcon width={24} name="cil-graph"/>
+                        <RoomServiceIcon />
                     </CWidgetIcon>
                 </CCol> 
           
                 <CCol xs="12" sm="6" lg="4">
                     <CWidgetIcon text="Total Programmes" header="22" color="info" iconPadding={false}>
-                        <ChildCareIcon/>
+                        <AutorenewIcon />
                     </CWidgetIcon>
                 </CCol>
               

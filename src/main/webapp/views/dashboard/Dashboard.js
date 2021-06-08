@@ -28,13 +28,13 @@ const Dashboard = () => {
       <CCard>
         <CCardBody>
           <CRow>
-            <CCol sm="12">
+            {/* <CCol sm="12">
               <h4 id="traffic" className="card-title mb-0">TOtal OVC Enrollment For The Last 6months</h4>
              
-            </CCol>
+            </CCol> */}
            
           </CRow>
-          <MainChartExample style={{height: '300px', marginTop: '40px'}}/>
+          {/* <MainChartExample style={{height: '300px', marginTop: '40px'}}/> */}
           <Chart />
         </CCardBody>
        
