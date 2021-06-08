@@ -41,15 +41,15 @@ var options = {
     series: [{
         type: 'column',
         name: 'Total OVC',
-        data: [3, 2, 1, 3, 4]
+        data: [50, 100, 200, 250, 300]
     }, {
         type: 'column',
         name: 'Total HIV Positive',
-        data: [2, 3, 5, 7, 6]
+        data: [20, 30, 50, 70, 60]
     }, {
         type: 'spline',
         name: 'Average',
-        data: [3, 2.67, 3, 6.33, 3.33],
+        data: [50, 100, 80, 100, 60],
         marker: {
             lineWidth: 2,
             lineColor: Highcharts.getOptions().colors[3],
