@@ -37,8 +37,6 @@ public class NomisApplication extends SpringBootServletInitializer {
         SpringApplication.run(NomisApplication.class, args);
     }
 
-
-
     /*@Bean
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();

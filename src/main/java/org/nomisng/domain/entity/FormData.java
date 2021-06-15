@@ -43,7 +43,7 @@ public class FormData extends JsonBEntity{
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy;
+    private String createdBy = "guest@nomisng.org";
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
@@ -55,7 +55,7 @@ public class FormData extends JsonBEntity{
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy;
+    private String modifiedBy = "guest@nomisng.org";
 
     @LastModifiedDate
     @Column(name = "date_modified")

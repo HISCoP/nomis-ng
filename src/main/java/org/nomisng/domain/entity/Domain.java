@@ -1,5 +1,6 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,5 +31,6 @@ public class Domain extends Audit {
     private int archived;
 
     @OneToMany(mappedBy = "domainByDomainId")
+    @JsonIgnore
     public Collection<Program> servicesById;
 }

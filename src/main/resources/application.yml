@@ -50,7 +50,7 @@ server:
 spring:
     datasource:
         username: postgres
-        password: admin!23
+        password: emeka
         url: jdbc:postgresql://localhost:5432/nomis
         driver-class-name: org.postgresql.Driver
         hibernate:

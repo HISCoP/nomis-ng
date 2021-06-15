@@ -27,7 +27,7 @@ public class Audit {
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy = "guest@nomis-ng.org";/*SecurityUtils.getCurrentUserLogin().orElse(null);*/
+    private String createdBy = "guest@nomisng.org";/*SecurityUtils.getCurrentUserLogin().orElse(null);*/
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
@@ -39,7 +39,7 @@ public class Audit {
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy = "guest@nomis-ng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+    private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @LastModifiedDate
     @Column(name = "date_modified")

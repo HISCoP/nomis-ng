@@ -48,6 +48,7 @@ public class Program extends Audit {
 
     @ManyToOne
     @JoinColumn(name = "domain_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JsonIgnore
     private Domain domainByDomainId;
 
     @PrePersist

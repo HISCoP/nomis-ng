@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -49,7 +50,7 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "service_code")
-    private Long programCode;
+    private String programCode;
 
     @Basic
     @Column(name = "archived")
@@ -59,25 +60,25 @@ public class Form extends JsonBEntity {
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy;
+    private String createdBy = "guest@nomisng.org";
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private Timestamp dateCreated;
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
     @LastModifiedBy
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy;
+    private String modifiedBy = "guest@nomisng.org";
 
     @LastModifiedDate
     @Column(name = "date_modified")
     @JsonIgnore
     @ToString.Exclude
-    private Timestamp dateModified;
+    private LocalDateTime dateModified = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
