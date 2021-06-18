@@ -4,16 +4,12 @@
  * PROGRAM CODES
  */
 
-//export const GENERAL_SERVICE = '25216afc-d158-4696-ada6-00df609b9a4c'
-
-
 /**
  * @CODES
  * ==============================================
  * FORM CODES
  */
 
-export const VITAL_SIGNS_FORM = 'bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0'
 export const DRUG_PRESCRIPTION_FORM = '4ab293ff-6837-41e8-aa85-14f25ce59ef0'
 export const REGIMEN_PRESCRIPTION_FORM = 'e5b39440-13fc-4f61-82e9-c7bd74b44729'
 export const LAB_TEST_ORDER_FORM = '87cb9bc7-ea0d-4c83-a70d-b57a5fb7769e'
@@ -86,18 +82,16 @@ export const GENERAL_SERVICE = '25216afc-d158-4696-ada6-00df609b9a4c'
  * FORM CODES
  */
 
+export const VITAL_SIGNS_FORM = 'bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0'
 
-
-/**
- * @CODES
- * ==============================================
- * TYPE PATIENT CODES
- */
+// export const IN_PATIENT_BOOKED = 3
+// export const IN_PATIENT_UNBOOKED = 2
+// export const OUT_PATIENT_BOOKED = 1
+// export const OUT_PATIENT_UNBOOKED = '0'
+// export const EMERGENCY_PATIENT = 4
 
 /**
  * @CODES
  * ==============================================
  * LAB ORDER STATUS CODES
  */
-
-

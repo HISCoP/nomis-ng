@@ -7,9 +7,6 @@ import { Link } from 'react-router-dom';
 import {FormGroup, Input, Label, Col, Row, Form} from 'reactstrap';
 import MatButton from '@material-ui/core/Button';
 import { TiArrowBack } from "react-icons/ti";
-import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import {ToastContainer} from 'react-toastify';
@@ -18,7 +15,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { url } from "./../../api"
-import {createForm, fetchAllForms, fetchService} from './../../actions/formBuilder'
+import {createForm, fetchDomain, fetchService} from './../../actions/formBuilder'
 
 const Create = props => {
     const [res, setRes] = React.useState("");
@@ -29,7 +26,8 @@ const Create = props => {
     });
     const textAreaRef = useRef(null);
     const [form, setform] = useState([{title: 'Loading', value: ''}]);
-    const [useFor, setuseFor] = useState([{title: 'Loading', value: ''}]);
+    const [formType, setformType] = React.useState(true);
+    const [domainCode, setdomainCode] = React.useState(true);
     const [disabledCheckBox, setdisabledCheckBox] = useState(true)
     const [showFileImport, setShowFileImport] = useState(true);
     const toggleShowFileImport = () => setShowFileImport(!showFileImport);
@@ -71,32 +69,14 @@ const Create = props => {
         getCharacters();
     }, []);
 
-    useEffect(() => {
-        async function getCharacters() {
-            try {
-
-                const response = await axios(
-                    url + "application-codesets/codesetGroup?codesetGroup=USE_FOR"
-                );
-                const body = response.data;
-
-
-                setuseFor(
-                    body.map(({ display, id }) => ({ title: display, value: id }))
-                );
-                body !==null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
-
-                console.log(response)
-            } catch (error) {
-            }
-        }
-        getCharacters();
-    }, []);
 
     useEffect (() => {
-        props.fetchService();
-        props.fetchAllForms();
+        props.fetchService()
     }, [])
+
+    const handleDomainChange = (e) => {
+        props.fetchService(e.target.value)
+    }
 
 
     const handleSubmit = e => {
@@ -149,6 +129,17 @@ const Create = props => {
                                     <option value="wizard">Wizard</option></Input>
                             </FormGroup></Col>
 
+
+                            <Col md={4}> <FormGroup>
+                                <Label class="sr-only">Domain Name</Label>
+                                {props.domains.length && props.domains.length > 0 ?
+                                    <Input type="select" class="form-control" id="domainCode" required value={formData.domainCode}  onChange={e => handleDomainChange(e) }>
+                                        {props.domains.map(domain => (<option key={domain.code} value={domain.code} >{domain.name}</option>))}
+                                    </Input>:  <Input type="select" class="form-control" id="domainCode" required value={domainCode} onChange={e => setdomainCode(e.target.value)}>
+                                        <option>No programs found</option>
+                                    </Input>}
+                            </FormGroup></Col>
+
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Program Area</Label>
                                 {props.services.length && props.services.length > 0 ?
@@ -158,102 +149,33 @@ const Create = props => {
                                         <option>No Programs Found</option>
                                     </Input>}
                             </FormGroup></Col>
+                        </Row>
 
+                        <Row>
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Form Name</Label>
                                 <Input type="text" class="form-control" id="name" name="name" value={formData.name}   onChange={e => setFormData({...formData, name:e.target.value})} required/>
                             </FormGroup> </Col>
-                        </Row>
-                        <Row>
+
+
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Version</Label>
                                 <Input type="text" class="form-control" id="version" name="version" value={formData.version}   onChange={e => setFormData({...formData, version:e.target.value})} required/>
                             </FormGroup> </Col>
 
                             <Col md={4}> <FormGroup>
-                                <Label class="sr-only">Frequency of Usage</Label>
-                                <Input type="select"  id="usageCode" value={formData.usageCode} onChange={e => setFormData({...formData, usageCode:e.target.value})}>
+                                <Label class="sr-only">Form Type</Label>
+                                <Input type="select"  id="formType" value={formData.formType} onChange={e => setFormData({...formData, formType:e.target.value})}>
                                     <option></option>
-                                    <option value="0">Once per Patient</option>
-                                    <option value="1">Periodically</option></Input>
+                                    <option value="0">Care Giver</option>
+                                    <option value="1">OVC</option></Input>
                             </FormGroup></Col>
 
-                            <Col md={4}> <FormGroup>
-                                <Label for="queryOption">Use For</Label>
-                                <Autocomplete
-                                    multiple
-                                    id="useFor"
-                                    size="small"
-                                    options={useFor !==null ? useFor : "LOADING"}
-                                    disableCloseOnSelect
-                                    getOptionLabel={(option) => option.title}
-                                    defaultValue={formData.queryOption}
-                                    onChange={(e, i) => {
-                                        setFormData({...formData, queryOption: i});
-                                    }}
-                                    renderOption={(option, { selected }) => (
-                                        <React.Fragment>
-                                            { disabledCheckBox===false ?
-                                                <Checkbox
-                                                    icon={icon}
-                                                    checkedIcon={checkedIcon}
-                                                    style={{marginRight: 8}}
-                                                    checked={selected}
-                                                />
-                                                : ""
-                                            }
-                                            {option.title}
-                                        </React.Fragment>
-                                    )}
-                                    style={{ width: "auto"}}
-                                    renderInput={(params) => (
-                                        <TextField {...params} variant="outlined" label="Use For" placeholder="Use For" />
-                                    )}
-                                />
-                            </FormGroup></Col>
-
-                        </Row>
-
-                        <Row>
-                            <Col md={4}> <FormGroup>
-                                <Label for="formPrecedence">Form Precedence</Label>
-                                <Autocomplete
-                                    multiple
-                                    id="formCode"
-                                    size="small"
-                                    options={form !==null ? form : "LOADING"}
-                                    disableCloseOnSelect
-                                    getOptionLabel={(option) => option.title}
-                                    onChange={(e, i) => {
-                                        setFormData({...formData, formPrecedence: i});
-                                    }}
-                                    defaultValue={formData.queryOption}
-                                    renderOption={(option, { selected }) => (
-                                        <React.Fragment>
-                                            { disabledCheckBox===false ?
-                                                <Checkbox
-                                                    icon={icon}
-                                                    checkedIcon={checkedIcon}
-                                                    style={{marginRight: 8}}
-                                                    checked={selected}
-                                                />
-                                                : ""
-                                            }
-                                            {option.title}
-                                        </React.Fragment>
-                                    )}
-                                    style={{ width: "auto"}}
-                                    renderInput={(params) => (
-                                        <TextField {...params} variant="outlined" label="Form Order" placeholder="form order" />
-                                    )}
-                                />
-                            </FormGroup></Col>
                             <Col md={2}> <FormGroup>
                                 <label class="sr-only"></label>
                                 <button type="submit"  class="form-control btn btn-primary mt-4" >Save Form</button>
                             </FormGroup></Col>
                         </Row>
-
                     </Form>
                     {/*display the resource object if the form is imported else display the default formData object*/}
                     <FormBuilder form={formData.resourceObject || formData}
@@ -275,13 +197,13 @@ const Create = props => {
 const mapStateToProps =  (state = { form:{}}) => {
     return {
         services: state.formReducers.services,
-        formList: state.formReducers.form,
+        domains: state.formReducers.domains,
     }}
 
 const mapActionsToProps = ({
     fetchService: fetchService,
+    fetchDomain: fetchDomain,
     createForm: createForm,
-    fetchAllForms: fetchAllForms,
 })
 
 export default connect(mapStateToProps, mapActionsToProps)(Create)
