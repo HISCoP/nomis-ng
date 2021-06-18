@@ -3,14 +3,12 @@
 //export const url =  'https://lp-base.herokuapp.com/api/';
 
 //Online Server
-//export const url =  'http://www.lamisplus.org/base-module/api/';
+export const url =  'http://nomis-ng.org:8080/demo/api/';
 
 //Local Server
 //export const url =  'https://lp-base-app.herokuapp.com/api/';
 
-export const url = 'http://localhost:8484/api/'
-
-
+//export const url = 'http://localhost:8484/api/'
 
 //export const url = 'http://lamisplus.org/base-module/api/';
 //export const url =  'https://lp-base.herokuapp.com/api/';

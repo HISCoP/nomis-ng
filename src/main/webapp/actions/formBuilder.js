@@ -23,6 +23,26 @@ export const fetchService = (onSuccess) => dispatch => {
         })
 }
 
+export const fetchDomain = (onSuccess) => dispatch => {
+    axios.get(`${url}domains`)
+        .then(response => {
+            console.log(response)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_FETCH_DOMAINS,
+                payload: response.data
+            })
+            onSuccess()
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong'
+
+            })
+        })
+}
+
 export const fetchAllForms = (onSuccess) => dispatch => {
     axios.get(`${url}forms`)
         .then(response => {
@@ -64,52 +84,52 @@ export const createForm = (data, onSuccess, onError) => dispatch => {
         });
 };
 
-// export const updateForm = (id, data) => dispatch => {
-//     axios
-//         .put(`${url}forms/${id}`, data)
-//         .then(response => {
-//             dispatch({
-//                 type: FORMTYPES.FORMTYPES_UPDATE,
-//                 payload: response.data
-//             });
-//             toast.success("Form was updated successfully!");
-//             console.log(response)
-//         })
-//         .catch(error => {
-//             dispatch({
-//                 type: FORMTYPES.FORMTYPES_ERROR,
-//                 payload: 'Something went wrong, please try again'
-//             })
-//         })
-// }
-//
-//
-// export const fetchById = (programId, onSuccess, onError) => dispatch => {
-//     axios.get(`${url}programs/${programId}/forms`)
-//         .then(response => {
-//             console.log(response)
-//             dispatch({
-//                 type: FORMTYPES.FORMTYPES_FETCH_BY_ID,
-//                 payload: response.data
-//             })
-//             if(onSuccess){
-//                 onSuccess()
-//             }
-//         })
-//         .catch(error => {
-//             console.log(error)
-//             dispatch({
-//                 type: FORMTYPES.FORMTYPES_ERROR,
-//                 payload: 'Something went wrong'
-//
-//             })
-//             if(onError){
-//                 onError()
-//             }
-//         })
-// }
-//
-//
+export const updateForm = (id, data) => dispatch => {
+    axios
+        .put(`${url}forms/${id}`, data)
+        .then(response => {
+            dispatch({
+                type: FORMTYPES.FORMTYPES_UPDATE,
+                payload: response.data
+            });
+            toast.success("Form was updated successfully!");
+            console.log(response)
+        })
+        .catch(error => {
+            dispatch({
+                type: FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong, please try again'
+            })
+        })
+}
+
+
+export const fetchById = (programId, onSuccess, onError) => dispatch => {
+    axios.get(`${url}programs/${programId}/forms`)
+        .then(response => {
+            console.log(response)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_FETCH_BY_ID,
+                payload: response.data
+            })
+            if(onSuccess){
+                onSuccess()
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong'
+
+            })
+            if(onError){
+                onError()
+            }
+        })
+}
+
+
 // export const fetchAll = (onSuccess, onError) => dispatch => {
 //     axios
 //         .get(`${url}forms`)
@@ -129,8 +149,8 @@ export const createForm = (data, onSuccess, onError) => dispatch => {
 //
 //         })
 // }
-//
-//
+
+
 // export const fetchForms = () => dispatch => {
 //     axios.get(`${url}programs/1/forms`)
 //         .then(response => {
@@ -149,8 +169,8 @@ export const createForm = (data, onSuccess, onError) => dispatch => {
 //             })
 //         })
 // }
-//
-//
+
+
 export const deleteForm = (id) => dispatch => {
     console.log(`${url}forms/${id}`);
     axios
