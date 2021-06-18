@@ -23,6 +23,26 @@ export const fetchService = (onSuccess) => dispatch => {
         })
 }
 
+export const fetchDomainServices = (domainId) => dispatch => {
+    axios.get(`${url}domains/${domainId}/ovcServices`)
+        .then(response => {
+            console.log(response)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_FETCH_SERVICES,
+                payload: response.data
+            })
+           // onSuccess()
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong'
+
+            })
+        })
+}
+
 export const fetchDomain = (onSuccess) => dispatch => {
     axios.get(`${url}domains`)
         .then(response => {

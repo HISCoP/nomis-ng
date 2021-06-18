@@ -21,4 +21,6 @@ public class FormDTO extends JsonBEntity {
     private String ovcServiceCode;
 
     private String ovcServiceName;
+
+    private String version;
 }

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import {fetchById, updateForm, fetchService} from '../../actions/formBuilder'
 import MatButton from '@material-ui/core/Button';
-import { authHeader } from '_helpers/auth-header';
+import { authHeader } from '../../_helpers/auth-header';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -75,7 +75,7 @@ const Update = props => {
     useEffect(() => {
         async function fetchFormByCode() {
             axios
-                .get(`${url}forms/${row.code}/formCode`)
+                .get(`${url}forms/formCode?formCode=${row.code}`)
                 .then(response => {
                     setform2(response.data);
                     setLoading(false);
@@ -121,6 +121,7 @@ const Update = props => {
                         Form Manager
                     </Link>
                     <Typography color="textPrimary">Edit Form -  {row ? row.name : ""}</Typography>
+
                 </Breadcrumbs>
                 <br/>
 
@@ -146,16 +147,6 @@ const Update = props => {
                                         <Input type="select"  id="displayType" value={displayType} onChange={e => setDisplayType(e.target.value)}>
                                             <option value="form">Form</option>
                                             <option value="wizard">Wizard</option></Input>
-                                    </FormGroup></Col>
-
-                                    <Col md={4}> <FormGroup>
-                                        <Label class="sr-only">Program Area</Label>
-                                        {props.services.length && props.services.length > 0 ?
-                                            <Input type="select" class="form-control" id="programCode" required value={formData.programCode} onChange={e => setFormData({...formData, programCode:e.target.value})}>
-                                                {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
-                                            </Input>:  <Input type="select" class="form-control" id="programCode" required >
-                                                <option>No Programs Found</option>
-                                            </Input>}
                                     </FormGroup></Col>
 
                                     <Col md={2}> <FormGroup>

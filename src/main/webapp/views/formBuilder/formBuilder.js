@@ -15,13 +15,13 @@ import "react-widgets/dist/css/react-widgets.css";
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { url } from "./../../api"
-import {createForm, fetchDomain, fetchService} from './../../actions/formBuilder'
+import {createForm, fetchDomain, fetchDomainServices} from './../../actions/formBuilder'
 
 const Create = props => {
     const [res, setRes] = React.useState("");
     const [formData, setFormData] = React.useState({
         resourceObject: null,
-        programCode: "",
+        ovcServiceCode: "",
         display: ""
     });
     const textAreaRef = useRef(null);
@@ -71,10 +71,11 @@ const Create = props => {
 
 
     useEffect (() => {
-        props.fetchService()
+      props.fetchDomain()
     }, [])
 
     const handleDomainChange = (e) => {
+        e.preventDefault();
         props.fetchService(e.target.value)
     }
 
@@ -134,19 +135,21 @@ const Create = props => {
                                 <Label class="sr-only">Domain Name</Label>
                                 {props.domains && props.domains.length && props.domains.length > 0 ?
                                     <Input type="select" class="form-control" id="domainCode" required value={formData.domainCode}  onChange={e => handleDomainChange(e) }>
-                                        {props.domains.map(domain => (<option key={domain.code} value={domain.code} >{domain.name}</option>))}
+                                        <option >Select a domain</option>
+                                        {props.domains.map(domain => (<option key={domain.code} value={domain.id} >{domain.name}</option>))}
                                     </Input>:  <Input type="select" class="form-control" id="domainCode" required value={domainCode} onChange={e => setdomainCode(e.target.value)}>
-                                        <option>No programs found</option>
+                                        <option>No Domain found</option>
                                     </Input>}
                             </FormGroup></Col>
 
                             <Col md={4}> <FormGroup>
-                                <Label class="sr-only">Program Area</Label>
-                                {props.services.length && props.services.length > 0 ?
-                                    <Input type="select" class="form-control" id="programCode" required value={formData.programCode} onChange={e => setFormData({...formData, programCode:e.target.value})}>
+                                <Label class="sr-only">Service</Label>
+                                {props.services && props.services.length && props.services.length > 0 ?
+                                    <Input type="select" class="form-control" id="ovcServiceCode" required value={formData.ovcServiceCode} onChange={e => setFormData({...formData, ovcServiceCode:e.target.value})}>
+                                        <option >Select a service</option>
                                         {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
-                                    </Input>:  <Input type="select" class="form-control" id="programCode" required >
-                                        <option>No Programs Found</option>
+                                    </Input>:  <Input type="select" class="form-control" id="ovcServiceCode" required >
+                                        <option>No Services Found</option>
                                     </Input>}
                             </FormGroup></Col>
                         </Row>
@@ -201,7 +204,7 @@ const mapStateToProps =  (state = { form:{}}) => {
     }}
 
 const mapActionsToProps = ({
-    fetchService: fetchService,
+    fetchService: fetchDomainServices,
     fetchDomain: fetchDomain,
     createForm: createForm,
 })

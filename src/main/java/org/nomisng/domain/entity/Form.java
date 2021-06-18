@@ -53,6 +53,10 @@ public class Form extends JsonBEntity {
     private String ovcServiceCode;
 
     @Basic
+    @Column(name = "version")
+    private String version;
+
+    @Basic
     @Column(name = "archived")
     private Integer archived = 0;
 
@@ -84,6 +88,16 @@ public class Form extends JsonBEntity {
     @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
     @JsonIgnore
     private OvcService ovcServiceByOvcServiceCode;
+
+    @Transient
+    private String ovcServiceName;
+
+    public String getOvcServiceName(){
+        if(ovcServiceByOvcServiceCode != null){
+            return ovcServiceByOvcServiceCode.getName();
+        }
+        return null;
+    }
 
     @PrePersist
     public void update() {

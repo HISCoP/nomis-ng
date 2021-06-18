@@ -64,6 +64,6 @@ public class EncounterService {
     public List<FormDataDTO> getFormDataByEncounterId(Long encounterId) {
         Encounter encounter = encounterRepository.findById(encounterId)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",encounterId+"" ));
-        return formDataMapper.toFormDataDTOS(encounter.getGetFormDataById());
+        return formDataMapper.toFormDataDTOS(encounter.getFormDataById());
     }
 }
