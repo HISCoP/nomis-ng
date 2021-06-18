@@ -1,8 +1,7 @@
 import React, {createRef, useState} from 'react';
 import {Header, Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
-import {CCol, CRow, CTabContent,
-    CTabPane, } from "@coreui/react";
+import {CCol, CRow, CTabContent, CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -28,7 +27,6 @@ const HomePage = () => {
     return (
         <>
             <CRow>
-
                 <CCol sm="3" lg="3">
                     {/*className={'bg-success'}*/}
              <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
@@ -36,8 +34,8 @@ const HomePage = () => {
         <Menu.Item
           name='messages'
           active={activeItem === 'dashboard'}
-          onClick={handleItemClick}
-        >
+          onClick={handleItemClick}>
+
        <DashboardIcon className={'text-left'}/>
                   <span className={'pl-2'}>  Dashboard </span>
         </Menu.Item>
@@ -52,8 +50,7 @@ const HomePage = () => {
         <Menu.Item
           name='messages'
           active={activeItem === 'formbuilder'}
-          onClick={()=>{}}
-        >
+          onClick={()=>{}}>
             <Link color="inherit" to ={{
                 pathname: "form-home",
             }}  >

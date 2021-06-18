@@ -17,6 +17,9 @@ const formReducer = (state = {  services:  [], form:[]}, action) => {
         case FORMTYPES.FORMTYPES_FETCH_SERVICES:
             return {...state, services: action.payload}
 
+        case FORMTYPES.FORMTYPES_FETCH_DOMAINS:
+            return {...state, domains: action.payload}
+
         case FORMTYPES.FORMTYPES_CREATE_FORM:
             return { ...state, status: action.payload }
 
