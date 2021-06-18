@@ -1,11 +1,13 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -42,4 +44,8 @@ public class Household extends Audit {
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
     public Collection<HouseholdMember> householdMembersById;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "householdMemberByHouseholdMemberId")
+    private List<Encounter> encounterByOvcServiceCode;
 }

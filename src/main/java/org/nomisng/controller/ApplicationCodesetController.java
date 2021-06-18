@@ -18,9 +18,14 @@ import java.util.List;
 public class ApplicationCodesetController {
     private final ApplicationCodesetService applicationCodesetService;
 
-    @GetMapping("/{codesetGroup}")
-    public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodesetGroup(@PathVariable String codesetGroup) {
-        return ResponseEntity.ok(applicationCodesetService.getApplicationCodeByCodesetGroup(codesetGroup));
+    @GetMapping("/codeSetGroup/{codeSetGroup}")
+    public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodesetGroup(@PathVariable String codeSetGroup) {
+        return ResponseEntity.ok(applicationCodesetService.getApplicationCodeByCodesetGroup(codeSetGroup));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApplicationCodesetDTO> getApplicationCodesetById(@PathVariable Long id) {
+        return ResponseEntity.ok(applicationCodesetService.getApplicationCodesetById(id));
     }
 
     @GetMapping
@@ -42,6 +47,6 @@ public class ApplicationCodesetController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(this.applicationCodesetService.delete(id));
+        return ResponseEntity.ok(applicationCodesetService.delete(id));
     }
 }

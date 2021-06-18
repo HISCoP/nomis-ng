@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.RandomUtils;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "service")
-public class Program extends Audit {
+@Table(name = "ovc_service")
+public class OvcService extends Audit implements Serializable {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +40,12 @@ public class Program extends Audit {
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "programByProgramCode")
-    private List<Form> formByProgramCode;
+    @OneToMany(mappedBy = "ovcServiceByOvcServiceCode")
+    private List<Form> formByOvcServiceCode;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "programByProgramCode")
-    private List<Encounter> encounterByProgramCode;
+    @OneToMany(mappedBy = "ovcServiceByOvcServiceCode")
+    private List<Encounter> encounterByOvcServiceCode;
 
     @ManyToOne
     @JoinColumn(name = "domain_id", referencedColumnName = "id", updatable = false, insertable = false)
@@ -53,6 +54,8 @@ public class Program extends Audit {
 
     @PrePersist
     public void update() {
-        this.code = UUID.randomUUID().toString();
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
     }
 }

@@ -3,7 +3,7 @@ package org.nomisng.domain.dto;
 import lombok.Data;
 
 @Data
-public class ProgramDTO {
+public class OvcServiceDTO {
 
     private Long id;
 

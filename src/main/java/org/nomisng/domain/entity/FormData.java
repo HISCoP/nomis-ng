@@ -19,7 +19,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @Table(name = "form_data")
-public class FormData extends JsonBEntity{
+public class FormData extends JsonBEntity {
 
     @Id
     @Column(name = "id", updatable = false)
@@ -37,6 +37,7 @@ public class FormData extends JsonBEntity{
 
     @Basic
     @Column(name = "organisational_unit_id")
+    @JsonIgnore
     private Long organisationalUnitId;
 
     @CreatedBy
@@ -66,10 +67,12 @@ public class FormData extends JsonBEntity{
     @ManyToOne
     @JoinColumn(name = "encounter_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public Encounter encounterByEncounterId;
 
     @ManyToOne
     @JoinColumn(name = "organisational_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public OrganisationUnit organisationUnitByOrganisationalUnitId;
 }

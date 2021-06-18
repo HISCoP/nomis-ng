@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -32,5 +34,12 @@ public class Domain extends Audit {
 
     @OneToMany(mappedBy = "domainByDomainId")
     @JsonIgnore
-    public Collection<Program> servicesById;
+    private List<OvcService> servicesById;
+
+    @PrePersist
+    public void update() {
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
+    }
 }

@@ -12,8 +12,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -50,7 +50,7 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "service_code")
-    private String programCode;
+    private String ovcServiceCode;
 
     @Basic
     @Column(name = "archived")
@@ -83,5 +83,12 @@ public class Form extends JsonBEntity {
     @ManyToOne
     @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
     @JsonIgnore
-    private Program programByProgramCode;
+    private OvcService ovcServiceByOvcServiceCode;
+
+    @PrePersist
+    public void update() {
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
+    }
 }

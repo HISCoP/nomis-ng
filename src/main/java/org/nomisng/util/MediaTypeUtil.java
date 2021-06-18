@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import javax.servlet.ServletContext;
 
 public class MediaTypeUtil {
-
     // abc.zip
     // abc.pdf,..
     public static MediaType getMediaTypeForFileName(ServletContext servletContext, String fileName) {

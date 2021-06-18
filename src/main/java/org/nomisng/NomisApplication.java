@@ -56,7 +56,6 @@ public class NomisApplication extends SpringBootServletInitializer {
      * Provides sensible defaults and convenience methods for configuration.
      * @return a Docket
      */
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -73,7 +72,6 @@ public class NomisApplication extends SpringBootServletInitializer {
      *
      * @return ApiInfo for documentation
      */
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Nomis")
@@ -81,7 +79,7 @@ public class NomisApplication extends SpringBootServletInitializer {
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .termsOfServiceUrl("http://swagger.io/terms/")
-                .version("1.0.0").contact(new Contact("Development Team","http://nomis.org/base-module", "info@Nomis.org"))
+                .version("1.0.0").contact(new Contact("Development Team","http://nomis-ng.org/demo", "info@nomis-ng.org/demo"))
                 .build();
     }
 

@@ -3,7 +3,9 @@ package org.nomisng.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nomisng.domain.dto.DomainDTO;
+import org.nomisng.domain.dto.OvcServiceDTO;
 import org.nomisng.domain.entity.Domain;
+import org.nomisng.domain.entity.OvcService;
 import org.nomisng.service.DomainService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +26,18 @@ public class DomainController {
     }
 
     @GetMapping("/domainCode")
-    public ResponseEntity<DomainDTO> getFormByFormCode(@RequestParam String domainCode) {
+    public ResponseEntity<DomainDTO> getDomainByFormCode(@RequestParam String domainCode) {
             return ResponseEntity.ok(domainService.getDomainByDomainCode(domainCode));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DomainDTO> getForm(@PathVariable Long id) {
-        return ResponseEntity.ok(domainService.getDomain(id));
+    public ResponseEntity<DomainDTO> getDomainById(@PathVariable Long id) {
+        return ResponseEntity.ok(domainService.getDomainById(id));
+    }
+
+    @GetMapping("{id}/ovcServices")
+    public ResponseEntity<List<OvcServiceDTO>> getOvcServicesByDomainId(@PathVariable Long id) {
+        return ResponseEntity.ok(domainService.getOvcServicesByDomainId(id));
     }
 
     @PostMapping
