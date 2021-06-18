@@ -143,7 +143,7 @@ function FormSearch(props) {
             {/*);*/}
             {/*}*/}
             <ToastContainer />
-            <FormRendererModal
+              <FormRendererModal
                 programCode={currentForm.programCode}
                 formCode={currentForm.formCode}
                 showModal={showCurrentForm}

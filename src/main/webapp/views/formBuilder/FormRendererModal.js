@@ -84,7 +84,7 @@ const FormRendererModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        patient: state.patients.patient,
+        patient: state.patients,
     };
 };
 

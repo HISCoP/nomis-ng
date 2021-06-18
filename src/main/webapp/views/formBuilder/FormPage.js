@@ -42,7 +42,7 @@ const GeneralFormSearch = props => {
                         <br />
                     </Title>
                     <br />
-                    {/*<FormHomePage/>*/}
+                    <FormHomePage/>
                 </CardContent>
             </Card>
         </div>

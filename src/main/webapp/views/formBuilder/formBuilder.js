@@ -86,7 +86,7 @@ const Create = props => {
         props.createForm(formData);
     }
     return (
-        <Page title="Form Builder" >
+        <div >
             <ToastContainer autoClose={3000} hideProgressBar />
             <Card >
                 <CardContent>
@@ -132,7 +132,7 @@ const Create = props => {
 
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Domain Name</Label>
-                                {props.domains.length && props.domains.length > 0 ?
+                                {props.domains && props.domains.length && props.domains.length > 0 ?
                                     <Input type="select" class="form-control" id="domainCode" required value={formData.domainCode}  onChange={e => handleDomainChange(e) }>
                                         {props.domains.map(domain => (<option key={domain.code} value={domain.code} >{domain.name}</option>))}
                                     </Input>:  <Input type="select" class="form-control" id="domainCode" required value={domainCode} onChange={e => setdomainCode(e.target.value)}>
@@ -190,7 +190,7 @@ const Create = props => {
                     </div>
                 </CardContent>
             </Card>
-        </Page>
+        </div>
     );
 
 }
