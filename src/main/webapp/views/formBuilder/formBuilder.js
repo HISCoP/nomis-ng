@@ -132,11 +132,11 @@ const Create = props => {
 
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Domain Name</Label>
-                                {props.domains.length && props.domains.length > 0 ?
+                                {props.domains && props.domains.length > 0 ?
                                     <Input type="select" class="form-control" id="domainCode" required value={formData.domainCode}  onChange={e => handleDomainChange(e) }>
                                         {props.domains.map(domain => (<option key={domain.code} value={domain.code} >{domain.name}</option>))}
                                     </Input>:  <Input type="select" class="form-control" id="domainCode" required value={domainCode} onChange={e => setdomainCode(e.target.value)}>
-                                        <option>No programs found</option>
+                                        <option>No Domain found</option>
                                     </Input>}
                             </FormGroup></Col>
 

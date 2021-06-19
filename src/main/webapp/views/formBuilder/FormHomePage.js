@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import { connect } from "react-redux";
-import {fetchAllForms, deleteForm} from "../../actions/formBuilder";
+import {fetchAllForms, deleteForm} from "../../actions/formBuilder"
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import "react-widgets/dist/css/react-widgets.css";
-import FormRendererModal from '../formBuilder/FormRendererModal';
+//import FormRendererModal from "../formBuilder/FormRendererModal";
 import { ToastContainer, toast } from "react-toastify";
 import {Menu, MenuButton, MenuItem, MenuList} from '@reach/menu-button';
 import {Link} from 'react-router-dom';
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import DownloadLink  from "react-download-link";
+import {CardContent} from "@material-ui/core";
 
 //Dtate Picker package
 Moment.locale("en");
@@ -32,15 +33,15 @@ function FormSearch(props) {
         props.fetchAllForms(onSuccess, onError);
     }, []);
 
-    const onSuccess = () => {
-        toast.success("Form saved successfully!", { appearance: "success" });
-        setShowCurrentForm(false);
-    };
+    // const onSuccess = () => {
+    //     toast.success("Form saved successfully!", { appearance: "success" });
+    //     setShowCurrentForm(false);
+    // };
 
-    const onError = () => {
-        toast.error("Something went wrong, request failed.");
-        setShowCurrentForm(false);
-    };
+    // const onError = () => {
+    //     toast.error("Something went wrong, request failed.");
+    //     setShowCurrentForm(false);
+    // };
 
     const viewForm = (row) => {
         setCurrentForm({
@@ -140,10 +141,9 @@ function FormSearch(props) {
                     }}
                 />
             </div>
-            {/*);*/}
-            {/*}*/}
+          
             <ToastContainer />
-            <FormRendererModal
+            {/* <FormRendererModal
                 programCode={currentForm.programCode}
                 formCode={currentForm.formCode}
                 showModal={showCurrentForm}
@@ -152,17 +152,18 @@ function FormSearch(props) {
                 onSuccess={onSuccess}
                 onError={onError}
                 options={currentForm.options}
-            />
+            /> */}
         </React.Fragment>
     );
 }
 const mapStateToProps =  (state = { form:{}}) => {
+    // console.log(state.forms)
     return {
         formList: state.formReducers.form !==null ? state.formReducers.form : {},
     }}
 
 const mapActionToProps = {
-     fetchAllForms: fetchAllForms,
+    fetchAllForms: fetchAllForms,
      deleteForm: deleteForm
 };
 
