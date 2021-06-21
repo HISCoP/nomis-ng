@@ -1,0 +1,58 @@
+package org.nomisng.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.RecordExistException;
+import org.nomisng.domain.dto.FormDTO;
+import org.nomisng.domain.dto.VisitDTO;
+import org.nomisng.domain.entity.Form;
+import org.nomisng.domain.entity.Visit;
+import org.nomisng.domain.mapper.VisitMapper;
+import org.nomisng.repository.VisitRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@Transactional
+@Slf4j
+@RequiredArgsConstructor
+public class VisitService {
+    private final VisitRepository visitRepository;
+    private final VisitMapper visitMapper;
+    private static final int ARCHIVED = 1;
+    private static final int UN_ARCHIVED = 0;
+
+    public List getAllVisits() {
+        return visitMapper.toVisitDTOS(visitRepository.findAll());
+    }
+
+    public Visit save(VisitDTO visitDTO) {
+        return visitRepository.save(visitMapper.toVisit(visitDTO));
+    }
+
+    public VisitDTO getVisit(Long id) {
+        Visit visit = visitRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException(Visit.class, "Id", id+""));
+
+       return visitMapper.toVisitDTO(visit);
+    }
+
+
+    public Visit update(Long id, VisitDTO visitDTO) {
+        Visit visit = visitRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException(Visit.class, "Id", id+""));
+        visitDTO.setId(visit.getId());
+
+        return visitRepository.save(visitMapper.toVisit(visitDTO));
+
+    }
+
+    public Integer delete(Long id) {
+        return null;
+    }
+}

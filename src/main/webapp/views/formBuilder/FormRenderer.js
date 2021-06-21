@@ -1,6 +1,6 @@
 import React from "react";
 // import Page from "components/Page";
-import { SubmissionGrid, Form } from "react-formio";
+import { Form } from "react-formio";
 import * as actions from "../../actions/formManager";
 import { connect } from "react-redux";
 import Moment from "moment";
@@ -8,7 +8,7 @@ import momentLocalizer from "react-widgets-moment";
 import { toast } from "react-toastify";
 import {Card, Alert, CardBody, Spinner, ModalBody} from "reactstrap";
 // import { fetchLastEncounter } from '../../_services/form-renderer';
-import { url } from "api";
+import { url } from "../../api/index";
 import axios from "axios";
 import { formRendererService } from "../../_services/form-renderer";
 // import { authHeader } from '../../_helpers/auth-header';
@@ -86,7 +86,7 @@ const FormRenderer = (props) => {
     React.useEffect(() => {
         if(props.patientHospitalNumber) {
             console.log('form render')
-            props.fetchPatientByHospitalNumber(props.patientHospitalNumber);
+           props.fetchPatientByHospitalNumber(props.patientHospitalNumber);
         }
 
     }, []);
@@ -214,10 +214,10 @@ const FormRenderer = (props) => {
 
 const mapStateToProps = (state = { form: {} }) => {
     return {
-        patient: state.patients.patient,
-        form: state.formManager.form,
-        formEncounter: state.formManager.formEncounter,
-        errors: state.formManager.errors,
+        patient: state.patients,
+        form: state.programManager.form,
+        formEncounter: state.programManager.formEncounter,
+        errors: state.programManager.errors,
     };
 };
 

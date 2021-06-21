@@ -1,0 +1,82 @@
+package org.nomisng.service;
+
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.RecordExistException;
+import org.nomisng.domain.dto.ApplicationCodesetDTO;
+import org.nomisng.domain.entity.ApplicationCodeset;
+import org.nomisng.domain.mapper.ApplicationCodesetMapper;
+import org.nomisng.repository.ApplicationCodesetRepository;
+import org.nomisng.util.Constants;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@Transactional
+@Slf4j
+@RequiredArgsConstructor
+public class ApplicationCodesetService {
+    private final ApplicationCodesetRepository applicationCodesetRepository;
+    private final ApplicationCodesetMapper applicationCodesetMapper;
+
+    public List<ApplicationCodesetDTO> getAllApplicationCodeset(){
+        List<ApplicationCodeset> applicationCodesets = applicationCodesetRepository.findAllByArchivedOrderByIdAsc(Constants.ArchiveStatus.UN_ARCHIVED);
+
+        return applicationCodesetMapper.toApplicationCodesetDTOList(applicationCodesets);
+    }
+
+    public ApplicationCodeset save(ApplicationCodesetDTO applicationCodesetDTO){
+        Optional<ApplicationCodeset> applicationCodesetOptional = applicationCodesetRepository.findByDisplayAndCodesetGroupAndArchived(applicationCodesetDTO.getDisplay(),
+                applicationCodesetDTO.getCodesetGroup(), Constants.ArchiveStatus.UN_ARCHIVED);
+        if (applicationCodesetOptional.isPresent()) {
+            throw new RecordExistException(ApplicationCodeset.class,"Display:",applicationCodesetDTO.getDisplay());
+        }
+
+        final ApplicationCodeset applicationCodeset = applicationCodesetMapper.toApplicationCodeset(applicationCodesetDTO);
+        applicationCodeset.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
+
+        return applicationCodesetRepository.save(applicationCodeset);
+    }
+
+    public List<ApplicationCodesetDTO> getApplicationCodeByCodesetGroup(String codesetGroup){
+        List<ApplicationCodeset> applicationCodesetList = applicationCodesetRepository.findAllByCodesetGroupAndArchivedOrderByIdAsc(codesetGroup, Constants.ArchiveStatus.UN_ARCHIVED);
+
+        return applicationCodesetMapper.toApplicationCodesetDTOList(applicationCodesetList);
+    }
+
+    public ApplicationCodesetDTO getApplicationCodesetById(Long id){
+        ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
+
+        return  applicationCodesetMapper.toApplicationCodesetDTO(applicationCodeset);
+    }
+
+    public ApplicationCodeset update(Long id, ApplicationCodesetDTO applicationCodesetDTO){
+        applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
+
+        final ApplicationCodeset applicationCodeset = applicationCodesetMapper.toApplicationCodeset(applicationCodesetDTO);
+        applicationCodeset.setId(id);
+        applicationCodeset.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
+        return applicationCodesetRepository.save(applicationCodeset);
+    }
+
+    public Integer delete(Long id){
+        ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
+        applicationCodeset.setArchived(Constants.ArchiveStatus.ARCHIVED);
+        applicationCodesetRepository.save(applicationCodeset);
+
+        return applicationCodeset.getArchived();
+    }
+
+    public Boolean exist(String display, String codesetGroup){
+        return applicationCodesetRepository.existsByDisplayAndCodesetGroup(display, codesetGroup);
+    }
+}

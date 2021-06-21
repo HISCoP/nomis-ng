@@ -1,5 +1,2 @@
-
-
-# NOMIS 3.0
-
-
+# nomis-ng
+National OVC Management Information System for Nigeria

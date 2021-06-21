@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './main/webapp/serviceWorker';
-
+import './main/webapp/scss/formio.css';
 import { icons } from './main/webapp/assets/icons'
 
 import { Provider } from 'react-redux'

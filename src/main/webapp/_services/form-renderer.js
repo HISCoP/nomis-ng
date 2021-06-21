@@ -10,6 +10,7 @@ export const formRendererService = {
 function fetchEncounterById(encounterId) {
     return axios
         .get(`${url}encounters/${encounterId}`, {})
+
 }
 
 function fetchFormByFormCode(formCode) {
