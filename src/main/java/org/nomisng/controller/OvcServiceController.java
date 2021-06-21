@@ -47,6 +47,4 @@ public class OvcServiceController {
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
         return ResponseEntity.ok(ovcServiceService.delete(id));
     }
-
-
 }
