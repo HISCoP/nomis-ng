@@ -46,21 +46,10 @@ public class OrganisationUnit extends Audit {
     @Column(name = "phone")
     private String phone;
 
-    @Basic
-    @Column(name = "email")
-    private String email;
-
-    @Basic
-    @Column(name = "latitude")
-    private Double latitude;
-
-    @Basic
-    @Column(name = "longitude")
-    private Double longitude;
 
     @OneToMany(mappedBy = "organisationUnitByCurrentOrganisationUnitId")
     @ToString.Exclude
-    public Collection<ApplicationUser> applicationUsersById;
+    public Collection<User> UsersById;
 
     @OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
     @ToString.Exclude

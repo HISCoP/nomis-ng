@@ -8,6 +8,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import FormRendererModal from '../formBuilder/FormRendererModal';
 import { ToastContainer, toast } from "react-toastify";
 import {Menu, MenuButton, MenuItem, MenuList} from '@reach/menu-button';
+import "@reach/menu-button/styles.css";
 import {Link} from 'react-router-dom';
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import DownloadLink  from "react-download-link";
@@ -67,16 +68,16 @@ function FormSearch(props) {
                 <MaterialTable
                     title="Find By Program Area and Form Name"
                     columns={[
-                        {title: "Program Area", field: "programName"},
+                        {title: "Service Area", field: "ovcServiceName"},
                         { title: "Form Name", field: "name" },
-                        { title: "Form Version", field: "number" },
+                        { title: "Form Version", field: "version" },
                         {title: "Action", field: "actions", filtering: false,},
                     ]}
                     isLoading={loading}
                     data={!props.formList && !props.formList.length ? [] : props.formList.map((row) => ({
-                        programName: row.programName,
+                        ovcServiceName: row.ovcServiceName,
                         name: row.name,
-                        number: row.version,
+                        version: row.version,
                         actions:
                             <div>
                                 <Menu>
@@ -84,19 +85,10 @@ function FormSearch(props) {
                                         Actions <span aria-hidden>▾</span>
                                     </MenuButton>
                                     <MenuList style={{ color:"#000 !important"}} >
-                                        <MenuItem onSelect={() => viewForm (row)}>
-                                            <i
-                                                className="fa fa-eye"
-                                                aria-hidden="true"
-                                                size="15"
-                                                style={{ cursor: "pointer", color: "#blue" }}>
-                                                &nbsp; {""} View Form
-                                            </i>
-                                        </MenuItem>
                                         <MenuItem style={{ color:"#000 !important"}}>
                                             <Link
                                                 to={{
-                                                    pathname: "/view-form",
+                                                    pathname: "/edit-form",
                                                     state: {row:row}
                                                 }}>
                                                 <MdModeEdit size="15" color="blue" />{" "}<span style={{color: '#000'}}>Edit Form </span>

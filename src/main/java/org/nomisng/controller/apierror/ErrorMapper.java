@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 public class ErrorMapper {
 
-    protected static <K, V> Map<K, V> toMap(
+    public static <K, V> Map<K, V> toMap(
             Class<K> keyType, Class<V> valueType, Object... entries) {
         if (entries.length % 2 == 1)
             throw new IllegalArgumentException("Invalid entries");

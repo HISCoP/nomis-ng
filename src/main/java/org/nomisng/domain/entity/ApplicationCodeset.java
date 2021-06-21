@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -74,8 +75,10 @@ public class ApplicationCodeset extends Audit {
     @JsonIgnore
     private Collection<ApplicationCodesetStandardCodeset> applicationCodesetStandardCodesetsById;
 
-    @OneToMany(mappedBy = "applicationCodesetByFormTypeId")
-    @ToString.Exclude
-    @JsonIgnore
-    private Collection<Form> formsById;
+    @PrePersist
+    public void update() {
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
+    }
 }

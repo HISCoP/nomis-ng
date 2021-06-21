@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -31,4 +32,11 @@ public class OrganisationUnitIdentifier extends Audit {
     @ManyToOne
     @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
     private OrganisationUnit organisationUnitByOrganisationUnitId;
+
+    @PrePersist
+    public void update() {
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
+    }
 }

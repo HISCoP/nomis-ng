@@ -5,13 +5,14 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Data
 @EqualsAndHashCode
 @Table(name = "visit")
-public class Visit extends Audit{
+public class Visit extends Audit {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +20,9 @@ public class Visit extends Audit{
 
     @Basic
     @Column(name = "start_time")
-    private Time startTime;
+    private LocalDateTime startTime;
 
     @Basic
     @Column(name = "end_time")
-    private Time endTime;
+    private LocalDateTime endTime;
 }

@@ -1,11 +1,13 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -31,5 +33,13 @@ public class Domain extends Audit {
     private int archived;
 
     @OneToMany(mappedBy = "domainByDomainId")
-    public Collection<Service> servicesById;
+    @JsonIgnore
+    private List<OvcService> servicesById;
+
+    @PrePersist
+    public void update() {
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
+    }
 }

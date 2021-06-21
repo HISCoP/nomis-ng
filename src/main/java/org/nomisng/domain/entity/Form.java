@@ -12,7 +12,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -41,51 +42,67 @@ public class Form extends JsonBEntity {
 
     @Basic
     @Column(name = "form_type_id")
-    private Long formTypeId;
+    private int formTypeId;
 
     @Basic
     @Column(name = "resource_path")
     private String resourcePath;
 
     @Basic
-    @Column(name = "service_id")
-    private Long serviceId;
+    @Column(name = "service_code")
+    private String ovcServiceCode;
+
+    @Basic
+    @Column(name = "version")
+    private String version;
 
     @Basic
     @Column(name = "archived")
-    private int archived = 0;
+    private Integer archived = 0;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy;
+    private String createdBy = "guest@nomisng.org";
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private Timestamp dateCreated;
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
     @LastModifiedBy
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy;
+    private String modifiedBy = "guest@nomisng.org";
 
     @LastModifiedDate
     @Column(name = "date_modified")
     @JsonIgnore
     @ToString.Exclude
-    private Timestamp dateModified;
+    private LocalDateTime dateModified = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "form_type_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
     @JsonIgnore
-    private ApplicationCodeset applicationCodesetByFormTypeId;
+    private OvcService ovcServiceByOvcServiceCode;
 
-    @ManyToOne
-    @JoinColumn(name = "service_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @JsonIgnore
-    private Service serviceByServiceId;
+    @Transient
+    private String ovcServiceName;
+
+    public String getOvcServiceName(){
+        if(ovcServiceByOvcServiceCode != null){
+            return ovcServiceByOvcServiceCode.getName();
+        }
+        return null;
+    }
+
+    @PrePersist
+    public void update() {
+        if(this.code == null || this.code.isEmpty()) {
+            this.code = UUID.randomUUID().toString();
+        }
+    }
 }
