@@ -1,12 +1,15 @@
 package org.nomisng.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.ResourceResolver;
 import org.springframework.web.servlet.resource.ResourceResolverChain;
 
@@ -21,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-public class SinglePageAppConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -88,5 +91,11 @@ public class SinglePageAppConfig implements WebMvcConfigurer {
             String extension = StringUtils.getFilenameExtension(path);
             return handledExtensions.stream().anyMatch(ext -> ext.equals(extension));
         }
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        //enables CORS requests from any origin to any endpoint in the application
+        registry.addMapping("/**");
     }
 }

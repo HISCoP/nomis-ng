@@ -18,15 +18,15 @@ import java.util.List;
 public class ApplicationCodesetController {
     private final ApplicationCodesetService applicationCodesetService;
 
-    @GetMapping("/codeSetGroup/{codeSetGroup}")
-    public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodesetGroup(@PathVariable String codeSetGroup) {
-        return ResponseEntity.ok(applicationCodesetService.getApplicationCodeByCodesetGroup(codeSetGroup));
+    @GetMapping("/codesetGroup/{codesetGroup}")
+    public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodesetGroup(@PathVariable String codesetGroup) {
+        return ResponseEntity.ok(applicationCodesetService.getApplicationCodeByCodesetGroup(codesetGroup));
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public ResponseEntity<ApplicationCodesetDTO> getApplicationCodesetById(@PathVariable Long id) {
         return ResponseEntity.ok(applicationCodesetService.getApplicationCodesetById(id));
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<ApplicationCodesetDTO>> getAllApplicationCodesets() {
