@@ -46,6 +46,7 @@ const Update = props => {
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [displayType, setDisplayType] = React.useState("");
     const [formCode, setformCode] = React.useState();
+    //const [FormPrecedenceList, setFormPrecedenceList] = React.useState();
     const [form2, setform2] = React.useState();
     const classes = useStyles();
     let myform;
@@ -58,19 +59,19 @@ const Update = props => {
     const [showFileImport, setShowFileImport] = useState(true);
     const toggleShowFileImport = () => setShowFileImport(!showFileImport);
 
-    useEffect(() => {
-        async function fetchForms() {
-            try {
-                const response = await axios(url + "forms");
-                const body = response.data;
-                const data = body.map(({ name, code }) => ({ title: name, value: code }));
-                setFormPrecedenceList(data);
-                body !== null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
-            } catch (error) {
-            }
-        }
-        fetchForms();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchForms() {
+    //         try {
+    //             const response = await axios(url + "forms");
+    //             const body = response.data;
+    //             const data = body.map(({ name, code }) => ({ title: name, value: code }));
+    //             setFormPrecedenceList(data);
+    //             body !== null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
+    //         } catch (error) {
+    //         }
+    //     }
+    //     fetchForms();
+    // }, []);
 
     useEffect(() => {
         async function fetchFormByCode() {
