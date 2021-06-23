@@ -23,8 +23,8 @@ export const fetchService = (onSuccess) => dispatch => {
         })
 }
 
-export const fetchDomainServices = (domainId) => dispatch => {
-    axios.get(`${url}domains/${domainId}/ovcServices`)
+export const fetchDomainServices = (domainId, serviceType) => dispatch => {
+    axios.get(`${url}domains/${domainId}/ovcServices/${serviceType}`)
         .then(response => {
             console.log(response)
             dispatch({

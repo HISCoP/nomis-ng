@@ -59,19 +59,19 @@ const Update = props => {
     const [showFileImport, setShowFileImport] = useState(true);
     const toggleShowFileImport = () => setShowFileImport(!showFileImport);
 
-    // useEffect(() => {
-    //     async function fetchForms() {
-    //         try {
-    //             const response = await axios(url + "forms");
-    //             const body = response.data;
-    //             const data = body.map(({ name, code }) => ({ title: name, value: code }));
-    //             setFormPrecedenceList(data);
-    //             body !== null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
-    //         } catch (error) {
-    //         }
-    //     }
-    //     fetchForms();
-    // }, []);
+    useEffect(() => {
+        async function fetchForms() {
+            try {
+                const response = await axios(url + "forms");
+                const body = response.data;
+                const data = body.map(({ name, code }) => ({ title: name, value: code }));
+               // setFormPrecedenceList(data);
+                body !== null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
+            } catch (error) {
+            }
+        }
+        fetchForms();
+    }, []);
 
     useEffect(() => {
         async function fetchFormByCode() {
@@ -117,7 +117,7 @@ const Update = props => {
             <ToastContainer />
             <CardBody>
                 <Breadcrumbs aria-label="breadcrumb">
-                    <Link color="inherit" to={{  pathname: "/admin",
+                    <Link color="inherit" to={{  pathname: "/form-home",
                         state: 'form-builder'}} >
                         Form Manager
                     </Link>

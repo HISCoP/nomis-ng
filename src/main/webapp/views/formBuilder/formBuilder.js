@@ -1,5 +1,4 @@
 import React, {useRef, useEffect, useState}  from 'react';
-import Page from '../page';
 import { connect } from 'react-redux';
 import {  Errors, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
@@ -14,24 +13,24 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
-import { url } from "./../../api"
+import { url } from "./../../api";
+import Select from 'react-select';
 import {createForm, fetchDomain, fetchDomainServices} from './../../actions/formBuilder'
 
 const Create = props => {
     const [res, setRes] = React.useState("");
     const [formData, setFormData] = React.useState({
         resourceObject: null,
-        ovcServiceCode: "",
         display: ""
     });
     const textAreaRef = useRef(null);
     const [form, setform] = useState([{title: 'Loading', value: ''}]);
-    const [formType, setformType] = React.useState(true);
-    const [domainCode, setdomainCode] = React.useState(true);
+    const [formType, setformType] = React.useState("");
+    const [domainCode, setdomainCode] = React.useState("");
     const [disabledCheckBox, setdisabledCheckBox] = useState(true)
     const [showFileImport, setShowFileImport] = useState(true);
     const toggleShowFileImport = () => setShowFileImport(!showFileImport);
-
+    const [isSupportingForm, setIsSupportingForm] = React.useState(false);
     const icon = <CheckBoxOutlineBlankIcon fontSize="small"/>;
     const checkedIcon = <CheckBoxIcon fontSize="small"/>;
     let fileReader;
@@ -74,17 +73,17 @@ const Create = props => {
       props.fetchDomain()
     }, [])
 
-
-    const handleDomainChange = (e) => {
-        e.preventDefault();
-        props.fetchService(e.target.value)
+    const fetchServices = (domainCode, formType) => {
+        if(domainCode && formType) {
+            props.fetchService(domainCode, formType)
+        }
     }
 
 
     const handleSubmit = e => {
         formData['resourceObject']=res;
         formData['id'] = "";
-        e.preventDefault()
+        e.preventDefault();
         props.createForm(formData);
     }
     return (
@@ -93,7 +92,7 @@ const Create = props => {
             <Card >
                 <CardContent>
                     <Link to ={{
-                        pathname: "/admin",
+                        pathname: "/form-home",
                         state: 'form-builder'
                     }}>
                         <MatButton
@@ -131,31 +130,6 @@ const Create = props => {
                                     <option value="wizard">Wizard</option></Input>
                             </FormGroup></Col>
 
-
-                            <Col md={4}> <FormGroup>
-                                <Label class="sr-only">Domain Name</Label>
-                                {props.domains && props.domains.length && props.domains.length > 0 ?
-                                    <Input type="select" class="form-control" id="domainCode" required value={formData.domainCode}  onChange={e => handleDomainChange(e) }>
-                                        <option >Select a domain</option>
-                                        {props.domains.map(domain => (<option key={domain.code} value={domain.id} >{domain.name}</option>))}
-                                    </Input>:  <Input type="select" class="form-control" id="domainCode" required value={domainCode} onChange={e => setdomainCode(e.target.value)}>
-                                        <option>No Domain found</option>
-                                    </Input>}
-                            </FormGroup></Col>
-
-                            <Col md={4}> <FormGroup>
-                                <Label class="sr-only">Service</Label>
-                                {props.services && props.services.length && props.services.length > 0 ?
-                                    <Input type="select" class="form-control" id="ovcServiceCode" required value={formData.ovcServiceCode} onChange={e => setFormData({...formData, ovcServiceCode:e.target.value})}>
-                                        <option >Select a service</option>
-                                        {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
-                                    </Input>:  <Input type="select" class="form-control" id="ovcServiceCode" required >
-                                        <option>No Services Found</option>
-                                    </Input>}
-                            </FormGroup></Col>
-                        </Row>
-
-                        <Row>
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Form Name</Label>
                                 <Input type="text" class="form-control" id="name" name="name" value={formData.name}   onChange={e => setFormData({...formData, name:e.target.value})} required/>
@@ -166,15 +140,58 @@ const Create = props => {
                                 <Label class="sr-only">Version</Label>
                                 <Input type="text" class="form-control" id="version" name="version" value={formData.version}   onChange={e => setFormData({...formData, version:e.target.value})} required/>
                             </FormGroup> </Col>
-
+                            <Col md={12} className={"pb-2"}>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="checkbox" onChange={e=>setIsSupportingForm(e.target.checked)} />{' '}
+                                    Is this a supporting form? If yes, check the box and select the supporting services.
+                                </Label>
+                            </FormGroup>
+                            </Col>
+                            {isSupportingForm ?
+                                <Col md={12}>
+                                    <Row>
                             <Col md={4}> <FormGroup>
-                                <Label class="sr-only">Form Type</Label>
-                                <Input type="select"  id="formType" value={formData.formType} onChange={e => setFormData({...formData, formType:e.target.value})}>
+                                <Label class="sr-only">Domain Name</Label>
+                                {props.domains && props.domains.length && props.domains.length > 0 ?
+                                    <Input type="select" class="form-control" id="domainCode" required value={domainCode}  onChange={e => {
+                                        setdomainCode(e.target.value);
+                                        fetchServices(e.target.value, formType);
+                                    } }>
+                                        <option >Select a domain</option>
+                                        {props.domains.map(domain => (<option key={domain.code} value={domain.id} >{domain.name}</option>))}
+                                    </Input>:  <Input type="select" class="form-control" id="domainCode" required value={domainCode} onChange={e => setdomainCode(e.target.value)}>
+                                        <option>No Domain found</option>
+                                    </Input>}
+                            </FormGroup></Col>
+                            <Col md={4}> <FormGroup>
+                                <Label class="sr-only">Service Type</Label>
+                                <Input type="select"  id="formType" value={formType} onChange={e => {
+                                    setformType(e.target.value);
+                                    fetchServices(domainCode, e.target.value);
+                                }}>
                                     <option></option>
                                     <option value="0">Care Giver</option>
                                     <option value="1">OVC</option></Input>
                             </FormGroup></Col>
-
+                            <Col md={4}> <FormGroup>
+                                <Label class="sr-only">Service</Label>
+                                {props.services && props.services.length && props.services.length > 0 ?
+                                    <Select isMulti
+                                            name="colors"
+                                            options={props.services.map((service) => ({label:service.name, value:service.code}))}
+                                            onChange={(newValue) => {
+                                                setFormData({...formData, supportingServices: newValue.map(({value}) => value).toString()})
+                                            }
+                                            }
+                                    />
+                                    :  <Input type="select" class="form-control" id="ovcServiceCode" required >
+                                        <option>No Services Found</option>
+                                    </Input>}
+                            </FormGroup></Col>
+                                    </Row>
+                                </Col>
+: <></>}
                             <Col md={2}> <FormGroup>
                                 <label class="sr-only"></label>
                                 <button type="submit"  class="form-control btn btn-primary mt-4" >Save Form</button>
