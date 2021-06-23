@@ -28,6 +28,7 @@ import { Alert } from '@material-ui/lab';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
+import 'formiojs/dist/formio.builder.min.css';
 
 const useStyles = makeStyles(theme => ({
     root2: {

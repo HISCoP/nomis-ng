@@ -65,7 +65,7 @@ export const fetchDomain = (onSuccess) => dispatch => {
 }
 
 export const fetchAllForms = (onSuccess) => dispatch => {
-    axios.get(`${url}ovc-services`)
+    axios.get(`${url}forms`)
         .then(response => {
             console.log(response)
             dispatch({
