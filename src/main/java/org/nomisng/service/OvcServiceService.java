@@ -43,7 +43,7 @@ public class OvcServiceService {
         return this.ovcServiceMapper.toOvcServiceDTOS(ovcServiceRepository.findAllByArchivedIsNotOrderByIdDesc(ARCHIVED));
     }
 
-    public List<Form> getFormByOvcServiceId(Long ovcServiceId){
+    /*public List<Form> getFormByOvcServiceId(Long ovcServiceId){
         Optional<OvcService> optionalOvcService = ovcServiceRepository.findById(ovcServiceId);
         if(!optionalOvcService.isPresent() || optionalOvcService.get().getArchived() == ARCHIVED) throw new EntityNotFoundException(OvcService.class, "OvcService Id", ovcServiceId + "");
         List<Form> forms = optionalOvcService.get().getFormByOvcServiceCode().stream()
@@ -51,7 +51,7 @@ public class OvcServiceService {
                 .sorted(Comparator.comparing(Form::getId).reversed())
                 .collect(Collectors.toList());
         return forms;
-    }
+    }*/
 
     public Domain getDomainByOvcServiceId(Long ovcServiceId){
         OvcService ovcService = ovcServiceRepository.findByIdAndArchived(ovcServiceId, UN_ARCHIVED)

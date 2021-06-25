@@ -1,11 +1,15 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.nomisng.util.converter.LocalDateConverter;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 
 
@@ -22,8 +26,10 @@ public class HouseholdMember extends Audit {
     private Long id;
 
     @Basic
-    @Column(name = "dob", nullable = false)
-    private Date dob;
+    @Column(name = "dob")
+    @Convert(converter = LocalDateConverter.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dob;
 
     @Basic
     @Column(name = "dob_estimated", nullable = false)
@@ -50,26 +56,29 @@ public class HouseholdMember extends Audit {
     private Long educationId;
 
     @Basic
-    @Column(name = "occupation_id", nullable = false)
+    @Column(name = "occupation_id")
     private Long occupationId;
 
     @Basic
-    @Column(name = "household_id", nullable = false)
+    @Column(name = "household_id")
     private Long householdId;
 
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public Household householdByHouseholdId;
 
     @ManyToOne
     @JoinColumn(name = "gender_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public ApplicationCodeset applicationCodesetByGenderId;
 
     @ManyToOne
     @JoinColumn(name = "marital_status_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public ApplicationCodeset applicationCodesetByMaritalStatusId;
 
     @ManyToOne
@@ -80,5 +89,13 @@ public class HouseholdMember extends Audit {
     @ManyToOne
     @JoinColumn(name = "occupation_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public ApplicationCodeset applicationCodesetByOccupationId;
+
+    @PrePersist
+    public void update() {
+        if(this.householdByHouseholdId != null && this.householdByHouseholdId.getId() != null) {
+            this.householdId = householdByHouseholdId.getId();
+        }
+    }
 }

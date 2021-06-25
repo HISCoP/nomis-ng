@@ -28,10 +28,10 @@ public class OvcServiceController {
         return ovcServiceService.update(id, ovcServiceDTO);
     }
 
-    @GetMapping("{id}/forms")
+    /*@GetMapping("{id}/forms")
     public ResponseEntity<List<Form>> getFormByOvcServiceId(@PathVariable Long id) {
             return ResponseEntity.ok(ovcServiceService.getFormByOvcServiceId(id));
-    }
+    }*/
 
     @GetMapping("{id}/domain")
     public ResponseEntity<Domain> getDomainByOvcServiceId(@PathVariable Long id) {

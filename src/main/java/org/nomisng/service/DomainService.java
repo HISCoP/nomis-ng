@@ -90,4 +90,15 @@ public class DomainService {
                 .collect(Collectors.toList());
         return ovcServiceMapper.toOvcServiceDTOS(ovcServices);
     }
+
+    public List<OvcServiceDTO> getOvcServicesByDomainIdAndServiceType(Long domainId, Integer serviceType){
+        Domain domain = domainRepository.findByIdAndArchived(domainId, Constants.ArchiveStatus.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", domainId +""));
+        List<OvcService> ovcServices = domain.getServicesById().stream()
+                .filter(ovcService -> ovcService.getArchived()!= null && ovcService.getArchived()== Constants.ArchiveStatus.UN_ARCHIVED &&
+                        (ovcService.getServiceType() != null && ovcService.getServiceType() == serviceType))
+                .sorted(Comparator.comparing(OvcService::getId).reversed())
+                .collect(Collectors.toList());
+        return ovcServiceMapper.toOvcServiceDTOS(ovcServices);
+    }
 }

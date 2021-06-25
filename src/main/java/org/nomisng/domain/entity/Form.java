@@ -41,16 +41,12 @@ public class Form extends JsonBEntity {
     private Object resourceObject;
 
     @Basic
-    @Column(name = "form_type_id")
-    private int formTypeId;
-
-    @Basic
     @Column(name = "resource_path")
     private String resourcePath;
 
-    @Basic
+    /*@Basic
     @Column(name = "service_code")
-    private String ovcServiceCode;
+    private String ovcServiceCode;*/
 
     @Basic
     @Column(name = "version")
@@ -84,12 +80,16 @@ public class Form extends JsonBEntity {
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
 
-    @ManyToOne
+    @Basic
+    @Column(name = "support_services")
+    private String supportServices;
+
+    /*@ManyToOne
     @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
     @JsonIgnore
-    private OvcService ovcServiceByOvcServiceCode;
+    private OvcService ovcServiceByOvcServiceCode;*/
 
-    @Transient
+    /*@Transient
     private String ovcServiceName;
 
     public String getOvcServiceName(){
@@ -104,5 +104,5 @@ public class Form extends JsonBEntity {
         if(this.code == null || this.code.isEmpty()) {
             this.code = UUID.randomUUID().toString();
         }
-    }
+    }*/
 }

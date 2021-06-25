@@ -1,11 +1,13 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -55,13 +57,14 @@ public class OrganisationUnit extends Audit {
     @ToString.Exclude
     private Collection<FormData> formDataById;
 
-    @OneToOne(mappedBy = "organisationUnitById")
+    @OneToMany(mappedBy = "organisationUnitById")
     @ToString.Exclude
-    private Household householdById;
+    private List<Household> households;
 
     @ManyToOne
     @JoinColumn(name = "organisation_unit_level_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     private OrganisationUnitLevel organisationUnitLevelByOrganisationUnitLevelId;
 
     @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")

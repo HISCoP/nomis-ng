@@ -31,7 +31,7 @@ public class FormService {
         if(formDTO.getCode() == null || formDTO.getCode().isEmpty()){
             formDTO.setCode(UUID.randomUUID().toString());
         }
-        Optional<Form> formOptional = formRepository.findByNameAndOvcServiceCodeAndArchived(formDTO.getName(), formDTO.getOvcServiceCode(), UN_ARCHIVED);
+        Optional<Form> formOptional = formRepository.findByNameAndAndArchived(formDTO.getName(), UN_ARCHIVED);
         if (formOptional.isPresent()) {
             throw new RecordExistException(Form.class, "Name", formDTO.getName());
         }
@@ -47,7 +47,6 @@ public class FormService {
 
         Form form = formOptional.get();
         FormDTO formDTO = formMapper.toFormDTO(form);
-        formDTO.setOvcServiceName(form.getOvcServiceByOvcServiceCode().getName());
         return formDTO;
     }
 
@@ -58,7 +57,6 @@ public class FormService {
         }
         Form form = formOptional.get();
         FormDTO formDTO = formMapper.toFormDTO(form);
-        formDTO.setOvcServiceName(form.getOvcServiceByOvcServiceCode().getName());
         return formDTO;
     }
 

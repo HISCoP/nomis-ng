@@ -40,6 +40,11 @@ public class DomainController {
         return ResponseEntity.ok(domainService.getOvcServicesByDomainId(id));
     }
 
+    @GetMapping("{id}/ovcServices/{serviceType}")
+    public ResponseEntity<List<OvcServiceDTO>> getOvcServicesByDomainIdAndServiceType(@PathVariable Long id, @PathVariable Integer serviceType) {
+        return ResponseEntity.ok(domainService.getOvcServicesByDomainIdAndServiceType(id, serviceType));
+    }
+
     @PostMapping
     public ResponseEntity<Domain> save(@RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.save(domainDTO));
