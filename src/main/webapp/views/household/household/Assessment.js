@@ -3,7 +3,7 @@ import {CButton, CCol, CRow, CCard, CDataTable, CCardBody} from "@coreui/react";
 import {Icon} from "semantic-ui-react";
 import {CChartBar} from "@coreui/react-chartjs";
 import MaterialTable from 'material-table';
-import NewCarePlan from './NewCarePlan';
+import NewHouseHoldAssessment from './NewHouseHoldAssessment';
 
 const Assessment = () => {
     const [modal, setModal] = useState(false);
@@ -53,7 +53,7 @@ const Assessment = () => {
                     />
                 </CCol>
             </CRow>
-            <NewCarePlan  modal={modal} toggle={toggle}/>
+            <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
         </>
     )
 }

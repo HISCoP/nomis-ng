@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import FormRenderer from "../../formBuilder/FormRenderer";
 
 const NewHouseHoldAssessment = (props) => {
   const {
@@ -16,13 +17,19 @@ const NewHouseHoldAssessment = (props) => {
   return (
     <div>
       
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true}>
+      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size={"xl"}>
         <ModalHeader toggle={props.toggle}>New HouseHold Assessment</ModalHeader>
         <ModalBody>
-          <p> Form will be here</p>
+          <FormRenderer
+              patientId={""}
+              formCode={"5f451d7d-213c-4478-b700-69a262667b89"}
+              programCode={""}
+              visitId={""}
+              onSuccess={props.onSuccess}
+              onSubmit={props.onSubmit}
+          />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
           <Button color="secondary" onClick={props.toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
