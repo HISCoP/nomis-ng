@@ -8,6 +8,7 @@ const MemberSearch = React.lazy(() => import('./views/household/member/MemberSea
 const FormBuilder = React.lazy(() => import('./views/formBuilder/formBuilder'));
 const ViewForm = React.lazy(() => import('./views/formBuilder/ViewForm'));
 const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
+const DataVisualisation = React.lazy(() => import('./views/visualization/HomePage'));
 
 /* Admin */
 const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
@@ -21,7 +22,8 @@ const routes = [
   { path: '/household-members', name: 'Household Members', component: MemberSearch },
   { path: '/form-builder', name: 'Form Builder', component: FormBuilder },
   { path: '/edit-form', name: 'Edit Form', component: ViewForm },
-  { path: "/form-home", name: 'Form Builder', component: FormPage} ,
+  { path: "/form-home", name: 'Form Builder', component: FormPage},
+  { path: "/visualization", name: 'Data Visualisation', component: DataVisualisation} ,
   
 ];
 

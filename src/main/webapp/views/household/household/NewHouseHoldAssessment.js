@@ -1,7 +1,9 @@
 
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
-import FormRenderer from "../../formBuilder/FormRenderer";
+import * as CODES from './../../../api/codes'
+import FormRenderer from './../../formBuilder/FormRenderer'
+
 
 const NewHouseHoldAssessment = (props) => {
   const {
@@ -11,28 +13,42 @@ const NewHouseHoldAssessment = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
+  const currentForm = {
+    code: CODES.HOUSEHOLD_ASSESSMENT,
+    //programCode: CODES.GENERAL_SERVICE,
+    formName: "Hosehold Assesment",
+    options:{
+        hideHeader: true
+    },
+  };
 
+const saveAssessment = (e) => {
+      alert('Save Successfully');
+      props.togglestatus();
+
+  
+};
 
 
   return (
     <div>
       
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size={"xl"}>
+      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='xl'>
         <ModalHeader toggle={props.toggle}>New HouseHold Assessment</ModalHeader>
         <ModalBody>
+          
           <FormRenderer
-              patientId={""}
-              formCode={"5f451d7d-213c-4478-b700-69a262667b89"}
-              programCode={""}
-              visitId={""}
-              onSuccess={props.onSuccess}
-              onSubmit={props.onSubmit}
+          formCode={currentForm.code}
+          programCode=""
+          onSubmit={saveAssessment}
           />
         </ModalBody>
-        <ModalFooter>
+        {/* <ModalFooter>
+          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
           <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
+        </ModalFooter> */}
       </Modal>
+      
     </div>
   );
   
