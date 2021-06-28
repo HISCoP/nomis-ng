@@ -56,7 +56,17 @@ const HomePage = () => {
                             <p>Services</p>
 
                         </Menu.Item>
-
+                        <Menu.Item
+                            name='statusupdate'
+                            active={activeItem === 'statusupdate'}
+                            className={'text-center'}
+                            onClick={handleItemClick}
+                        >
+                           
+                                <FolderIcon fontSize="large" className={'text-center'}/>
+                                <p>Status Update</p>
+                          
+                        </Menu.Item>
                         <Menu.Item
                             name='household'
                             active={activeItem === 'household'}
@@ -70,17 +80,7 @@ const HomePage = () => {
                                 <p>Household</p>
                             </Link>
                         </Menu.Item>
-                        <Menu.Item
-                            name='statusupdate'
-                            active={activeItem === 'statusupdate'}
-                            className={'text-center'}
-                            onClick={handleItemClick}
-                        >
-                           
-                                <FolderIcon fontSize="large" className={'text-center'}/>
-                                <p>Status Update</p>
-                          
-                        </Menu.Item>
+                        
                         
                     </Menu>
 

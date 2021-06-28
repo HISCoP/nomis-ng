@@ -12,11 +12,11 @@ const ServiceHomePage = () => {
     const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
         {
-            menuItem: 'Status Update ',
+            menuItem: 'HIV Status Update ',
             render: () => <ServicePage setIndex={setIndex}/>,
         },
         {
-            menuItem: 'Graduation',
+            menuItem: 'Graduation/Exit',
             render: () => <PendingForms/>,
         }
     ]
