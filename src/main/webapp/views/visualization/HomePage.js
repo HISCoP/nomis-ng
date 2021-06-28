@@ -43,20 +43,20 @@ const Dashboard = () => {
           </CRow>
 
           <CRow>
-            <CCol sm="4" className="p-1">
+            <CCol sm="6" className="p-1">
                 <OVC_SERV_Than_18 />
             </CCol>
-            <CCol sm="4" className="p-1">
+            <CCol sm="6" className="p-1">
                 <OVC_SERV_Less_18 />
             </CCol>
             
           </CRow>
           <CRow>
            
-            <CCol sm="4" className="p-1">
+            <CCol sm="6" className="p-1">
                 <OVC_SERV_Male/>
             </CCol>
-            <CCol sm="4" className="p-1">
+            <CCol sm="6" className="p-1">
                 <OVC_SERV_Than_18 />
             </CCol>
             
