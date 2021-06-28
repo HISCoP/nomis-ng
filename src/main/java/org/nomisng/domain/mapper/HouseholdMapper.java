@@ -28,7 +28,7 @@ public interface HouseholdMapper {
     @Mappings({
             @Mapping(source="household.id", target="id")
     })
-    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMemberDTO> householdMembersDTOS, List<HouseholdContactDTO> householdContactDTOS);
+    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMemberDTO> householdMemberDTOS, List<HouseholdContactDTO> householdContactDTOS);
 
 
     @Mappings({

@@ -63,6 +63,10 @@ public class HouseholdMember extends Audit {
     @Column(name = "household_id")
     private Long householdId;
 
+    @Basic
+    @Column(name = "household_member_type") //1 - OVC, 2 - Caregiver, 3 OVC & Caregiver
+    private Integer householdMemberType;
+
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
@@ -84,6 +88,7 @@ public class HouseholdMember extends Audit {
     @ManyToOne
     @JoinColumn(name = "education_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public ApplicationCodeset applicationCodesetByEducationId;
 
     @ManyToOne
@@ -92,10 +97,10 @@ public class HouseholdMember extends Audit {
     @JsonIgnore
     public ApplicationCodeset applicationCodesetByOccupationId;
 
-    @PrePersist
+    /*@PrePersist
     public void update() {
         if(this.householdByHouseholdId != null && this.householdByHouseholdId.getId() != null) {
             this.householdId = householdByHouseholdId.getId();
         }
-    }
+    }*/
 }

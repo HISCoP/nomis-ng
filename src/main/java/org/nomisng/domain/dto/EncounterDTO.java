@@ -24,5 +24,4 @@ public class EncounterDTO implements Serializable {
     public List<FormData> formData;
 
     private Object data;
-
 }

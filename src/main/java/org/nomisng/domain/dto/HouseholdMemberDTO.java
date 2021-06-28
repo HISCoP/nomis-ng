@@ -39,4 +39,6 @@ public class HouseholdMemberDTO {
     private Long occupationId;
 
     private Long householdId;
+
+    private Integer householdMemberType;
 }

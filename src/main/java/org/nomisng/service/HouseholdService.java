@@ -36,8 +36,6 @@ public class HouseholdService {
     private final HouseholdMapper householdMapper;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdContactMapper householdContactMapper;
-    private static final int ARCHIVED = 1;
-    private static final int UN_ARCHIVED = 0;
 
     public List<HouseholdDTO> getAllHouseholds() {
         return householdMapper.toHouseholdDTOS(householdRepository.findAll());
@@ -51,7 +49,7 @@ public class HouseholdService {
 
     public HouseholdDTO getHouseholdById(Long id) {
         Household household = householdRepository.findById(id)
-                .orElseThrow(() ->new EntityNotFoundException(Household.class, "Id", id+""));
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
         List<HouseholdMember> householdMembers = household.getHouseholdMembers();
         List<HouseholdContact> householdContacts = household.getHouseholdContacts();
 
@@ -62,9 +60,11 @@ public class HouseholdService {
     }
 
 
+
+
     public Household update(Long id, HouseholdDTO householdDTO) {
-        Household household = householdRepository.findById(id)
-                .orElseThrow(() ->new EntityNotFoundException(Household.class, "Id", id+""));
+        householdRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
 
         return saveOrUpdateHousehold(id, householdDTO);
     }
@@ -79,7 +79,7 @@ public class HouseholdService {
 
         Household household = householdMapper.toHousehold(householdDTO);
         //For updates
-        if(id == null){
+        if(id != null){
             household.setId(id);
         }
         household = householdRepository.save(household);
@@ -89,7 +89,6 @@ public class HouseholdService {
             for (HouseholdContact householdContact : householdContacts) {
                 householdContact.setHouseholdId(household.getId());
                 updatedHouseholdContacts.add(householdContact);
-
             }
         }
         if(householdDTO.getHouseholdMemberDTOS() != null) {

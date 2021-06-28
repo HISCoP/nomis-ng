@@ -24,5 +24,5 @@ public interface HouseholdMemberMapper {
     List<HouseholdMemberDTO> toHouseholdMemberDTOS(List<HouseholdMember> householdMembers);
 
 
-
+    List<HouseholdMemberDTO> toHouseholdDTOS(List<HouseholdMember> householdMembers);
 }

@@ -37,9 +37,9 @@ public class DomainService {
 
     public Domain save(DomainDTO domainDTO) {
         Optional<Domain> domainOptional = domainRepository.findByNameAndArchived(domainDTO.getName(), Constants.ArchiveStatus.UN_ARCHIVED);
-        if (domainOptional.isPresent()) {
+        domainOptional.ifPresent(domain -> {
             throw new RecordExistException(Domain.class, "Name", domainDTO.getName());
-        }
+        });
         Domain domain = domainMapper.toDomain(domainDTO);
         domain.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
 
@@ -49,7 +49,6 @@ public class DomainService {
     public DomainDTO getDomainById(Long id) {
         Domain domain = domainRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", id +""));
-
         DomainDTO domainDTO = domainMapper.toDomainDTO(domain);
         return domainDTO;
     }
@@ -57,15 +56,13 @@ public class DomainService {
     public DomainDTO getDomainByDomainCode(String domainCode) {
         Domain domain = domainRepository.findByCodeAndArchived(domainCode, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Domain Code", domainCode));
-
         DomainDTO domainDTO = domainMapper.toDomainDTO(domain);
         return domainDTO;
     }
 
     public Domain update(Long id, DomainDTO domainDTO) {
-        Optional<Domain> domainOptional = domainRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED);
-        //log.info("domain optional  is" + domainOptional.get());
-        if(!domainOptional.isPresent())throw new EntityNotFoundException(Domain.class, "Id", id +"");
+        domainRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", id+""));
 
         Domain domain = domainMapper.toDomain(domainDTO);
         domain.setId(id);

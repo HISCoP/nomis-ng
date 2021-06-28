@@ -35,12 +35,10 @@ public class EncounterService {
     }
 
     public Encounter update(Long id, EncounterDTO encounterDTO) {
-        Encounter encounter = encounterRepository.findById(id)
+        encounterRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
-
-        encounter.setId(id);
-        encounterRepository.save(encounter);
-        return encounter;
+        encounterDTO.setId(id);
+        return encounterRepository.save(encounterMapper.toEncounter(encounterDTO));
     }
 
     public Encounter save(EncounterDTO encounterDTO) {

@@ -53,7 +53,6 @@ public class DomainController {
     @PutMapping("/{id}")
     public ResponseEntity<Domain> update(@PathVariable Long id, @RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.update(id, domainDTO));
-
     }
 
     @DeleteMapping("/{id}")
