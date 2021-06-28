@@ -12,13 +12,10 @@ const ServiceHomePage = () => {
     const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
         {
-            menuItem: ' Status Update ',
+            menuItem: ' Forms',
             render: () => <ServicePage setIndex={setIndex}/>,
-        },
-        {
-            menuItem: 'Graduation/Exit',
-            render: () => <PendingForms/>,
         }
+       
     ]
 
     return (
@@ -51,7 +48,7 @@ const ServicePage = (props) => {
                     {/* <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "} */}
                 <br/><br/><br/>
                 <MaterialTable
-                        title="Status Update"
+                        title="Forms History"
                         columns={[
                             { title: 'Form Name', field: 'name' },
                             { title: 'Date', field: 'date' },
