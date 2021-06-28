@@ -4,11 +4,27 @@ import {Icon} from "semantic-ui-react";
 import {CChartBar} from "@coreui/react-chartjs";
 import MaterialTable from 'material-table';
 import NewCarePlan from './NewCarePlan';
+import FormRenderer from "../../formBuilder/FormRenderer";
 
-const CarePlan = () => {
+const CarePlan = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
-    const fields = ['dateCreated','totalServices', 'pending', 'inProgress', 'completed', 'Actions']
+    const onSubmit = (submission) => {
+        alert('Submitted');
+        console.log('submission is ');
+        console.log(submission);
+    }
+    const onSuccess = () => {
+        alert('Successfull');
+    }
+    const currentForm ={
+        code: "",
+        programCode: "",
+        formName: "Household Care Plan",
+        options:{
+            hideHeader: true
+        },
+    };
     const usersData = [
         {pending: 0, totalServices: '10', dateCreated: '2018/01/01', inProgress: '3', completed: '7'},
         {pending: 1, totalServices: '7', dateCreated: '2018/01/01', inProgress: '2', completed: '4'},
@@ -17,12 +33,8 @@ const CarePlan = () => {
     return (
         <>
             <CRow>
-                <CCol xs="12">
-
-                    <Icon name='users' />  Household Careplan(s)
-
+                <CCol xs="12" className={"pb-3"}>
                     <CButton color={"primary"} className="float-right" onClick={toggle}> New Care Plan</CButton>
-                    <hr />
                 </CCol>
             </CRow>
 
@@ -94,7 +106,8 @@ const CarePlan = () => {
                     />
                 </CCol>
             </CRow>
-            <NewCarePlan  modal={modal} toggle={toggle}/>
+
+            <NewCarePlan  modal={modal} toggle={toggle} onSubmit={onSubmit} onSuccess={onSuccess}/>
         </>
     )
 }

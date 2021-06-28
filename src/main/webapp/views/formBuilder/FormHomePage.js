@@ -68,7 +68,7 @@ function FormSearch(props) {
                 <MaterialTable
                     title="Find By Program Area and Form Name"
                     columns={[
-                        {title: "Service Area", field: "ovcServiceName"},
+
                         { title: "Form Name", field: "name" },
                         { title: "Form Version", field: "version" },
                         {title: "Action", field: "actions", filtering: false,},

@@ -64,7 +64,7 @@ const Update = props => {
                 const response = await axios(url + "forms");
                 const body = response.data;
                 const data = body.map(({ name, code }) => ({ title: name, value: code }));
-                setFormPrecedenceList(data);
+               // setFormPrecedenceList(data);
                 body !== null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
             } catch (error) {
             }
@@ -116,7 +116,7 @@ const Update = props => {
             <ToastContainer />
             <CardBody>
                 <Breadcrumbs aria-label="breadcrumb">
-                    <Link color="inherit" to={{  pathname: "/admin",
+                    <Link color="inherit" to={{  pathname: "/form-home",
                         state: 'form-builder'}} >
                         Form Manager
                     </Link>
@@ -192,7 +192,7 @@ const Update = props => {
 
 
                 {/*preview modal start*/}
-                <Modal isOpen={showModal} toggle={toggleModal} size="lg">
+                <Modal isOpen={showModal} toggle={toggleModal} size="xl">
                     <ModalHeader toggle={toggleModal}><h4>View Form</h4> </ModalHeader>
                     <ModalBody>
                         <Card>
@@ -204,7 +204,7 @@ const Update = props => {
                                     <Form
                                         form={JSON.parse(res)}
                                         ref={form => myform = form}
-                                        submission={{data : {patient: props.patient, authHeader: authHeader(), baseUrl:url}}}
+                                        submission={{data : {authHeader: authHeader(), baseUrl:url}}}
                                         //src={url}
                                         hideComponents={props.hideComponents}
                                         //onSubmit={props.onSubmit}

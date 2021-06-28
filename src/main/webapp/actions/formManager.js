@@ -61,7 +61,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
     })
 
     axios
-        .get(`${baseUrl}forms/${id}/formCode`)
+        .get(`${baseUrl}forms/formCode?formCode=${id}`)
         .then(response => {
             dispatch({
                 type: ACTION_TYPES.FORM_FETCH_BY_ID,
