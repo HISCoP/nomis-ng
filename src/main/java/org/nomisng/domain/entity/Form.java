@@ -44,9 +44,9 @@ public class Form extends JsonBEntity {
     @Column(name = "resource_path")
     private String resourcePath;
 
-    /*@Basic
-    @Column(name = "service_code")
-    private String ovcServiceCode;*/
+    @Basic
+    @Column(name = "form_type")
+    private String formType;
 
     @Basic
     @Column(name = "version")
