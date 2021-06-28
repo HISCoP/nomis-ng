@@ -27,10 +27,9 @@ const Assessment = () => {
                         title="Assessment History"
                         columns={[
                             { title: 'Date Created', field: 'dateCreated' },
-                            { title: 'Total Services', field: 'totalServices' },
-                            { title: 'Pending', field: 'pending' },
-                            { title: 'In Progress', field: 'inProgress' },
-                            { title: 'Completed', field: 'completed' },
+                            { title: 'Total Yes', field: 'totalServices' },
+                            { title: 'Total No', field: 'pending' },
+                            { title: 'Total N/A', field: 'inProgress' },
                         ]}
                         data={usersData}
                         actions={[

@@ -86,6 +86,7 @@ export const VITAL_SIGNS_FORM = 'bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0'
 export const HOUSEHOLD_ASSESSMENT = '5f451d7d-213c-4478-b700-69a262667b89'
 export const Caregiver_Household_Service= '9ec328a9-1b3c-4043-98d0-84ea5f47de55'
 export const  ChildServiceFrom= '6b8e6617-7182-40d0-9e8c-d6f33e9f4325'
+export const NEW_HOUSEHOLD = 'ca9332ef-b60b-42ac-b879-a67ebf27649d'
 
 // export const IN_PATIENT_BOOKED = 3
 // export const IN_PATIENT_UNBOOKED = 2
