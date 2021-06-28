@@ -44,7 +44,7 @@ const ServicePage = (props) => {
                 </CAlert>
                 </CCol>
                 <CCol xs="12">
-                    <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> Provide Status Update</CButton> {" "}
+                    <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> New Form</CButton> {" "}
                     {/* <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "} */}
                 <br/><br/><br/>
                 <MaterialTable
