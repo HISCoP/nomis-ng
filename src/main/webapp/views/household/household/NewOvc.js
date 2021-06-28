@@ -14,8 +14,7 @@ const NewOvc = (props) => {
   const toggle = () => setModal(!modal);
     const currentForm = {
         code: CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM,
-        //programCode: CODES.GENERAL_SERVICE,
-        formName: "Hosehold Assesment",
+        formName: "Vulnerable Children Form",
         options:{
             hideHeader: true
         },
@@ -33,7 +32,7 @@ const NewOvc = (props) => {
     <div>
       
       <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
-        <ModalHeader toggle={props.toggle}>New OVC</ModalHeader>
+        <ModalHeader toggle={props.toggle}>New Care Giver Enrolment</ModalHeader>
         <ModalBody>
             <FormRenderer
                 formCode={currentForm.code}

@@ -1,34 +1,47 @@
 
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import * as CODES from './../../../api/codes'
+import FormRenderer from './../../formBuilder/FormRenderer'
 
-const NewCareGiver = (props) => {
+
+const NewOvc = (props) => {
   const {
     buttonLabel,
     className
   } = props;
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
+  const currentForm = {
+    code: CODES.CARE_GIVER_ENROLMENT_FORM ,
+    formName: "Care Giver Enrolment Form",
+    options:{
+      hideHeader: true
+    },
+  };
+
+  const saveAssessment = (e) => {
+    alert('Save Successfully');
+    props.togglestatus();
 
 
+  };
 
 
   return (
-    <div>
-      
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true}>
-        <ModalHeader toggle={props.toggle}>New Care Giver</ModalHeader>
-        <ModalBody>
-          <p> Form will be here</p>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
-          <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+      <div>
+
+        <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
+          <ModalHeader toggle={props.toggle}>New Care Giver</ModalHeader>
+          <ModalBody>
+            <FormRenderer
+                formCode={currentForm.code}
+                onSubmit={saveAssessment}/>
+          </ModalBody>
+        </Modal>
+      </div>
   );
-  
+
 }
 
-export default NewCareGiver;
+export default NewOvc;
