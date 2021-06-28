@@ -28,6 +28,7 @@ import { Alert } from '@material-ui/lab';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
+import 'formiojs/dist/formio.builder.min.css';
 
 const useStyles = makeStyles(theme => ({
     root2: {
@@ -46,6 +47,7 @@ const Update = props => {
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [displayType, setDisplayType] = React.useState("");
     const [formCode, setformCode] = React.useState();
+    //const [FormPrecedenceList, setFormPrecedenceList] = React.useState();
     const [form2, setform2] = React.useState();
     const classes = useStyles();
     let myform;
