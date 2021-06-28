@@ -12,7 +12,7 @@ const ServiceHomePage = () => {
     const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
         {
-            menuItem: 'HIV Status Update ',
+            menuItem: ' Status Update ',
             render: () => <ServicePage setIndex={setIndex}/>,
         },
         {
