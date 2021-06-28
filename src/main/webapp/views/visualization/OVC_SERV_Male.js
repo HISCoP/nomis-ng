@@ -20,21 +20,57 @@ var options = {
         type: 'column'
     },
     title: {
-        text: 'OVC_SERV [ Comprehensive & Prevention]'
+        text: 'OVC_SERV & HIVSTAT by Age Category-MALE'
     },
+   
     xAxis: {
-        categories: ['Jan.', 'Feb.', 'March', 'April', 'May', 'June']
+        categories: ['Unknown Age_…', '<1yrsF', '1-4yrsF', '5-9yrsF', '10-14yrsF', '15-17yrsF', '18-20yrsF', '18+yrsF'],
+        title: {
+            text: null
+        }
     },
- 
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Population (millions)',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    tooltip: {
+        valueSuffix: ' millions'
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    // legend: {
+    //     layout: 'vertical',
+    //     align: 'right',
+    //     verticalAlign: 'top',
+    //     x: -40,
+    //     y: 80,
+    //     floating: true,
+    //     borderWidth: 1,
+    //     backgroundColor:
+    //         Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+    //     shadow: true
+    // },
+    credits: {
+        enabled: false
+    },
     series: [{
-        type: 'column',
-        name: 'OVC_SERV_Prevention',
-        data: [50, 100, 200, 250, 300]
+        name: 'OVC_SERV',
+        data: [107, 31, 635, 203, 2,99,76,89]
     }, {
-        type: 'column',
-        name: 'OVC_SERV_Comprehensive',
-        data: [20, 30, 50, 70, 60]
-    }, ]
+        name: 'OVC_HIVSTAT',
+        data: [133, 156, 947, 408, 667,908,987,123]
+    }]
 }
 
 

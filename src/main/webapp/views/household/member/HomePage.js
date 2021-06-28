@@ -9,6 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
 import ServiceHomePage from "./ServicePage";
+import StatusUpdate from "./StatusUpdate";
 import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -69,6 +70,17 @@ const HomePage = () => {
                                 <p>Household</p>
                             </Link>
                         </Menu.Item>
+                        <Menu.Item
+                            name='statusupdate'
+                            active={activeItem === 'statusupdate'}
+                            className={'text-center'}
+                            onClick={handleItemClick}
+                        >
+                           
+                                <FolderIcon fontSize="large" className={'text-center'}/>
+                                <p>Status Update</p>
+                          
+                        </Menu.Item>
                         
                     </Menu>
 
@@ -82,6 +94,9 @@ const HomePage = () => {
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
                             <ServiceHomePage />
+                        </CTabPane>
+                        <CTabPane active={activeItem === 'statusupdate'} >
+                            <StatusUpdate />
                         </CTabPane>
 
                     </CTabContent>
