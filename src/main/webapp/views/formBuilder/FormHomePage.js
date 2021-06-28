@@ -22,6 +22,7 @@ function FormSearch(props) {
     const [loading, setLoading] = useState(false);
     const [showCurrentForm, setShowCurrentForm] = useState(false);
     const [currentForm, setCurrentForm] = useState(false);
+    console.log(props.formList)
 
     useEffect(() => {
         setLoading(true);
@@ -76,7 +77,7 @@ function FormSearch(props) {
                     ]}
                     isLoading={loading}
                     data={!props.formList && !props.formList.length ? [] : props.formList.map((row) => ({
-                        ovcServiceName: row.ovcServiceName,
+                        
                         name: row.name,
                         version: row.version,
                         actions:

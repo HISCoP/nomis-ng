@@ -15,7 +15,7 @@ function fetchEncounterById(encounterId) {
 
 function fetchFormByFormCode(formCode) {
     return axios
-        .get(`${url}forms/${formCode}/formCode`, {})
+        .get(`${url}forms/formCode?formCode=${formCode}`, {})
 }
 
 function updateFormData(id, data){

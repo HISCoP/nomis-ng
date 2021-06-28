@@ -102,7 +102,12 @@ const Tables = () => {
           </CCard>
         </CCol>
       </CRow>
-      <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
+      {modal ?
+        <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
+        :
+        ""
+      }
+      
     </>
     
   )
