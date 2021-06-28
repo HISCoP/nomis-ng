@@ -21,10 +21,7 @@ const NewCareGiver = (props) => {
         <ModalBody>
           <p> Form will be here</p>
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
-          <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
+
       </Modal>
     </div>
   );

@@ -26,14 +26,14 @@ const ServiceHistoryPage = (props) => {
                             <List.Content floated='right'>
                                 <Button>View</Button>
                             </List.Content>
-                            <List.Content>Household Vunerabilty Assessment - Ada Kindu</List.Content>
+                            <List.Content>Household Vulnerabilty Assessment {memberId ? '' : ' - Ada Kindu'}</List.Content>
                             <List.Description>29/10/2020 15:09 PM </List.Description>
                         </List.Item>
                         <List.Item>
                             <List.Content floated='right'>
                                 <Button>View</Button>
                             </List.Content>
-                            <List.Content>Caregiver Form - Amos Kindu</List.Content>
+                            <List.Content>Caregiver Form {memberId ? '' : ' - Amos Kindu' }</List.Content>
                             <List.Description>29/10/2020 15:09 PM </List.Description>
                         </List.Item>
 
@@ -41,7 +41,7 @@ const ServiceHistoryPage = (props) => {
                             <List.Content floated='right'>
                                 <Button>View</Button>
                             </List.Content>
-                            <List.Content>Household Followup Assessment - Amos Kindu</List.Content>
+                            <List.Content>Household Followup Assessment {memberId ? '' : ' - Amos Kindu'}</List.Content>
                             <List.Description>29/10/2020 15:09 PM </List.Description>
                         </List.Item>
                     </List>

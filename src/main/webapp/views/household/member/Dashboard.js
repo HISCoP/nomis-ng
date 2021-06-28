@@ -20,7 +20,7 @@ const Dashboard = () => {
                     <RecentServiceOffered />
                 </CCol>
                 <CCol xs="12" >
-                    <ServiceHistoryPage />
+                    <ServiceHistoryPage memberId={23}/>
                 </CCol>
             </CRow>
 
