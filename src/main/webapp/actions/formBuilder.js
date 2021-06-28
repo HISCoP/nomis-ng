@@ -44,6 +44,7 @@ export const fetchDomainServices = (domainId, serviceType) => dispatch => {
 }
 
 export const fetchDomain = (onSuccess) => dispatch => {
+    console.log(url)
     axios.get(`${url}domains`)
         .then(response => {
             console.log(response)
