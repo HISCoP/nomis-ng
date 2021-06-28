@@ -13,6 +13,7 @@ import HouseholdMember from "./HouseholdMember";
 import HouseholdService from "./HouseholdService";
 import CarePlan from "./CarePlan";
 import { makeStyles } from "@material-ui/core/styles";
+import AssessmentCarePlanHome from "./AssessmentCarePlanHome";
 
 const useStyles = makeStyles({
     root: {
@@ -73,7 +74,7 @@ const HouseholdHomePage = (props) => {
                     className={'text-center'}
                 >
                     <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Care Plans</p>
+                    <p>Assessments & Care Plans</p>
                 </Menu.Item>
             </Menu>
                 </CCol>
@@ -88,7 +89,7 @@ const HouseholdHomePage = (props) => {
                             <HouseholdMember />
                         </CTabPane>
                         <CTabPane active={activeItem === 'careplan'} >
-                           <CarePlan/>
+                           <AssessmentCarePlanHome/>
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
                            <HouseholdService />

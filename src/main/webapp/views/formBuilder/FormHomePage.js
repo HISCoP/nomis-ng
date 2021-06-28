@@ -78,7 +78,7 @@ function FormSearch(props) {
                     ]}
                     isLoading={loading}
                     data={!props.formList && !props.formList.length ? [] : props.formList.map((row) => ({
-                        ovcServiceName: row.ovcServiceName,
+                        
                         name: row.name,
                         version: row.version,
                         actions:

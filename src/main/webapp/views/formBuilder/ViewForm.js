@@ -194,7 +194,7 @@ const Update = props => {
 
 
                 {/*preview modal start*/}
-                <Modal isOpen={showModal} toggle={toggleModal} size="lg">
+                <Modal isOpen={showModal} toggle={toggleModal} size="xl">
                     <ModalHeader toggle={toggleModal}><h4>View Form</h4> </ModalHeader>
                     <ModalBody>
                         <Card>
@@ -206,7 +206,7 @@ const Update = props => {
                                     <Form
                                         form={JSON.parse(res)}
                                         ref={form => myform = form}
-                                        submission={{data : {patient: props.patient, authHeader: authHeader(), baseUrl:url}}}
+                                        submission={{data : {authHeader: authHeader(), baseUrl:url}}}
                                         //src={url}
                                         hideComponents={props.hideComponents}
                                         //onSubmit={props.onSubmit}

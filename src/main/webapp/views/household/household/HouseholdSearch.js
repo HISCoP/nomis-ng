@@ -12,7 +12,7 @@ import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
-import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+import NewHouseHold from './NewHouseHold';
 
 const Tables = () => {
   const [modal, setModal] = useState(false);
@@ -26,13 +26,13 @@ const Tables = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              Household Vulnerability Assessment
+             Find Household
 
               <CButton 
                   color="primary" 
                   className="float-right"
                   onClick={toggle}
-                >New Household Assessment</CButton>
+                >New Household </CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable
@@ -102,7 +102,12 @@ const Tables = () => {
           </CCard>
         </CCol>
       </CRow>
-      <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
+      {modal ?
+        <NewHouseHold  modal={modal} toggle={toggle}/>
+        :
+        ""
+      }
+      
     </>
     
   )
