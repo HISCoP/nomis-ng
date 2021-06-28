@@ -21,6 +21,7 @@ function FormSearch(props) {
     const [loading, setLoading] = useState(false);
     const [showCurrentForm, setShowCurrentForm] = useState(false);
     const [currentForm, setCurrentForm] = useState(false);
+    console.log(props.formList)
 
     useEffect(() => {
         setLoading(true);
@@ -32,6 +33,7 @@ function FormSearch(props) {
         };
         props.fetchAllForms(onSuccess, onError);
     }, []);
+
 
     const onSuccess = () => {
         toast.success("Form saved successfully!", { appearance: "success" });

@@ -33,6 +33,7 @@ export const PHARMARCY_DRUG_DISPENSE = '01a75846-83ed-4caa-9c78-136697742b72'
 export const PHARMARCY_DRUG_DISPENSE_REGIMEN = 'c9b1b50f-6544-42b6-a868-91a5bf320671'
 export const DATA_VISUALIZATION = '738ed64d-f96b-433f-a096-13896f7a3509'
 export const BIOMETRICS_CAPTURE_FORM = 'e8a5260c-3f07-404e-a718-cd7f669c9aae'
+export const VULNERABLE_CHILDREN_ENROLMENT_FORM = 'afde4bd9-d3ac-44f4-ae78-1e2fd9fcaead'
 /**
  * @CODES
  * ==============================================
