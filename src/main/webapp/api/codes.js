@@ -33,6 +33,9 @@ export const PHARMARCY_DRUG_DISPENSE = '01a75846-83ed-4caa-9c78-136697742b72'
 export const PHARMARCY_DRUG_DISPENSE_REGIMEN = 'c9b1b50f-6544-42b6-a868-91a5bf320671'
 export const DATA_VISUALIZATION = '738ed64d-f96b-433f-a096-13896f7a3509'
 export const BIOMETRICS_CAPTURE_FORM = 'e8a5260c-3f07-404e-a718-cd7f669c9aae'
+export const VULNERABLE_CHILDREN_ENROLMENT_FORM = 'afde4bd9-d3ac-44f4-ae78-1e2fd9fcaead'
+export const CARE_GIVER_ENROLMENT_FORM = '5457c394-4c2a-47c6-8a77-745e513bd3c6'
+
 /**
  * @CODES
  * ==============================================
@@ -50,15 +53,15 @@ export const EMERGENCY_PATIENT = 4
  * LAB ORDER STATUS CODES
  */
 export const LAB_ORDER_STATUS = [{name:"Sample Collected", id: 1},
-{name:"Sample Transfer", id: 2},
-{name:"Sample Verified", id: 3},
-{name:"Sample Rejected", id: 4},
-{name:"Result Available", id: 5},
-{name:"Pending", id:0}];
+    {name:"Sample Transfer", id: 2},
+    {name:"Sample Verified", id: 3},
+    {name:"Sample Rejected", id: 4},
+    {name:"Result Available", id: 5},
+    {name:"Pending", id:0}];
 
 
 export const DRUG_ORDER_STATUS = [{name:"Not Dispensed", id: 0},
-{name:"Dispensed", id: 1}];
+    {name:"Dispensed", id: 1}];
 
 /**
  * @CODES
@@ -85,7 +88,10 @@ export const GENERAL_SERVICE = '25216afc-d158-4696-ada6-00df609b9a4c'
 export const VITAL_SIGNS_FORM = 'bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0'
 export const HOUSEHOLD_ASSESSMENT = '5f451d7d-213c-4478-b700-69a262667b89'
 export const Caregiver_Household_Service= '9ec328a9-1b3c-4043-98d0-84ea5f47de55'
-export const  ChildServiceFrom= '6b8e6617-7182-40d0-9e8c-d6f33e9f4325'
+export const NEW_HOUSEHOLD= '9ec328a9-1b3c-4043-98d0-84ea5f47de55'
+
+
+
 
 // export const IN_PATIENT_BOOKED = 3
 // export const IN_PATIENT_UNBOOKED = 2

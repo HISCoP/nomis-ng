@@ -74,7 +74,7 @@ const HouseholdHomePage = (props) => {
                     className={'text-center'}
                 >
                     <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Assessment & Care Plans</p>
+                    <p>Assessments & Care Plans</p>
                 </Menu.Item>
             </Menu>
                 </CCol>

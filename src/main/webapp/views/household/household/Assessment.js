@@ -3,7 +3,7 @@ import {CButton, CCol, CRow, CCard, CDataTable, CCardBody} from "@coreui/react";
 import {Icon} from "semantic-ui-react";
 import {CChartBar} from "@coreui/react-chartjs";
 import MaterialTable from 'material-table';
-import NewCarePlan from './NewCarePlan';
+import NewHouseHoldAssessment from './NewHouseHoldAssessment';
 
 const Assessment = () => {
     const [modal, setModal] = useState(false);
@@ -27,10 +27,9 @@ const Assessment = () => {
                         title="Assessment History"
                         columns={[
                             { title: 'Date Created', field: 'dateCreated' },
-                            { title: 'Total Services', field: 'totalServices' },
-                            { title: 'Pending', field: 'pending' },
-                            { title: 'In Progress', field: 'inProgress' },
-                            { title: 'Completed', field: 'completed' },
+                            { title: 'Total Yes', field: 'totalServices' },
+                            { title: 'Total No', field: 'pending' },
+                            { title: 'Total N/A', field: 'inProgress' },
                         ]}
                         data={usersData}
                         actions={[
@@ -53,7 +52,7 @@ const Assessment = () => {
                     />
                 </CCol>
             </CRow>
-            <NewCarePlan  modal={modal} toggle={toggle}/>
+            <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
         </>
     )
 }
