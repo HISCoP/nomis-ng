@@ -32,7 +32,7 @@ const NewOvc = (props) => {
     <div>
       
       <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
-        <ModalHeader toggle={props.toggle}>New Care Giver Enrolment</ModalHeader>
+        <ModalHeader toggle={props.toggle}>New OVC Enrolment</ModalHeader>
         <ModalBody>
             <FormRenderer
                 formCode={currentForm.code}
