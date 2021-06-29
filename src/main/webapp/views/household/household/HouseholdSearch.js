@@ -43,7 +43,7 @@ const Tables = () => {
                   { title: 'Total OVC', field: 'ovc', type: 'numeric' },
                   {
                     title: 'Status',
-                    field: 'staus',
+                    field: 'status',
                     
                   },
                   {
@@ -53,7 +53,7 @@ const Tables = () => {
                   },
                 ]}
                 data={[
-                  { id: '7892', date: 'Baran', ovc: 7, status: 'Vulnerable', 
+                  { id: '7892', date: '24/08/2021', ovc: 7, status: 'Graduated',
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
@@ -73,7 +73,7 @@ const Tables = () => {
                           </Menu>
                   
                   },
-                  { id: '4758', date: 'Baran', ovc: 7, status: 'Not Vulnerable', 
+                  { id: '4758', date: '23/09/2020', ovc: 7, status: 'In Progress',
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
