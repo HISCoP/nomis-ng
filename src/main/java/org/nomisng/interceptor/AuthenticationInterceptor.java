@@ -1,5 +1,6 @@
 package org.nomisng.interceptor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Component
+@Slf4j
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
+        log.info("Request URL {}", request.getRequestURI());
+
         if (request.getRequestURI().contains("/api/encounters")) {
             return HandleEncounterController(request);
         }
@@ -29,6 +33,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         System.out.println("Post Handle method is Calling");
     }
+
     @Override
     public void afterCompletion
             (HttpServletRequest request, HttpServletResponse response, Object

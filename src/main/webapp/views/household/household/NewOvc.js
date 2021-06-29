@@ -1,6 +1,9 @@
 
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import * as CODES from './../../../api/codes'
+import FormRenderer from './../../formBuilder/FormRenderer'
+
 
 const NewOvc = (props) => {
   const {
@@ -9,22 +12,34 @@ const NewOvc = (props) => {
   } = props;
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
+    const currentForm = {
+        code: CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM,
+        formName: "Vulnerable Children Form",
+        options:{
+            hideHeader: true
+        },
+    };
+
+    const saveAssessment = (e) => {
+        alert('Save Successfully');
+        props.togglestatus();
 
 
+    };
 
 
   return (
     <div>
       
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true}>
-        <ModalHeader toggle={props.toggle}>New OVC</ModalHeader>
+      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
+        <ModalHeader toggle={props.toggle}>New Care Giver Enrolment</ModalHeader>
         <ModalBody>
-          <p> Form will be here</p>
+            <FormRenderer
+                formCode={currentForm.code}
+                programCode=""
+                onSubmit={saveAssessment}
+            />
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
-          <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
       </Modal>
     </div>
   );

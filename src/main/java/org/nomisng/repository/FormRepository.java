@@ -16,6 +16,6 @@ public interface FormRepository extends JpaRepository<Form, Long>, JpaSpecificat
 
     List<Form> findAllByArchivedOrderByIdAsc(int archived);
 
-    Optional<Form> findByNameAndOvcServiceCodeAndArchived(String name, String serviceCode, int archived);
+    Optional<Form> findByNameAndAndArchived(String name, int archived);
 }
 

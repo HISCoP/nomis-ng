@@ -13,8 +13,7 @@ import java.util.List;
 public interface EncounterMapper {
     Encounter toEncounter(EncounterDTO encounterDTO);
     @Mappings({
-            @Mapping(source="encounter.id", target="id"),
-            @Mapping(source="encounter.ovcServiceCode", target="ovcServiceCode")
+            @Mapping(source="encounter.id", target="id")
     })
     EncounterDTO toEncounterDTO(Encounter encounter, Form form);
 

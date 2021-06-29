@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Data
@@ -30,22 +27,27 @@ public class Household extends Audit {
 
     @Basic
     @Column(name = "cbo_id")
-    private Long cboId;
+    @JsonIgnore
+    private Long cboId = 1L;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id", updatable = false, insertable = false)
+    @ManyToOne
+    @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public OrganisationUnit organisationUnitById;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
-    public Collection<HouseholdContact> householdContactsById;
+    @JsonIgnore
+    public List<HouseholdContact> householdContacts;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
-    public Collection<HouseholdMember> householdMembersById;
-
     @JsonIgnore
+    public List<HouseholdMember> householdMembers;
+
     @OneToMany(mappedBy = "householdMemberByHouseholdMemberId")
+    @ToString.Exclude
+    @JsonIgnore
     private List<Encounter> encounterByOvcServiceCode;
 }

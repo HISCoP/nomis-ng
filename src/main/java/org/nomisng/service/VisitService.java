@@ -24,8 +24,6 @@ import java.util.UUID;
 public class VisitService {
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
-    private static final int ARCHIVED = 1;
-    private static final int UN_ARCHIVED = 0;
 
     public List getAllVisits() {
         return visitMapper.toVisitDTOS(visitRepository.findAll());
@@ -37,19 +35,16 @@ public class VisitService {
 
     public VisitDTO getVisit(Long id) {
         Visit visit = visitRepository.findById(id)
-                .orElseThrow(() ->new EntityNotFoundException(Visit.class, "Id", id+""));
-
+                .orElseThrow(() -> new EntityNotFoundException(Visit.class, "Id", id+""));
        return visitMapper.toVisitDTO(visit);
     }
 
 
     public Visit update(Long id, VisitDTO visitDTO) {
         Visit visit = visitRepository.findById(id)
-                .orElseThrow(() ->new EntityNotFoundException(Visit.class, "Id", id+""));
+                .orElseThrow(() -> new EntityNotFoundException(Visit.class, "Id", id+""));
         visitDTO.setId(visit.getId());
-
         return visitRepository.save(visitMapper.toVisit(visitDTO));
-
     }
 
     public Integer delete(Long id) {

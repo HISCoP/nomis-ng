@@ -9,6 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
 import ServiceHomePage from "./ServicePage";
+import Forms from "./Forms";
 import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -55,7 +56,17 @@ const HomePage = () => {
                             <p>Services</p>
 
                         </Menu.Item>
-
+                        <Menu.Item
+                            name='forms'
+                            active={activeItem === 'forms'}
+                            className={'text-center'}
+                            onClick={handleItemClick}
+                        >
+                           
+                                <FolderIcon fontSize="large" className={'text-center'}/>
+                                <p>Forms</p>
+                          
+                        </Menu.Item>
                         <Menu.Item
                             name='household'
                             active={activeItem === 'household'}
@@ -70,6 +81,7 @@ const HomePage = () => {
                             </Link>
                         </Menu.Item>
                         
+                        
                     </Menu>
 
                 </CCol>
@@ -82,6 +94,9 @@ const HomePage = () => {
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
                             <ServiceHomePage />
+                        </CTabPane>
+                        <CTabPane active={activeItem === 'forms'} >
+                            <Forms />
                         </CTabPane>
 
                     </CTabContent>

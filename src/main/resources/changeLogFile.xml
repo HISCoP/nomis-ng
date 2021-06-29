@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Emeka" id="1624451901250-1">
+        <createSequence sequenceName="application_codeset_id_seq1"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-2">
+        <createSequence sequenceName="application_user_id_seq"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-3">
+        <createSequence sequenceName="application_user_organisation_unit_id_seq1"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-4">
+        <createSequence sequenceName="domain_id_seq"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-5">
+        <createSequence sequenceName="form_id_seq"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-6">
+        <createSequence sequenceName="hibernate_sequence"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-7">
+        <createSequence sequenceName="menu_id_seq1"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-8">
+        <createSequence sequenceName="role_id_seq"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-9">
+        <createSequence sequenceName="service_id_seq"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-10">
+        <createTable tableName="application_codeset">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="application_codeset2_pkey"/>
+            </column>
+            <column name="codeset_group" type="VARCHAR(2147483647)"/>
+            <column name="display" type="VARCHAR(2147483647)"/>
+            <column name="language" type="VARCHAR(2147483647)"/>
+            <column name="version" type="VARCHAR(2147483647)"/>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(2147483647)"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-11">
+        <createTable tableName="application_codeset_standard_codeset">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="application_codeset_id" type="BIGINT"/>
+            <column name="standard_codeset_id" type="BIGINT"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-12">
+        <createTable tableName="application_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="user_name" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="other_names" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="current_organisation_unit_id" type="BIGINT"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="activation_key" type="VARCHAR(2147483647)"/>
+            <column name="date_reset" type="date"/>
+            <column name="reset_key" type="VARCHAR(2147483647)"/>
+            <column name="time_uploaded" type="TIME WITH TIME ZONE"/>
+            <column name="archived" type="INT"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="gender" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-13">
+        <createTable tableName="application_user_organisation_unit">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="application_user_organisation_unit_pkey"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="application_user_id" type="BIGINT"/>
+            <column name="archived" type="INT"/>
+            <column name="organisation_unit_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-14">
+        <createTable tableName="application_user_role">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-15">
+        <createTable tableName="domain">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="domain_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="code" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-16">
+        <createTable tableName="encounter">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="encounter_pkey"/>
+            </column>
+            <column name="date_encounter" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organisational_unit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="household_member_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="form_code" type="VARCHAR(2147483647)"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-17">
+        <sql>
+            CREATE TABLE form
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+            name character varying ,
+            code character varying  NOT NULL,
+            resource_object json,
+            form_type_id bigint,
+            resource_path character varying ,
+            created_by character varying(255)  NOT NULL,
+            date_created timestamp without time zone NOT NULL,
+            date_modified timestamp without time zone,
+            modified_by character varying(255) ,
+            archived integer,
+            uuid character varying(255) ,
+            version character varying ,
+            support_services character varying(255) ,
+            CONSTRAINT form_pkey PRIMARY KEY (id),
+            CONSTRAINT unique_form_code UNIQUE (code)
+            )
+        </sql>
+        <!--<createTable tableName="form">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="form_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="code" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_object" type="JSON(2147483647)"/>
+            <column name="form_type_id" type="BIGINT"/>
+            <column name="resource_path" type="VARCHAR(2147483647)"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="archived" type="INT"/>
+            <column name="uuid" type="VARCHAR(255)"/>
+            <column name="version" type="VARCHAR(2147483647)"/>
+            <column name="support_services" type="VARCHAR(255)"/>
+        </createTable>-->
+    </changeSet>
+
+    <changeSet author="Emeka" id="1624451901250-24">
+        <createTable tableName="organisation_unit">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="organisation_unit_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="description" type="VARCHAR(300)"/>
+            <column name="organisation_unit_level_id" type="BIGINT"/>
+            <column name="parent_organisation_unit_id" type="BIGINT"/>
+            <column name="archived" type="INT"/>
+            <column name="address" type="VARCHAR(2147483647)"/>
+            <column name="phone" type="VARCHAR(2147483647)"/>
+            <column name="email" type="VARCHAR(2147483647)"/>
+            <column name="latitude" type="FLOAT8"/>
+            <column name="longitude" type="FLOAT8"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Emeka" id="1624451901250-18">
+        <sql>
+            CREATE TABLE form_data
+            (
+            id bigint NOT NULL,
+            encounter_id bigint NOT NULL,
+            data jsonb,
+            organisational_unit_id bigint NOT NULL,
+            created_by character varying(255)  NOT NULL,
+            date_created timestamp without time zone NOT NULL,
+            date_modified timestamp without time zone,
+            modified_by character varying(255) ,
+            CONSTRAINT form_data_pkey PRIMARY KEY (id),
+            CONSTRAINT encounter_id_fk FOREIGN KEY (encounter_id)
+            REFERENCES public.encounter (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            NOT VALID,
+            CONSTRAINT organisation_id_fk FOREIGN KEY (organisational_unit_id)
+            REFERENCES organisation_unit (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            NOT VALID
+            )
+        </sql>
+        <!--<createTable tableName="form_data">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="encounter_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="JSONB(2147483647)"/>
+            <column name="organisational_unit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>-->
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-19">
+        <createTable tableName="household">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unique_id" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(2147483647)"/>
+            <column name="cbo_id" type="BIGINT"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-20">
+        <createTable tableName="household_contact">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mobile_phone_number" type="VARCHAR(2147483647)"/>
+            <column name="alternate_phone_number" type="VARCHAR(2147483647)"/>
+            <column name="email" type="VARCHAR(2147483647)"/>
+            <column name="zip_code" type="VARCHAR(2147483647)"/>
+            <column name="city" type="VARCHAR(2147483647)"/>
+            <column name="street" type="VARCHAR(2147483647)"/>
+            <column name="landmark" type="VARCHAR(2147483647)"/>
+            <column name="country_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="province_id" type="BIGINT"/>
+            <column name="household_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-21">
+        <createTable tableName="household_member">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dob" type="date"/>
+            <column name="dob_estimated" type="BOOL"/>
+            <column name="first_name" type="VARCHAR(2147483647)"/>
+            <column name="last_name" type="VARCHAR(2147483647)"/>
+            <column name="gender_id" type="BIGINT"/>
+            <column name="marital_status_id" type="BIGINT"/>
+            <column name="education_id" type="BIGINT"/>
+            <column name="occupation_id" type="BIGINT"/>
+            <column name="household_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-22">
+        <createTable tableName="menu">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="menu_pkey"/>
+            </column>
+            <column name="archived" type="INT"/>
+            <column name="module_id" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-23">
+        <createTable tableName="module">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="archived" type="INT"/>
+            <column name="artifact" type="VARCHAR(255)"/>
+            <column name="base_package" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="data" type="BYTEA"/>
+            <column name="date_installed" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="installed_by" type="VARCHAR(255)"/>
+            <column name="module_type" type="INT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_config" type="BOOL"/>
+            <column name="started" type="BOOL"/>
+            <column name="status" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uninstall" type="BOOL"/>
+            <column name="version" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Emeka" id="1624451901250-25">
+        <createTable tableName="organisation_unit_hierarchy">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organisation_unit_id" type="BIGINT"/>
+            <column name="parent_organisation_unit_id" type="BIGINT"/>
+            <column name="organisation_unit_level_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-26">
+        <createTable tableName="organisation_unit_identifier">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organisation_unit_id" type="BIGINT"/>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-27">
+        <createTable tableName="organisation_unit_level">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="description" type="VARCHAR(300)"/>
+            <column name="archived" type="INT"/>
+            <column name="status" type="INT"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-28">
+        <createTable tableName="ovc_service">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="service_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="domain_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="archived" type="INT"/>
+            <column name="service_type" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-29">
+        <createTable tableName="permission">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2147483647)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-30">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="role_pkey"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+            <column name="modified_by" type="VARCHAR(2147483647)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-31">
+        <createTable tableName="role_permission">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-32">
+        <createTable tableName="standard_codeset">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="description" type="VARCHAR(2147483647)"/>
+            <column name="standard_codeset_source_id" type="BIGINT"/>
+            <column name="archived" type="INT"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-33">
+        <createTable tableName="standard_codeset_source">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="description" type="VARCHAR(2147483647)"/>
+            <column name="archived" type="INT"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-34">
+        <createTable tableName="visit">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="TIME WITH TIME ZONE"/>
+            <column name="end_time" type="TIME WITH TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-35">
+        <addPrimaryKey columnNames="id" constraintName="application_codeset_standard_codeset_pkey" tableName="application_codeset_standard_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-36">
+        <addPrimaryKey columnNames="user_id, role_id" constraintName="application_user_roles_pkey" tableName="application_user_role"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-39">
+        <addPrimaryKey columnNames="id" constraintName="household_contact_pkey" tableName="household_contact"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-40">
+        <addPrimaryKey columnNames="id" constraintName="household_member_pkey" tableName="household_member"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-41">
+        <addPrimaryKey columnNames="id" constraintName="household_pkey" tableName="household"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-42">
+        <addPrimaryKey columnNames="id" constraintName="module_pkey" tableName="module"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-43">
+        <addPrimaryKey columnNames="id" constraintName="organisation_unit_hierarchy_pkey" tableName="organisation_unit_hierarchy"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-44">
+        <addPrimaryKey columnNames="id" constraintName="organisation_unit_identifier_pkey" tableName="organisation_unit_identifier"/>
+    </changeSet>
+    <!--<changeSet author="Emeka" id="1624451901250-45">
+        <addPrimaryKey columnNames="id" constraintName="organisation_unit_pkey" tableName="organisation_unit"/>
+    </changeSet>-->
+    <changeSet author="Emeka" id="1624451901250-46">
+        <addPrimaryKey columnNames="id" constraintName="organisational_unit_level_pkey" tableName="organisation_unit_level"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-47">
+        <addPrimaryKey columnNames="id" constraintName="priviledge_pkey" tableName="permission"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-48">
+        <addPrimaryKey columnNames="role_id, permission_id" constraintName="role_permissions_pkey" tableName="role_permission"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-49">
+        <addPrimaryKey columnNames="id" constraintName="standard_codeset_pkey" tableName="standard_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-50">
+        <addPrimaryKey columnNames="id" constraintName="standard_codeset_source_pkey" tableName="standard_codeset_source"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-51">
+        <addPrimaryKey columnNames="id" constraintName="visit_pkey" tableName="visit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-52">
+        <addUniqueConstraint columnNames="name" constraintName="uk_f73dsvaor0f4cycvldyt2idf1" tableName="module"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-53">
+        <addUniqueConstraint columnNames="code" constraintName="uk_jxqx9q5tehvt65cvnfydu83uw" tableName="ovc_service"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-54">
+        <addUniqueConstraint columnNames="code" constraintName="uk_p678i09huw94k0w1fgkvb9r36" tableName="ovc_service"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-55">
+        <addUniqueConstraint columnNames="base_package" constraintName="uk_rxqkmhg2y507iqe53my30p6sv" tableName="module"/>
+    </changeSet>
+    <!--<changeSet author="Emeka" id="1624451901250-56">
+        <addUniqueConstraint columnNames="code" constraintName="unique_form_code" tableName="form"/>
+    </changeSet>-->
+    <changeSet author="Emeka" id="1624451901250-57">
+        <addUniqueConstraint columnNames="name" constraintName="unique_name" tableName="permission"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-58">
+        <addUniqueConstraint columnNames="code" constraintName="unique_service_code" tableName="ovc_service"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-59">
+        <addUniqueConstraint columnNames="code" constraintName="unique_uuid" tableName="domain"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-60">
+        <addForeignKeyConstraint baseColumnNames="education_id" baseTableName="household_member" constraintName="application_codeset_education_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-61">
+        <addForeignKeyConstraint baseColumnNames="gender_id" baseTableName="household_member" constraintName="application_codeset_gender_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-62">
+        <addForeignKeyConstraint baseColumnNames="application_codeset_id" baseTableName="application_codeset_standard_codeset" constraintName="application_codeset_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-63">
+        <addForeignKeyConstraint baseColumnNames="marital_status_id" baseTableName="household_member" constraintName="application_codeset_marital_status_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-64">
+        <addForeignKeyConstraint baseColumnNames="occupation_id" baseTableName="household_member" constraintName="application_occupation_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-65">
+        <addForeignKeyConstraint baseColumnNames="domain_id" baseTableName="ovc_service" constraintName="domain_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="domain"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-67">
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="menu" constraintName="fk1obs6w04f4923yr9ejg0054cd" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-68">
+        <addForeignKeyConstraint baseColumnNames="household_id" baseTableName="household_contact" constraintName="fk_household_contact_household" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="household"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-69">
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="organisation_unit" constraintName="fk_organisation_level" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit_level"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-70">
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_id" baseTableName="organisation_unit_identifier" constraintName="fk_organisation_unit_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-71">
+        <addForeignKeyConstraint baseColumnNames="current_organisation_unit_id" baseTableName="application_user" constraintName="fk_user_organisation_unit" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-72">
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_id" baseTableName="application_user_organisation_unit" constraintName="fkhf3c1pa7kplb098xvf6rktwe7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-73">
+        <addForeignKeyConstraint baseColumnNames="application_user_id" baseTableName="application_user_organisation_unit" constraintName="fkn6hxlqt4dj51b6iipo5x7oq9t" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_user"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-74">
+        <addForeignKeyConstraint baseColumnNames="form_code" baseTableName="encounter" constraintName="form_code_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="code" referencedTableName="form"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-75">
+        <addForeignKeyConstraint baseColumnNames="household_id" baseTableName="household_member" constraintName="household_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="household"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-76">
+        <addForeignKeyConstraint baseColumnNames="household_member_id" baseTableName="encounter" constraintName="household_member_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="household_member"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-77">
+        <addForeignKeyConstraint baseColumnNames="country_id" baseTableName="household_contact" constraintName="org_unit_country_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-78">
+        <addForeignKeyConstraint baseColumnNames="province_id" baseTableName="household_contact" constraintName="org_unit_province_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-81">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="household" constraintName="organisation_unit_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-82">
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="organisation_unit_hierarchy" constraintName="organisation_unit_level_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit_level"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-83">
+        <addForeignKeyConstraint baseColumnNames="parent_organisation_unit_id" baseTableName="organisation_unit_hierarchy" constraintName="parent_organisation_unit_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-84">
+        <addForeignKeyConstraint baseColumnNames="permission_id" baseTableName="role_permission" constraintName="permission_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="permission"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-85">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="role_permission" constraintName="role_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-86">
+        <addForeignKeyConstraint baseColumnNames="standard_codeset_id" baseTableName="application_codeset_standard_codeset" constraintName="standard_codeset_fk_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="standard_codeset"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-87">
+        <addForeignKeyConstraint baseColumnNames="standard_codeset_source_id" baseTableName="standard_codeset" constraintName="standard_codeset_source_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="standard_codeset_source"/>
+    </changeSet>
+    <changeSet author="Emeka" id="1624451901250-88">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="application_user_role" constraintName="user_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="application_user"/>
+    </changeSet>
+
+    <changeSet author="emeka" id="1624451901250-93">
+        <loadData file="form.csv"
+                  quotchar="'"
+                  relativeToChangelogFile="false"
+                  schemaName="public"
+                  separator=","
+                  tableName="form">
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

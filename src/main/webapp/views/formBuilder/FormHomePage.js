@@ -35,6 +35,7 @@ function FormSearch(props) {
         props.fetchAllForms(onSuccess, onError);
     }, []);
 
+
     const onSuccess = () => {
         toast.success("Form saved successfully!", { appearance: "success" });
         setShowCurrentForm(false);

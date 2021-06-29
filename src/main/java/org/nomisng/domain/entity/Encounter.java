@@ -29,9 +29,9 @@ public class Encounter extends Audit {
     @Column(name = "form_code")
     private String formCode;
 
-    @Basic
+    /*@Basic
     @Column(name = "service_code")
-    private String ovcServiceCode;
+    private String ovcServiceCode;*/
 
     @Basic
     @Column(name = "household_member_id")
@@ -46,12 +46,6 @@ public class Encounter extends Audit {
     @ToStringExclude
     @JsonIgnore
     private List<FormData> formDataById;
-
-    @ManyToOne
-    @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
-    @JsonIgnore
-    @ToStringExclude
-    private OvcService ovcServiceByOvcServiceCode;
 
     @ManyToOne
     @JoinColumn(name = "household_member_id", referencedColumnName = "id", updatable = false, insertable = false)

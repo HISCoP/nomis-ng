@@ -1,5 +1,6 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -58,26 +59,37 @@ public class HouseholdContact extends Audit {
     private Long provinceId;
 
     @Basic
-    @Column(name = "household_id", nullable = false)
+    @Column(name = "household_id")
     private Long householdId;
 
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public Household householdByHouseholdId;
 
     @ManyToOne
     @JoinColumn(name = "country_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public OrganisationUnit organisationUnitByCountryId;
 
     @ManyToOne
     @JoinColumn(name = "state_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     private OrganisationUnit organisationUnitByStateId;
 
     @ManyToOne
     @JoinColumn(name = "province_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     private OrganisationUnit organisationUnitByProvinceId;
+
+    @PrePersist
+    public void persist() {
+        if(this.householdByHouseholdId != null && this.householdByHouseholdId.getId() != null) {
+            this.householdId = householdByHouseholdId.getId();
+        }
+    }
 }

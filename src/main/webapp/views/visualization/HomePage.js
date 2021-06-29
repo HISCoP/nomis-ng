@@ -30,8 +30,8 @@ const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 const Dashboard = () => {
   return (
     <>
-      <WidgetsDropdown />
-    
+      {/* <WidgetsDropdown />
+     */}
           <CRow>
             <CCol sm="6" className="p-2">
                 <ComprehensivePrevention />
@@ -43,21 +43,20 @@ const Dashboard = () => {
           </CRow>
 
           <CRow>
-            <CCol sm="4" className="p-1">
+            <CCol sm="6" className="p-2">
                 <OVC_SERV_Than_18 />
             </CCol>
-            <CCol sm="4" className="p-1">
+            <CCol sm="6" className="p-2">
                 <OVC_SERV_Less_18 />
             </CCol>
             
           </CRow>
           <CRow>
-           
-            <CCol sm="4" className="p-1">
-                <OVC_SERV_Male/>
+            <CCol sm="6" className="p-2">
+                <OVC_SERV_Female />
             </CCol>
-            <CCol sm="4" className="p-1">
-                <OVC_SERV_Than_18 />
+            <CCol sm="6" className="p-2">
+                <OVC_SERV_Male />
             </CCol>
             
           </CRow>

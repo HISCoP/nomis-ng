@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -34,9 +33,9 @@ public class ApplicationCodesetService {
     public ApplicationCodeset save(ApplicationCodesetDTO applicationCodesetDTO){
         Optional<ApplicationCodeset> applicationCodesetOptional = applicationCodesetRepository.findByDisplayAndCodesetGroupAndArchived(applicationCodesetDTO.getDisplay(),
                 applicationCodesetDTO.getCodesetGroup(), Constants.ArchiveStatus.UN_ARCHIVED);
-        if (applicationCodesetOptional.isPresent()) {
-            throw new RecordExistException(ApplicationCodeset.class,"Display:",applicationCodesetDTO.getDisplay());
-        }
+        applicationCodesetOptional.ifPresent(applicationCodeset -> {
+            throw new RecordExistException(ApplicationCodeset.class, "Display:", applicationCodeset.getDisplay());
+        });
 
         final ApplicationCodeset applicationCodeset = applicationCodesetMapper.toApplicationCodeset(applicationCodesetDTO);
         applicationCodeset.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
@@ -50,12 +49,12 @@ public class ApplicationCodesetService {
         return applicationCodesetMapper.toApplicationCodesetDTOList(applicationCodesetList);
     }
 
-    public ApplicationCodesetDTO getApplicationCodesetById(Long id){
+    /*public ApplicationCodesetDTO getApplicationCodesetById(Long id){
         ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
 
         return  applicationCodesetMapper.toApplicationCodesetDTO(applicationCodeset);
-    }
+    }*/
 
     public ApplicationCodeset update(Long id, ApplicationCodesetDTO applicationCodesetDTO){
         applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)

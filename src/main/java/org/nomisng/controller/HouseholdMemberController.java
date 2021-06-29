@@ -1,24 +1,50 @@
 package org.nomisng.controller;
 
-
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.nomisng.domain.dto.HouseholdDTO;
+import org.nomisng.domain.dto.HouseholdMemberDTO;
+import org.nomisng.domain.entity.Household;
+import org.nomisng.domain.entity.HouseholdMember;
+import org.nomisng.service.HouseholdMemberService;
+import org.nomisng.service.HouseholdService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/household-members")
-@Slf4j
+@RequestMapping("api/household-members")
 @RequiredArgsConstructor
 public class HouseholdMemberController {
+    private final HouseholdMemberService householdMemberService;
 
+    @GetMapping
+    public ResponseEntity<List<HouseholdMemberDTO>> getAllHouseholds() {
+        return ResponseEntity.ok(householdMemberService.getAllHouseholdMembers());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HouseholdMemberDTO> getHouseholdMemberById(@PathVariable Long id) {
+        return ResponseEntity.ok(householdMemberService.getHouseholdMemberById(id));
+    }
+
+    @GetMapping("/{id}/household")
+    public ResponseEntity<HouseholdDTO> getHouseholdByHouseholdMemberId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdMemberService.getHouseholdByHouseholdMemberId(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<HouseholdMember> save(@RequestBody HouseholdMemberDTO householdMemberDTO) {
+        return ResponseEntity.ok(householdMemberService.save(householdMemberDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HouseholdMember> update(@RequestBody HouseholdMemberDTO householdMemberDTO, @PathVariable Long id) {
+        return ResponseEntity.ok(householdMemberService.update(id, householdMemberDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Integer> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(householdMemberService.delete(id));
+    }
 }
