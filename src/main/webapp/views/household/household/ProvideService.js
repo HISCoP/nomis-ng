@@ -3,14 +3,20 @@ import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, } from 'reactstrap';
 import * as CODES from './../../../api/codes';
 import FormRenderer from './../../formBuilder/FormRenderer';
+import { connect } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
+import "react-widgets/dist/css/react-widgets.css";
+import {
+  createProvideService,
+} from "./../../../actions/householdCaregiverService";
+
+
 
 const ProvideService = (props) => {
-  const {
-    
+  const FormData = {};
+  const {   
     className
   } = props;
-  const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
 
   const currentForm = {
     code: CODES.Caregiver_Household_Service,
@@ -22,10 +28,21 @@ const ProvideService = (props) => {
   };
 
   const saveAssessment = (e) => {
-
-    console.log(e.data)
-    props.togglestatus();
-
+    console.log(props)
+    const onSuccess = () => {
+        props.toggle();
+    };
+    const onError = () => {
+        props.toggle();
+    };
+    
+    FormData['dateEncounter'] = '2021-06-10T07:54:11.526Z'//e.data.dataGrid[0].date;
+    FormData['formCode'] = CODES.Caregiver_Household_Service;
+    FormData['data'] = e.data.dataGrid ;
+    FormData['householdMemberId'] = 1;
+    
+    console.log(FormData)
+    props.createProvideService(FormData,onSuccess, onError);
 
 };
 
@@ -42,14 +59,14 @@ const ProvideService = (props) => {
           onSubmit={saveAssessment}
           />
         </ModalBody>
-        {/* <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
-          <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter> */}
+
       </Modal>
     </div>
   );
   
 }
 
-export default ProvideService;
+
+export default connect(null, { createProvideService })(
+  ProvideService
+);
