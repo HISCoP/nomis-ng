@@ -3,12 +3,12 @@ import { url } from "./../api";
 import * as ACTION_TYPES from "./types";
 
 
-export const fetchAll = (onSuccess , onError) => dispatch => {
+export const fetchAllHouseHoldMember = (onSuccess , onError) => dispatch => {
     axios
-        .get(`${url}programs`)
+        .get(`${url}household-members`)
         .then(response => {
             dispatch({
-                type: ACTION_TYPES.PROGRAM_FETCH_ALL,
+                type: ACTION_TYPES.FETCH_HOUSE_HOLD_MEMBER,
                 payload: response.data
             });
             if(onSuccess){
@@ -24,53 +24,3 @@ export const fetchAll = (onSuccess , onError) => dispatch => {
         );
 };
 
-export const createProvideService = (formData, onSuccess , onError) => dispatch => {
-    axios
-        .post(`${url}encounters`, formData)
-        .then(response => {
-            if(onSuccess){
-                onSuccess();
-            }
-        })
-        .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
-
-        );
-};
-
-export const updateProgram = (id, formData, onSuccess , onError) => dispatch => {
-    axios
-        .put(`${url}programs/${id}`, formData)
-        .then(response => {
-            if(onSuccess){
-                onSuccess();
-            }
-        })
-        .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
-
-        );
-};
-
-export const deleteProgram = (id, onSuccess , onError) => dispatch => {
-    axios
-        .delete(`${url}programs/${id}`)
-        .then(response => {
-            if(onSuccess){
-                onSuccess();
-            }
-        })
-        .catch(error => {
-                if(onError){
-                    onError();
-                }
-            }
-
-        );
-};

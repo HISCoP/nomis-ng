@@ -36,10 +36,10 @@ const ProvideService = (props) => {
         props.toggle();
     };
     
-    FormData['dateEncounter'] = '2021-06-10T07:54:11.526Z'//e.data.dataGrid[0].date;
+    FormData['dateEncounter'] = e.data.dataGrid[0].date;
     FormData['formCode'] = CODES.Caregiver_Household_Service;
     FormData['data'] = e.data.dataGrid ;
-    FormData['householdMemberId'] = 1;
+    FormData['householdMemberId'] = props.memberId;
     
     console.log(FormData)
     props.createProvideService(FormData,onSuccess, onError);
