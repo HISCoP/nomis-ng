@@ -5,6 +5,7 @@ import './main/webapp/scss/style.scss';
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
+    <p>Loading...</p>
   </div>
 )
 
