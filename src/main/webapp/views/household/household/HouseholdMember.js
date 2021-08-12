@@ -52,13 +52,13 @@ const HouseholdMember = (props) => {
             {!loading ? props.houseMemberList.map((member) => (
                 (
                 <CCol xs="12" sm="6" lg="4">
-                   <MemberCard memberType={{type:"Caregiver"}} details={member} currentAge={age(member.dob)}/>
+                   <MemberCard  details={member} currentAge={age(member.dob)}/>
                 </CCol>
                 )
             )
             )
             :
-            "Loading please wait.."
+            "Lading please wait.."
             }
             </CRow>
 
@@ -85,7 +85,7 @@ const MemberCard = (props) => {
         <>
         <CCard>
             <CCardBody className={'text-center'}>
-                <p className={'text-left'}><b>{props.memberType.type || ''}</b></p>
+                <p className={'text-left'}><b>{props.details.householdMemberType===1?"Caregiver": "OVC" || ''}</b></p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home",
