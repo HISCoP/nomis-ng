@@ -22,8 +22,11 @@ const useStyles = makeStyles({
     }
 });
 const HouseholdHomePage = (props) => {
+    //Getting the house Hold details from the props
+    console.log(props.location)
+    const houseHoldId = props.location.houseHoldId;
     const classes = useStyles();
-    const [activeItem, setActiveItem] = React.useState(props.location.state ? props.location.state : 'dashboard');
+    const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
@@ -85,7 +88,7 @@ const HouseholdHomePage = (props) => {
                             <HouseholdDashboard />
                         </CTabPane>
                         <CTabPane active={activeItem === 'members'} >
-                            <HouseholdMember />
+                            <HouseholdMember houseHoldId={houseHoldId}/>
                         </CTabPane>
                         <CTabPane active={activeItem === 'careplan'} >
                            <CarePlan/>

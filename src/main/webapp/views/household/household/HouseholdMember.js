@@ -9,15 +9,20 @@ import NewCareGiver from './NewCareGiver';
 import ProvideService from './ProvideService';
 import { connect } from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
+import { Alert } from 'reactstrap';
 
 const HouseholdMember = (props) => {
+    //Getting the household Id from the props 
+    
+    const [houseHoldId, sethouseHoldId] = useState(props.houseHoldId);
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
     const [modal2, setModal2] = useState(false);
     const toggle2 = () => setModal2(!modal2);
     const [loading, setLoading] = useState('')
 
-    console.log(props.houseMemberList)
+    console.log(houseHoldId)
+
     useEffect(() => {
     setLoading('true');
         const onSuccess = () => {
@@ -28,6 +33,9 @@ const HouseholdMember = (props) => {
         }
             props.fetchAllMember(onSuccess, onError);
     }, []); //componentDidMount
+
+    //This is to filter the actual Members of the HouseHold by filtering by the houseHoldId
+    const actualMember = props.houseMemberList.filter((x) => x.householdId ===houseHoldId)
     //Function to calculate Members Age 
     function age(dob)
     {
@@ -49,7 +57,7 @@ const HouseholdMember = (props) => {
                 </CCol>
             </CRow>
             <CRow>
-            {!loading ? props.houseMemberList.map((member) => (
+            {!loading && actualMember!==null ? actualMember.map((member) => (
                 (
                 <CCol xs="12" sm="6" lg="4">
                    <MemberCard  details={member} currentAge={age(member.dob)}/>
@@ -60,8 +68,15 @@ const HouseholdMember = (props) => {
             :
             "Lading please wait.."
             }
+                        
             </CRow>
-
+            {actualMember.length<=0 ?
+                <Alert color="primary">
+                    No Household Member please click the button above 
+                </Alert>
+            :
+            ""
+            }
             <NewOvc  modal={modal} toggle={toggle}/>
             <NewCareGiver  modal={modal2} toggle={toggle2}/>
             
