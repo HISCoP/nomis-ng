@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import { CCol, CRow} from "@coreui/react";
-import ServiceHistoryPage from '../widgets/ServiceHistoryPage';
+import ServiceHistoryPage from './ServiceHistoryPage';
 import DescriptionIcon from '@material-ui/icons/Description';
-import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+
 
 const HouseholdService = () => {
     const [modal, setModal] = useState(false);
@@ -18,10 +18,10 @@ const HouseholdService = () => {
             </CRow>
             <CRow>
                     <CCol xs="12" >
-                        <ServiceHistoryPage isHistory={false} />
+                        <ServiceHistoryPage  />
                     </CCol>
             </CRow>
-            <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
+           
             </>
     );
 }

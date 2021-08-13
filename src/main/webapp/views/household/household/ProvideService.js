@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, ModalHeader, ModalBody, } from 'reactstrap';
 import * as CODES from './../../../api/codes';
 import FormRenderer from './../../formBuilder/FormRenderer';

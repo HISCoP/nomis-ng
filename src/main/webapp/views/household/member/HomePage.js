@@ -1,5 +1,5 @@
 import React from 'react';
-import {Header, Menu, Icon, Dropdown} from 'semantic-ui-react'
+import {Header, Menu, Icon} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent,
     CTabPane} from "@coreui/react";
@@ -8,9 +8,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
-import ServiceHomePage from "./ServicePage";
+import ServiceHomePage from "./ServiceHistoryPage";
 import Forms from "./Forms";
-import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -21,7 +20,8 @@ const useStyles = makeStyles({
     }
 });
 
-const HomePage = () => {
+const HomePage = (props) => {
+    console.log(props)
     const classes = useStyles();
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
@@ -75,6 +75,7 @@ const HomePage = () => {
                         >
                             <Link color="inherit" to ={{
                                 pathname: "/household/home",
+                                houseHoldId:props.householdId
                             }}  >
                                 <FolderIcon fontSize="large" className={'text-center'}/>
                                 <p>Household</p>
