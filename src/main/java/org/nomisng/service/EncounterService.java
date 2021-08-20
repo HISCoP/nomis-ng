@@ -24,6 +24,7 @@ public class EncounterService {
     private final EncounterMapper encounterMapper;
     private final FormDataMapper formDataMapper;
     private final FormDataRepository formDataRepository;
+    private final Long organisationUnitId = 1L;
 
     public List<EncounterDTO> getAllEncounters() {
         return encounterMapper.toEncounterDTO(encounterRepository.findAll());
@@ -47,9 +48,11 @@ public class EncounterService {
             formData.setData(encounterDTO.getData());
         }
         Encounter encounter = encounterMapper.toEncounter(encounterDTO);
+        encounter.setOrganisationUnitId(organisationUnitId);
         encounter = encounterRepository.save(encounter);
 
         formData.setEncounterId(encounter.getId());
+        formData.setOrganisationalUnitId(organisationUnitId);
         formDataRepository.save(formData);
         return encounter;
     }

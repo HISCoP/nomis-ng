@@ -36,6 +36,7 @@ public class HouseholdService {
     private final HouseholdMapper householdMapper;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdContactMapper householdContactMapper;
+    private Long organisationUnitId = 1L;
 
     public List<HouseholdDTO> getAllHouseholds() {
         return householdMapper.toHouseholdDTOS(householdRepository.findAll());
@@ -78,7 +79,7 @@ public class HouseholdService {
         List<HouseholdContact> updatedHouseholdContacts = new ArrayList<>();
 
         Household household = householdMapper.toHousehold(householdDTO);
-        //For updates
+        //For updates and saving
         if(id != null){
             household.setId(id);
         }
@@ -91,13 +92,12 @@ public class HouseholdService {
                 updatedHouseholdContacts.add(householdContact);
             }
         }
-        if(householdDTO.getHouseholdMemberDTOS() != null) {
-            List<HouseholdMember> householdMembers = householdMemberMapper.toHouseholdMembers(householdDTO.getHouseholdMemberDTOS());
+        if(householdDTO.getHouseholdMemberDTO() != null) {
+            HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdDTO.getHouseholdMemberDTO());
 
-            for (HouseholdMember householdMember : householdMembers) {
-                householdMember.setHouseholdId(household.getId());
-                updatedHouseholdMembers.add(householdMember);
-            }
+            householdMember.setHouseholdId(household.getId());
+            updatedHouseholdMembers.add(householdMember);
+
         }
 
         householdContactRepository.saveAll(updatedHouseholdContacts);

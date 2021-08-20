@@ -6,11 +6,15 @@ import com.foreach.across.modules.web.AcrossWebModule;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.bootstrap.BootstrapModule;
+import org.nomisng.config.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -22,6 +26,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +47,7 @@ public class NomisApplication extends SpringBootServletInitializer {
         SpringApplication.run(NomisApplication.class, args);
     }
 
-    /*@Bean
+    @Bean
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
@@ -50,7 +55,7 @@ public class NomisApplication extends SpringBootServletInitializer {
         propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
         propertySourcesPlaceholderConfigurer.setIgnoreResourceNotFound(true);
         return propertySourcesPlaceholderConfigurer;
-    }*/
+    }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
