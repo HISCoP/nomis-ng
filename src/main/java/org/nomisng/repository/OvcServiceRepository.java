@@ -17,6 +17,6 @@ public interface OvcServiceRepository extends JpaRepository<OvcService, Long>, J
 
     Optional<OvcService> findByIdAndArchived(Long id, int archived);
 
-    List<OvcService> findAllByArchivedIsNotOrderByIdDesc(int archived);
+    List<OvcService> findAllByArchivedOrderByIdDesc(int archived);
 }
 

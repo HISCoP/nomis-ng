@@ -20,7 +20,7 @@ public class HouseholdMemberDTO {
 
     private Long id;
 
-    @Convert(converter = LocalDateConverter.class)
+    /*@Convert(converter = LocalDateConverter.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
 
@@ -36,9 +36,11 @@ public class HouseholdMemberDTO {
 
     private Long educationId;
 
-    private Long occupationId;
+    private Long occupationId;*/
 
     private Long householdId;
 
     private Integer householdMemberType;
+
+    private Object details;
 }

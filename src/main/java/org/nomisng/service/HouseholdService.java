@@ -19,6 +19,7 @@ import org.nomisng.repository.HouseholdContactRepository;
 import org.nomisng.repository.HouseholdMemberRepository;
 import org.nomisng.repository.HouseholdRepository;
 import org.nomisng.repository.VisitRepository;
+import org.nomisng.util.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +37,10 @@ public class HouseholdService {
     private final HouseholdMapper householdMapper;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdContactMapper householdContactMapper;
-    private Long organisationUnitId = 1L;
+    //private Long organisationUnitId = 1L;
 
     public List<HouseholdDTO> getAllHouseholds() {
-        return householdMapper.toHouseholdDTOS(householdRepository.findAll());
+        return householdMapper.toHouseholdDTOS(householdRepository.findAllByArchived(Constants.ArchiveStatus.UN_ARCHIVED));
     }
 
     public Household save(HouseholdDTO householdDTO) {
@@ -49,7 +50,7 @@ public class HouseholdService {
     }
 
     public HouseholdDTO getHouseholdById(Long id) {
-        Household household = householdRepository.findById(id)
+        Household household = householdRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
         List<HouseholdMember> householdMembers = household.getHouseholdMembers();
         List<HouseholdContact> householdContacts = household.getHouseholdContacts();
@@ -64,14 +65,17 @@ public class HouseholdService {
 
 
     public Household update(Long id, HouseholdDTO householdDTO) {
-        householdRepository.findById(id)
+        householdRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
 
         return saveOrUpdateHousehold(id, householdDTO);
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+        Household houseHold = householdRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
+        houseHold.setArchived(Constants.ArchiveStatus.ARCHIVED);
+        householdRepository.save(houseHold);
     }
 
     private Household saveOrUpdateHousehold( Long id, HouseholdDTO householdDTO){

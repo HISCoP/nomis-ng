@@ -18,4 +18,6 @@ public class HouseholdDTO {
     private List<HouseholdContactDTO> householdContactDTOS;
 
     private HouseholdMemberDTO householdMemberDTO;
+
+    private Object details;
 }
