@@ -42,7 +42,7 @@ public class HouseholdMemberService {
 
 
     public List<HouseholdMemberDTO> getAllHouseholdMembers() {
-        return householdMemberMapper.toHouseholdDTOS(householdMemberRepository.findAllByArchived(UN_ARCHIVED));
+        return householdMemberMapper.toHouseholdDTOS(householdMemberRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED));
     }
 
     public HouseholdMember save(HouseholdMemberDTO householdMemberDTO) {

@@ -53,7 +53,7 @@ public class FormDataService {
 
     public List<FormData> getAllFormData() {
         //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
-        return formDataRepository.findAllByArchivedAndOrganisationUnitId(UN_ARCHIVED, organisationUnitId);
+        return formDataRepository.findAllByArchivedAndOrganisationUnitIdOrderByIdDesc(UN_ARCHIVED, organisationUnitId);
     }
 
     public void delete(Long id) {
@@ -62,4 +62,9 @@ public class FormDataService {
         formData.setArchived(UN_ARCHIVED);
         formDataRepository.save(formData);
     }
+
+    /*public List<FormData> getAllFormDataByEncounterId(Long encounterId) {
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        return formDataRepository.findAllByEncounterIdAndArchivedAndOrganisationUnitIdOrderByIdDesc(encounterId, UN_ARCHIVED, organisationUnitId);
+    }*/
 }

@@ -15,6 +15,9 @@ public interface FormDataRepository extends JpaRepository<FormData, Long>, JpaSp
 
     Optional<FormData> findByIdAndArchivedAndOrganisationUnitId(Long id, int archived, Long organisationUnitId);
 
-    List<FormData> findAllByArchivedAndOrganisationUnitId(int archived, Long organisationUnitId);
+    List<FormData> findAllByArchivedAndOrganisationUnitIdOrderByIdDesc(int archived, Long organisationUnitId);
+
+    //List<FormData> findAllByEncounterIdAndArchivedAndOrganisationUnitIdOrderByIdDesc(Long encounterId, int archived, Long organisationUnitId);
+
 }
 

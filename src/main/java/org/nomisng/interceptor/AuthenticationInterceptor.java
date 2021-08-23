@@ -19,7 +19,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         if (request.getRequestURI().contains("/api/")) {
-            log.info("Request URL {}", request.getRequestURI());
+            log.info("User "+request.getRemoteUser() + " " + request.getMethod() + " Request URL {}", request.getRequestURI());
             return true;
         }
         else{

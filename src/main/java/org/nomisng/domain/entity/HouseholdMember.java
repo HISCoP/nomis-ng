@@ -15,6 +15,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -133,4 +134,9 @@ public class HouseholdMember extends JsonBEntity {
     @JsonIgnore
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "householdMemberByHouseholdMemberId")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Encounter> encounterByHouseholdMemberId;
 }

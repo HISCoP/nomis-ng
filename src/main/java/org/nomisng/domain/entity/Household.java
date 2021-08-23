@@ -21,8 +21,9 @@ public class Household extends Audit {
     @Column(name = "unique_id")
     private String uniqueId;
 
+    //TODO: discuss on changing status to an int
     @Basic
-    @Column(name = "status")
+    @Column(name = "status") // 0 - registered, 1 - registered and assessed, 2 - graduated
     private String status;
 
     @Basic
@@ -50,9 +51,4 @@ public class Household extends Audit {
     @ToString.Exclude
     @JsonIgnore
     public List<HouseholdMember> householdMembers;
-
-    @OneToMany(mappedBy = "householdMemberByHouseholdMemberId")
-    @ToString.Exclude
-    @JsonIgnore
-    private List<Encounter> encounterByOvcServiceCode;
 }
