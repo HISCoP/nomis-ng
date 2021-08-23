@@ -13,6 +13,6 @@ public interface HouseholdRepository extends JpaRepository<Household, Long>, Jpa
 
     Optional<Household> findByIdAndArchived(Long id, int archived);
 
-    List<Household> findAllByArchived(int archived);
+    List<Household> findAllByArchivedOrderByIdDesc(int archived);
 }
 

@@ -1,8 +1,10 @@
 package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.VisitDTO;
+import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.Visit;
 import org.nomisng.service.HouseholdService;
@@ -22,6 +24,12 @@ public class HouseholdController {
     @GetMapping
     public ResponseEntity<List<HouseholdDTO>> getAllHouseholds() {
         return ResponseEntity.ok(householdService.getAllHouseholds());
+    }
+
+    @GetMapping("/{id}/encounters")
+    //TODO: still in progress
+    public ResponseEntity<List<Encounter>> getEncounterByHouseholdId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getEncounterByHouseholdId(id));
     }
 
     @GetMapping("/{id}")

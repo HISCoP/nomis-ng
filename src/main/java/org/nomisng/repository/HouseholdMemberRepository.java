@@ -18,6 +18,6 @@ public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember
             "h.household_id=?1 AND h.details ->>'firstName' ilike ?2 AND h.details ->>'lastName' ilike ?3 AND h.archived=?4;", nativeQuery = true)
     Optional<HouseholdMember> findByHouseholdIdAndFirstNameAndLastNameAndArchived(Long householdId, String firstName, String lastName, int archived);
 
-    List<HouseholdMember> findAllByArchived(int archived);
+    List<HouseholdMember> findAllByArchivedOrderByIdDesc(int archived);
 }
 
