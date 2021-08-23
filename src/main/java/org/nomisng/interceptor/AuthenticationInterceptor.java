@@ -17,10 +17,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info("Request URL {}", request.getRequestURI());
 
-        if (request.getRequestURI().contains("/api/encounters")) {
-            return HandleEncounterController(request);
+        if (request.getRequestURI().contains("/api/")) {
+            log.info("Request URL {}", request.getRequestURI());
+            return true;
         }
         else{
             return true;
@@ -31,7 +31,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response,
                            Object handler, ModelAndView modelAndView) throws Exception {
 
-        System.out.println("Post Handle method is Calling");
+        //System.out.println("Post Handle method is Calling");
     }
 
     @Override
@@ -39,7 +39,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             (HttpServletRequest request, HttpServletResponse response, Object
                     handler, Exception exception) throws Exception {
 
-        System.out.println("Request and Response is completed");
+        //System.out.println("Request and Response is completed");
     }
 
     private boolean HandleEncounterController(@NotNull HttpServletRequest request) throws ResponseStatusException {

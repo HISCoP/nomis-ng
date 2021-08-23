@@ -11,6 +11,7 @@ import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.FormData;
 import org.nomisng.service.DomainService;
 import org.nomisng.service.EncounterService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,8 @@ public class EncounterController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(encounterService.delete(id));
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        encounterService.delete(id);
     }
 }

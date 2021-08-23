@@ -5,25 +5,30 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.nomisng.util.converter.LocalDateConverter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 
 @Entity
 @Data
 @EqualsAndHashCode
 @Table(name = "household_member")
-public class HouseholdMember extends Audit {
+public class HouseholdMember extends JsonBEntity {
 
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Basic
+    /*@Basic
     @Column(name = "dob")
     @Convert(converter = LocalDateConverter.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -55,15 +60,24 @@ public class HouseholdMember extends Audit {
 
     @Basic
     @Column(name = "occupation_id")
-    private Long occupationId;
+    private Long occupationId;*/
 
     @Basic
     @Column(name = "household_id")
     private Long householdId;
 
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "details", nullable = false, columnDefinition = "jsonb")
+    private Object details;
+
     @Basic
     @Column(name = "household_member_type") //1 - OVC, 2 - Caregiver, 3 OVC & Caregiver
     private Integer householdMemberType;
+
+    @Basic
+    @Column(name = "archived")
+    private int archived;
 
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
@@ -71,7 +85,7 @@ public class HouseholdMember extends Audit {
     @JsonIgnore
     public Household householdByHouseholdId;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "gender_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
     @JsonIgnore
@@ -93,12 +107,30 @@ public class HouseholdMember extends Audit {
     @JoinColumn(name = "occupation_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
     @JsonIgnore
-    public ApplicationCodeset applicationCodesetByOccupationId;
+    public ApplicationCodeset applicationCodesetByOccupationId;*/
 
-    /*@PrePersist
-    public void update() {
-        if(this.householdByHouseholdId != null && this.householdByHouseholdId.getId() != null) {
-            this.householdId = householdByHouseholdId.getId();
-        }
-    }*/
+
+    @CreatedBy
+    @Column(name = "created_by", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private String createdBy = "guest@nomisng.org";/*SecurityUtils.getCurrentUserLogin().orElse(null);*/
+
+    @CreatedDate
+    @Column(name = "date_created", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private LocalDateTime dateCreated = LocalDateTime.now();
+
+    @LastModifiedBy
+    @Column(name = "modified_by")
+    @JsonIgnore
+    @ToString.Exclude
+    private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+
+    @LastModifiedDate
+    @Column(name = "date_modified")
+    @JsonIgnore
+    @ToString.Exclude
+    private LocalDateTime dateModified = LocalDateTime.now();
 }

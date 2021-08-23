@@ -50,7 +50,7 @@ public class ApplicationCodeset extends Audit {
     @Column(name = "archived")
     private Integer archived = 0;
 
-    @OneToMany(mappedBy = "applicationCodesetByGenderId")
+/*    @OneToMany(mappedBy = "applicationCodesetByGenderId")
     @ToString.Exclude
     @JsonIgnore
     private Collection<HouseholdMember> householdMembersByGenderId;
@@ -68,7 +68,7 @@ public class ApplicationCodeset extends Audit {
     @OneToMany(mappedBy = "applicationCodesetByOccupationId")
     @ToString.Exclude
     @JsonIgnore
-    private Collection<HouseholdMember> householdMembersByOccupationId;
+    private Collection<HouseholdMember> householdMembersByOccupationId;*/
 
     @OneToMany(mappedBy = "applicationCodesetByApplicationCodesetId")
     @ToString.Exclude

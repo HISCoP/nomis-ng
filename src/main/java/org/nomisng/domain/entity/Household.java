@@ -30,6 +30,11 @@ public class Household extends Audit {
     @JsonIgnore
     private Long cboId = 1L;
 
+    @Basic
+    @Column(name = "archived")
+    @JsonIgnore
+    private int archived;
+
     @ManyToOne
     @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude

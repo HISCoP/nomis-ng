@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static org.nomisng.util.Constants.ArchiveStatus.*;
+
 @org.springframework.stereotype.Service
 @Transactional
 @Slf4j
@@ -27,14 +29,13 @@ public class OvcServiceService {
             ovcService.setCode(UUID.randomUUID().toString());
         }
         if(ovcService.getArchived() == null) {
-            ovcService.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
+            ovcService.setArchived(UN_ARCHIVED);
         }
         return this.ovcServiceRepository.save(ovcService);
     }
 
     public List<OvcServiceDTO> getAllOvcServices(){
-        return ovcServiceMapper.toOvcServiceDTOS(ovcServiceRepository
-                .findAllByArchivedIsNotOrderByIdDesc(Constants.ArchiveStatus.UN_ARCHIVED));
+        return ovcServiceMapper.toOvcServiceDTOS(ovcServiceRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED));
     }
 
     /*public List<Form> getFormByOvcServiceId(Long ovcServiceId){
@@ -48,25 +49,25 @@ public class OvcServiceService {
     }*/
 
     public Domain getDomainByOvcServiceId(Long ovcServiceId){
-        OvcService ovcService = ovcServiceRepository.findByIdAndArchived(ovcServiceId, Constants.ArchiveStatus.UN_ARCHIVED)
+        OvcService ovcService = ovcServiceRepository.findByIdAndArchived(ovcServiceId, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(OvcService.class,"id:",ovcServiceId+""));
 
         return ovcService.getDomainByDomainId();
     }
 
     public Integer delete(Long id) {
-        OvcService ovcService = ovcServiceRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+        OvcService ovcService = ovcServiceRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(OvcService.class, "OvcService Id", id + ""));
-        ovcService.setArchived(Constants.ArchiveStatus.ARCHIVED);
+        ovcService.setArchived(ARCHIVED);
         ovcServiceRepository.save(ovcService);
         return ovcService.getArchived();
     }
 
     public OvcService update(Long id, OvcServiceDTO ovcServiceDTO) {
-        ovcServiceRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+        ovcServiceRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(OvcService.class, "OvcService Id", id + ""));
         if(ovcServiceDTO.getArchived() == null){
-            ovcServiceDTO.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
+            ovcServiceDTO.setArchived(UN_ARCHIVED);
         }
         final OvcService ovcService = ovcServiceMapper.toOvcService(ovcServiceDTO);
         ovcService.setId(id);

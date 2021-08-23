@@ -17,5 +17,7 @@ public class HouseholdDTO {
 
     private List<HouseholdContactDTO> householdContactDTOS;
 
-    private List<HouseholdMemberDTO> householdMemberDTOS;
+    private HouseholdMemberDTO householdMemberDTO;
+
+    private Object details;
 }

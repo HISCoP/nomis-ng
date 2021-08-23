@@ -7,6 +7,7 @@ import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.HouseholdMember;
 import org.nomisng.service.HouseholdMemberService;
 import org.nomisng.service.HouseholdService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,8 @@ public class HouseholdMemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(householdMemberService.delete(id));
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        householdMemberService.delete(id);
     }
 }

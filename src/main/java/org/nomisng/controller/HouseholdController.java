@@ -7,6 +7,7 @@ import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.Visit;
 import org.nomisng.service.HouseholdService;
 import org.nomisng.service.VisitService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class HouseholdController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Household> save(@RequestBody HouseholdDTO householdDTO) {
         return ResponseEntity.ok(householdService.save(householdDTO));
     }
@@ -39,7 +41,8 @@ public class HouseholdController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(householdService.delete(id));
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        householdService.delete(id);
     }
 }

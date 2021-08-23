@@ -12,7 +12,7 @@
 	<groupId>org.nomis-ng</groupId>
 	<artifactId>nomis-ng</artifactId>
 	<version>0.0.1</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>nomis-ng</name>
 	<description>OVC Management Information System</description>
 
@@ -277,11 +277,11 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>4.1.2</version>
 		</dependency>-->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-maven-plugin</artifactId>
 			<version>3.4.1</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
 	<build>
@@ -330,7 +330,7 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
                  <groupId>org.liquibase</groupId>
                  <artifactId>liquibase-maven-plugin</artifactId>
                  <version>3.4.1</version>
@@ -348,7 +348,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 		</plugins>
 	</build>
 </project>

@@ -36,9 +36,14 @@ public class FormData extends JsonBEntity {
     private Object data;
 
     @Basic
-    @Column(name = "organisational_unit_id")
+    @Column(name = "organisation_unit_id")
     @JsonIgnore
-    private Long organisationalUnitId;
+    private Long organisationUnitId;
+
+    @Basic
+    @Column(name = "archived")
+    @JsonIgnore
+    private int archived;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
@@ -71,7 +76,7 @@ public class FormData extends JsonBEntity {
     public Encounter encounterByEncounterId;
 
     @ManyToOne
-    @JoinColumn(name = "organisational_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
     @JsonIgnore
     public OrganisationUnit organisationUnitByOrganisationalUnitId;

@@ -49,9 +49,6 @@ server:
         connection-timeout: 20s
 spring:
     datasource:
-        username: postgres
-        password: postgres
-        url: jdbc:postgresql://localhost:5432/nomis
         driver-class-name: org.postgresql.Driver
         hibernate:
             event.merge.enty_copy_observer: allow
