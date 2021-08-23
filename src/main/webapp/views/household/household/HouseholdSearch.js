@@ -13,6 +13,7 @@ import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
 import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+import NewHouseHold from './NewHouseHold';
 import { fetchAllHouseHold } from "./../../../actions/houseHold";
 
 
@@ -100,7 +101,7 @@ const HouseHoldList = (props) => {
         </CCol>
       </CRow>
       {modal ?
-        <NewHouseHoldAssessment  modal={modal} toggle={toggle} />
+        <NewHouseHold  modal={modal} toggle={toggle} />
         :
         ""
       }

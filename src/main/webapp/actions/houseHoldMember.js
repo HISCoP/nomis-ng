@@ -24,3 +24,23 @@ export const fetchAllHouseHoldMember = (onSuccess , onError) => dispatch => {
         );
 };
 
+export const fetchHouseHoldMemberById = (id, onSuccess , onError) => dispatch => {
+    axios
+        .get(`${url}household-members/${id}`)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.FETCH_HOUSE_HOLD_MEMBER_BY_ID,
+                payload: response.data
+            });
+            if(onSuccess){
+                onSuccess();
+            }
+        })
+        .catch(error => {
+                if(onError){
+                    onError();
+                }
+            }
+
+        );
+};

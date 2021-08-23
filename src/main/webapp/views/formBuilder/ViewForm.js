@@ -221,7 +221,7 @@ const Update = props => {
                                                 mode: 'cors',
                                             }).then(res => {
                                                 console.log(res);
-                                                myform.emit('submitDone', submission);
+                                              //  myform.emit('submitDone', submission);
                                             })}}
                                     />
                                 }

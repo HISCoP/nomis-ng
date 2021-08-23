@@ -45,3 +45,23 @@ export const fetchAllHouseHoldServiceHistory = (onSuccess , onError) => dispatch
         );
 };
 
+export const fetchHouseHoldById = (id, onSuccess , onError) => dispatch => {
+    axios
+        .get(`${url}households/${id}`)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.FETCH_HOUSE_HOLD_BY_ID,
+                payload: response.data
+            });
+            if(onSuccess){
+                onSuccess();
+            }
+        })
+        .catch(error => {
+                if(onError){
+                    onError();
+                }
+            }
+
+        );
+};

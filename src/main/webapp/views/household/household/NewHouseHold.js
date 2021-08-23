@@ -23,7 +23,12 @@ const NewHouseHold = (props) => {
   };
 
 const saveAssessment = (e) => {
+    const data = e.data;
       alert('Save Successfully');
+      const assessment = {details: data,
+        householdMemberDTO: { details: data.householdMember, householdMemberType: 0},
+        uniqueId: data.uniqueId };
+      console.log(assessment);
       props.togglestatus();
 
   
