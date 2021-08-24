@@ -3,11 +3,11 @@ package org.nomisng.domain.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.nomisng.domain.dto.HouseholdContactDTO;
+import org.nomisng.domain.dto.HouseholdAddressDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
 import org.nomisng.domain.entity.Household;
-import org.nomisng.domain.entity.HouseholdContact;
+import org.nomisng.domain.entity.HouseholdAddress;
 import org.nomisng.domain.entity.HouseholdMember;
 
 import java.util.List;
@@ -23,22 +23,22 @@ public interface HouseholdMapper {
     /*@Mappings({
             @Mapping(source="household.id", target="id")
     })
-    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMember> householdMembers, List<HouseholdContact> householdContacts);
+    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMember> householdMembers, List<HouseholdAddress> householdAddresses);
 */
     @Mappings({
             @Mapping(source="household.id", target="id")
     })
-    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMemberDTO> householdMemberDTOS, List<HouseholdContactDTO> householdContactDTOS);
+    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMemberDTO> householdMemberDTOS, List<HouseholdAddressDTO> householdAddressDTOS);
 
 
     @Mappings({
             @Mapping(source="householdDTO.id", target="id")
     })
-    Household toHousehold(HouseholdDTO householdDTO, List<HouseholdMemberDTO> householdMemberDTOS, HouseholdContactDTO householdContactDTO);
+    Household toHousehold(HouseholdDTO householdDTO, List<HouseholdMemberDTO> householdMemberDTOS, HouseholdAddressDTO householdAddressDTO);
 
     @Mappings({
             @Mapping(source="householdDTO.id", target="id")
     })
-    Household toHousehold(HouseholdDTO householdDTO, List<HouseholdMember> householdMembers, List<HouseholdContact> householdContacts);
+    Household toHousehold(HouseholdDTO householdDTO, List<HouseholdMember> householdMembers, List<HouseholdAddress> householdAddresses);
 
 }

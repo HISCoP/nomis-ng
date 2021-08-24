@@ -1,11 +1,10 @@
 package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.nomisng.domain.dto.EncounterDTO;
-import org.nomisng.domain.dto.HouseholdDTO;
-import org.nomisng.domain.dto.VisitDTO;
+import org.nomisng.domain.dto.*;
 import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.Household;
+import org.nomisng.domain.entity.HouseholdAddress;
 import org.nomisng.domain.entity.Visit;
 import org.nomisng.service.HouseholdService;
 import org.nomisng.service.VisitService;
@@ -28,7 +27,7 @@ public class HouseholdController {
 
     @GetMapping("/{id}/encounters")
     //TODO: still in progress
-    public ResponseEntity<List<Encounter>> getEncounterByHouseholdId(@PathVariable Long id) {
+    public ResponseEntity<List<Encounter>> getEncountersByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getEncounterByHouseholdId(id));
     }
 
@@ -37,10 +36,27 @@ public class HouseholdController {
         return ResponseEntity.ok(householdService.getHouseholdById(id));
     }
 
+    @GetMapping("/{id}/householdMembers")
+    public ResponseEntity<List<HouseholdMemberDTO>> getHouseholdMembersByHouseholdId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getHouseholdMembersByHouseholdId(id));
+    }
+
+
+    @GetMapping("/{id}/householdAddress")
+    public ResponseEntity<List<HouseholdAddressDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getHouseholdAddressesByHouseholdId(id));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Household> save(@RequestBody HouseholdDTO householdDTO) {
         return ResponseEntity.ok(householdService.save(householdDTO));
+    }
+
+    @PostMapping("/{id}/householdAddress")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<List<HouseholdAddressDTO>> saveHouseholdAddress(@PathVariable Long id, @RequestBody HouseholdAddress householdAddress) {
+        return ResponseEntity.ok(householdService.saveHouseholdAddress(id, householdAddress));
     }
 
     @PutMapping("/{id}")

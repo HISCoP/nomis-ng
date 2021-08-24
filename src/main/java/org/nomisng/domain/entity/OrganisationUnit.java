@@ -8,7 +8,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Data
@@ -81,13 +80,13 @@ public class OrganisationUnit extends Audit {
 
     @OneToMany(mappedBy = "organisationUnitByCountryId")
     @ToString.Exclude
-    private Collection<HouseholdContact> countryHouseholdContactsById;
+    private Collection<HouseholdAddress> countryHouseholdContactsById;
 
     @OneToMany(mappedBy = "organisationUnitByStateId")
     @ToString.Exclude
-    private Collection<HouseholdContact> stateHouseholdContactsById;
+    private Collection<HouseholdAddress> stateHouseholdContactsById;
 
     @OneToMany(mappedBy = "organisationUnitByProvinceId")
     @ToString.Exclude
-    private Collection<HouseholdContact> provinceHouseholdContactsById;
+    private Collection<HouseholdAddress> provinceHouseholdContactsById;
 }

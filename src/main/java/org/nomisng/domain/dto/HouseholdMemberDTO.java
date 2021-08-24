@@ -20,24 +20,6 @@ public class HouseholdMemberDTO {
 
     private Long id;
 
-    /*@Convert(converter = LocalDateConverter.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dob;
-
-    private Boolean dobEstimated;
-
-    private String firstName;
-
-    private String lastName;
-
-    private Long genderId;
-
-    private Long maritalStatusId;
-
-    private Long educationId;
-
-    private Long occupationId;*/
-
     private Long householdId;
 
     private Integer householdMemberType;
