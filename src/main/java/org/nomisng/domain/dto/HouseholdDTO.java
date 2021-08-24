@@ -1,7 +1,7 @@
 package org.nomisng.domain.dto;
 
 import lombok.Data;
-import org.nomisng.domain.entity.*;
+
 import java.util.List;
 
 @Data
@@ -15,7 +15,7 @@ public class HouseholdDTO {
 
     private Long cboId;
 
-    private List<HouseholdContactDTO> householdContactDTOS;
+    private List<HouseholdAddressDTO> householdAddressDTOS;
 
     private HouseholdMemberDTO householdMemberDTO;
 

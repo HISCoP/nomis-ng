@@ -30,8 +30,8 @@ public class Household extends JsonBEntity {
 
     //TODO: discuss on changing status to an int
     @Basic
-    @Column(name = "status") // 0 - registered, 1 - registered and assessed, 2 - graduated
-    private String status;
+    @Column(name = "status") // 1  - active, 2 - graduated
+    private int status;
 
     @Basic
     @Column(name = "cbo_id")
@@ -57,7 +57,7 @@ public class Household extends JsonBEntity {
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
     @JsonIgnore
-    public List<HouseholdContact> householdContacts;
+    public List<HouseholdAddress> householdAddresses;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude

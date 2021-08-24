@@ -6,29 +6,16 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "household_contact")
-public class HouseholdContact extends Audit {
+@Table(name = "household_address")
+public class HouseholdAddress extends Audit {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Basic
-    @Column(name = "mobile_phone_number")
-    private String mobilePhoneNumber;
-
-    @Basic
-    @Column(name = "alternate_phone_number")
-    private String alternatePhoneNumber;
-
-    @Basic
-    @Column(name = "email")
-    private String email;
 
     @Basic
     @Column(name = "zip_code")

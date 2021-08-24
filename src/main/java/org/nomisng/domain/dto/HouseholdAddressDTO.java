@@ -11,15 +11,9 @@ import org.nomisng.domain.entity.OrganisationUnit;
 import javax.persistence.*;
 
 @Data
-public class HouseholdContactDTO {
+public class HouseholdAddressDTO {
 
     private Long id;
-
-    private String mobilePhoneNumber;
-
-    private String alternatePhoneNumber;
-
-    private String email;
 
     private String zipCode;
 
