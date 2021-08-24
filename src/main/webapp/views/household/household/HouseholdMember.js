@@ -21,7 +21,6 @@ const HouseholdMember = (props) => {
     const toggle2 = () => setModal2(!modal2);
     const [loading, setLoading] = useState('')
 
-    console.log(houseHoldId)
 
     useEffect(() => {
     setLoading('true');
@@ -66,7 +65,7 @@ const HouseholdMember = (props) => {
             )
             )
             :
-            "Lading please wait.."
+            ""
             }
                         
             </CRow>

@@ -42,37 +42,66 @@ const HomePage = () => {
         <Menu.Item
           name='messages'
           active={activeItem === 'usersetup'}
-          onClick={handleItemClick}
+          
         >
-        <People fontSize="small" className={'text-left'}/>
-        <span className={'pl-2'}>  User Setup </span>
+         <Link color="inherit" to ={{ pathname: "user-setup-home", }}  >
+            <People fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  User Setup </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}>
+        <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
+            <People fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Organisation Unit </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}
+        >
+        <Link color="inherit" to ={{ pathname: "application-codeset-home", }}  >
+            <People fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}> Application Codeset </span>
+            </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}
+        
+        >
+         <Link color="inherit" to ={{ pathname: "program-setup-home", }}  >
+            <People fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Program Setup </span>
+        </Link>
         </Menu.Item>
         <Menu.Item
           name='messages'
           active={activeItem === 'formbuilder'}
           onClick={()=>{}}>
-            <Link color="inherit" to ={{
-                pathname: "form-home",
-            }}  >
+            <Link color="inherit" to ={{pathname: "form-home",}}  >
                 <DescriptionIcon fontSize="small" className={'text-left'}/>
                 <span className={'pl-2'}>  Form Builder </span>
             </Link>
 
         </Menu.Item>
         <Menu.Item>
-        <FolderIcon fontSize="small" className={'text-left'}/>
-        <span className={'pl-2'}>  Report Builder  </span>
+        <Link color="inherit" to ={{ pathname: "report-builder-home", }}  >
+            <FolderIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Report Builder  </span>
+        </Link>
         </Menu.Item>
 
 
         <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>Setting</span>
+            <span className={'pl-2'}>Others</span>
         <Dropdown   className={'float-right'} >  
                 
         <Dropdown.Menu >
-            <Dropdown.Item icon='edit' text='OVS' />
-            <Dropdown.Item icon='globe' text='Application Code Setup' />
+            <Dropdown.Item icon='edit' text='OVS Setting' />
+            <Dropdown.Item icon='globe' text='Ward Setup' />
             <Dropdown.Item icon='settings' text='Facilities Setup' />
           </Dropdown.Menu>
         </Dropdown>

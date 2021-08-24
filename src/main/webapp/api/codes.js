@@ -74,7 +74,7 @@ export const RADIOLOGY_ORDER_STATUS = [{name:"Result Available", id: 1},
  */
 
 export const GENERAL_SERVICE = '25216afc-d158-4696-ada6-00df609b9a4c'
-
+export const RETROSPECTIVE_SERVICE = 'eca42373-057d-4a18-be50-622ceba0d931'
 
 /**
  * @CODES
