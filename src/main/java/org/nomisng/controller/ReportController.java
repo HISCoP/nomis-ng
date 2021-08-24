@@ -50,7 +50,7 @@ public class ReportController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReportInfoDTO>> getAllJasperReports() {
+    public ResponseEntity<List<ReportInfoDTO>> getAllReports() {
         return ResponseEntity.ok(reportService.getReports());
     }
 
