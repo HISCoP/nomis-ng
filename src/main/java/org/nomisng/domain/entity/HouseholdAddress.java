@@ -50,8 +50,8 @@ public class HouseholdAddress extends Audit {
     private Long householdId;
 
     @Basic
-    @Column(name = "status", nullable = false)
-    private Integer status = 0;
+    @Column(name = "active", nullable = false)
+    private Integer active;
 
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)

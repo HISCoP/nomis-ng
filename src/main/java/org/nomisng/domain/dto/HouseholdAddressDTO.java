@@ -31,5 +31,5 @@ public class HouseholdAddressDTO {
 
     private Long householdId;
 
-    private int status;
+    private Integer active;
 }

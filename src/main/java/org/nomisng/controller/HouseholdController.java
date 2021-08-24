@@ -27,7 +27,7 @@ public class HouseholdController {
 
     @GetMapping("/{id}/encounters")
     //TODO: still in progress
-    public ResponseEntity<List<Encounter>> getEncounterByHouseholdId(@PathVariable Long id) {
+    public ResponseEntity<List<Encounter>> getEncountersByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getEncounterByHouseholdId(id));
     }
 
@@ -43,8 +43,8 @@ public class HouseholdController {
 
 
     @GetMapping("/{id}/householdAddress")
-    public ResponseEntity<List<HouseholdAddressDTO>> getHouseholdContactsByHouseholdId(@PathVariable Long id) {
-        return ResponseEntity.ok(householdService.getHouseholdContactsByHouseholdId(id));
+    public ResponseEntity<List<HouseholdAddressDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getHouseholdAddressesByHouseholdId(id));
     }
 
     @PostMapping
@@ -53,12 +53,11 @@ public class HouseholdController {
         return ResponseEntity.ok(householdService.save(householdDTO));
     }
 
-    //TODO: work on saving a houseAddress
-    /*@PostMapping
+    @PostMapping("/{id}/householdAddress")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Household> saveHouseholdAddress(@RequestBody HouseholdAddress householdAddress) {
-        return ResponseEntity.ok(householdService.saveHouseholdAddress(householdDTO));
-    }*/
+    public ResponseEntity<List<HouseholdAddressDTO>> saveHouseholdAddress(@PathVariable Long id, @RequestBody HouseholdAddress householdAddress) {
+        return ResponseEntity.ok(householdService.saveHouseholdAddress(id, householdAddress));
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Household> update(@RequestBody HouseholdDTO householdDTO, @PathVariable Long id) {

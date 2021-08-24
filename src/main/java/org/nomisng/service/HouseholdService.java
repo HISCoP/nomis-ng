@@ -30,6 +30,9 @@ public class HouseholdService {
     private final HouseholdMapper householdMapper;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdAddressMapper householdAddressMapper;
+    private static final int ACTIVE_HOUSEHOLD_ADDRESS = 1;
+    private static final int INACTIVE_HOUSEHOLD_ADDRESS = 0;
+
     private Long organisationUnitId = 1L;
 
     public List<HouseholdDTO> getAllHouseholds() {
@@ -92,7 +95,7 @@ public class HouseholdService {
         if(householdDTO.getHouseholdAddressDTOS() != null) {
             List<HouseholdAddress> householdAddresses = householdAddressMapper.toHouseholdContacts(householdDTO.getHouseholdAddressDTOS());
             for (HouseholdAddress householdAddress : householdAddresses) {
-                if(householdAddress.getStatus() == null){householdAddress.setStatus(1);}//only one address at registration of household
+                if(householdAddress.getActive() == null){householdAddress.setActive(ACTIVE_HOUSEHOLD_ADDRESS);}//only one address at registration of household
                 householdAddress.setHouseholdId(household.getId());
                 updatedHouseholdAddresses.add(householdAddress);
             }
@@ -118,7 +121,7 @@ public class HouseholdService {
         return householdMemberMapper.toHouseholdMemberDTOS(householdMembers);
     }
 
-    public List<HouseholdAddressDTO> getHouseholdContactsByHouseholdId(Long id) {
+    public List<HouseholdAddressDTO> getHouseholdAddressesByHouseholdId(Long id) {
         Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
 
@@ -128,9 +131,20 @@ public class HouseholdService {
         return householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
     }
 
-    //TODO: work on saving a houseAddress
-    /*public List<HouseholdAddressDTO> saveHouseholdAddress(HouseholdAddress householdAddress) {
-        HouseholdhouseholdAddressRepository.save(householdAddress);
+    public List<HouseholdAddressDTO> saveHouseholdAddress(Long id, HouseholdAddress householdAddress) {
+        List<HouseholdAddress> householdAddresses = new ArrayList<>();
+        for (HouseholdAddress householdAddress1 : householdAddressRepository.findAll()) {
+            householdAddress1.setActive(INACTIVE_HOUSEHOLD_ADDRESS);
+            householdAddresses.add(householdAddress1);
+        }
+        householdAddress.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
+        householdAddress.setHouseholdId(id);
+        householdAddresses.add(householdAddress);
+
+        householdAddresses = householdAddressRepository.saveAll(householdAddresses).stream()
+                .sorted(Comparator.comparingLong(HouseholdAddress::getId).reversed())//sort by id in descending/reversed order
+                .collect(Collectors.toList());
+
         return householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
-    }*/
+    }
 }
