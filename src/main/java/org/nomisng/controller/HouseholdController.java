@@ -1,12 +1,10 @@
 package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.nomisng.domain.dto.EncounterDTO;
-import org.nomisng.domain.dto.HouseholdDTO;
-import org.nomisng.domain.dto.HouseholdMemberDTO;
-import org.nomisng.domain.dto.VisitDTO;
+import org.nomisng.domain.dto.*;
 import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.Household;
+import org.nomisng.domain.entity.HouseholdAddress;
 import org.nomisng.domain.entity.Visit;
 import org.nomisng.service.HouseholdService;
 import org.nomisng.service.VisitService;
@@ -43,11 +41,24 @@ public class HouseholdController {
         return ResponseEntity.ok(householdService.getHouseholdMembersByHouseholdId(id));
     }
 
+
+    @GetMapping("/{id}/householdAddress")
+    public ResponseEntity<List<HouseholdAddressDTO>> getHouseholdContactsByHouseholdId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getHouseholdContactsByHouseholdId(id));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Household> save(@RequestBody HouseholdDTO householdDTO) {
         return ResponseEntity.ok(householdService.save(householdDTO));
     }
+
+    //TODO: work on saving a houseAddress
+    /*@PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Household> saveHouseholdAddress(@RequestBody HouseholdAddress householdAddress) {
+        return ResponseEntity.ok(householdService.saveHouseholdAddress(householdDTO));
+    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<Household> update(@RequestBody HouseholdDTO householdDTO, @PathVariable Long id) {

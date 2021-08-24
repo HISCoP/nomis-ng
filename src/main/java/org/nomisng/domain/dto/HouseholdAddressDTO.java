@@ -30,4 +30,6 @@ public class HouseholdAddressDTO {
     private Long provinceId;
 
     private Long householdId;
+
+    private int status;
 }

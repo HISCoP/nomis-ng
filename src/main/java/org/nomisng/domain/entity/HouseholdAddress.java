@@ -49,6 +49,10 @@ public class HouseholdAddress extends Audit {
     @Column(name = "household_id")
     private Long householdId;
 
+    @Basic
+    @Column(name = "status", nullable = false)
+    private Integer status = 0;
+
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude

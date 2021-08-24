@@ -92,6 +92,7 @@ public class HouseholdService {
         if(householdDTO.getHouseholdAddressDTOS() != null) {
             List<HouseholdAddress> householdAddresses = householdAddressMapper.toHouseholdContacts(householdDTO.getHouseholdAddressDTOS());
             for (HouseholdAddress householdAddress : householdAddresses) {
+                if(householdAddress.getStatus() == null){householdAddress.setStatus(1);}//only one address at registration of household
                 householdAddress.setHouseholdId(household.getId());
                 updatedHouseholdAddresses.add(householdAddress);
             }
@@ -112,8 +113,24 @@ public class HouseholdService {
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
 
         List<HouseholdMember> householdMembers = household.getHouseholdMembers().stream()
-                .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))
+                .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
                 .collect(Collectors.toList());
         return householdMemberMapper.toHouseholdMemberDTOS(householdMembers);
     }
+
+    public List<HouseholdAddressDTO> getHouseholdContactsByHouseholdId(Long id) {
+        Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
+
+        List<HouseholdAddress> householdAddresses = household.getHouseholdAddresses().stream()
+                .sorted(Comparator.comparingLong(HouseholdAddress::getId).reversed())//sort by id in descending/reversed order
+                .collect(Collectors.toList());
+        return householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
+    }
+
+    //TODO: work on saving a houseAddress
+    /*public List<HouseholdAddressDTO> saveHouseholdAddress(HouseholdAddress householdAddress) {
+        HouseholdhouseholdAddressRepository.save(householdAddress);
+        return householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
+    }*/
 }
