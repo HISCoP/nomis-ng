@@ -3,6 +3,7 @@ package org.nomisng.controller;
 import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
+import org.nomisng.domain.dto.HouseholdMemberDTO;
 import org.nomisng.domain.dto.VisitDTO;
 import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.Household;
@@ -35,6 +36,11 @@ public class HouseholdController {
     @GetMapping("/{id}")
     public ResponseEntity<HouseholdDTO> getHouseholdById(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdById(id));
+    }
+
+    @GetMapping("/{id}/householdMembers")
+    public ResponseEntity<List<HouseholdMemberDTO>> getHouseholdMembersByHouseholdId(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getHouseholdMembersByHouseholdId(id));
     }
 
     @PostMapping

@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.nomisng.util.Constants.ArchiveStatus.*;
 
@@ -39,6 +41,7 @@ public class HouseholdService {
 
     public Household save(HouseholdDTO householdDTO) {
         //TODO: check if household exist... by what criteria???
+        if(householdDTO.getHouseholdMemberDTO().getHouseholdMemberType() == null){householdDTO.getHouseholdMemberDTO().setHouseholdMemberType(0);}
 
         return saveOrUpdateHousehold(null, householdDTO);
     }
@@ -46,7 +49,9 @@ public class HouseholdService {
     public HouseholdDTO getHouseholdById(Long id) {
         Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
-        List<HouseholdMember> householdMembers = household.getHouseholdMembers();
+        List<HouseholdMember> householdMembers = household.getHouseholdMembers().stream()
+                .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))
+                .collect(Collectors.toList());
         List<HouseholdContact> householdContacts = household.getHouseholdContacts();
 
         List<HouseholdMemberDTO> householdMemberDTOS = householdMemberMapper.toHouseholdMemberDTOS(householdMembers);
@@ -111,5 +116,16 @@ public class HouseholdService {
         householdContactRepository.saveAll(updatedHouseholdContacts);
         householdMemberRepository.saveAll(updatedHouseholdMembers);
         return household;
+    }
+
+    public List<HouseholdMemberDTO> getHouseholdMembersByHouseholdId(Long id) {
+        Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
+
+        List<HouseholdMember> householdMembers = household.getHouseholdMembers().stream()
+                .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))
+                .collect(Collectors.toList());
+
+        return householdMemberMapper.toHouseholdMemberDTOS(householdMembers);
     }
 }

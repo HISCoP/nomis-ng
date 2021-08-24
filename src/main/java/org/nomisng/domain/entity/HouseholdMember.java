@@ -73,7 +73,7 @@ public class HouseholdMember extends JsonBEntity {
     private Object details;
 
     @Basic
-    @Column(name = "household_member_type") //1 - OVC, 2 - Caregiver, 3 OVC & Caregiver
+    @Column(name = "household_member_type") //1 - Caregiver, 2 - OVC & Caregiver, 3 OVC, 4 - Other members
     private Integer householdMemberType;
 
     @Basic
