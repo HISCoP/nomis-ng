@@ -10,6 +10,7 @@ import ProvideService from './ProvideService';
 import { connect } from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import { Alert } from 'reactstrap';
+import {calculateAge} from "./../../../utils/calculateAge";
 
 const HouseholdMember = (props) => {
     //Getting the household Id from the props 
@@ -20,8 +21,6 @@ const HouseholdMember = (props) => {
     const [modal2, setModal2] = useState(false);
     const toggle2 = () => setModal2(!modal2);
     const [loading, setLoading] = useState('')
-
-    console.log(houseHoldId)
 
     useEffect(() => {
     setLoading('true');
@@ -60,7 +59,7 @@ const HouseholdMember = (props) => {
             {!loading && actualMember!==null ? actualMember.map((member) => (
                 (
                 <CCol xs="12" sm="6" lg="4">
-                   <MemberCard  details={member} currentAge={age(member.dob)}/>
+                   <MemberCard  member={member} />
                 </CCol>
                 )
             )
@@ -100,12 +99,12 @@ const MemberCard = (props) => {
         <>
         <CCard>
             <CCardBody className={'text-center'}>
-                <p className={'text-left'}><b>{props.details.householdMemberType===1?"Caregiver": "OVC" || ''}</b></p>
+                <p className={'text-left'}><b>{props.member.householdMemberType===0?"Caregiver": "OVC" || ''}</b></p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home",
-                }}  ><span>{props.details.firstName + " " + props.details.lastName }</span></Link><br/>
-                <span>{props.details.gender===1 ?"Male" : "Female" } | {props.currentAge} Years</span>
+                }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName }</span></Link><br/>
+                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : "Nil" } | {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>
             <CCardFooter>

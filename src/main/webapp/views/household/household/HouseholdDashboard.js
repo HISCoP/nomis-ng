@@ -6,13 +6,13 @@ import CIcon from "@coreui/icons-react";
 import { Button, List} from 'semantic-ui-react'
 import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
 
-const HouseholdDashboard = () => {
+const HouseholdDashboard = (props) => {
 
     return (
         <>
                 <CRow>
                     <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="Total OVC" header="21,345"  color="success" iconPadding={false}>
+                <CWidgetIcon text="Total OVC" header={props.household && props.household.details && props.household.details.noOfChildren ? props.household.details.noOfChildren : ''}  color="success" iconPadding={false}>
                     <CIcon width={24} name="cil-people"/>
                 </CWidgetIcon>
                     </CCol>

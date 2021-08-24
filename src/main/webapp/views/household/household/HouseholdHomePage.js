@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Header, Menu, Icon} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CWidgetDropdown, CTabContent,
@@ -11,9 +11,12 @@ import FolderIcon from '@material-ui/icons/Folder';
 import HouseholdDashboard from './HouseholdDashboard'
 import HouseholdMember from "./HouseholdMember";
 import HouseholdService from "./HouseholdService";
-import CarePlan from "./CarePlan";
+import {calculateAge} from "./../../../utils/calculateAge";
 import { makeStyles } from "@material-ui/core/styles";
 import AssessmentCarePlanHome from "./AssessmentCarePlanHome";
+import {fetchHouseHoldById} from "./../../../actions/houseHold";
+import {connect} from "react-redux";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles({
     root: {
@@ -25,20 +28,36 @@ const useStyles = makeStyles({
 const HouseholdHomePage = (props) => {
     //Getting the house Hold details from the props
     console.log(props.location)
-    const houseHoldId = props.location.houseHoldId;
+    const houseHoldId = props.location.state;
+    const [fetchingHousehold, setFetchingHousehold] = useState(false);
     const classes = useStyles();
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
+
+    React.useEffect(() => {
+        setFetchingHousehold(true);
+        const onSuccess = () => {
+            setFetchingHousehold(false);
+        };
+        const onError = () => {
+            setFetchingHousehold(false);
+        };
+        props.fetchHouseHoldById(houseHoldId, onSuccess, onError);
+    }, [houseHoldId]);
+
     return (
         <>
+            {fetchingHousehold &&
+            <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+            }
             <CRow>
 
                 <CCol sm="3" lg="3">
             <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
                 <Menu.Item header className={'p-4'}>
-                    <HouseHoldInfo/>
+                    <HouseHoldInfo household={props.hh}/>
                 </Menu.Item>
                 <Menu.Item
                     name='dashboard'
@@ -86,7 +105,7 @@ const HouseholdHomePage = (props) => {
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >
-                            <HouseholdDashboard />
+                            <HouseholdDashboard household={props.hh}/>
                         </CTabPane>
                         <CTabPane active={activeItem === 'members'} >
                             <HouseholdMember houseHoldId={houseHoldId}/>
@@ -105,7 +124,8 @@ const HouseholdHomePage = (props) => {
     )
 }
 
-const HouseHoldInfo = () => {
+const HouseHoldInfo = (props) => {
+
     return (
         <>
             <CRow>
@@ -119,19 +139,36 @@ const HouseHoldInfo = () => {
                     {/*<Divider />*/}
                 </CCol>
                 <CCol sm="12" lg="12" className={'text-left pt-3'}>
-                    <span>Household ID: <small>12/11/2020 </small></span><br/>
-                    <span>Address: <small>No 20, Apata Road, Ibadan </small></span><br/>
-                    <span>Date Of Assessment: <small>12/11/2020</small> </span><br/>
-                    <span>Primary Caregiver Name: <small>Moses Lambo </small></span><br/>
-                    <span>Phone: <small>07057787654</small></span><br/>
-                    <span>Sex: <small>Male</small></span><br/>
-                    <span>Age: <small>52</small></span><br/>
-                    <span>Marital Status: <small>Married</small></span><br/>
-                    <span>Occupation: <small>Trader</small></span><br/>
+                    {props.household && props.household.details ?
+                        <>
+                    <span>Household ID: <small> {props.household ? props.household.uniqueId : 'Nil'} </small></span><br/>
+                    <span>Address: <small>{props.household.details ? props.household.details.street : 'Nil'} </small></span><br/>
+                    <span>Date Of Assessment: <small>{props.household.details.assessmentDate || 'Nil'}</small> </span><br/>
+                    <span>Primary Caregiver Name: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName: 'Nil' } </small></span><br/>
+                    <span>Phone: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.mobilePhoneNumber : 'Nil' }</small></span><br/>
+                    <span>Sex: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.sex ? props.household.details.primaryCareGiver.sex.display : 'Nil' }</small></span><br/>
+                            {props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.dob ?
+                    <span>Age: <small>{calculateAge(  props.household.details.primaryCareGiver.dob)} | {props.household.details.primaryCareGiver.dob}</small></span> :
+                                <span>Age: <small>Nil</small></span>
+                            }<br/>
+                    <span>Marital Status: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.maritalStatus : 'Nil' }</small></span><br/>
+                    <span>Occupation: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.occupation ? props.household.details.primaryCareGiver.occupation : 'Nil' }</small></span><br/>
+                    </> : <></>}
                 </CCol>
             </CRow>
         </>
     )
 }
 
-export default HouseholdHomePage;
+
+const mapStateToProps = (state) => {
+    return {
+        hh: state.houseHold.household
+    };
+};
+
+const mapActionToProps = {
+    fetchHouseHoldById: fetchHouseHoldById,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(HouseholdHomePage);

@@ -20,20 +20,22 @@ import { fetchAllHouseHold } from "./../../../actions/houseHold";
 const HouseHoldList = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-  const [loading, setLoading] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  console.log(props.houseHoldList)
   useEffect(() => {
-  setLoading('true');
-      const onSuccess = () => {
-          setLoading(false)
-      }
-      const onError = () => {
-          setLoading(false)     
-      }
-          props.fetchAllHouseHold(onSuccess, onError);
+    performSearch();
   }, []); //componentDidMount
 
+    const performSearch = () => {
+        setLoading('true');
+        const onSuccess = () => {
+            setLoading(false)
+        }
+        const onError = () => {
+            setLoading(false)
+        }
+        props.fetchAllHouseHold(onSuccess, onError);
+    }
   return (
     <>
       
@@ -68,9 +70,9 @@ const HouseHoldList = (props) => {
                   },
                 ]}
                 data={props.houseHoldList.map((row) => ({
-                  id: row.id,
-                  date: null,
-                  ovc: row.householdMemberDTOS &&  row.householdMemberDTOS !==null ?  row.householdMemberDTOS.length : 0,
+                  id: row.uniqueId,
+                  date: row.details && row.details.assessmentDate ? row.details.assessmentDate : "",
+                  ovc: row.details &&  row.details.noOfChildren != null ?  row.details.noOfChildren : 0,
                   status: row.status,
                   action:
                           <Menu>
@@ -80,7 +82,7 @@ const HouseHoldList = (props) => {
                                 <MenuList style={{hover:"#eee"}}>
                                 <MenuItem >
                                   <Link
-                                        to={{pathname: "/household/home", houseHoldId: row.id }}>
+                                        to={{pathname: "/household/home", state: row.id }}>
                                         View Dashboard
                                   </Link>
                                   
@@ -101,7 +103,7 @@ const HouseHoldList = (props) => {
         </CCol>
       </CRow>
       {modal ?
-        <NewHouseHold  modal={modal} toggle={toggle} />
+        <NewHouseHold  modal={modal} toggle={toggle} reloadSearch={performSearch}/>
         :
         ""
       }

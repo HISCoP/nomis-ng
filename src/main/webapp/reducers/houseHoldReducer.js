@@ -16,7 +16,7 @@ const houseHoldReducer = (state = initialState, action) => {
         return { ...state, holdHoldServiceHistory: [...action.payload] }
 
     case ACTION_TYPES.FETCH_HOUSE_HOLD_BY_ID:
-      return { ...state, household: [...action.payload] }
+      return { ...state, household: action.payload }
 
     default:
       return state

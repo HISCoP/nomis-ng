@@ -65,3 +65,20 @@ export const fetchHouseHoldById = (id, onSuccess , onError) => dispatch => {
 
         );
 };
+
+export const saveHouseHold = (body, onSuccess , onError) => dispatch => {
+    axios
+        .post(`${url}households`, body)
+        .then(response => {
+            if(onSuccess){
+                onSuccess();
+            }
+        })
+        .catch(error => {
+                if(onError){
+                    onError();
+                }
+            }
+
+        );
+};
