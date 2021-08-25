@@ -11,7 +11,6 @@ import org.nomisng.domain.entity.OvcService;
 import org.nomisng.domain.mapper.DomainMapper;
 import org.nomisng.domain.mapper.OvcServiceMapper;
 import org.nomisng.repository.DomainRepository;
-import org.nomisng.util.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
@@ -76,7 +76,7 @@ public class DomainService {
         Domain domain = domainRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", id +""));
 
-        domain.setArchived(Constants.ArchiveStatus.ARCHIVED);
+        domain.setArchived(ARCHIVED);
         domainRepository.save(domain);
         return domain.getArchived();
     }

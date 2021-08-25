@@ -9,13 +9,13 @@ import org.nomisng.domain.dto.ApplicationCodesetDTO;
 import org.nomisng.domain.entity.ApplicationCodeset;
 import org.nomisng.domain.mapper.ApplicationCodesetMapper;
 import org.nomisng.repository.ApplicationCodesetRepository;
-import org.nomisng.util.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
@@ -71,7 +71,7 @@ public class ApplicationCodesetService {
     public Integer delete(Long id){
         ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
-        applicationCodeset.setArchived(Constants.ArchiveStatus.ARCHIVED);
+        applicationCodeset.setArchived(ARCHIVED);
         applicationCodesetRepository.save(applicationCodeset);
 
         return applicationCodeset.getArchived();
