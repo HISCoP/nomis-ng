@@ -50,6 +50,9 @@ public class UserService {
 
     private final OrganisationUnitRepository organisationUnitRepository;
 
+    private Long currentOrganisationUnit = 0L;
+
+
 
     @Transactional
     public Optional<User> getUserWithAuthoritiesByUsername(String userName){
@@ -61,25 +64,26 @@ public class UserService {
            return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName);
     }
 
-    public User registerUser(UserDTO userDTO, String password){
-        userRepository
-                .findOneByUserName(userDTO.getUserName().toLowerCase())
-                .ifPresent(existingUser-> {
-                    throw new UsernameAlreadyUsedException();
-                        }
-                );
-
+    public User registerUser(UserDTO userDTO, String password, Boolean updateUser){
+        Optional<User> optionalUser = userRepository.findOneByUserName(userDTO.getUserName().toLowerCase());
         User newUser = new User();
+        if(updateUser){
+        }else {
+            optionalUser.ifPresent(existingUser-> {
+                        throw new UsernameAlreadyUsedException();
+                    }
+            );
+        }
+        
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setUserName(userDTO.getUserName());
         newUser.setEmail(userDTO.getEmail());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
-        newUser.setCurrentOrganisationUnitId(userDTO.getCurrentOrganisationUnitId());
+        newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-        newUser.setArchived(UN_ARCHIVED);
 
         if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
             Set<Role> roles = new HashSet<>();
@@ -93,8 +97,9 @@ public class UserService {
         } else {
             newUser.setRole(getRolesFromStringSet(userDTO.getRoles()));
         }
+
         userRepository.save(newUser);
-        log.debug("User Created: {}", newUser);
+        //log.debug("User Created: {}", newUser);
         return newUser;
     }
 
