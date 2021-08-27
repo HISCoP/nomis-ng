@@ -14,18 +14,21 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { connect } from "react-redux";
-import { fetchAllDomainServices } from "../../../actions/domainsServices";
-import NewServices from './NewServices';
+import { fetchAllDomains } from "../../../actions/domainsServices";
+import NewDomain from './NewDomain';
 
 
 
-const DomainServiceList = (props) => {
+const DomainList = (props) => {
     const [loading, setLoading] = useState('')
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
-    const domainDetails = props.location.state!==null ? props.location.state : null
-    console.log(domainDetails)
+
     useEffect(() => {
+        loadDomains()
+    }, []); //componentDidMount
+
+ const loadDomains = () => {
     setLoading('true');
         const onSuccess = () => {
             setLoading(false)
@@ -33,8 +36,8 @@ const DomainServiceList = (props) => {
         const onError = () => {
             setLoading(false)     
         }
-            props.fetchAllDomainServices(domainDetails.id, onSuccess, onError);
-    }, []); //componentDidMount
+            props.fetchAllDomains(onSuccess, onError);
+    } //componentDidMount
 
     const openNewDomainModal = (row) => {
         toggleModal();
@@ -48,7 +51,7 @@ const DomainServiceList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Domain - {domainDetails.name} </Typography>
+                    <Typography color="textPrimary">Domain Manager - Domain Area </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -57,12 +60,12 @@ const DomainServiceList = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Service </span>
+                        <span style={{textTransform: 'capitalize'}}>Add New Domain </span>
                     </Button>
 
                 </div>
                 <MaterialTable
-                    title="Find By Service "
+                    title="Find By Domain Area"
                     columns={[
                         { title: "Domain ID", field: "domainId" },
                         {title: "Domain Name", field: "name"},
@@ -70,7 +73,7 @@ const DomainServiceList = (props) => {
                         {title: "Action", field: "action", filtering: false,},
                     ]}
                     isLoading={loading}   
-                    data={[props.serviceList].map((row) => ({
+                    data={props.domainList.map((row) => ({
                         domainId: row.id,
                         name: row.name,
                     
@@ -108,7 +111,7 @@ const DomainServiceList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewServices toggleModal={toggleModal} showModal={showModal} />
+            <NewDomain toggleModal={toggleModal} showModal={showModal}  loadDomains={loadDomains}/>
         </Card>
         
     );
@@ -119,11 +122,11 @@ const DomainServiceList = (props) => {
 
 const mapStateToProps = state => {
     return {
-        serviceList: state.domainServices.services
+        domainList: state.domainServices.domains
     };
   };
   const mapActionToProps = {
-    fetchAllDomainServices: fetchAllDomainServices
+    fetchAllDomains: fetchAllDomains
   };
   
-  export default connect(mapStateToProps, mapActionToProps)(DomainServiceList);
+  export default connect(mapStateToProps, mapActionToProps)(DomainList);

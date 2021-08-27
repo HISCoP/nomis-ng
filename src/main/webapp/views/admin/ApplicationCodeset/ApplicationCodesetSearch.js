@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react';
 import MaterialTable from 'material-table';
 import {
     Card,
-    CardBody, 
+    CardBody, Modal, ModalBody, ModalHeader, Spinner, ModalFooter
 } from 'reactstrap';
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
@@ -11,17 +11,36 @@ import Button from "@material-ui/core/Button";
 import { FaPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
-import { fetchAllCodeset } from "../../../actions/codeSet";
+import { fetchAllCodeset, deleteApplicationCodeset } from "../../../actions/codeSet";
 import NewApplicationCodeset from "./NewApplicationCodeset";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { toast } from "react-toastify";
+import SaveIcon from "@material-ui/icons/Delete";
+import CancelIcon from "@material-ui/icons/Cancel";
+import {makeStyles} from "@material-ui/core/styles";
 
-
-
+const useStyles = makeStyles(theme => ({
+    button: {
+        margin: theme.spacing(1)
+    }
+}))
 
 const ApplicationCodesetList = (props) => {
-    const [loading, setLoading] = useState('')
+    const [loading, setLoading] = React.useState(true);
+    const [deleting, setDeleting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
+    const [currentCodeset, setCurrentCodeset] = React.useState(null);
+    const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+    const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
+    const classes = useStyles()
     useEffect(() => {
+        loadApplicationCodeset()
+    }, []); //componentDidMount
+
+ const loadApplicationCodeset = () => {
+  
     setLoading('true');
         const onSuccess = () => {
             setLoading(false)
@@ -30,12 +49,35 @@ const ApplicationCodesetList = (props) => {
             setLoading(false)     
         }
             props.fetchAllCApplicationCodeset(onSuccess, onError);
-    }, []); //componentDidMount
+    }; //componentDidMount
 
     const openNewDomainModal = (row) => {
+        setCurrentCodeset(row);
         toggleModal();
     }
 
+    const processDelete = (id) => {
+        setDeleting(true);
+       const onSuccess = () => {
+           setDeleting(false);
+           toggleDeleteModal();
+           loadApplicationCodeset();
+       };
+       const onError = () => {
+           setDeleting(false);
+           toast.error("Something went wrong, please contact administration");
+       };
+       props.delete(id, onSuccess, onError);
+       }
+       const openApplicationCodeset = (row) => {
+           setCurrentCodeset(row);
+           toggleModal();
+       }
+   
+       const deleteApplicationCodeset = (row) => {
+           setCurrentCodeset(row);
+           toggleDeleteModal();
+       }
 
     return (
         <Card>
@@ -67,6 +109,7 @@ const ApplicationCodesetList = (props) => {
                     { title: "Value", field: "display" },
                     { title: "Version", field: "version" },
                     { title: "Language", field: "language" },
+                    
                 ]}
                 isLoading={loading}
                 data={props.applicationCodesetList.map((row) => ({
@@ -76,7 +119,20 @@ const ApplicationCodesetList = (props) => {
                     language: row.language,
                     version: row.version
                 }))}
-                
+                actions= {[
+                    {
+                        icon: EditIcon,
+                        iconProps: {color: 'primary'},
+                        tooltip: 'Edit Codeset',
+                        onClick: (event, row) => openApplicationCodeset(row)
+                    },
+                    {
+                        icon: DeleteIcon,
+                        iconProps: {color: 'primary'},
+                        tooltip: 'Delete Codeset',
+                        onClick: (event, row) => deleteApplicationCodeset(row)
+                    }
+                        ]}
                     
                         //overriding action menu with props.actions
                         components={props.actions}
@@ -96,7 +152,34 @@ const ApplicationCodesetList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewApplicationCodeset toggleModal={toggleModal} showModal={showModal} />
+            <NewApplicationCodeset toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={props.applicationCodesetList} formData={currentCodeset} loadCodeset={loadApplicationCodeset}/>
+            <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Global Variable - {currentCodeset && currentCodeset.display ? currentCodeset.display : ""} </ModalHeader>
+                    <ModalBody>
+                        <p>Are you sure you want to proceed ?</p>
+                    </ModalBody>
+                <ModalFooter>
+                    <Button
+                        type='button'
+                        variant='contained'
+                        color='primary'
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
+                        disabled={deleting}
+                        onClick={() => processDelete(currentCodeset.id)}
+                    >
+                        Delete  {deleting ? <Spinner /> : ""}
+                    </Button>
+                    <Button
+                        variant='contained'
+                        color='default'
+                        onClick={toggleDeleteModal}
+                        startIcon={<CancelIcon />}
+                    >
+                        Cancel
+                    </Button>
+                </ModalFooter>
+        </Modal>
         </Card>
         
     );
@@ -111,7 +194,8 @@ const mapStateToProps = state => {
     };
   };
   const mapActionToProps = {
-    fetchAllCApplicationCodeset: fetchAllCodeset
+    fetchAllCApplicationCodeset: fetchAllCodeset,
+    delete: deleteApplicationCodeset
   };
   
   export default connect(mapStateToProps, mapActionToProps)(ApplicationCodesetList);

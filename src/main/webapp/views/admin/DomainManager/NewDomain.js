@@ -8,8 +8,8 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
-
+import { createDomain, updateDomain } from "../../../actions/domainsServices";
+import { v4 as uuidv4 } from 'uuid';
 import { Spinner } from 'reactstrap';
 
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 const NewDomain = (props) => {
     const [loading, setLoading] = useState(false)
-    const defaultValues = {name:"",description:"",format:"" }
+    const defaultValues = {name:""}
     const [formData, setFormData] = useState(defaultValues)
     const [errors, setErrors] = useState({});
     const classes = useStyles()
@@ -48,26 +48,25 @@ const NewDomain = (props) => {
         return Object.values(temp).every(x => x == "")
     }
 
-    const createGlobalVariable = e => {
-        // e.preventDefault()
-        // setLoading(true);
+    const createGlobalDomain = e => {
+        e.preventDefault()
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+            props.loadDomains();
+            props.toggleModal()
+        }
+        const onError = () => {
+            setLoading(false);
+           
+        }
 
-        // const onSuccess = () => {
-        //     setLoading(false);
-        //     toast.success("Global variable saved successfully!")
-        //     props.loadGlobalVariable();
-        //     props.toggleModal()
-        // }
-        // const onError = () => {
-        //     setLoading(false);
-        //     toast.error("Something went wrong, please contact administration");
-        // }
-
-        // if(formData.id){
-        //     props.updateGlobalVariable(formData.id, formData, onSuccess, onError)
-        //     return
-        // }
-        // props.newGlobalVariable(formData, onSuccess,onError)
+        if(formData.id){
+            props.updateDomain(formData.id, formData, onSuccess, onError)
+            return
+        }
+        //formData.code= uuidv4();
+        props.createDomain(formData, onSuccess,onError)
 
     }
     return (
@@ -76,7 +75,7 @@ const NewDomain = (props) => {
             <ToastContainer />
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
-                <Form onSubmit={createGlobalVariable}>
+                <Form onSubmit={createGlobalDomain}>
                     <ModalHeader toggle={props.toggleModal}>New Domain </ModalHeader>
                     <ModalBody>
                         <Card >
@@ -126,4 +125,7 @@ const NewDomain = (props) => {
     );
 }
 
-export default NewDomain;
+
+export default connect(null, { createDomain, updateDomain })(NewDomain);
+
+

@@ -15,8 +15,8 @@ const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
 const UserSetupHomePage = React.lazy(() => import('./views/admin/Users/UserPage'));
 const ApplicationCodeSetupHomePage = React.lazy(() => import('./views/admin/ApplicationCodeset/ApplicationCodesetSearch'));
 const OrganisationUnitHomepage = React.lazy(() => import('./views/admin/OrganizationUnit/Index'));
-const ProgramSetupHomePage = React.lazy(() => import('./views/admin/ProgramManager/DomainManager'));
-const DomainServices = React.lazy(() => import('./views/admin/ProgramManager/DomainServices'));
+const ProgramSetupHomePage = React.lazy(() => import('./views/admin/DomainManager/DomainManager'));
+const DomainServices = React.lazy(() => import('./views/admin/DomainManager/DomainServices'));
 const UserRegistration = React.lazy(() => import ('./views/admin/Users/UserRegistration'));
 const Roles = React.lazy(() => import('./views/admin/Roles/RolesPage'));
 
@@ -34,7 +34,7 @@ const routes = [
   { path: "/form-home", name: 'Form Builder', component: FormPage},
   { path: "/user-setup-home", name: 'User Setup', component: UserSetupHomePage},
   { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage},
-  { path: "/program-setup-home", name: 'Program Setup', component: ProgramSetupHomePage},
+  { path: "/program-setup-home", name: 'Domain Setup', component: ProgramSetupHomePage},
   { path: "/organisation-unit-home", name: 'Organisation Unit', component: OrganisationUnitHomepage},
   { path: "/domain-service", name: 'Domain Services', component: DomainServices},
   { path: "/user-registration", name: 'User Registration', component: UserRegistration},

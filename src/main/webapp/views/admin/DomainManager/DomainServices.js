@@ -9,21 +9,20 @@ import Typography from "@material-ui/core/Typography";
 import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button";
 import { FaPlus } from "react-icons/fa";
-import "@reach/menu-button/styles.css";
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import { connect } from "react-redux";
-import { fetchAllDomains } from "../../../actions/domainsServices";
-import NewDomain from './NewDomain';
+import { fetchAllDomainServices } from "../../../actions/domainsServices";
+import NewServices from './NewServices';
+import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
+import { MdModeEdit, MdDelete } from "react-icons/md";
 
 
-
-const DomainList = (props) => {
+const DomainServiceList = (props) => {
     const [loading, setLoading] = useState('')
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
-
+    const domainDetails = props.location.state && props.location.state!==null ? props.location.state : ""
+    console.log(domainDetails)
     useEffect(() => {
     setLoading('true');
         const onSuccess = () => {
@@ -32,7 +31,7 @@ const DomainList = (props) => {
         const onError = () => {
             setLoading(false)     
         }
-            props.fetchAllDomains(onSuccess, onError);
+            props.fetchAllDomainServices(domainDetails.id, onSuccess, onError);
     }, []); //componentDidMount
 
     const openNewDomainModal = (row) => {
@@ -47,7 +46,7 @@ const DomainList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Program Manager - Domain Area </Typography>
+                    <Typography color="textPrimary">Domain - {domainDetails.name} </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -56,12 +55,12 @@ const DomainList = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Domain </span>
+                        <span style={{textTransform: 'capitalize'}}>Add New Service </span>
                     </Button>
 
                 </div>
                 <MaterialTable
-                    title="Find By Domain Area"
+                    title="Find By Service "
                     columns={[
                         { title: "Domain ID", field: "domainId" },
                         {title: "Domain Name", field: "name"},
@@ -69,24 +68,48 @@ const DomainList = (props) => {
                         {title: "Action", field: "action", filtering: false,},
                     ]}
                     isLoading={loading}   
-                    data={props.domainList.map((row) => ({
+                    data={[props.serviceList].map((row) => ({
                         domainId: row.id,
                         name: row.name,
                     
                         status: row.archived===0 ? 'Active' : "Inactive",
-                        action: <Link to ={{ 
-                                        pathname: "/domain-service",  
-                                        state: row
-                                    }} 
-                                        style={{ cursor: "pointer", color: "blue", fontStyle: "bold"}}
+                        action: ( <div>
+                            <Menu>
+                                <MenuButton
+                                style={{
+                                    backgroundColor: "#3F51B5",
+                                    color: "#fff",
+                                    border: "2px solid #3F51B5",
+                                    borderRadius: "4px",
+                                }}
+                                >
+                                Actions <span aria-hidden>▾</span>
+                                </MenuButton>
+                                <MenuList style={{ color: "#000 !important" }}>
+                                <MenuItem style={{ color: "#000 !important" }} >
+                                    <Button
+                                    size="sm"
+                                    color="link"
+                                    onClick={() => (row.id)}
                                     >
-                                        <Tooltip title="View Domain Services">
-                                            <IconButton aria-label="View Domain Services" >
-                                                <VisibilityIcon color="primary"/>
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Link>
-                        
+                                    <MdModeEdit size="15" />{" "}
+                                    <span style={{ color: "#000" }}>Edit  </span>
+                                    </Button>
+                                </MenuItem>
+                                <MenuItem style={{ color: "#000 !important" }}>
+                                    <Button
+                                        size="sm"
+                                        color="link"
+                                        onClick={() => (row)}
+                                    >
+                                    <MdDelete size="15" />{" "}
+                                    <span style={{ color: "#000" }}>Delete </span>
+                                    </Button>
+                                </MenuItem>
+                                </MenuList>
+                            </Menu>
+                            </div>
+                            )
                         }))}  
                     
                         //overriding action menu with props.actions
@@ -107,7 +130,7 @@ const DomainList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewDomain toggleModal={toggleModal} showModal={showModal} />
+            <NewServices toggleModal={toggleModal} showModal={showModal} domainDetails={domainDetails}/>
         </Card>
         
     );
@@ -118,11 +141,11 @@ const DomainList = (props) => {
 
 const mapStateToProps = state => {
     return {
-        domainList: state.domainServices.domains
+        serviceList: state.domainServices.services
     };
   };
   const mapActionToProps = {
-    fetchAllDomains: fetchAllDomains
+    fetchAllDomainServices: fetchAllDomainServices
   };
   
-  export default connect(mapStateToProps, mapActionToProps)(DomainList);
+  export default connect(mapStateToProps, mapActionToProps)(DomainServiceList);

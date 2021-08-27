@@ -4,10 +4,12 @@ import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent, CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import DescriptionIcon from '@material-ui/icons/Description';
-import FolderIcon from '@material-ui/icons/Folder';
+import ListIcon from '@material-ui/icons/List';
+import DnsIcon from '@material-ui/icons/Dns';
 import People from '@material-ui/icons/People';
-
+import AcUnitIcon from '@material-ui/icons/AcUnit';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DomainIcon from '@material-ui/icons/Domain';
 import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -53,7 +55,7 @@ const HomePage = () => {
           name='messages'
           active={activeItem === 'usersetup'}>
         <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
-            <People fontSize="small" className={'text-left'}/>
+            <AcUnitIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  Organisation Unit </span>
         </Link>
         </Menu.Item>
@@ -62,7 +64,7 @@ const HomePage = () => {
           active={activeItem === 'usersetup'}
         >
         <Link color="inherit" to ={{ pathname: "application-codeset-home", }}  >
-            <People fontSize="small" className={'text-left'}/>
+            <CropFreeIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}> Application Codeset </span>
             </Link>
         </Menu.Item>
@@ -72,8 +74,8 @@ const HomePage = () => {
         
         >
          <Link color="inherit" to ={{ pathname: "program-setup-home", }}  >
-            <People fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Program Setup </span>
+            <DomainIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Domain Setup </span>
         </Link>
         </Menu.Item>
         <Menu.Item
@@ -81,14 +83,14 @@ const HomePage = () => {
           active={activeItem === 'formbuilder'}
           onClick={()=>{}}>
             <Link color="inherit" to ={{pathname: "form-home",}}  >
-                <DescriptionIcon fontSize="small" className={'text-left'}/>
+                <DnsIcon fontSize="small" className={'text-left'}/>
                 <span className={'pl-2'}>  Form Builder </span>
             </Link>
 
         </Menu.Item>
         <Menu.Item>
         <Link color="inherit" to ={{ pathname: "report-builder-home", }}  >
-            <FolderIcon fontSize="small" className={'text-left'}/>
+            <ListIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  Report Builder  </span>
         </Link>
         </Menu.Item>

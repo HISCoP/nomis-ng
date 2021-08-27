@@ -28,8 +28,7 @@ import useForm from "../../Functions/UseForm";
 import { Spinner } from "reactstrap";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { FaArrowLeft } from "react-icons/fa";
-import { DateTimePicker } from "react-widgets";
+import { TiArrowBack } from "react-icons/ti";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
@@ -79,7 +78,7 @@ const UserRegistration = (props) => {
     initialfieldState_userRegistration
   );
   const [gender, setGender] = useState([]);
-  const [role, setRole] = useState([]);
+  const [role, setRole] = useState(['']);
   const [confirm, setConfirm] = useState("");
   const [matchingPassword, setMatchingPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
@@ -91,7 +90,7 @@ const UserRegistration = (props) => {
   useEffect(() => {
     async function getCharacters() {
       axios
-        .get(`${baseUrl}application-codesets/codesetGroup?codesetGroup=GENDER`)
+        .get(`${baseUrl}application-codesets/codesetGroup/GENDER`)
         .then((response) => {
           console.log(Object.entries(response.data));
           setGender(
@@ -102,32 +101,32 @@ const UserRegistration = (props) => {
           );
         })
         .catch((error) => {
-          console.log(error);
+          
         });
     }
     getCharacters();
   }, []);
 
   /* Get list of Role parameter from the endpoint */
-  useEffect(() => {
-    async function getCharacters() {
-      axios
-        .get(`${baseUrl}roles`)
-        .then((response) => {
-          console.log(Object.entries(response.data));
-          setRole(
-            Object.entries(response.data).map(([key, value]) => ({
-              label: value.name,
-              value: value.name,
-            }))
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    getCharacters();
-  }, []);
+  // useEffect(() => {
+  //   async function getCharacters() {
+  //     axios
+  //       .get(`${baseUrl}roles`)
+  //       .then((response) => {
+          
+  //         setRole(
+  //           Object.entries(response.data).map(([key, value]) => ({
+  //             label: value.name,
+  //             value: value.name,
+  //           }))
+  //         );
+  //       })
+  //       .catch((error) => {
+         
+  //       });
+  //   }
+  //   getCharacters();
+  // }, []);
 
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
@@ -157,24 +156,36 @@ const UserRegistration = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSaving(true);
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
-    values["roles"] = [values["role"]]
-    setSaving(true);
+    values["roles"] = [values["role"] ='User'];
+
+    delete values["dateOfBirth"];
+    delete values["phone"];
+    delete values["adminRegistration"];
+    delete values["username"];
+    delete values["role"];
+    
     const onSuccess = () => {
       setSaving(false);
       toast.success("Registration Successful");
+      setTimeout(() => {
+        props.history.push(`/user-setup-home`)
+    }, 1000) 
       resetForm();
     };
     const onError = () => {
       setSaving(false);
       toast.error("Something went wrong");
+      
     };
     props.register(values, onSuccess, onError);
   };
 
   return (
     <div>
+    <ToastContainer autoClose={3000} hideProgressBar />
       <Title>
         <Link
               to ={{
@@ -186,7 +197,7 @@ const UserRegistration = (props) => {
             variant="contained"
             color="primary"
             className=" float-right mr-1"
-            startIcon={<FaArrowLeft />}
+            startIcon={<TiArrowBack />}
           >
             <span style={{ textTransform: "capitalize" }}>Back </span>
           </Button>
@@ -194,13 +205,14 @@ const UserRegistration = (props) => {
         <br />
       </Title>
       <br />
-      <ToastContainer autoClose={3000} hideProgressBar />
-      <Alert color="primary">
-        All Information with Asterisks(*) are compulsory
-      </Alert>
+      
 
       <Form onSubmit={handleSubmit}>
         <Col xl={12} lg={12} md={12}>
+        
+        <Alert color="primary">
+          All Information with Asterisks(*) are compulsory
+        </Alert>
           <Card className={classes.cardBottom}>
             <CardContent>
               <Title>User Information</Title>
@@ -255,22 +267,12 @@ const UserRegistration = (props) => {
                       Password must be atleast 6 characters
                     </FormFeedback>
                   </FormGroup>
-                  <FormGroup>
-                    <Label for="email">Email *</Label>
-                    <Input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={handleInputChange}
-                      value={values.email}
-                      required
-                    />
-                  </FormGroup>
+                 
                  
                   
                 </Col>
                 <Col md={6}>
-                  <FormGroup>
+                  {/* <FormGroup>
                     <Label for="role">Role *</Label>
                     <Input
                       type="select"
@@ -287,7 +289,25 @@ const UserRegistration = (props) => {
                         </option>
                       ))}
                     </Input>
-                  </FormGroup>
+                  </FormGroup>  */}
+                  {/* <FormGroup>
+                    <Label for="role">Role *</Label>
+                    <Input
+                      type="select"
+                      name="role"
+                      id="role"
+                      value={values.role}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value=""> </option>
+                      {role.map(({ label, value }) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </Input>
+                  </FormGroup> */}
                   <FormGroup>
                     <Label for="gender">Gender *</Label>
                     <Input
@@ -328,6 +348,17 @@ const UserRegistration = (props) => {
                       id="phoneNumber"
                       onChange={handleInputChange}
                       value={values.phoneNumber}
+                      required
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="email">Email *</Label>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="email"
+                      onChange={handleInputChange}
+                      value={values.email}
                       required
                     />
                   </FormGroup>
