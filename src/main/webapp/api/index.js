@@ -3,7 +3,6 @@
 //export const url =  'https://lp-base.herokuapp.com/api/';
 
 //Online Server
-//export const url =  'http://10.167.2.102:8080/nomis-ng/api/';
 //export const url =  'http://nomis-ng.org:8080/demo/api/';
 //Local Server
 export const url =  'http://localhost:8480/api/';
