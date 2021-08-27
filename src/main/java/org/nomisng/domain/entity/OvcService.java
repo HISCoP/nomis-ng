@@ -50,7 +50,7 @@ public class OvcService extends Audit implements Serializable {
 
     @Basic
     @Column(name = "service_type")
-    @NotNull(message = "serviceType cannot be null")
+    @NotNull(message = "serviceType cannot be null") //1 - caregiver, 2 - ovc, 3 other member. May we change to application codeset
     private Integer serviceType;
 
     @ManyToOne
