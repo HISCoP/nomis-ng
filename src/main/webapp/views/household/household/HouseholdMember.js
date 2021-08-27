@@ -23,16 +23,19 @@ const HouseholdMember = (props) => {
     const [loading, setLoading] = useState('')
 
     useEffect(() => {
-    setLoading('true');
+    fetchMembers();
+    }, []); //componentDidMount
+
+    const fetchMembers = () => {
+        setLoading('true');
         const onSuccess = () => {
             setLoading(false)
         }
         const onError = () => {
-            setLoading(false)     
+            setLoading(false)
         }
-            props.fetchAllMember(onSuccess, onError);
-    }, []); //componentDidMount
-
+        props.fetchAllMember(onSuccess, onError);
+    }
     //This is to filter the actual Members of the HouseHold by filtering by the houseHoldId
     const actualMember = props.houseMemberList.filter((x) => x.householdId ===houseHoldId)
     //Function to calculate Members Age 
@@ -76,8 +79,8 @@ const HouseholdMember = (props) => {
             :
             ""
             }
-            <NewOvc  modal={modal} toggle={toggle}/>
-            <NewCareGiver  modal={modal2} toggle={toggle2}/>
+            <NewOvc  modal={modal} toggle={toggle} householdId={houseHoldId} reload={fetchMembers}/>
+            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={houseHoldId} reload={fetchMembers}/>
             
             </>
     );
@@ -99,7 +102,7 @@ const MemberCard = (props) => {
         <>
         <CCard>
             <CCardBody className={'text-center'}>
-                <p className={'text-left'}><b>{props.member.householdMemberType===0?"Caregiver": "OVC" || ''}</b></p>
+                <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "OVC" || ''}</b></p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home",

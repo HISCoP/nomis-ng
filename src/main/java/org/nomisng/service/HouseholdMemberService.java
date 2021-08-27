@@ -41,8 +41,8 @@ public class HouseholdMemberService {
     public HouseholdMember save(HouseholdMemberDTO householdMemberDTO) {
         try {
             String details = mapper.writeValueAsString(householdMemberDTO.getDetails());
-            firstName = getDetailsInfo(details, firstName);
-            lastName = getDetailsInfo(details, lastName);
+            firstName = getDetailsInfo(details, "firstName");
+            lastName = getDetailsInfo(details, "lastName");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

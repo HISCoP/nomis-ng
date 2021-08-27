@@ -213,8 +213,8 @@ const FormRenderer = (props) => {
                         hideComponents={props.hideComponents}
                         options={options}
                         onSubmit={(submission) => {
-                            delete submission.data.houseHoldMember;
-                            delete submission.data.houseHold;
+                            delete submission.data.householdMember;
+                            delete submission.data.household;
                             delete submission.data.authHeader;
                             delete submission.data.submit;
                             delete submission.data.baseUrl;

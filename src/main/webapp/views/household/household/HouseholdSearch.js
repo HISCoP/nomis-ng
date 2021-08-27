@@ -70,7 +70,8 @@ const HouseHoldList = (props) => {
                   },
                 ]}
                 data={props.houseHoldList.map((row) => ({
-                  id: row.uniqueId,
+                  id: <span> <Link
+                      to={{pathname: "/household/home", state: row.id }}>{row.uniqueId}</Link></span>,
                   date: row.details && row.details.assessmentDate ? row.details.assessmentDate : "",
                   ovc: row.details &&  row.details.noOfChildren != null ?  row.details.noOfChildren : 0,
                   status: row.status,
