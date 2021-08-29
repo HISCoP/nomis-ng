@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
   CCard,
   CCardBody,
@@ -7,17 +7,31 @@ import {
   CButton,
   CRow
 } from '@coreui/react'
-
+import { connect } from "react-redux";
 import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
-import NewHouseHold from './NewHouseHold';
+import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+import { fetchAllHouseHold } from "./../../../actions/houseHold";
 
-const Tables = () => {
+
+const HouseHoldList = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
+  const [loading, setLoading] = useState('')
 
+  console.log(props.houseHoldList)
+  useEffect(() => {
+  setLoading('true');
+      const onSuccess = () => {
+          setLoading(false)
+      }
+      const onError = () => {
+          setLoading(false)     
+      }
+          props.fetchAllHouseHold(onSuccess, onError);
+  }, []); //componentDidMount
 
   return (
     <>
@@ -26,13 +40,13 @@ const Tables = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-             Find Household
+              Household Vulnerability Assessment
 
               <CButton 
                   color="primary" 
                   className="float-right"
                   onClick={toggle}
-                >New Household </CButton>
+                >New Household Assessment</CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable
@@ -43,7 +57,7 @@ const Tables = () => {
                   { title: 'Total OVC', field: 'ovc', type: 'numeric' },
                   {
                     title: 'Status',
-                    field: 'status',
+                    field: 'staus',
                     
                   },
                   {
@@ -52,48 +66,31 @@ const Tables = () => {
                     
                   },
                 ]}
-                data={[
-                  { id: '7892', date: '24/08/2021', ovc: 7, status: 'Graduated',
+                data={props.houseHoldList.map((row) => ({
+                  id: row.id,
+                  date: null,
+                  ovc: row.householdMemberDTOS &&  row.householdMemberDTOS !==null ?  row.householdMemberDTOS.length : 0,
+                  status: row.status,
                   action:
-                  <Menu>
-                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                              Action <span aria-hidden>▾</span>
-                            </MenuButton>
-                              <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >
-                                <Link
-                                      to={{pathname: "/household/home"}}>
-                                      View Dashboard
-                                </Link>
-                                
-                              </MenuItem>                            
-                              <MenuItem >{" "}Edit</MenuItem>
-                              <MenuItem >{" "}Delete</MenuItem>
-                              </MenuList>
+                          <Menu>
+                            <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                                Action <span aria-hidden>▾</span>
+                              </MenuButton>
+                                <MenuList style={{hover:"#eee"}}>
+                                <MenuItem >
+                                  <Link
+                                        to={{pathname: "/household/home", houseHoldId: row.id }}>
+                                        View Dashboard
+                                  </Link>
+                                  
+                                </MenuItem>                            
+                                <MenuItem >{" "}Edit</MenuItem>
+                                <MenuItem >{" "}Delete</MenuItem>
+                                </MenuList>
                           </Menu>
-                  
-                  },
-                  { id: '4758', date: '23/09/2020', ovc: 7, status: 'In Progress',
-                  action:
-                  <Menu>
-                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                              Action <span aria-hidden>▾</span>
-                            </MenuButton>
-                              <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >
-                                <Link
-                                      to={{pathname: "/household/home"}}>
-                                      View Dashboard
-                                </Link>
-                                
-                              </MenuItem>                            
-                              <MenuItem >{" "}Edit</MenuItem>
-                              <MenuItem >{" "}Delete</MenuItem>
-                              </MenuList>
-                          </Menu>
-                  
-                  },
-                ]}        
+                 
+                 
+                }))}       
                 options={{
                   search: true
                 }}
@@ -103,7 +100,7 @@ const Tables = () => {
         </CCol>
       </CRow>
       {modal ?
-        <NewHouseHold  modal={modal} toggle={toggle}/>
+        <NewHouseHoldAssessment  modal={modal} toggle={toggle} />
         :
         ""
       }
@@ -114,4 +111,15 @@ const Tables = () => {
   
 }
 
-export default Tables
+
+const mapStateToProps = state => {
+  return {
+      houseHoldList: state.houseHold.houseHoldList
+  };
+};
+const mapActionToProps = {
+  fetchAllHouseHold: fetchAllHouseHold
+};
+
+export default connect(mapStateToProps, mapActionToProps)(HouseHoldList);
+

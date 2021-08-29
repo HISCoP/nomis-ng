@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import './main/webapp/scss/style.scss';
+import { Spinner } from 'reactstrap';
 
 const loading = (
   <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
+    <div className="sk-spinner sk-spinner-pulse">
+    <Spinner type="grow" color="primary" />
+    </div>
+    {/* <p>Loading...</p> */}
   </div>
 )
 

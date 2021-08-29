@@ -4,10 +4,12 @@ import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent, CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import DescriptionIcon from '@material-ui/icons/Description';
-import FolderIcon from '@material-ui/icons/Folder';
+import ListIcon from '@material-ui/icons/List';
+import DnsIcon from '@material-ui/icons/Dns';
 import People from '@material-ui/icons/People';
-
+import AcUnitIcon from '@material-ui/icons/AcUnit';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DomainIcon from '@material-ui/icons/Domain';
 import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -42,37 +44,66 @@ const HomePage = () => {
         <Menu.Item
           name='messages'
           active={activeItem === 'usersetup'}
-          onClick={handleItemClick}
+          
         >
-        <People fontSize="small" className={'text-left'}/>
-        <span className={'pl-2'}>  User Setup </span>
+         <Link color="inherit" to ={{ pathname: "user-setup-home", }}  >
+            <People fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  User Setup </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}>
+        <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
+            <AcUnitIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Organisation Unit </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}
+        >
+        <Link color="inherit" to ={{ pathname: "application-codeset-home", }}  >
+            <CropFreeIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}> Application Codeset </span>
+            </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}
+        
+        >
+         <Link color="inherit" to ={{ pathname: "program-setup-home", }}  >
+            <DomainIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Domain Setup </span>
+        </Link>
         </Menu.Item>
         <Menu.Item
           name='messages'
           active={activeItem === 'formbuilder'}
           onClick={()=>{}}>
-            <Link color="inherit" to ={{
-                pathname: "form-home",
-            }}  >
-                <DescriptionIcon fontSize="small" className={'text-left'}/>
+            <Link color="inherit" to ={{pathname: "form-home",}}  >
+                <DnsIcon fontSize="small" className={'text-left'}/>
                 <span className={'pl-2'}>  Form Builder </span>
             </Link>
 
         </Menu.Item>
         <Menu.Item>
-        <FolderIcon fontSize="small" className={'text-left'}/>
-        <span className={'pl-2'}>  Report Builder  </span>
+        <Link color="inherit" to ={{ pathname: "report-builder-home", }}  >
+            <ListIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Report Builder  </span>
+        </Link>
         </Menu.Item>
 
 
         <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>Setting</span>
+            <span className={'pl-2'}>Others</span>
         <Dropdown   className={'float-right'} >  
                 
         <Dropdown.Menu >
-            <Dropdown.Item icon='edit' text='OVS' />
-            <Dropdown.Item icon='globe' text='Application Code Setup' />
+            <Dropdown.Item icon='edit' text='OVS Setting' />
+            <Dropdown.Item icon='globe' text='Ward Setup' />
             <Dropdown.Item icon='settings' text='Facilities Setup' />
           </Dropdown.Menu>
         </Dropdown>
