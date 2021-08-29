@@ -87,6 +87,7 @@ public class DomainService {
         List<OvcService> ovcServices = domain.getServicesById().stream()
                 .filter(ovcService ->ovcService.getArchived()!= null && ovcService.getArchived()== UN_ARCHIVED)
                 .sorted(Comparator.comparing(OvcService::getId).reversed())
+                .map(ovcService -> {ovcService.setDomainName(domain.getName()); return ovcService;}) //setting domain name of an ovcService
                 .collect(Collectors.toList());
         return ovcServiceMapper.toOvcServiceDTOS(ovcServices);
     }
@@ -94,10 +95,12 @@ public class DomainService {
     public List<OvcServiceDTO> getOvcServicesByDomainIdAndServiceType(Long domainId, Integer serviceType){
         Domain domain = domainRepository.findByIdAndArchived(domainId, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", domainId +""));
+
         List<OvcService> ovcServices = domain.getServicesById().stream()
                 .filter(ovcService -> ovcService.getArchived()!= null && ovcService.getArchived()== UN_ARCHIVED &&
                         (ovcService.getServiceType() != null && ovcService.getServiceType() == serviceType))
                 .sorted(Comparator.comparing(OvcService::getId).reversed())
+                .map(ovcService -> {ovcService.setDomainName(domain.getName()); return ovcService;}) //setting domain name of an ovcService
                 .collect(Collectors.toList());
         return ovcServiceMapper.toOvcServiceDTOS(ovcServices);
     }

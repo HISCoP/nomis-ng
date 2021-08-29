@@ -3,15 +3,16 @@ package org.nomisng.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.OvcServiceDTO;
 import org.nomisng.domain.entity.Domain;
 import org.nomisng.domain.entity.OvcService;
 import org.nomisng.domain.mapper.OvcServiceMapper;
 import org.nomisng.repository.OvcServiceRepository;
-import org.nomisng.util.Constants;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.nomisng.util.Constants.ArchiveStatus.*;
 
@@ -24,10 +25,13 @@ public class OvcServiceService {
     private final OvcServiceMapper ovcServiceMapper;
 
     public OvcService save(OvcServiceDTO ovcServiceDTO) {
+        Optional<OvcService> optionalOvcService = ovcServiceRepository.findByNameAndServiceTypeAndArchived(ovcServiceDTO.getName(), ovcServiceDTO.getServiceType(), UN_ARCHIVED);
+        optionalOvcService.ifPresent(ovcService -> {
+            throw new RecordExistException(OvcService.class, "OvcService", ovcServiceDTO.getName() + "");
+        });
         final OvcService ovcService = ovcServiceMapper.toOvcService(ovcServiceDTO);
-        if(ovcService.getCode() == null) {
-            ovcService.setCode(UUID.randomUUID().toString());
-        }
+        ovcService.setCode(UUID.randomUUID().toString());
+
         if(ovcService.getArchived() == null) {
             ovcService.setArchived(UN_ARCHIVED);
         }
@@ -35,7 +39,12 @@ public class OvcServiceService {
     }
 
     public List<OvcServiceDTO> getAllOvcServices(){
-        return ovcServiceMapper.toOvcServiceDTOS(ovcServiceRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED));
+        List<OvcService> ovcServices = ovcServiceRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED).stream()
+                .sorted(Comparator.comparing(OvcService::getId).reversed())
+                .map(ovcService -> {ovcService.setDomainName(ovcService.getDomainByDomainId().getName()); return ovcService;}) //setting domain name of an ovcService
+                .collect(Collectors.toList());
+
+        return ovcServiceMapper.toOvcServiceDTOS(ovcServices);
     }
 
     /*public List<Form> getFormByOvcServiceId(Long ovcServiceId){
@@ -55,12 +64,11 @@ public class OvcServiceService {
         return ovcService.getDomainByDomainId();
     }
 
-    public Integer delete(Long id) {
+    public void delete(Long id) {
         OvcService ovcService = ovcServiceRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(OvcService.class, "OvcService Id", id + ""));
         ovcService.setArchived(ARCHIVED);
         ovcServiceRepository.save(ovcService);
-        return ovcService.getArchived();
     }
 
     public OvcService update(Long id, OvcServiceDTO ovcServiceDTO) {
@@ -71,6 +79,24 @@ public class OvcServiceService {
         }
         final OvcService ovcService = ovcServiceMapper.toOvcService(ovcServiceDTO);
         ovcService.setId(id);
+        ovcService.setDomainName(ovcService.getDomainByDomainId().getName());
         return ovcServiceRepository.save(ovcService);
+    }
+
+    //TODO: Keep for future usage
+    /*public OvcServiceDTO getOvcServiceById(Long id){
+        OvcService ovcService = ovcServiceRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(OvcService.class,"id:",id+""));
+
+        return ovcServiceMapper.toOvcServiceDTO(ovcService);
+    }*/
+
+    public List<OvcServiceDTO> getOvcServiceByServiceType(Integer serviceType){
+        List<OvcService> ovcServices = ovcServiceRepository.findByServiceTypeAndArchived(serviceType, UN_ARCHIVED).stream()
+                .sorted(Comparator.comparing(OvcService::getId).reversed())
+                .map(ovcService -> {ovcService.setDomainName(ovcService.getDomainByDomainId().getName()); return ovcService;}) //setting domain name of an ovcService
+                .collect(Collectors.toList());
+
+        return ovcServiceMapper.toOvcServiceDTOS(ovcServices);
     }
 }
