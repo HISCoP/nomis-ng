@@ -3,6 +3,7 @@ package org.nomisng.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.UserDTO;
 import org.nomisng.domain.entity.ApplicationUserOrganisationUnit;
 import org.nomisng.domain.entity.OrganisationUnit;
@@ -70,11 +71,11 @@ public class UserService {
         if(updateUser){
         }else {
             optionalUser.ifPresent(existingUser-> {
-                        throw new UsernameAlreadyUsedException();
+                        throw new RecordExistException(User.class, "Record exist", userDTO.getUserName().toLowerCase() + "");
                     }
             );
         }
-        
+
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setUserName(userDTO.getUserName());
         newUser.setEmail(userDTO.getEmail());
