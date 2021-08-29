@@ -89,7 +89,7 @@ const HomePage = () => {
 
         </Menu.Item>
         <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "report-builder-home", }}  >
+        <Link color="inherit" to ={{ pathname: "report-builder", }}  >
             <ListIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  Report Builder  </span>
         </Link>

@@ -10,19 +10,19 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react';
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CgProfile } from 'react-icons/cg';
 
 import * as ACTION_TYPES from "./../actions/types";
 import store from "./../store";
-
+import { useHistory } from "react-router-dom";
 import { authentication } from "./../_services/authentication";
 
 const { dispatch } = store;
 
 const TheHeaderDropdown = () => {
-
+  let history = useHistory();
   const [isOpenNotificationPopover, setIsOpenNotificationPopover] = useState(false);
   const [isNotificationConfirmed, setIsNotificationConfirmed] = useState(false);
   const [isOpenUserCardPopover, setIsOpenUserCardPopover] = useState(false);
@@ -53,6 +53,7 @@ const TheHeaderDropdown = () => {
   };
 
   const logout = () => {
+    history.push("/login");
     authentication.logout();
   }
 
@@ -123,7 +124,7 @@ const TheHeaderDropdown = () => {
         </CDropdownItem>
 
         <CDropdownItem divider />
-        <CDropdownItem style={{ color:'red', fontSize:'bold'}}>
+        <CDropdownItem style={{ color:'red', fontSize:'bold'}} onClick={logout}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Log out
         </CDropdownItem>

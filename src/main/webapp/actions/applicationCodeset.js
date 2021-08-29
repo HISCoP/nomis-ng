@@ -2,14 +2,34 @@ import axios from "axios";
 import { url } from "api";
 import * as ACTION_TYPES from "./types";
 
+export const fetchApplicationCodeSet = (codesetGroup, actionType, onSuccess , onError) => dispatch => {
+    console.log(actionType)
+    axios
+      .get(`${url}application-codesets/codesetGroup?codesetGroup=${codesetGroup}`)
+      .then(response => {
+        dispatch({
+          type: actionType,
+          payload: response.data
+        });
+        if(onSuccess){
+            onSuccess();
+        }
+      })
+      .catch(error => {
+          if(onError){
+              onError();
+          }
+      }
+        
+      );
+  };
 
-export const fetchAllCApplicationCodeset = (onSuccess , onError) => dispatch => {
+export const fetchAll = (onSuccess , onError) => dispatch => {
     axios
         .get(`${url}application-codesets`)
         .then(response => {
-            console.log(response.data)
             dispatch({
-                type: ACTION_TYPES.APPLICATION_CODESET_LISTS,
+                type: ACTION_TYPES.APPLICATION_CODESET_LIST,
                 payload: response.data
             });
             if(onSuccess){

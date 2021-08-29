@@ -10,34 +10,78 @@ import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button";
 import { FaPlus } from "react-icons/fa";
 import { connect } from "react-redux";
-import { fetchAllDomainServices } from "../../../actions/domainsServices";
+import { fetchAllDomainServices, deleteDomainService } from "../../../actions/domainsServices";
 import NewServices from './NewServices';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { MdModeEdit, MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
+import SaveIcon from "@material-ui/icons/Delete";
+import CancelIcon from "@material-ui/icons/Cancel";
+import {makeStyles} from "@material-ui/core/styles";
+import { Modal, ModalBody, ModalHeader, Spinner, ModalFooter
+} from 'reactstrap';
 
+const useStyles = makeStyles(theme => ({
+    button: {
+        margin: theme.spacing(1)
+    }
+}))
 
 const DomainServiceList = (props) => {
     const [loading, setLoading] = useState('')
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
-    const domainDetails = props.location.state && props.location.state!==null ? props.location.state : ""
-    console.log(domainDetails)
+    const domainDetails = props.location.state && props.location.state!==null ? props.location.state : "";
+    const [deleting, setDeleting] = React.useState(false);
+    const [currentDomainService, setCurrenDomainService] = React.useState(null);
+    const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+    const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
+    const classes = useStyles()
+
     useEffect(() => {
-    setLoading('true');
-        const onSuccess = () => {
-            setLoading(false)
-        }
-        const onError = () => {
-            setLoading(false)     
-        }
-            props.fetchAllDomainServices(domainDetails.id, onSuccess, onError);
-    }, []); //componentDidMount
+            loadDomainsServices()
+    }, [domainDetails.id]); //componentDidMount
+
+    const loadDomainsServices = () => {
+        setLoading('true');
+            const onSuccess = () => {
+                setLoading(false)
+            }
+            const onError = () => {
+                setLoading(false)     
+            }
+                props.fetchAllDomainServices(domainDetails.id, onSuccess, onError);
+        }; //componentDidMount
 
     const openNewDomainModal = (row) => {
-        toggleModal();
+        if(row){
+            setCurrenDomainService(row)
+            toggleModal();
+        }
+        toggleModal();    
+       
     }
+    const processDelete = (id) => {
+        setDeleting(true);
+       const onSuccess = () => {
+           setDeleting(false);
+           toggleDeleteModal();
+           loadDomainsServices();
+       };
+       const onError = () => {
+           setDeleting(false);
+           toast.error("Something went wrong, please contact administration");
+       };
 
+       props.deleteDomainService(id, onSuccess, onError);
+       }
+
+   
+       const deleteApplicationDomain = (row) => {
+        setCurrenDomainService(row)
+           toggleDeleteModal();
+       }
 
     return (
         <Card>
@@ -63,15 +107,16 @@ const DomainServiceList = (props) => {
                     title="Find By Service "
                     columns={[
                         { title: "Domain ID", field: "domainId" },
-                        {title: "Domain Name", field: "name"},
+                        {title: "Service Name", field: "name"},
+                       
                         {title: "Domain Status", field: "status"},
                         {title: "Action", field: "action", filtering: false,},
                     ]}
                     isLoading={loading}   
-                    data={[props.serviceList].map((row) => ({
+                    data={props.serviceList.map((row) => ({
                         domainId: row.id,
                         name: row.name,
-                    
+                   
                         status: row.archived===0 ? 'Active' : "Inactive",
                         action: ( <div>
                             <Menu>
@@ -86,25 +131,17 @@ const DomainServiceList = (props) => {
                                 Actions <span aria-hidden>▾</span>
                                 </MenuButton>
                                 <MenuList style={{ color: "#000 !important" }}>
-                                <MenuItem style={{ color: "#000 !important" }} >
-                                    <Button
-                                    size="sm"
-                                    color="link"
-                                    onClick={() => (row.id)}
-                                    >
+                                <MenuItem style={{ color: "#000 !important" }} onClick={() => openNewDomainModal(row)}>
+                                  
                                     <MdModeEdit size="15" />{" "}
                                     <span style={{ color: "#000" }}>Edit  </span>
-                                    </Button>
+                                   
                                 </MenuItem>
-                                <MenuItem style={{ color: "#000 !important" }}>
-                                    <Button
-                                        size="sm"
-                                        color="link"
-                                        onClick={() => (row)}
-                                    >
+                                <MenuItem style={{ color: "#000 !important" }} onClick={() => deleteApplicationDomain(row)}>
+                            
                                     <MdDelete size="15" />{" "}
                                     <span style={{ color: "#000" }}>Delete </span>
-                                    </Button>
+                                 
                                 </MenuItem>
                                 </MenuList>
                             </Menu>
@@ -130,7 +167,37 @@ const DomainServiceList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewServices toggleModal={toggleModal} showModal={showModal} domainDetails={domainDetails}/>
+            
+            <NewServices toggleModal={toggleModal} showModal={showModal} domainDetails={domainDetails} loadDomainsServices={loadDomainsServices} currentDomainService={currentDomainService}/>
+            {/* Delete Modal for Domain Service Area */}
+            <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Domain Area  - {currentDomainService && currentDomainService.name ? currentDomainService.name : ""} </ModalHeader>
+                    <ModalBody>
+                        <p>Are you sure you want to proceed ?</p>
+                    </ModalBody>
+                <ModalFooter>
+                    <Button
+                        type='button'
+                        variant='contained'
+                        color='primary'
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
+                        disabled={deleting}
+                        onClick={() => processDelete(currentDomainService.id)}
+                    >
+                        Delete  {deleting ? <Spinner /> : ""}
+                    </Button>
+                    <Button
+                        variant='contained'
+                        color='default'
+                        onClick={toggleDeleteModal}
+                        startIcon={<CancelIcon />}
+                    >
+                        Cancel
+                    </Button>
+                </ModalFooter>
+        </Modal>
+            {/* End of Delelte Modal for Domain Service Area */}
         </Card>
         
     );
@@ -145,7 +212,8 @@ const mapStateToProps = state => {
     };
   };
   const mapActionToProps = {
-    fetchAllDomainServices: fetchAllDomainServices
+    fetchAllDomainServices: fetchAllDomainServices,
+    deleteDomainService:deleteDomainService
   };
   
   export default connect(mapStateToProps, mapActionToProps)(DomainServiceList);

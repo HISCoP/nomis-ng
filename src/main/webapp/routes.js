@@ -17,8 +17,14 @@ const ApplicationCodeSetupHomePage = React.lazy(() => import('./views/admin/Appl
 const OrganisationUnitHomepage = React.lazy(() => import('./views/admin/OrganizationUnit/Index'));
 const ProgramSetupHomePage = React.lazy(() => import('./views/admin/DomainManager/DomainManager'));
 const DomainServices = React.lazy(() => import('./views/admin/DomainManager/DomainServices'));
-const UserRegistration = React.lazy(() => import ('./views/admin/Users/UserRegistration'));
+const UserRegistration = React.lazy(() => import('./views/admin/Users/UserRegistration'));
 const Roles = React.lazy(() => import('./views/admin/Roles/RolesPage'));
+/*Reporting components*/
+const ReportBuilderPage = React.lazy(() => import('./views/admin/Reports/ReportHome'));
+const ReportTemplate = React.lazy(() => import("./views/admin/Reports/ReportTemplate"));
+const ReportPage = React.lazy(() => import("./views/admin//Reports/ReportingPage"));
+// const JasperTemplateUpdate = React.lazy(() => import("./views/admin/Reports/JasperTemplateUpdate"));
+const ReportView = React.lazy(() => import("./views/admin/Reports/ReportView"));
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: Dashboard },
@@ -39,7 +45,11 @@ const routes = [
   { path: "/domain-service", name: 'Domain Services', component: DomainServices},
   { path: "/user-registration", name: 'User Registration', component: UserRegistration},
   { path: "/roles", name: 'Role', component: Roles},
-
+  /* The rout to Report*/
+  { path: "/report-builder", name: 'Report ', component: ReportBuilderPage},
+   { path: "/build-report", name: 'Build Report', component: ReportTemplate},
+  { path: "/report", name: 'Report', component: ReportPage},
+  { path: "/report-view", name: 'Report View', component: ReportView},
   { path: "/visualization", name: 'Data Visualisation', component: DataVisualisation} ,
   
 ];
