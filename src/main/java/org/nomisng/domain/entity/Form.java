@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -105,4 +106,7 @@ public class Form extends JsonBEntity {
             this.code = UUID.randomUUID().toString();
         }
     }*/
+
+    @OneToMany(mappedBy = "formByFormCode")
+    private List<Encounter> FormByFormCode;
 }

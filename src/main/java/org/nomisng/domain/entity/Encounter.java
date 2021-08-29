@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringExclude;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,7 @@ public class Encounter extends Audit {
 
     @Basic
     @Column(name = "archived")
-    private int archived;
+    private Integer archived;
 
     /*@Basic
     @Column(name = "service_code")
@@ -56,4 +57,21 @@ public class Encounter extends Audit {
     @JsonIgnore
     @ToStringExclude
     private HouseholdMember householdMemberByHouseholdMemberId;
+
+    @ManyToOne
+    @JoinColumn(name = "form_code", referencedColumnName = "code", updatable = false, insertable = false)
+    private Form formByFormCode;
+
+    @Transient
+    private String formName;
+
+    @Transient
+    private String firstName;
+
+    @Transient
+    private String lastName;
+
+    @Transient
+    private String otherNames;
+
 }

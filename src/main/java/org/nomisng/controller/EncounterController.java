@@ -11,9 +11,15 @@ import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.FormData;
 import org.nomisng.service.DomainService;
 import org.nomisng.service.EncounterService;
+import org.nomisng.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -33,6 +39,15 @@ public class EncounterController {
     @GetMapping("/{id}")
     public ResponseEntity<EncounterDTO> getEncounterById(@PathVariable Long id) {
         return ResponseEntity.ok(encounterService.getEncounterById(id));
+    }
+
+    @GetMapping("/{id}/{formCode}")
+    public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdMemberIdAndFormCode(@PathVariable Long id,
+                                                                                          @PathVariable String formCode,
+                                                                                          @PageableDefault(value = 100) Pageable pageable) {
+        Page<Encounter> encounterPage = encounterService.getEncountersByHouseholdMemberIdAndFormCode(id, formCode, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), encounterPage);
+        return new ResponseEntity<>(encounterService.getEncounterDTOFromPage(encounterPage), headers, HttpStatus.OK);
     }
 
     @GetMapping("{id}/FormData")
