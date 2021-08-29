@@ -18,6 +18,8 @@ import {
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import { Link } from 'react-router-dom';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateReports = props => {
     const datanew = {
@@ -54,7 +56,8 @@ const CreateReports = props => {
     }, [])
 
     const handleSubmit = e => {
-        newdata2['programCode']=programCode;
+        //newdata2['programCode']=programCode;
+        newdata2['programCode']=null;
         newdata2['resourceObject']=res;
         newdata2['name']=name;
         newdata2['description']=description;
@@ -62,12 +65,23 @@ const CreateReports = props => {
         newdata2['template']=template;
 
         e.preventDefault()
-
-        props.creatReport(newdata2);
+        const onSuccess = () => {
+                //setLoading(false);
+            setTimeout(() => {
+                props.history.push(`/report-builder`)
+            }, 1000)
+               
+            }
+            const onError = () => {
+                //setLoading(false);
+                
+            }
+        props.creatReport(newdata2, onSuccess, onError);
     }
 
     return (
         <Card>
+        <ToastContainer />
             <CardBody>
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" to={{pathname: "/admin",
@@ -85,17 +99,17 @@ const CreateReports = props => {
                         <hr />
                         <Form onSubmit={handleSubmit} >
                             <Row>
-                                <Col md={4}> 
+                                {/* <Col md={4}> 
                                     <FormGroup>
                                         <Label class="sr-only">Program Area</Label>
-                                            {/* {props.services.length && props.services.length > 0 ?
+                                            {props.services.length && props.services.length > 0 ?
                                                 <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
                                                     {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
                                                 </Input>:  <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
                                                     <option>No Programs Found</option>
-                                                </Input>} */}
+                                                </Input>}
                                         </FormGroup>
-                                    </Col>
+                                    </Col> */}
 
                                 <Col md={4}><FormGroup>
                                     <Label class="sr-only">Report Name</Label>

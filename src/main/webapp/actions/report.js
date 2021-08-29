@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 
 
 export const creatReport = (data, onSuccess, onError) => dispatch => {
-    console.log(data)
+  
     axios
         .post(`${url}reports/`, data)
         .then(response => {
@@ -13,15 +13,17 @@ export const creatReport = (data, onSuccess, onError) => dispatch => {
                 type: ACTION_TYPES.REPORTS_CREATE_REPORT,
                 payload: response.data
             });
+          
             toast.success("Report was saved successfully!");
-            console.log(response)
             if(onSuccess){
                 onSuccess();
             }
         })
         .catch(error => {
+        
                 if(onError){
                     onError();
+                    toast.danger("Report was saved successfully!");
                 }
             }
 
