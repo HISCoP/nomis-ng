@@ -22,10 +22,6 @@ const HouseholdMember = (props) => {
     const toggle2 = () => setModal2(!modal2);
     const [loading, setLoading] = useState('')
 
-<<<<<<< HEAD
-
-=======
->>>>>>> form-builder-fix
     useEffect(() => {
     fetchMembers();
     }, []); //componentDidMount
@@ -63,11 +59,7 @@ const HouseholdMember = (props) => {
             )
             )
             :
-<<<<<<< HEAD
-            ""
-=======
             "Loading please wait.."
->>>>>>> form-builder-fix
             }
                         
             </CRow>
