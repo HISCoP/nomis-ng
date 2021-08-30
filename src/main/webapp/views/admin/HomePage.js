@@ -95,8 +95,19 @@ const HomePage = () => {
         </Link>
         </Menu.Item>
 
-
         <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "cbo", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  CBO Setup  </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "donor", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Donor Setup  </span>
+        </Link>
+        </Menu.Item>
+        {/* <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>Others</span>
         <Dropdown   className={'float-right'} >  
@@ -107,7 +118,7 @@ const HomePage = () => {
             <Dropdown.Item icon='settings' text='Facilities Setup' />
           </Dropdown.Menu>
         </Dropdown>
-        </Menu.Item>
+        </Menu.Item> */}
 
             </Menu>
 

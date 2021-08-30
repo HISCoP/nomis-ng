@@ -175,3 +175,17 @@ export const REPORTS_GENERATE_REPORT = 'REPORTS_GENERATE_REPORT'
 export const REPORTS_UPDATE = 'REPORTS_UPDATE'
 export const REPORTS_DELETE = 'REPORTS_DELETE'
 export const REPORTS_ERROR = 'REPORTS_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * CBO 
+ */
+ export const FETCH_ALL_CBO = 'FETCH_ALL_CBO'
+
+ /**
+ * @TYPES
+ * ===============================================
+ * DONOR 
+ */
+  export const FETCH_ALL_DONOR = 'FETCH_ALL_DONOR'

@@ -12,6 +12,8 @@ import globalVariableReducer from "./globalVariableReducer";
 import domainsServicesReducer from './domainsServicesReducer';
 import rolesReducer from './rolesReducer';
 import reportReducer from './reportReducer';
+import cboReducer from './cboReducer';
+import donorReducer from './donorReducer';
 
 export default combineReducers({
  
@@ -27,6 +29,8 @@ export default combineReducers({
   globalVariables: globalVariableReducer,
   domainServices: domainsServicesReducer,
   roles: rolesReducer,
+  cboReducer: cboReducer,
+  donorReducer: donorReducer,
 
 })
 

@@ -25,6 +25,8 @@ const ReportTemplate = React.lazy(() => import("./views/admin/Reports/ReportTemp
 const ReportPage = React.lazy(() => import("./views/admin//Reports/ReportingPage"));
 // const JasperTemplateUpdate = React.lazy(() => import("./views/admin/Reports/JasperTemplateUpdate"));
 const ReportView = React.lazy(() => import("./views/admin/Reports/ReportView"));
+const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"));
+const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: Dashboard },
@@ -50,7 +52,8 @@ const routes = [
    { path: "/build-report", name: 'Build Report', component: ReportTemplate},
   { path: "/report", name: 'Report', component: ReportPage},
   { path: "/report-view", name: 'Report View', component: ReportView},
-  { path: "/visualization", name: 'Data Visualisation', component: DataVisualisation} ,
+  { path: "/cbo", name: 'CBO ', component: CboManager} ,
+  { path: "/donor", name: 'Donor Manager', component: DonorManager} ,
   
 ];
 
