@@ -5,6 +5,9 @@ import { CCol, CRow, CWidgetIcon, CCard,
 import CIcon from "@coreui/icons-react";
 import { Button, List} from 'semantic-ui-react'
 import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
+import {connect} from "react-redux";
+import {calculateAge} from "../../../utils/calculateAge";
+import {Link} from "react-router-dom";
 
 const HouseholdDashboard = (props) => {
 
@@ -17,19 +20,19 @@ const HouseholdDashboard = (props) => {
                 </CWidgetIcon>
                     </CCol>
                     <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total Services" header="10" color="success"  iconPadding={false}>
+                        <CWidgetIcon text="Total Services" header={props.householdServiceHistory.length} color="success"  iconPadding={false}>
                             <CIcon width={24} name="cil-notes"/>
                         </CWidgetIcon>
                     </CCol>
                     <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total HIV Positive" header="2" color="success" iconPadding={false}>
+                        <CWidgetIcon text="Total HIV Positive" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
                         </CCol>
                 </CRow>
         <CRow>
             <CCol xs="12" >
-                <ServiceHistoryPage />
+                <ServiceHistoryPage householdId={props.household.id} />
             </CCol>
 
             <CCol xs="12" >
@@ -39,27 +42,22 @@ const HouseholdDashboard = (props) => {
 
                     <CCardBody>
                     <List divided verticalAlign='middle'>
+                        {props.houseMemberList.filter(x=>x.householdMemberType === 2).length > 0 ? props.houseMemberList.filter(x=>x.householdMemberType === 2).map((member) => (
                         <List.Item>
                             <List.Content floated='right'>
-                                <Button>View</Button>
+                                <Link color="inherit" to ={{
+                                    pathname: "/household-member/home", state: member.id
+                                }}  >  <Button > View</Button> </Link>
                             </List.Content>
-                            <List.Content>Amos Kindu - Female</List.Content>
-                            <List.Description>12 years </List.Description>
+                            <List.Content>{member.details.firstName + " " + member.details.lastName } - {member.details.sex && member.details.sex.display ? member.details.sex.display  : "Nil" } </List.Content>
+                            <List.Description>{calculateAge(member.details.dob)} </List.Description>
                         </List.Item>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Ada Kindu - Male</List.Content>
-                            <List.Description>5 years</List.Description>
-                        </List.Item>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Soma Kindu</List.Content>
-                            <List.Description>3 years</List.Description>
-                        </List.Item>
+                        ))
+                        :
+                            <List.Item>
+                                <List.Content>There are no OVCs in this household</List.Content>
+                            </List.Item>
+                        }
                     </List>
                     </CCardBody>
                 </CCard>
@@ -71,4 +69,14 @@ const HouseholdDashboard = (props) => {
     )
 }
 
-export default HouseholdDashboard;
+const mapStateToProps = (state) => {
+    return {
+        houseMemberList: state.houseHold.householdMembers,
+        householdServiceHistory: state.houseHold.householdServiceHistory
+    };
+};
+
+const mapActionToProps = {
+
+}
+export default connect(mapStateToProps, mapActionToProps)( HouseholdDashboard);

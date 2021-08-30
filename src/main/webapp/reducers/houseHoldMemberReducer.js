@@ -20,7 +20,7 @@ const houseHoldMemberReducer = (state = initialState, action) => {
       return { ...state, members: [...action.payload] }
 
     case ACTION_TYPES.FETCH_HOUSE_HOLD_MEMBER_BY_ID:
-      return { ...state, member: [...action.payload] }
+      return { ...state, member: action.payload}
 
     default:
       return state

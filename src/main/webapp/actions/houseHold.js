@@ -24,9 +24,9 @@ export const fetchAllHouseHold = (onSuccess , onError) => dispatch => {
         );
 };
 
-export const fetchAllHouseHoldServiceHistory = (onSuccess , onError) => dispatch => {
+export const fetchAllHouseHoldServiceHistory = (id, onSuccess , onError) => dispatch => {
     axios
-        .get(`${url}encounters`)
+        .get(`${url}households/${id}/encounters`)
         .then(response => {
             dispatch({
                 type: ACTION_TYPES.FETCH_HOUSEHOLD_SERVICE_HISTORY,
@@ -70,6 +70,44 @@ export const saveHouseHold = (body, onSuccess , onError) => dispatch => {
     axios
         .post(`${url}households`, body)
         .then(response => {
+            if(onSuccess){
+                onSuccess();
+            }
+        })
+        .catch(error => {
+                if(onError){
+                    onError();
+                }
+            }
+
+        );
+};
+
+export const deleteHousehold = (id, onSuccess , onError) => dispatch => {
+    axios
+        .delete(`${url}households/${id}`)
+        .then(response => {
+            if(onSuccess){
+                onSuccess();
+            }
+        })
+        .catch(error => {
+                if(onError){
+                    onError();
+                }
+            }
+
+        );
+};
+
+export const fetchAllHouseHoldMembersByHouseholdId = (id, onSuccess , onError) => dispatch => {
+    axios
+        .get(`${url}households/${id}/householdMembers`)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.FETCH_HOUSEHOLD_MEMBERS_BY_HOUSEHOLD_ID,
+                payload: response.data
+            });
             if(onSuccess){
                 onSuccess();
             }

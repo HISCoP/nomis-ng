@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {  Errors, Form, FormBuilder } from 'react-formio';
+import {  Errors, Form, FormBuilder, Formio } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -29,6 +29,9 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import 'formiojs/dist/formio.builder.min.css';
+import CustomSelect from "./customComponents/CustomSelect";
+
+Formio.use(CustomSelect);
 
 const useStyles = makeStyles(theme => ({
     root2: {

@@ -4,7 +4,7 @@ import ServiceHistoryPage from './ServiceHistoryPage';
 import DescriptionIcon from '@material-ui/icons/Description';
 
 
-const HouseholdService = () => {
+const HouseholdService = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
@@ -18,7 +18,7 @@ const HouseholdService = () => {
             </CRow>
             <CRow>
                     <CCol xs="12" >
-                        <ServiceHistoryPage  />
+                        <ServiceHistoryPage householdId={props.householdId} />
                     </CCol>
             </CRow>
            

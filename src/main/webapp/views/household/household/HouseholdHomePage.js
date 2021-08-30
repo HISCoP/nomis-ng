@@ -31,7 +31,7 @@ const HouseholdHomePage = (props) => {
     //Getting the house Hold details from the props
     console.log(props.location)
     const houseHoldId = props.location.state;
-    const [fetchingHousehold, setFetchingHousehold] = useState(false);
+    const [fetchingHousehold, setFetchingHousehold] = useState(true);
     const classes = useStyles();
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
@@ -116,7 +116,7 @@ const HouseholdHomePage = (props) => {
                            <AssessmentCarePlanHome/>
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                           <HouseholdService />
+                           <HouseholdService householdId={houseHoldId}/>
                         </CTabPane>
                     </CTabContent>
 

@@ -62,7 +62,7 @@ const HouseholdMember = (props) => {
                 ]}
                 isLoading={loading}
                 data={props.houseMemberList.map((row) => ({
-                  id: row.id,
+                  id: row.details.uniqueId,
                   date: null,
                   name: row.details.firstName + " " + row.details.lastName,
                   age: calculateAge(row.details.dob),
@@ -74,7 +74,7 @@ const HouseholdMember = (props) => {
                               <MenuList style={{hover:"#eee"}}>
                               <MenuItem >
                                 <Link
-                                      to={{pathname: "/household-member/home" , houseHoldId:row.householdId}}>
+                                      to={{pathname: "/household-member/home" , state:row.id, householdId:row.householdId}}>
                                       View Dashboard
                                 </Link>
                                 

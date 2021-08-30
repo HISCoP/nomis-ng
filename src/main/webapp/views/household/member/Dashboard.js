@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { CCol, CRow, CWidgetIcon, CCard,
     CCardBody,
     CCardHeader,} from "@coreui/react";
@@ -8,13 +8,20 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ChildCareIcon from '@material-ui/icons/ChildCare';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ServiceHistoryPage from '../widgets/ServiceHistoryPage';
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
+import {connect} from "react-redux";
+import {calculateAge} from "./../../../utils/calculateAge";
+import axios from "axios";
+import {url} from "../../../api";
 
-const Dashboard = () => {
+
+const Dashboard = (props) => {
 
     return (
         <>
               <TopDashboardStats />
-              <MidDashboardStats />
+              <MidDashboardStats member={props.member} household={props.household} fetchingHousehold={props.fetchingHousehold} />
             <CRow>
                 <CCol xs="12" >
                     <RecentServiceOffered />
@@ -68,7 +75,28 @@ const TopDashboardStats = (props) => {
     );
 }
 
-const MidDashboardStats = () => {
+const MidDashboardStats = (props) => {
+    const [fetchingMember, setFetchingMember] = useState(true);
+    const [caregiver, setCaregiver] = useState(null);
+    const caregiverId = props.member && props.member.details && props.member.details.caregiver ? props.member.details.caregiver : null;
+    React.useEffect(() => {
+        fetchCaregiver();
+    }, [caregiverId]);
+
+    const fetchCaregiver = () => {
+        axios
+            .get(`${url}household-members/${caregiverId}`)
+            .then(response => {
+                setFetchingMember(false);
+                setCaregiver(response.data);
+            })
+            .catch(error => {
+                    setFetchingMember(false);
+                    setCaregiver(null);
+                }
+
+            );
+    }
     return (
         <>
             <CRow>
@@ -76,11 +104,13 @@ const MidDashboardStats = () => {
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
                         <CCardHeader> <Icon name='home' /> Household Information</CCardHeader>
                         <CCardBody>
-
-                                <span>Household ID: <small>FCT/FGH/12/2020 </small></span><br/>
-                                <span>Address: <small>No 20, Apata Road, Ibadan </small></span><br/>
-                                <span>Date Of Assessment: <small>12/11/2020</small> </span><br/>
-                                <span>Primary Caregiver Name: <small>Moses Lambo </small></span><br/>
+                            {props.fetchingHousehold &&
+                            <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                            }
+                                <span>Household ID: <small>{props.household && props.household.details ? props.household.details.uniqueId : 'Nil'} </small></span><br/>
+                                <span>Address: <small> {props.household && props.household.details ? props.household.details.street : 'Nil' }</small></span><br/>
+                                <span>Date Of Assessment: <small>{props.household && props.household.details ? props.household.details.assessmentDate : 'Nil' }</small> </span><br/>
+                                <span>Primary Caregiver Name: <small>{props.household && props.household.details && props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName: 'Nil' }  </small></span><br/>
                         </CCardBody>
                     </CCard>
                 </CCol>
@@ -88,11 +118,13 @@ const MidDashboardStats = () => {
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
                         <CCardHeader> <Icon name='user' /> Caregiver Information</CCardHeader>
                         <CCardBody>
-
-                            <span>Caregiver Name: <small>Amina Lambo </small></span><br/>
-                            <span>Age: <small>30 years</small></span><br/>
-                            <span>Sex: <small>Female</small> </span><br/>
-                            <span>Phone Number: <small>07069969954 </small></span><br/>
+                            {fetchingMember &&
+                            <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                            }
+                            <span>Caregiver Name: <small>{caregiver && caregiver.details ? caregiver.details.firstName + ' ' + caregiver.details.lastName : 'Nil'}</small></span><br/>
+                            <span>Age: <small>{caregiver && caregiver.details && caregiver.details.dob ? calculateAge(caregiver.details.dob) : 'Nil' }</small></span><br/>
+                            <span>Sex: <small>{caregiver && caregiver.details && caregiver.details.sex ? caregiver.details.sex.display : 'Nil' }</small> </span><br/>
+                            <span>Phone Number: <small>{caregiver && caregiver.details ? caregiver.details.mobilePhoneNumber : 'Nil'} </small></span><br/>
                         </CCardBody>
                     </CCard>
                 </CCol>
@@ -121,4 +153,14 @@ const RecentServiceOffered = () => {
             </>
     );
 }
-export default Dashboard;
+const mapStateToProps = (state) => {
+    return {
+        caregiver: state.houseHoldMember.member,
+    };
+};
+
+const mapActionToProps = {
+    fetchHouseHoldMemberById: fetchHouseHoldMemberById
+};
+
+export default connect(mapStateToProps, mapActionToProps)(Dashboard);
