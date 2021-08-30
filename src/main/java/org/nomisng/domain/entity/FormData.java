@@ -1,6 +1,8 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -69,10 +71,10 @@ public class FormData extends JsonBEntity {
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "encounter_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
     @JsonIgnore
+    @ToString.Exclude
     public Encounter encounterByEncounterId;
 
     @ManyToOne
@@ -80,4 +82,5 @@ public class FormData extends JsonBEntity {
     @ToString.Exclude
     @JsonIgnore
     public OrganisationUnit organisationUnitByOrganisationalUnitId;
+
 }

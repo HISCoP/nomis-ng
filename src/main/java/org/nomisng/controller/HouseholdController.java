@@ -6,11 +6,18 @@ import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.HouseholdAddress;
 import org.nomisng.domain.entity.Visit;
+import org.nomisng.service.EncounterService;
 import org.nomisng.service.HouseholdService;
 import org.nomisng.service.VisitService;
+import org.nomisng.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -19,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HouseholdController {
     private final HouseholdService householdService;
+    private final EncounterService encounterService;
+
 
     @GetMapping
     public ResponseEntity<List<HouseholdDTO>> getAllHouseholds() {
@@ -26,9 +35,17 @@ public class HouseholdController {
     }
 
     @GetMapping("/{id}/encounters")
-    //TODO: still in progress
-    public ResponseEntity<List<Encounter>> getEncountersByHouseholdId(@PathVariable Long id) {
+    public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getEncounterByHouseholdId(id));
+    }
+
+    @GetMapping("/{id}/{formCode}/encounters")
+    public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdIdAndFormCode(@PathVariable Long id,
+                                                                                          @PathVariable String formCode,
+                                                                                          @PageableDefault(value = 100) Pageable pageable) {
+        Page<Encounter> encounterPage = encounterService.getEncountersByHouseholdIdAndFormCode(id, formCode, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), encounterPage);
+        return new ResponseEntity<>(encounterService.getEncounterDTOFromPage(encounterPage), headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -42,7 +42,7 @@ public class DomainService {
         domainOptional.ifPresent(domain -> {
             throw new RecordExistException(Domain.class, "Name", domainDTO.getName());
         });
-        if(domainDTO.getCode() == null){domainDTO.setCode(UUID.randomUUID().toString());}
+        domainDTO.setCode(UUID.randomUUID().toString());
         Domain domain = domainMapper.toDomain(domainDTO);
         domain.setArchived(UN_ARCHIVED);
 
