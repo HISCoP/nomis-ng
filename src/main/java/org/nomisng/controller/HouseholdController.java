@@ -48,6 +48,15 @@ public class HouseholdController {
         return new ResponseEntity<>(encounterService.getEncounterDTOFromPage(encounterPage), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/{formCode}/formData")
+    public ResponseEntity<List<FormDataDTO>> getFormDataByHouseholdIdAndFormCode(@PathVariable Long id,
+                                                                                    @PathVariable String formCode,
+                                                                                    @PageableDefault(value = 100) Pageable pageable) {
+        Page<Encounter> encounterPage = encounterService.getEncountersByHouseholdIdAndFormCode(id, formCode, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), encounterPage);
+        return new ResponseEntity<>(encounterService.getFormDataDTOFromPage(encounterPage), headers, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<HouseholdDTO> getHouseholdById(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdById(id));

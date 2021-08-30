@@ -90,10 +90,18 @@ public class EncounterService {
     }
 
     public List<EncounterDTO> getEncounterDTOFromPage(Page<Encounter> encounterPage){
-       List<Encounter> encounters =  encounterPage.getContent().stream()
+        List<Encounter> encounters =  encounterPage.getContent().stream()
                 .map(encounter -> this.addFirstNameAndLastNameAndFormNameToEncounter(encounter))
                 .collect(Collectors.toList());
         return encounterMapper.toEncounterDTOS(encounters);
+    }
+
+    public List<FormDataDTO> getFormDataDTOFromPage(Page<Encounter> encounterPage){
+        List<FormData> formData =  encounterPage.getContent().stream()
+                .map(Encounter::getFormData)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        return formDataMapper.toFormDataDTOS(formData);
     }
 
     protected Encounter addFirstNameAndLastNameAndFormNameToEncounter(Encounter encounter){

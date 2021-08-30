@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -19,28 +20,16 @@ import java.util.List;
 @Data
 @EqualsAndHashCode
 @Table(name = "household")
-public class Household extends JsonBEntity {
-    @ManyToOne
-    @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
-    @JsonIgnore
-    public OrganisationUnit organisationUnitById;
-    @OneToMany(mappedBy = "householdByHouseholdId")
-    @ToString.Exclude
-    @JsonIgnore
-    public List<HouseholdAddress> householdAddresses;
-    @OneToMany(mappedBy = "householdByHouseholdId")
-    @ToString.Exclude
-    @JsonIgnore
-    public List<HouseholdMember> householdMembers;
+public class Household extends JsonBEntity implements Serializable {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Basic
     @Column(name = "unique_id")
     private String uniqueId;
-    //TODO: discuss on changing status to an int
+
     @Basic
     @Column(name = "status") // 1  - active, 2 - graduated
     private int status;
@@ -84,4 +73,20 @@ public class Household extends JsonBEntity {
     @JsonIgnore
     @ToString.Exclude
     private List<Encounter> encountersById;
+
+    @ManyToOne
+    @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @ToString.Exclude
+    @JsonIgnore
+    private OrganisationUnit organisationUnitById;
+
+    @OneToMany(mappedBy = "householdByHouseholdId")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<HouseholdAddress> householdAddresses;
+
+    @OneToMany(mappedBy = "householdByHouseholdId")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<HouseholdMember> householdMembers;
 }
