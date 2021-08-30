@@ -35,9 +35,9 @@ const ServiceHistoryPage = (props) => {
                 ]}
                 isLoading={loading}
                 data={props.householdServiceHistory.map(service => ({
-                    formName: service.formCode,
+                    formName: service.formName,
                     date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
-                    memberName: service.householdMemberId
+                    memberName: service.firstName + " " + service.lastName
                 }))}
 
                 actions={[

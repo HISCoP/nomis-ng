@@ -4,20 +4,53 @@ import {Icon} from "semantic-ui-react";
 import {CChartBar} from "@coreui/react-chartjs";
 import MaterialTable from 'material-table';
 import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+import {toast} from "react-toastify";
+import axios from "axios";
+import {url} from "../../../api";
+import * as CODES from './../../../api/codes'
 
-const Assessment = () => {
+const Assessment = (props) => {
     const [modal, setModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [assessmentList, setAssessmentList] = useState([]);
     const toggle = () => setModal(!modal);
-    const usersData = [
-        {pending: 0, totalServices: '10', dateCreated: '2018/01/01', inProgress: '3', completed: '7'},
-        {pending: 1, totalServices: '7', dateCreated: '2018/01/01', inProgress: '2', completed: '4'},
-        {pending: 2, totalServices: '5', dateCreated: '2018/02/01', inProgress: '3', completed: '0'}
-];
+
+    React.useEffect(() => {
+       fetchAssessments();
+    }, [props.householdId]);
+
+    const fetchAssessments = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+
+        const onError = () => {
+            setLoading(false);
+            toast.error('Error: Could not fetch household assessments!');
+        }
+        axios
+            .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
+            .then(response => {
+                setAssessmentList(response.data.map(x => x.data))
+                if(onSuccess){
+                    onSuccess();
+                }
+            })
+            .catch(error => {
+                    if(onError){
+                        onError();
+                    }
+                }
+
+            );
+    }
+
     return (
         <>
             <CRow >
                 <CCol xs="12" className={"pb-3"}>
-                    <CButton color={"primary"} className="float-right" onClick={toggle}> New Assessment</CButton>
+                    <CButton color={"primary"} className="float-right" onClick={toggle} > New Assessment</CButton>
                 </CCol>
             </CRow>
 
@@ -25,13 +58,14 @@ const Assessment = () => {
                 <CCol xs={"12"}>
                     <MaterialTable
                         title="Assessment History"
+                        isLoading={loading}
                         columns={[
-                            { title: 'Date Created', field: 'dateCreated' },
-                            { title: 'Total Yes', field: 'totalServices' },
-                            { title: 'Total No', field: 'pending' },
-                            { title: 'Total N/A', field: 'inProgress' },
+                            { title: 'Date Created', field: 'assessmentDate' },
+                            { title: 'Total Yes', field: 'totalYes' },
+                            { title: 'Total No', field: 'totalNo' },
+                            { title: 'Total N/A', field: 'totalNa' },
                         ]}
-                        data={usersData}
+                        data={assessmentList}
                         actions={[
                             {
                                 icon: 'edit',
@@ -52,7 +86,7 @@ const Assessment = () => {
                     />
                 </CCol>
             </CRow>
-            <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
+            <NewHouseHoldAssessment  modal={modal} toggle={toggle} householdId={props.householdId} reloadSearch={fetchAssessments}/>
         </>
     )
 }

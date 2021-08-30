@@ -113,7 +113,7 @@ const HouseholdHomePage = (props) => {
                             <HouseholdMember houseHoldId={houseHoldId}/>
                         </CTabPane>
                         <CTabPane active={activeItem === 'careplan'} >
-                           <AssessmentCarePlanHome/>
+                           <AssessmentCarePlanHome householdId={houseHoldId}/>
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
                            <HouseholdService householdId={houseHoldId}/>

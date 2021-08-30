@@ -59,7 +59,7 @@ const ServiceHistoryPage = (props) => {
                                 <List.Content floated='right'>
                                     <Button>View</Button>
                                 </List.Content>
-                                <List.Content>{service.formCode} {memberId ? '' : ' - '+service.householdMemberId}</List.Content>
+                                <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - '+service.firstName+' '+service.lastName) : ''}</List.Content>
                                 <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
                             </List.Item>
                         )

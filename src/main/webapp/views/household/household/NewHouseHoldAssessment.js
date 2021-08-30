@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, } from 'reactstrap';
 import * as CODES from './../../../api/codes'
 import FormRenderer from './../../formBuilder/FormRenderer'
+import {toast, ToastContainer} from "react-toastify";
 
 
 const NewHouseHoldAssessment = (props) => {
@@ -29,18 +30,24 @@ const saveAssessment = (e) => {
   
 };
 
+const onSuccess = () => {
+    props.reloadSearch();
+    toast.success("Form saved successfully!", { appearance: "success" });
+    props.toggle();
+}
+
 
   return (
     <div>
-      
+      <ToastContainer />
       <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='xl'>
         <ModalHeader toggle={props.toggle}>New HouseHold Assessment</ModalHeader>
         <ModalBody>
           
           <FormRenderer
           formCode={currentForm.code}
-          programCode=""
-          onSubmit={saveAssessment}
+          householdId={props.householdId}
+          onSuccess={onSuccess}
           />
         </ModalBody>
         {/* <ModalFooter>
