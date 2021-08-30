@@ -4,16 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Data
+@Entity
 @EqualsAndHashCode
 @Table(name = "organisation_unit")
-public class OrganisationUnit extends Audit {
+public class OrganisationUnit extends JsonBEntity implements Serializable {
+
+
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,65 +32,72 @@ public class OrganisationUnit extends Audit {
     private String description;
 
     @Basic
-    @Column(name = "organisation_unit_level_id", nullable = false)
+    @Column(name = "organisation_unit_level_id")
     private Long organisationUnitLevelId;
 
     @Basic
-    @Column(name = "parent_organisation_unit_id", nullable = false)
+    @Column(name = "parent_organisation_unit_id")
     private Long parentOrganisationUnitId;
 
     @Basic
-    @Column(name = "archived", nullable = false)
+    @Column(name = "archived")
+    @JsonIgnore
     private Integer archived = 0;
 
-    @Basic
-    @Column(name = "address")
-    private String address;
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "details", nullable = false, columnDefinition = "jsonb")
+    private Object details;
 
-    @Basic
-    @Column(name = "phone")
-    private String phone;
-
-
-    @OneToMany(mappedBy = "organisationUnitByCurrentOrganisationUnitId")
-    @ToString.Exclude
-    public Collection<User> UsersById;
-
-    @OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
-    @ToString.Exclude
-    private Collection<FormData> formDataById;
-
-    @OneToMany(mappedBy = "organisationUnitById")
-    @ToString.Exclude
-    private List<Household> households;
-
-    @ManyToOne
-    @JoinColumn(name = "organisation_unit_level_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
+    @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
-    private OrganisationUnitLevel organisationUnitLevelByOrganisationUnitLevelId;
+    @ToString.Exclude
+    private String createdBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+
+    @Column(name = "date_created", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private LocalDateTime dateCreated = LocalDateTime.now();
+
+    @Column(name = "modified_by")
+    @JsonIgnore
+    @ToString.Exclude
+    private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+
+    @Column(name = "date_modified")
+    @JsonIgnore
+    @ToString.Exclude
+    private LocalDateTime dateModified = LocalDateTime.now();
+    @Transient
+    private String  parentOrganisationUnitName;
+
+    @Transient
+    private String  parentParentOrganisationUnitName;
 
     @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    private List<CboDonorIpOrganisationUnit> cboDonorIpOrganisationUnitsById;
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    @JsonIgnore
+    public List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnitsById;
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    @JsonIgnore
     @ToString.Exclude
-    private Collection<OrganisationUnitHierarchy> organisationUnitHierarchiesById;
+    public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById;
 
     @OneToMany(mappedBy = "organisationUnitByParentOrganisationUnitId")
+    @JsonIgnore
     @ToString.Exclude
-    private Collection<OrganisationUnitHierarchy> parentOrganisationUnitHierarchiesById;
+    public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById_0;
 
-    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    @OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
+    @JsonIgnore
     @ToString.Exclude
-    private Collection<OrganisationUnitIdentifier> organisationUnitIdentifiersById;
+    public List<FormData> formDataById;
 
-    @OneToMany(mappedBy = "organisationUnitByCountryId")
+    @OneToMany(mappedBy = "organisationUnitByCurrentOrganisationUnitId")
+    @JsonIgnore
     @ToString.Exclude
-    private Collection<HouseholdAddress> countryHouseholdContactsById;
-
-    @OneToMany(mappedBy = "organisationUnitByStateId")
-    @ToString.Exclude
-    private Collection<HouseholdAddress> stateHouseholdContactsById;
-
-    @OneToMany(mappedBy = "organisationUnitByProvinceId")
-    @ToString.Exclude
-    private Collection<HouseholdAddress> provinceHouseholdContactsById;
+    public List<User> users;
 }

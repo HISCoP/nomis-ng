@@ -18,8 +18,8 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PROTECTED)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Audit {

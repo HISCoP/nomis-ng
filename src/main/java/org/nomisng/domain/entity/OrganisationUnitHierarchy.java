@@ -1,16 +1,16 @@
 package org.nomisng.domain.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
-@Entity
 @Data
+@Entity
 @EqualsAndHashCode
 @Table(name = "organisation_unit_hierarchy")
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrganisationUnitHierarchy {
     @Id
     @Column(name = "id", updatable = false)
@@ -30,17 +30,20 @@ public class OrganisationUnitHierarchy {
     private Long organisationUnitLevelId;
 
     @ManyToOne
-    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
     @ToString.Exclude
     private OrganisationUnit organisationUnitByOrganisationUnitId;
 
     @ManyToOne
-    @JoinColumn(name = "parent_organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JoinColumn(name = "parent_organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
     @ToString.Exclude
     private OrganisationUnit organisationUnitByParentOrganisationUnitId;
 
     @ManyToOne
-    @JoinColumn(name = "organisation_unit_level_id", referencedColumnName = "id",updatable = false, insertable = false)
+    @JoinColumn(name = "organisation_unit_level_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
     @ToString.Exclude
     private OrganisationUnitLevel organisationUnitLevelByOrganisationUnitLevelId;
 }
