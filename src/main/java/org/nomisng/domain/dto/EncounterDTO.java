@@ -21,6 +21,8 @@ public class EncounterDTO implements Serializable {
 
     private Long householdMemberId;
 
+    private Long householdId;
+
     private List<FormData> formData;
 
     private String formName;
