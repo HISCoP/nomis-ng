@@ -41,15 +41,6 @@ public class EncounterController {
         return ResponseEntity.ok(encounterService.getEncounterById(id));
     }
 
-    @GetMapping("/{id}/{formCode}")
-    public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdMemberIdAndFormCode(@PathVariable Long id,
-                                                                                          @PathVariable String formCode,
-                                                                                          @PageableDefault(value = 100) Pageable pageable) {
-        Page<Encounter> encounterPage = encounterService.getEncountersByHouseholdMemberIdAndFormCode(id, formCode, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), encounterPage);
-        return new ResponseEntity<>(encounterService.getEncounterDTOFromPage(encounterPage), headers, HttpStatus.OK);
-    }
-
     @GetMapping("{id}/FormData")
     public ResponseEntity<List<FormDataDTO>> getFormDataByEncounterId(@PathVariable Long id) {
         return ResponseEntity.ok(encounterService.getFormDataByEncounterId(id));

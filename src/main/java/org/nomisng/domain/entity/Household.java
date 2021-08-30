@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -19,51 +20,42 @@ import java.util.List;
 @EqualsAndHashCode
 @Table(name = "household")
 public class Household extends JsonBEntity {
-    @Id
-    @Column(name = "id", updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Basic
-    @Column(name = "unique_id")
-    private String uniqueId;
-
-    //TODO: discuss on changing status to an int
-    @Basic
-    @Column(name = "status") // 1  - active, 2 - graduated
-    private int status;
-
-    @Basic
-    @Column(name = "cbo_id")
-    @JsonIgnore
-    private Long cboId = 1L;
-
-    @Type(type = "jsonb")
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "details", nullable = false, columnDefinition = "jsonb")
-    private Object details;
-
-    @Basic
-    @Column(name = "archived")
-    @JsonIgnore
-    private int archived;
-
     @ManyToOne
     @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
     @JsonIgnore
     public OrganisationUnit organisationUnitById;
-
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
     @JsonIgnore
     public List<HouseholdAddress> householdAddresses;
-
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
     @JsonIgnore
     public List<HouseholdMember> householdMembers;
-
+    @Id
+    @Column(name = "id", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Basic
+    @Column(name = "unique_id")
+    private String uniqueId;
+    //TODO: discuss on changing status to an int
+    @Basic
+    @Column(name = "status") // 1  - active, 2 - graduated
+    private int status;
+    @Basic
+    @Column(name = "cbo_id")
+    @JsonIgnore
+    private Long cboId = 1L;
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "details", nullable = false, columnDefinition = "jsonb")
+    private Object details;
+    @Basic
+    @Column(name = "archived")
+    @JsonIgnore
+    private int archived;
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
@@ -87,4 +79,9 @@ public class Household extends JsonBEntity {
     @JsonIgnore
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "householdByHouseholdId")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<Encounter> encountersById;
 }

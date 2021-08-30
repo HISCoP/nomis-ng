@@ -25,5 +25,13 @@ public interface EncounterRepository extends JpaRepository<Encounter, Long>, Jpa
     List<Encounter> findAllHouseholdMemberAndArchived(Long householdId, int unArchivedHouseHold, int unArchivedEncounter);
 
     Page<Encounter> findAllByIdAndFormCodeAndArchivedOrderByIdDesc(Long id, String formCode, int archived, Pageable pageable);
+
+    Page<Encounter> findAllByHouseholdMemberIdAndFormCodeAndArchivedOrderByIdDesc(Long householdMemberId, String formCode, int archived, Pageable pageable);
+
+    Page<Encounter> findAllByHouseholdIdAndFormCodeAndArchivedOrderByIdDesc(Long householdId, String formCode, int archived, Pageable pageable);
+
+    List<Encounter> findAllByHouseholdMemberIdAndArchived(Long householdId, int archived);
+
+
 }
 

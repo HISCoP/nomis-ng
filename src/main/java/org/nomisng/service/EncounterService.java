@@ -30,12 +30,13 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 @RequiredArgsConstructor
 public class EncounterService {
     private final EncounterRepository encounterRepository;
+    private final FormDataRepository formDataRepository;
     private final EncounterMapper encounterMapper;
     private final FormDataMapper formDataMapper;
     private final Long organisationUnitId = 1L;
 
     public List<EncounterDTO> getAllEncounters() {
-        return encounterMapper.toEncounterDTO(encounterRepository.findAllByArchived(UN_ARCHIVED));
+        return encounterMapper.toEncounterDTOS(encounterRepository.findAllByArchived(UN_ARCHIVED));
     }
 
     public EncounterDTO getEncounterById(Long id) {
@@ -53,15 +54,16 @@ public class EncounterService {
     }
 
     public Encounter save(EncounterDTO encounterDTO) {
-        //FormData formData = new FormData();
-
         Encounter encounter = encounterMapper.toEncounter(encounterDTO);
         encounter.setOrganisationUnitId(organisationUnitId);
         encounter = encounterRepository.save(encounter);
+        final Long finalEncounterId = encounter.getId();
 
-        //formData.setEncounterId(encounter.getId());
-        //formData.setOrganisationalUnitId(organisationUnitId);
-        //formDataRepository.save(formData);
+        encounterDTO.getFormData().forEach(formData -> {
+            formData.setEncounterId(finalEncounterId);
+            formData.setOrganisationUnitId(organisationUnitId);
+        });
+        formDataRepository.saveAll(encounterDTO.getFormData());
         return encounter;
     }
 
@@ -79,27 +81,33 @@ public class EncounterService {
         return formDataMapper.toFormDataDTOS(encounter.getFormData());
     }
 
-    public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCode(Long id, String formCode, Pageable pageable) {
-        return encounterRepository.findAllByIdAndFormCodeAndArchivedOrderByIdDesc(id, formCode, UN_ARCHIVED, pageable);
+    public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCode(Long householdMemberId, String formCode, Pageable pageable) {
+        return encounterRepository.findAllByHouseholdMemberIdAndFormCodeAndArchivedOrderByIdDesc(householdMemberId, formCode, UN_ARCHIVED, pageable);
+    }
+
+    public Page<Encounter> getEncountersByHouseholdIdAndFormCode(Long householdId, String formCode, Pageable pageable) {
+        return encounterRepository.findAllByHouseholdIdAndFormCodeAndArchivedOrderByIdDesc(householdId, formCode, UN_ARCHIVED, pageable);
     }
 
     //TODO: Test...
     public List<EncounterDTO> getEncounterDTOFromPage(Page<Encounter> encounterPage){
        List<Encounter> encounters =  encounterPage.getContent().stream()
-                .map(encounter -> {
-                    encounter.setFormName(encounter.getFormByFormCode().getName());
-                    HouseholdMember householdMember = encounter.getHouseholdMemberByHouseholdMemberId();
-                    String firstName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "firstName");
-                    String lastName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName");
-                    String otherNames = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName");
-
-                    encounter.setFirstName(firstName);
-                    encounter.setLastName(lastName);
-                    encounter.setOtherNames(otherNames);
-
-                    return encounter;
-                })
+                .map(encounter -> this.addFirstNameAndLastNameAndFormNameToEncounter(encounter))
                 .collect(Collectors.toList());
-        return encounterMapper.toEncounterDTO(encounters);
+        return encounterMapper.toEncounterDTOS(encounters);
+    }
+
+    protected Encounter addFirstNameAndLastNameAndFormNameToEncounter(Encounter encounter){
+        encounter.setFormName(encounter.getFormByFormCode().getName());
+        if(encounter.getHouseholdMemberByHouseholdMemberId() != null) {
+            HouseholdMember householdMember = encounter.getHouseholdMemberByHouseholdMemberId();
+            String firstName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "firstName").replaceAll("^\"+|\"+$", "");
+            String lastName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName").replaceAll("^\"+|\"+$", "");
+            //String otherNames = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "otherNames");
+
+            encounter.setFirstName(firstName);
+            encounter.setLastName(lastName);
+        }
+        return encounter;
     }
 }

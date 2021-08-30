@@ -83,7 +83,7 @@ public class HouseholdMemberService {
                 .filter(encounter -> encounter.getArchived() != null && encounter.getArchived()== UN_ARCHIVED)// get all unarchived
                 .sorted(Comparator.comparing(Encounter::getId).reversed()) // by id reversed/descending order
                 .collect(Collectors.toList());
-        return encounterMapper.toEncounterDTO(encounters);
+        return encounterMapper.toEncounterDTOS(encounters);
     }
 
     public HouseholdMember update(Long id, HouseholdMemberDTO householdMemberDTO) {
