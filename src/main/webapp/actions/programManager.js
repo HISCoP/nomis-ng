@@ -5,8 +5,9 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchAll = (onSuccess , onError) => dispatch => {
     axios
-        .get(`${url}programs`)
+        .get(`${url}domains`)
         .then(response => {
+            console.log(response.data)
             dispatch({
                 type: ACTION_TYPES.PROGRAM_FETCH_ALL,
                 payload: response.data

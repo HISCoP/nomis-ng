@@ -22,6 +22,10 @@ const HouseholdMember = (props) => {
     const toggle2 = () => setModal2(!modal2);
     const [loading, setLoading] = useState('')
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> backend
     useEffect(() => {
     fetchMembers();
     }, []); //componentDidMount
@@ -59,7 +63,11 @@ const HouseholdMember = (props) => {
             )
             )
             :
+<<<<<<< HEAD
             "Loading please wait.."
+=======
+            ""
+>>>>>>> backend
             }
                         
             </CRow>

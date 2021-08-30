@@ -5,13 +5,16 @@ import {
   Switch
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
+import { Spinner } from 'reactstrap';
 
 // routes config
 import routes from '../routes'
   
 const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
+  <div className="pt-10 text-center">
+    <div className="sk-spinner sk-spinner-pulse">
+    <Spinner style={{ width: '3rem', height: '3rem' }} />
+    </div>
   </div>
 )
 

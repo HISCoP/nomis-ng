@@ -8,13 +8,19 @@ import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.FormDataDTO;
 import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.FormData;
+import org.nomisng.domain.entity.Household;
+import org.nomisng.domain.entity.HouseholdMember;
 import org.nomisng.domain.mapper.EncounterMapper;
 import org.nomisng.domain.mapper.FormDataMapper;
 import org.nomisng.repository.EncounterRepository;
 import org.nomisng.repository.FormDataRepository;
 import org.nomisng.util.Constants;
+import org.nomisng.util.JsonUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.nomisng.util.Constants.ArchiveStatus.*;
 
@@ -71,5 +77,29 @@ public class EncounterService {
         Encounter encounter = encounterRepository.findById(encounterId)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",encounterId+"" ));
         return formDataMapper.toFormDataDTOS(encounter.getFormData());
+    }
+
+    public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCode(Long id, String formCode, Pageable pageable) {
+        return encounterRepository.findAllByIdAndFormCodeAndArchivedOrderByIdDesc(id, formCode, UN_ARCHIVED, pageable);
+    }
+
+    //TODO: Test...
+    public List<EncounterDTO> getEncounterDTOFromPage(Page<Encounter> encounterPage){
+       List<Encounter> encounters =  encounterPage.getContent().stream()
+                .map(encounter -> {
+                    encounter.setFormName(encounter.getFormByFormCode().getName());
+                    HouseholdMember householdMember = encounter.getHouseholdMemberByHouseholdMemberId();
+                    String firstName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "firstName");
+                    String lastName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName");
+                    String otherNames = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName");
+
+                    encounter.setFirstName(firstName);
+                    encounter.setLastName(lastName);
+                    encounter.setOtherNames(otherNames);
+
+                    return encounter;
+                })
+                .collect(Collectors.toList());
+        return encounterMapper.toEncounterDTO(encounters);
     }
 }

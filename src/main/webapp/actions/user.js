@@ -19,10 +19,11 @@ export const register = (data, onSuccess, onError) => (dispatch) => {
           type: ACTION_TYPES.REGISTER_SUCCESS,
           payload: response.data,
         });
-        onSuccess && onSuccess();
+    
+        onSuccess();
       } catch (err) {
         onError();
-        console.log(err);
+        
       }
     })
     .catch((error) => {
@@ -30,6 +31,8 @@ export const register = (data, onSuccess, onError) => (dispatch) => {
         type: ACTION_TYPES.REGISTER_FAILURE,
         payload: "Something went wrong, please try again",
       });
+      onError();
+      
       console.log(error);
     });
 };

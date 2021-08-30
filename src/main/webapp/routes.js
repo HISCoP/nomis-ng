@@ -12,8 +12,16 @@ const DataVisualisation = React.lazy(() => import('./views/visualization/HomePag
 
 /* Admin */
 const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
+const UserSetupHomePage = React.lazy(() => import('./views/admin/Users/UserPage'));
+const ApplicationCodeSetupHomePage = React.lazy(() => import('./views/admin/ApplicationCodeset/ApplicationCodesetSearch'));
+const OrganisationUnitHomepage = React.lazy(() => import('./views/admin/OrganizationUnit/Index'));
+const ProgramSetupHomePage = React.lazy(() => import('./views/admin/DomainManager/DomainManager'));
+const DomainServices = React.lazy(() => import('./views/admin/DomainManager/DomainServices'));
+const UserRegistration = React.lazy(() => import ('./views/admin/Users/UserRegistration'));
+const Roles = React.lazy(() => import('./views/admin/Roles/RolesPage'));
+
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
+  { path: '/', exact: true, name: 'Home', component: Dashboard },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/households', name: 'Households', component: houseHoldAssessment },
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage },
@@ -22,7 +30,16 @@ const routes = [
   { path: '/household-members', name: 'Household Members', component: MemberSearch },
   { path: '/form-builder', name: 'Form Builder', component: FormBuilder },
   { path: '/edit-form', name: 'Edit Form', component: ViewForm },
+  /* Administrative Link */
   { path: "/form-home", name: 'Form Builder', component: FormPage},
+  { path: "/user-setup-home", name: 'User Setup', component: UserSetupHomePage},
+  { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage},
+  { path: "/program-setup-home", name: 'Domain Setup', component: ProgramSetupHomePage},
+  { path: "/organisation-unit-home", name: 'Organisation Unit', component: OrganisationUnitHomepage},
+  { path: "/domain-service", name: 'Domain Services', component: DomainServices},
+  { path: "/user-registration", name: 'User Registration', component: UserRegistration},
+  { path: "/roles", name: 'Role', component: Roles},
+
   { path: "/visualization", name: 'Data Visualisation', component: DataVisualisation} ,
   
 ];

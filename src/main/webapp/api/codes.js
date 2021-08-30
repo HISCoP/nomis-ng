@@ -35,6 +35,7 @@ export const DATA_VISUALIZATION = '738ed64d-f96b-433f-a096-13896f7a3509'
 export const BIOMETRICS_CAPTURE_FORM = 'e8a5260c-3f07-404e-a718-cd7f669c9aae'
 export const VULNERABLE_CHILDREN_ENROLMENT_FORM = 'afde4bd9-d3ac-44f4-ae78-1e2fd9fcaead'
 export const CARE_GIVER_ENROLMENT_FORM = '5457c394-4c2a-47c6-8a77-745e513bd3c6'
+export const  ChildServiceFrom= '6b8e6617-7182-40d0-9e8c-d6f33e9f4325'
 
 /**
  * @CODES
@@ -53,15 +54,15 @@ export const EMERGENCY_PATIENT = 4
  * LAB ORDER STATUS CODES
  */
 export const LAB_ORDER_STATUS = [{name:"Sample Collected", id: 1},
-    {name:"Sample Transfer", id: 2},
-    {name:"Sample Verified", id: 3},
-    {name:"Sample Rejected", id: 4},
-    {name:"Result Available", id: 5},
-    {name:"Pending", id:0}];
+{name:"Sample Transfer", id: 2},
+{name:"Sample Verified", id: 3},
+{name:"Sample Rejected", id: 4},
+{name:"Result Available", id: 5},
+{name:"Pending", id:0}];
 
 
 export const DRUG_ORDER_STATUS = [{name:"Not Dispensed", id: 0},
-    {name:"Dispensed", id: 1}];
+{name:"Dispensed", id: 1}];
 
 /**
  * @CODES
