@@ -35,6 +35,7 @@ public class HouseholdMemberService {
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdMapper householdMapper;
     private final EncounterMapper encounterMapper;
+    private final EncounterService encounterService;
     private ObjectMapper mapper = new ObjectMapper();
     private String firstName = "firstName";
     private String lastName = "lastName";
@@ -80,6 +81,7 @@ public class HouseholdMemberService {
         HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
         List<Encounter> encounters = householdMember.getEncounterByHouseholdMemberId().stream()
+                .map(encounter -> encounterService.addFirstNameAndLastNameAndFormNameToEncounter(encounter))
                 .filter(encounter -> encounter.getArchived() != null && encounter.getArchived()== UN_ARCHIVED)// get all unarchived
                 .sorted(Comparator.comparing(Encounter::getId).reversed()) // by id reversed/descending order
                 .collect(Collectors.toList());
