@@ -34,7 +34,7 @@ public class Encounter extends Audit implements Serializable {
 
     @Basic
     @Column(name = "archived")
-    private Integer archived;
+    private Integer archived=0;
 
     @Basic
     @Column(name = "household_id")
