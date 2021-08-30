@@ -38,6 +38,38 @@ const CarePlan = (props) => {
                 </CCol>
             </CRow>
 
+            <CRow className={"pb-3"}>
+                <CCol xs={"12"}>
+                    <MaterialTable
+                        title="Care Plan History"
+                        columns={[
+                            { title: 'Date Created', field: 'dateCreated' },
+                            { title: 'Total Services', field: 'totalServices' },
+                            { title: 'Pending', field: 'pending' },
+                            { title: 'In Progress', field: 'inProgress' },
+                            { title: 'Completed', field: 'completed' },
+                        ]}
+                        data={usersData}
+                        actions={[
+                            {
+                                icon: 'edit',
+                                tooltip: 'edit Form',
+                                onClick: (event, rowData) => alert("You saved " + rowData.name)
+                            },
+                            rowData => ({
+                                icon: 'visibility',
+                                tooltip: 'View Form',
+                                onClick: (event, rowData) => alert("You want to delete " + rowData.name)
+
+                            })
+                        ]}
+                        options={{
+                            actionsColumnIndex: -1,
+                            padding: 'dense',
+                        }}
+                    />
+                </CCol>
+            </CRow>
             <CRow>
                 <CCol xs="12">
                     <CCard>
@@ -73,40 +105,6 @@ const CarePlan = (props) => {
                     </CCard>
                 </CCol>
             </CRow>
-
-            <CRow>
-                <CCol xs={"12"}>
-                    <MaterialTable
-                        title="Care Plan History"
-                        columns={[
-                            { title: 'Date Created', field: 'dateCreated' },
-                            { title: 'Total Services', field: 'totalServices' },
-                            { title: 'Pending', field: 'pending' },
-                            { title: 'In Progress', field: 'inProgress' },
-                            { title: 'Completed', field: 'completed' },
-                        ]}
-                        data={usersData}
-                        actions={[
-                            {
-                                icon: 'edit',
-                                tooltip: 'edit Form',
-                                onClick: (event, rowData) => alert("You saved " + rowData.name)
-                            },
-                            rowData => ({
-                                icon: 'visibility',
-                                tooltip: 'View Form',
-                                onClick: (event, rowData) => alert("You want to delete " + rowData.name)
-
-                            })
-                        ]}
-                        options={{
-                            actionsColumnIndex: -1,
-                            padding: 'dense',
-                        }}
-                    />
-                </CCol>
-            </CRow>
-
             <NewCarePlan  modal={modal} toggle={toggle} onSubmit={onSubmit} onSuccess={onSuccess}/>
         </>
     )

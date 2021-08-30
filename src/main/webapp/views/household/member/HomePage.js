@@ -67,8 +67,7 @@ const HomePage = (props) => {
                 <CCol sm="3" lg="3">
                     <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
                         <Menu.Item header className={'p-4'}>
-
-                            <InfoSection member={props.member && props.member.details ? props.member.details : props.member}/>
+                            <InfoSection member={props.member && props.member.details ? props.member.details : props.member} householdMemberType={props.member ? props.member.householdMemberType : ''}/>
                         </Menu.Item>
                         <Menu.Item
                             name='dashboard'
@@ -148,7 +147,7 @@ const InfoSection = (props) => {
             <CRow>
                 <CCol sm="12" lg="12">
                     <Header as='h3' inverted dividing>
-                        <Icon name='user' />  Member - {props.member.householdMemberType===1?"Caregiver": "OVC" || ''}
+                        <Icon name='user' />  Member - {props.householdMemberType === 1?"Caregiver": "OVC" }
                     </Header>
                 </CCol>
                 <CCol sm="12" lg="12" className={'text-left pt-3'}>

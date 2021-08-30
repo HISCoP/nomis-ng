@@ -99,36 +99,57 @@ const MidDashboardStats = (props) => {
     }
     return (
         <>
+            {props.member.householdMemberType && props.member.householdMemberType === 1 &&
             <CRow>
-                <CCol xs="12" sm="6" lg="6" >
+                <CCol xs="12" sm="12" lg="12">
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
-                        <CCardHeader> <Icon name='home' /> Household Information</CCardHeader>
+                        <CCardHeader> <Icon name='home'/> Household Information</CCardHeader>
                         <CCardBody>
                             {props.fetchingHousehold &&
                             <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
                             }
-                                <span>Household ID: <small>{props.household && props.household.details ? props.household.details.uniqueId : 'Nil'} </small></span><br/>
-                                <span>Address: <small> {props.household && props.household.details ? props.household.details.street : 'Nil' }</small></span><br/>
-                                <span>Date Of Assessment: <small>{props.household && props.household.details ? props.household.details.assessmentDate : 'Nil' }</small> </span><br/>
-                                <span>Primary Caregiver Name: <small>{props.household && props.household.details && props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName: 'Nil' }  </small></span><br/>
+                            <span>Household ID: <small>{props.household && props.household.details ? props.household.details.uniqueId : 'Nil'} </small></span><br/>
+                            <span>Address: <small> {props.household && props.household.details ? props.household.details.street : 'Nil'}</small></span><br/>
+                            <span>Date Of Assessment: <small>{props.household && props.household.details ? props.household.details.assessmentDate : 'Nil'}</small> </span><br/>
+                            <span>Primary Caregiver Name: <small>{props.household && props.household.details && props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName : 'Nil'}  </small></span><br/>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
+
+            }
+            {props.member.householdMemberType && props.member.householdMemberType !== 1 &&
+            <CRow>
+                <CCol xs="12" sm="6" lg="6">
+                    <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
+                        <CCardHeader> <Icon name='home'/> Household Information</CCardHeader>
+                        <CCardBody>
+                            {props.fetchingHousehold &&
+                            <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                            }
+                            <span>Household ID: <small>{props.household && props.household.details ? props.household.details.uniqueId : 'Nil'} </small></span><br/>
+                            <span>Address: <small> {props.household && props.household.details ? props.household.details.street : 'Nil'}</small></span><br/>
+                            <span>Date Of Assessment: <small>{props.household && props.household.details ? props.household.details.assessmentDate : 'Nil'}</small> </span><br/>
+                            <span>Primary Caregiver Name: <small>{props.household && props.household.details && props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName : 'Nil'}  </small></span><br/>
                         </CCardBody>
                     </CCard>
                 </CCol>
                 <CCol xs="12" sm="6" lg="6">
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
-                        <CCardHeader> <Icon name='user' /> Caregiver Information</CCardHeader>
+                        <CCardHeader> <Icon name='user'/> Caregiver Information</CCardHeader>
                         <CCardBody>
                             {fetchingMember &&
                             <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
                             }
                             <span>Caregiver Name: <small>{caregiver && caregiver.details ? caregiver.details.firstName + ' ' + caregiver.details.lastName : 'Nil'}</small></span><br/>
-                            <span>Age: <small>{caregiver && caregiver.details && caregiver.details.dob ? calculateAge(caregiver.details.dob) : 'Nil' }</small></span><br/>
-                            <span>Sex: <small>{caregiver && caregiver.details && caregiver.details.sex ? caregiver.details.sex.display : 'Nil' }</small> </span><br/>
+                            <span>Age: <small>{caregiver && caregiver.details && caregiver.details.dob ? calculateAge(caregiver.details.dob) : 'Nil'}</small></span><br/>
+                            <span>Sex: <small>{caregiver && caregiver.details && caregiver.details.sex ? caregiver.details.sex.display : 'Nil'}</small> </span><br/>
                             <span>Phone Number: <small>{caregiver && caregiver.details ? caregiver.details.mobilePhoneNumber : 'Nil'} </small></span><br/>
                         </CCardBody>
                     </CCard>
                 </CCol>
             </CRow>
+            }
         </>
     )
 }
