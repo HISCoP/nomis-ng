@@ -25,10 +25,11 @@ public class Household extends JsonBEntity implements Serializable {
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Basic
     @Column(name = "unique_id")
     private String uniqueId;
-    //TODO: discuss on changing status to an int
+
     @Basic
     @Column(name = "status") // 1  - active, 2 - graduated
     private int status;
