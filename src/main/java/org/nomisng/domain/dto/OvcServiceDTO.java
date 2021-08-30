@@ -15,4 +15,5 @@ public class OvcServiceDTO {
 
     private Integer archived;
 
+    private int serviceType;
 }

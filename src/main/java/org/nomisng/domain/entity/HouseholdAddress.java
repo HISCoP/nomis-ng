@@ -1,33 +1,21 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "household_contact")
-public class HouseholdContact extends Audit {
+@Table(name = "household_address")
+public class HouseholdAddress extends Audit {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Basic
-    @Column(name = "mobile_phone_number")
-    private String mobilePhoneNumber;
-
-    @Basic
-    @Column(name = "alternate_phone_number")
-    private String alternatePhoneNumber;
-
-    @Basic
-    @Column(name = "email")
-    private String email;
 
     @Basic
     @Column(name = "zip_code")
@@ -58,26 +46,41 @@ public class HouseholdContact extends Audit {
     private Long provinceId;
 
     @Basic
-    @Column(name = "household_id", nullable = false)
+    @Column(name = "household_id")
     private Long householdId;
+
+    @Basic
+    @Column(name = "active", nullable = false)
+    private Integer active;
 
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public Household householdByHouseholdId;
 
     @ManyToOne
     @JoinColumn(name = "country_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public OrganisationUnit organisationUnitByCountryId;
 
     @ManyToOne
     @JoinColumn(name = "state_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     private OrganisationUnit organisationUnitByStateId;
 
     @ManyToOne
     @JoinColumn(name = "province_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     private OrganisationUnit organisationUnitByProvinceId;
+
+    @PrePersist
+    public void persist() {
+        if(this.householdByHouseholdId != null && this.householdByHouseholdId.getId() != null) {
+            this.householdId = householdByHouseholdId.getId();
+        }
+    }
 }

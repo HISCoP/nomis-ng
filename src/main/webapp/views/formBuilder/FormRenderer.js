@@ -13,7 +13,8 @@ import axios from "axios";
 import { formRendererService } from "../../_services/form-renderer";
 // import { authHeader } from '../../_helpers/auth-header';
 import _ from 'lodash';
-import {fetchByHospitalNumber} from "../../actions/patients";
+import {fetchHouseHoldById} from "../../actions/houseHold";
+import {fetchHouseHoldMemberById} from "../../actions/houseHoldMember";
 
 Moment.locale("en");
 momentLocalizer();
@@ -25,7 +26,9 @@ const FormRenderer = (props) => {
     const [showLoading, setShowLoading] = React.useState(false);
     const [showLoadingForm, setShowLoadingForm] = React.useState(true);
     const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
-    const [formId, setFormId] = React.useState()
+    const [formId, setFormId] = React.useState();
+    const [household, setHousehold] = React.useState({});
+    const [householdMember, setHouseholdMember] = React.useState({});
     const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { patient: props.patient, baseUrl: url }}));
     const onDismiss = () => setShowErrorMsg(false);
     const options = {
@@ -59,7 +62,14 @@ const FormRenderer = (props) => {
     //Add patient info to the submission object. This make patient data accessible within the form
     async function fetchEncounter(){
         setShowLoadingEncounter(true);
-        await axios.get(`${url}patients/${props.patientId}/encounters/${props.formCode}`, {})
+        let url_slugs = "";
+        if(props.houseHoldId){
+            url_slugs = `${url}households/${props.houseHoldId}/encounters/${props.formCode}`;
+        }
+        if(props.householdMemberId){
+            url_slugs = `${url}household-members/${props.householdMemberId}/encounters/${props.formCode}`;
+        }
+        await axios.get(url_slugs, {})
             .then(response => {
                 //get encounter form data and store it in submission object
 
@@ -82,19 +92,27 @@ const FormRenderer = (props) => {
 
     }
 
-    //fetch patient by patient hospital number if patient is not in the props object
+    //fetch household and household member
     React.useEffect(() => {
-        if(props.patientHospitalNumber) {
-            console.log('form render')
-           props.fetchPatientByHospitalNumber(props.patientHospitalNumber);
+        //fetch household by householdId if householdId is in the props object
+        if(props.householdId) {
+            props.fetchHouseHoldById(props.householdId);
+        }
+        if(props.householdMemberId) {
+            props.fetchHouseHoldMemberById(props.householdMemberId);
         }
 
     }, []);
 
-    //Add patient data to submission
+    //Add household data to submission
     React.useEffect(() => {
-        setSubmission(_.merge(submission, { data: { patient: props.patient}}));
-    }, [props.patient]);
+        setSubmission(_.merge(submission, { data: { household: props.household}}));
+    }, [props.household]);
+
+    //Add householdMember data to submission
+    React.useEffect(() => {
+        setSubmission(_.merge(submission, { data: { householdMember: props.houseHoldMember}}));
+    }, [props.houseHoldMember]);
 
     // Submit form to server
     const submitForm = (submission) => {
@@ -195,7 +213,8 @@ const FormRenderer = (props) => {
                         hideComponents={props.hideComponents}
                         options={options}
                         onSubmit={(submission) => {
-                            delete submission.data.patient;
+                            delete submission.data.householdMember;
+                            delete submission.data.household;
                             delete submission.data.authHeader;
                             delete submission.data.submit;
                             delete submission.data.baseUrl;
@@ -214,7 +233,8 @@ const FormRenderer = (props) => {
 
 const mapStateToProps = (state = { form: {} }) => {
     return {
-        patient: state.patients,
+        household: state.houseHold.household,
+        houseHoldMember: state.houseHoldMember.member,
         form: state.programManager.form,
         formEncounter: state.programManager.formEncounter,
         errors: state.programManager.errors,
@@ -224,7 +244,8 @@ const mapStateToProps = (state = { form: {} }) => {
 const mapActionToProps = {
     fetchForm: actions.fetchById,
     saveEncounter: actions.saveEncounter,
-    fetchPatientByHospitalNumber: fetchByHospitalNumber
+    fetchHouseHoldById: fetchHouseHoldById,
+    fetchHouseHoldMemberById: fetchHouseHoldMemberById
 };
 
 export default connect(mapStateToProps, mapActionToProps)(FormRenderer);

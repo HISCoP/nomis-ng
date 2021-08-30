@@ -58,7 +58,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
-        userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        userService.registerUser(managedUserVM, managedUserVM.getPassword(), false);
     }
 
     @GetMapping("/users")

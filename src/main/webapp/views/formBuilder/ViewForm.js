@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {  Errors, Form, FormBuilder } from 'react-formio';
+import {  Errors, Form, FormBuilder, Formio } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -29,6 +29,9 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import 'formiojs/dist/formio.builder.min.css';
+import CustomSelect from "./customComponents/CustomSelect";
+
+Formio.use(CustomSelect);
 
 const useStyles = makeStyles(theme => ({
     root2: {
@@ -194,7 +197,7 @@ const Update = props => {
 
 
                 {/*preview modal start*/}
-                <Modal isOpen={showModal} toggle={toggleModal} size="lg">
+                <Modal isOpen={showModal} toggle={toggleModal} size="xl">
                     <ModalHeader toggle={toggleModal}><h4>View Form</h4> </ModalHeader>
                     <ModalBody>
                         <Card>
@@ -206,7 +209,7 @@ const Update = props => {
                                     <Form
                                         form={JSON.parse(res)}
                                         ref={form => myform = form}
-                                        submission={{data : {patient: props.patient, authHeader: authHeader(), baseUrl:url}}}
+                                        submission={{data : {authHeader: authHeader(), baseUrl:url}}}
                                         //src={url}
                                         hideComponents={props.hideComponents}
                                         //onSubmit={props.onSubmit}
@@ -221,7 +224,7 @@ const Update = props => {
                                                 mode: 'cors',
                                             }).then(res => {
                                                 console.log(res);
-                                                myform.emit('submitDone', submission);
+                                              //  myform.emit('submitDone', submission);
                                             })}}
                                     />
                                 }

@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate","/api/application-codesets/codesetGroup", "/api/swagger-ui.html",
+                .antMatchers("/api/authenticate", "/api/swagger-ui.html",
                         "http://nomis-ng.org:8080/demo/api/**", "http://nomis-ng.org:8080/demo/api/**",
                         ":8080/demo/api/**").permitAll()
                 .antMatchers("/api/**").permitAll()

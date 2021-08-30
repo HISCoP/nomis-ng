@@ -9,13 +9,14 @@ import org.nomisng.domain.dto.ApplicationCodesetDTO;
 import org.nomisng.domain.entity.ApplicationCodeset;
 import org.nomisng.domain.mapper.ApplicationCodesetMapper;
 import org.nomisng.repository.ApplicationCodesetRepository;
-import org.nomisng.util.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
@@ -26,51 +27,51 @@ public class ApplicationCodesetService {
     private final ApplicationCodesetMapper applicationCodesetMapper;
 
     public List<ApplicationCodesetDTO> getAllApplicationCodeset(){
-        List<ApplicationCodeset> applicationCodesets = applicationCodesetRepository.findAllByArchivedOrderByIdAsc(Constants.ArchiveStatus.UN_ARCHIVED);
+        List<ApplicationCodeset> applicationCodesets = applicationCodesetRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
 
         return applicationCodesetMapper.toApplicationCodesetDTOList(applicationCodesets);
     }
 
     public ApplicationCodeset save(ApplicationCodesetDTO applicationCodesetDTO){
         Optional<ApplicationCodeset> applicationCodesetOptional = applicationCodesetRepository.findByDisplayAndCodesetGroupAndArchived(applicationCodesetDTO.getDisplay(),
-                applicationCodesetDTO.getCodesetGroup(), Constants.ArchiveStatus.UN_ARCHIVED);
-        if (applicationCodesetOptional.isPresent()) {
-            throw new RecordExistException(ApplicationCodeset.class,"Display:",applicationCodesetDTO.getDisplay());
-        }
+                applicationCodesetDTO.getCodesetGroup(), UN_ARCHIVED);
+        applicationCodesetOptional.ifPresent(applicationCodeset -> {
+            throw new RecordExistException(ApplicationCodeset.class, "Display:", applicationCodeset.getDisplay());
+        });
 
         final ApplicationCodeset applicationCodeset = applicationCodesetMapper.toApplicationCodeset(applicationCodesetDTO);
-        applicationCodeset.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
+        applicationCodeset.setArchived(UN_ARCHIVED);
 
         return applicationCodesetRepository.save(applicationCodeset);
     }
 
     public List<ApplicationCodesetDTO> getApplicationCodeByCodesetGroup(String codesetGroup){
-        List<ApplicationCodeset> applicationCodesetList = applicationCodesetRepository.findAllByCodesetGroupAndArchivedOrderByIdAsc(codesetGroup, Constants.ArchiveStatus.UN_ARCHIVED);
+        List<ApplicationCodeset> applicationCodesetList = applicationCodesetRepository.findAllByCodesetGroupAndArchivedOrderByIdAsc(codesetGroup, UN_ARCHIVED);
 
         return applicationCodesetMapper.toApplicationCodesetDTOList(applicationCodesetList);
     }
 
-    public ApplicationCodesetDTO getApplicationCodesetById(Long id){
+    /*public ApplicationCodesetDTO getApplicationCodesetById(Long id){
         ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
 
         return  applicationCodesetMapper.toApplicationCodesetDTO(applicationCodeset);
-    }
+    }*/
 
     public ApplicationCodeset update(Long id, ApplicationCodesetDTO applicationCodesetDTO){
-        applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+        applicationCodesetRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
 
         final ApplicationCodeset applicationCodeset = applicationCodesetMapper.toApplicationCodeset(applicationCodesetDTO);
         applicationCodeset.setId(id);
-        applicationCodeset.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
+        applicationCodeset.setArchived(UN_ARCHIVED);
         return applicationCodesetRepository.save(applicationCodeset);
     }
 
     public Integer delete(Long id){
-        ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
+        ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
-        applicationCodeset.setArchived(Constants.ArchiveStatus.ARCHIVED);
+        applicationCodeset.setArchived(ARCHIVED);
         applicationCodesetRepository.save(applicationCodeset);
 
         return applicationCodeset.getArchived();

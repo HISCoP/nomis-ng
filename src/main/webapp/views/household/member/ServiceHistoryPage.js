@@ -2,38 +2,43 @@ import React, {useState, useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { connect } from "react-redux";
 import { fetchAllHouseHoldServiceHistory } from "./../../../actions/houseHold";
+import moment from "moment";
 
 const ServiceHistoryPage = (props) => {
 
-    const [loading, setLoading] = useState('')
+    const [loading, setLoading] = useState(false);
+    const memberId = props.memberId;
 
-    console.log(props.holdHoldServiceHistory)
     useEffect(() => {
-    setLoading('true');
+        fetchHouseholdServiceHistory(memberId);
+    }, [memberId]); //componentDidMount
+
+    const fetchHouseholdServiceHistory = (memberId) => {
+        setLoading(true);
         const onSuccess = () => {
-            setLoading(false)
+            setLoading(false);
         }
         const onError = () => {
-            setLoading(false)     
+            setLoading(false);
         }
-            props.fetchAllHouseHoldServiceHistory(onSuccess, onError);
-    }, []); //componentDidMount
-
+        props.fetchAllHouseHoldServiceHistory(memberId, onSuccess, onError);
+    }
    
     return (
 
             <MaterialTable
                 title="Services Form History"
                 columns={[
-                    { title: 'Form Name', field: 'name' },
+                    { title: 'Form Name', field: 'formName' },
                     { title: 'Date', field: 'date' },
-                      { title: 'Name', field: 'surname' },
+                    { title: 'Name', field: 'memberName' },
                 ]}
                 isLoading={loading}
-                data={[
-                    { name: 'Household Vunerabilty Assessment', surname: 'Ama Kindu', date: '12/11/2020 08:35 AM', birthCity: 63 },
-                    { name: 'Household Followup Assessment', surname: 'Nisa Baran', date: '12/11/2020 08:35 AM', birthCity: 34 },
-                ]}
+                data={props.householdServiceHistory.map(service => ({
+                    formName: service.formCode,
+                    date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
+                    memberName: service.householdMemberId
+                }))}
                 actions={[
                     {
                         icon: 'edit',
@@ -59,7 +64,7 @@ const ServiceHistoryPage = (props) => {
 
 const mapStateToProps = state => {
     return {
-        holdHoldServiceHistory: state.houseHold.holdHoldServiceHistory
+        householdServiceHistory: state.houseHold.householdServiceHistory
     };
   };
   const mapActionToProps = {

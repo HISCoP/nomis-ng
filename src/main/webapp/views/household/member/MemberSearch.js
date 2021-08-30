@@ -13,6 +13,7 @@ import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
+import {calculateAge} from "./../../../utils/calculateAge";
 
 
 const HouseholdMember = (props) => {
@@ -29,13 +30,7 @@ const HouseholdMember = (props) => {
       }
           props.fetchAllMember(onSuccess, onError);
   }, []); //componentDidMount
-  //Function to calculate Members Age 
-  function age(dob)
-    {
-        
-        dob = new Date(dob);
-        return   new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
-    }
+
 
 
   return (
@@ -67,10 +62,10 @@ const HouseholdMember = (props) => {
                 ]}
                 isLoading={loading}
                 data={props.houseMemberList.map((row) => ({
-                  id: row.id,
+                  id: row.details.uniqueId,
                   date: null,
-                  name: row.firstName + " " + row.lastName,
-                  age: age(row.dob),
+                  name: row.details.firstName + " " + row.details.lastName,
+                  age: calculateAge(row.details.dob),
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
@@ -79,7 +74,7 @@ const HouseholdMember = (props) => {
                               <MenuList style={{hover:"#eee"}}>
                               <MenuItem >
                                 <Link
-                                      to={{pathname: "/household-member/home" , houseHoldId:row.householdId}}>
+                                      to={{pathname: "/household-member/home" , state:row.id, householdId:row.householdId}}>
                                       View Dashboard
                                 </Link>
                                 

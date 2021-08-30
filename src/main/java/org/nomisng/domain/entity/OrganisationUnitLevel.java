@@ -1,5 +1,6 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,6 +37,7 @@ public class OrganisationUnitLevel extends Audit {
 
     @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")
     @ToString.Exclude
+    @JsonIgnore
     private Collection<OrganisationUnit> organisationUnitsById;
 
     @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")

@@ -1,34 +1,74 @@
-
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import {CARE_GIVER_ENROLMENT_FORM} from './../../../api/codes'
+import FormRenderer from './../../formBuilder/FormRenderer'
+import {toast, ToastContainer} from "react-toastify";
+import axios from "axios";
+import {url} from "../../../api";
 
-const NewCareGiver = (props) => {
+
+const NewOvc = (props) => {
   const {
-    buttonLabel,
     className
   } = props;
-  const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
+  const currentForm = {
+    code: CARE_GIVER_ENROLMENT_FORM ,
+    formName: "Care Giver Enrolment Form",
+    options:{
+      hideHeader: true
+    },
+  };
 
+  const createMember = (body) => {
+    const onSuccess = () => {
+      toast.success('Household caregiver saved!');
+      props.reload();
+      props.toggle();
 
+    }
+
+    const onError = () => {
+      toast.error('Error: Household caregiver not saved!');
+    }
+    axios
+        .post(`${url}household-members`, body)
+        .then(response => {
+          if(onSuccess){
+            onSuccess();
+          }
+        })
+        .catch(error => {
+              if(onError){
+                onError();
+              }
+            }
+
+        );
+  }
+  const save = (e) => {
+    //alert('Save Successfully');
+
+    const data = e.data;
+    const member = {details: data, householdMemberType: 1, householdId: props.householdId};
+   createMember(member)
+
+  };
 
 
   return (
-    <div>
-      
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true}>
-        <ModalHeader toggle={props.toggle}>New Care Giver</ModalHeader>
-        <ModalBody>
-          <p> Form will be here</p>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
-          <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+      <div>
+<ToastContainer />
+        <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
+          <ModalHeader toggle={props.toggle}>New Care Giver</ModalHeader>
+          <ModalBody>
+            <FormRenderer
+                formCode={currentForm.code}
+                onSubmit={save}/>
+          </ModalBody>
+        </Modal>
+      </div>
   );
-  
+
 }
 
-export default NewCareGiver;
+export default NewOvc;

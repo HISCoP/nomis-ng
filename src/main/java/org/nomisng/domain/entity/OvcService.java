@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.RandomUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -39,13 +40,18 @@ public class OvcService extends Audit implements Serializable {
     private Integer archived;
 
 
-    @JsonIgnore
+    /*@JsonIgnore
     @OneToMany(mappedBy = "ovcServiceByOvcServiceCode")
-    private List<Form> formByOvcServiceCode;
+    private List<Form> formByOvcServiceCode;*/
 
-    @JsonIgnore
+    /*@JsonIgnore
     @OneToMany(mappedBy = "ovcServiceByOvcServiceCode")
-    private List<Encounter> encounterByOvcServiceCode;
+    private List<Encounter> encounterByOvcServiceCode;*/
+
+    @Basic
+    @Column(name = "service_type")
+    @NotNull(message = "serviceType cannot be null") //1 - caregiver, 2 - ovc, 3 other member. May we change to application codeset
+    private Integer serviceType;
 
     @ManyToOne
     @JoinColumn(name = "domain_id", referencedColumnName = "id", updatable = false, insertable = false)
@@ -56,6 +62,9 @@ public class OvcService extends Audit implements Serializable {
     public void update() {
         if(this.code == null || this.code.isEmpty()) {
             this.code = UUID.randomUUID().toString();
+        }
+        if(this.archived == null) {
+            this.archived = 0;
         }
     }
 }

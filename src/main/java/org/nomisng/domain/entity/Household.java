@@ -4,17 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Data
 @EqualsAndHashCode
 @Table(name = "household")
-public class Household extends Audit {
+public class Household extends JsonBEntity {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,28 +28,63 @@ public class Household extends Audit {
     @Column(name = "unique_id")
     private String uniqueId;
 
+    //TODO: discuss on changing status to an int
     @Basic
-    @Column(name = "status")
-    private String status;
+    @Column(name = "status") // 1  - active, 2 - graduated
+    private int status;
 
     @Basic
     @Column(name = "cbo_id")
-    private Long cboId;
+    @JsonIgnore
+    private Long cboId = 1L;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id", updatable = false, insertable = false)
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "details", nullable = false, columnDefinition = "jsonb")
+    private Object details;
+
+    @Basic
+    @Column(name = "archived")
+    @JsonIgnore
+    private int archived;
+
+    @ManyToOne
+    @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
+    @JsonIgnore
     public OrganisationUnit organisationUnitById;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
-    public Collection<HouseholdContact> householdContactsById;
+    @JsonIgnore
+    public List<HouseholdAddress> householdAddresses;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
-    public Collection<HouseholdMember> householdMembersById;
-
     @JsonIgnore
-    @OneToMany(mappedBy = "householdMemberByHouseholdMemberId")
-    private List<Encounter> encounterByOvcServiceCode;
+    public List<HouseholdMember> householdMembers;
+
+    @CreatedBy
+    @Column(name = "created_by", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private String createdBy = "guest@nomisng.org";/*SecurityUtils.getCurrentUserLogin().orElse(null);*/
+
+    @CreatedDate
+    @Column(name = "date_created", nullable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private LocalDateTime dateCreated = LocalDateTime.now();
+
+    @LastModifiedBy
+    @Column(name = "modified_by")
+    @JsonIgnore
+    @ToString.Exclude
+    private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+
+    @LastModifiedDate
+    @Column(name = "date_modified")
+    @JsonIgnore
+    @ToString.Exclude
+    private LocalDateTime dateModified = LocalDateTime.now();
 }

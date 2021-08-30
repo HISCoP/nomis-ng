@@ -1,8 +1,6 @@
 
-//export const url = 'http://lamisplus.org/base-module/api/';
-//export const url =  'https://lp-base.herokuapp.com/api/';
-
 //Online Server
+<<<<<<< HEAD
 //export const url =  'http://nomis-ng.org:8080/demo/api/';
 //Local Server
 export const url =  'http://localhost:8480/api/';
@@ -21,6 +19,12 @@ export const url =  'http://localhost:8480/api/';
 // export const url =  'http://localhost:8080/api/';
 
 //export const url = 'http://localhost:8080/base-module/api/'
+=======
+//export const url =  'http://10.167.2.102:8080/nomis-ng/api/';
+//export const url =  'http://nomis-ng.org:8080/demo/api/';
+//Local Server
+export const url =  'http://localhost:8080/api/';
+>>>>>>> form-builder-fix
 
 //Other const
 export const HIVSERVICECODE = "0d31f6ee-571c-45b8-80d5-3f7e1d5377b7";

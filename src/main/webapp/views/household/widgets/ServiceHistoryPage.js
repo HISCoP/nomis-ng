@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { CCard,
     CCardBody,
     CLink,
@@ -6,15 +6,38 @@ import { CCard,
 import CIcon from "@coreui/icons-react";
 import {Button, List} from 'semantic-ui-react'
 import MaterialTable from 'material-table';
+import {fetchAllHouseHoldServiceHistory} from "../../../actions/houseHold";
+import {connect} from "react-redux";
+import moment from "moment";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const ServiceHistoryPage = (props) => {
     //should be able to fetch by either houseHoldId or memberId
-    const houseHoldId = props.houseHoldId;
+    const [loading, setLoading] = useState(false);
+    const houseHoldId = props.householdId;
     const memberId = props.memberId;
     const isBoolean = (variable) => typeof variable === "boolean";
     const isHistory = isBoolean(props.isHistory) ? props.isHistory : true;
 
+    React.useEffect(() => {
+        if(!memberId) {
+            fetchHouseholdServiceHistory(houseHoldId);
+        }
+    }, [houseHoldId, memberId]);
+
+    const fetchHouseholdServiceHistory = (houseHoldId) => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+        const onError = () => {
+            setLoading(false);
+        }
+        props.fetchAllHouseHoldServiceHistory(houseHoldId, onSuccess, onError);
+    }
+
     if(isHistory) {
+
     return (
      <CCard>
                     <CCardHeader>Recent Service Forms
@@ -22,28 +45,26 @@ const ServiceHistoryPage = (props) => {
                     </CCardHeader>
                     <CCardBody>
                     <List divided verticalAlign='middle'>
+                        {!loading && props.householdServiceHistory.length <= 0 &&
                         <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Household Vunerabilty Assessment - Ada Kindu</List.Content>
-                            <List.Description>29/10/2020 15:09 PM </List.Description>
+                            <List.Content>There are no services in this household</List.Content>
                         </List.Item>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Caregiver Form - Amos Kindu</List.Content>
-                            <List.Description>29/10/2020 15:09 PM </List.Description>
-                        </List.Item>
+                        }
 
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Household Followup Assessment - Amos Kindu</List.Content>
-                            <List.Description>29/10/2020 15:09 PM </List.Description>
-                        </List.Item>
+                        {loading &&
+                        <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                        }
+                        {props.householdServiceHistory.map(service =>
+                            <List.Item>
+                                <List.Content floated='right'>
+                                    <Button>View</Button>
+                                </List.Content>
+                                <List.Content>{service.formCode} {memberId ? '' : ' - '+service.householdMemberId}</List.Content>
+                                <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
+                            </List.Item>
+                        )
+                        }
+
                     </List>
                     </CCardBody>
                 </CCard>
@@ -54,6 +75,7 @@ const ServiceHistoryPage = (props) => {
 
  <MaterialTable
                 title="Services Form History"
+                isLoading={loading}
                 columns={[
                     { title: 'Form Name', field: 'name' },
                     { title: 'Date', field: 'date' },
@@ -85,4 +107,13 @@ const ServiceHistoryPage = (props) => {
                         );
 }
 
-export default ServiceHistoryPage;
+const mapStateToProps = state => {
+    return {
+        householdServiceHistory: state.houseHold.householdServiceHistory
+    };
+};
+const mapActionToProps = {
+    fetchAllHouseHoldServiceHistory: fetchAllHouseHoldServiceHistory
+};
+
+export default connect(mapStateToProps, mapActionToProps)(ServiceHistoryPage);

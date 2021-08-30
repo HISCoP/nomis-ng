@@ -21,11 +21,5 @@ public class EncounterDTO implements Serializable {
 
     private Long householdMemberId;
 
-    @NotNull(message = "ovcServiceCode cannot be null")
-    private Long ovcServiceCode;
-
     public List<FormData> formData;
-
-    private Object data;
-
 }

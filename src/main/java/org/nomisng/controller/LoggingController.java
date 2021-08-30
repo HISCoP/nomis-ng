@@ -37,12 +37,12 @@ public class LoggingController {
         ByteArrayResource resource = new ByteArrayResource(data);
 
         return ResponseEntity.ok()
-                // Content-Disposition
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
-                // Content-Type
-                .contentType(mediaType) //
-                // Content-Length
-                .contentLength(data.length) //
-                .body(resource);
+            // Content-Disposition
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
+            // Content-Type
+            .contentType(mediaType)
+            // Content-Length
+            .contentLength(data.length)
+            .body(resource);
     }
 }

@@ -30,8 +30,12 @@ public class Encounter extends Audit {
     private String formCode;
 
     @Basic
+    @Column(name = "archived")
+    private int archived;
+
+    /*@Basic
     @Column(name = "service_code")
-    private String ovcServiceCode;
+    private String ovcServiceCode;*/
 
     @Basic
     @Column(name = "household_member_id")
@@ -42,16 +46,10 @@ public class Encounter extends Audit {
     @JsonIgnore
     private Long organisationUnitId;
 
-    @OneToMany(mappedBy = "encounterByEncounterId")
+    @OneToMany(mappedBy = "encounterByEncounterId",cascade = CascadeType.PERSIST)
     @ToStringExclude
     @JsonIgnore
-    private List<FormData> formDataById;
-
-    @ManyToOne
-    @JoinColumn(name = "service_code", referencedColumnName = "code", updatable = false, insertable = false)
-    @JsonIgnore
-    @ToStringExclude
-    private OvcService ovcServiceByOvcServiceCode;
+    private List<FormData> formData;
 
     @ManyToOne
     @JoinColumn(name = "household_member_id", referencedColumnName = "id", updatable = false, insertable = false)
