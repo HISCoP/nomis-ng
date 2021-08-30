@@ -89,7 +89,6 @@ public class EncounterService {
         return encounterRepository.findAllByHouseholdIdAndFormCodeAndArchivedOrderByIdDesc(householdId, formCode, UN_ARCHIVED, pageable);
     }
 
-    //TODO: Test...
     public List<EncounterDTO> getEncounterDTOFromPage(Page<Encounter> encounterPage){
        List<Encounter> encounters =  encounterPage.getContent().stream()
                 .map(encounter -> this.addFirstNameAndLastNameAndFormNameToEncounter(encounter))
