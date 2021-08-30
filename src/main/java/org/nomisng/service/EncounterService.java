@@ -55,13 +55,13 @@ public class EncounterService {
 
     public Encounter save(EncounterDTO encounterDTO) {
         Encounter encounter = encounterMapper.toEncounter(encounterDTO);
-        encounter.setOrganisationUnitId(organisationUnitId);
+        //encounter.setOrganisationUnitId(organisationUnitId);
         encounter = encounterRepository.save(encounter);
         final Long finalEncounterId = encounter.getId();
 
         encounterDTO.getFormData().forEach(formData -> {
             formData.setEncounterId(finalEncounterId);
-            formData.setOrganisationUnitId(organisationUnitId);
+            //formData.setOrganisationUnitId(organisationUnitId);
         });
         formDataRepository.saveAll(encounterDTO.getFormData());
         return encounter;

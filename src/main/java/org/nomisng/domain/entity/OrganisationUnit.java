@@ -91,10 +91,10 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     @ToString.Exclude
     public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById_0;
 
-    @OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
+    /*@OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
     @JsonIgnore
     @ToString.Exclude
-    public List<FormData> formDataById;
+    public List<FormData> formDataById;*/
 
     @OneToMany(mappedBy = "organisationUnitByCurrentOrganisationUnitId")
     @JsonIgnore
