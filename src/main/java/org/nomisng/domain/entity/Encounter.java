@@ -48,10 +48,10 @@ public class Encounter extends Audit implements Serializable {
     @Column(name = "household_member_id")
     private Long householdMemberId;
 
-    @Basic
+    /*@Basic
     @Column(name = "organisational_unit_id")
     @JsonIgnore
-    private Long organisationUnitId;
+    private Long organisationUnitId;*/
 
     @OneToMany(mappedBy = "encounterByEncounterId")
     @ToStringExclude

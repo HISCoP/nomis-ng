@@ -20,7 +20,6 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 public class FormDataService {
 
     private final FormDataRepository formDataRepository;
-    private final UserService userService;
     private final Long organisationUnitId = 1L;
     private final FormDataMapper formDataMapper;
 
@@ -38,22 +37,22 @@ public class FormDataService {
                 .orElseThrow(() -> new EntityNotFoundException(FormData.class, "Id", id +""));
         //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
         FormData formData = formDataMapper.toFormData(formDataDTO);
-        formData.setOrganisationUnitId(organisationUnitId);
+        //formData.setOrganisationUnitId(organisationUnitId);
         formData.setId(id);
         formData.setArchived(UN_ARCHIVED);
         return formDataRepository.save(formData);
     }
 
     public FormData getFormData(Long id){
-        Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
-        FormData formData = formDataRepository.findByIdAndArchivedAndOrganisationUnitId(id, UN_ARCHIVED, organisationUnitId)
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        FormData formData = formDataRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(FormData.class, "Id", id +""));
         return formData;
     }
 
     public List<FormData> getAllFormData() {
         //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
-        return formDataRepository.findAllByArchivedAndOrganisationUnitIdOrderByIdDesc(UN_ARCHIVED, organisationUnitId);
+        return formDataRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED);
     }
 
     public void delete(Long id) {
