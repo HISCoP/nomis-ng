@@ -6,6 +6,7 @@ import * as ACTION_TYPES from "./../actions/types";
 import jwt_decode from "jwt-decode";
 import _ from 'lodash';
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const { dispatch } = store;
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
@@ -45,16 +46,21 @@ function login(username, password, remember) {
         });
 }
 
-function logout() {
-
+function logout(props) {
+    
     axios.post(`${url}users/logOut`)
+        
         .then(response => {
+           
             console.log(response)
             localStorage.removeItem('currentUser');
             localStorage.removeItem('currentUser_Permissions');
             currentUserSubject.next(null);
 
-        });
+        })
+        .catch((error) => {
+           
+        });;
              // remove user from local storage to log user out
            
       

@@ -12,7 +12,7 @@ import { FaPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
 import { fetchAllCodeset, deleteApplicationCodeset } from "../../../actions/codeSet";
-import NewApplicationCodeset from "./NewApplicationCodeset";
+import NewCbo from "./NewCbo";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { toast } from "react-toastify";
@@ -86,7 +86,7 @@ const ApplicationCodesetList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Application Codeset </Typography>
+                    <Typography color="textPrimary">CBO  </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -95,41 +95,39 @@ const ApplicationCodesetList = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Application Codeset </span>
+                        <span style={{textTransform: 'capitalize'}}>Add New CBO </span>
                     </Button>
 
                 </div>
                 <MaterialTable
-                    title="Find Application Codeset"
+                    title="Find CBO"
                     columns={[
                     {
-                        title: "Codeset Group",
+                        title: "ID",
                         field: "codesetGroup",
                     },
-                    { title: "Value", field: "display" },
-                    { title: "Version", field: "version" },
-                    { title: "Language", field: "language" },
+                    { title: "Name", field: "name" },
+                    { title: "Description", field: "version" },
+
                     
                 ]}
                 isLoading={loading}
                 data={props.applicationCodesetList.map((row) => ({
-                    codesetGroup: row.codesetGroup,
-                    id: row.id,
-                    display: row.display,
-                    language: row.language,
-                    version: row.version
+                    codesetGroup: 'Lagos/Aja/003/002',
+                    name: 'Emeka Emeka',
+                    display: 'Heart Foundation CBO',
                 }))}
                 actions= {[
                     {
                         icon: EditIcon,
                         iconProps: {color: 'primary'},
-                        tooltip: 'Edit Codeset',
+                        tooltip: 'Edit CBO',
                         onClick: (event, row) => openApplicationCodeset(row)
                     },
                     {
                         icon: DeleteIcon,
                         iconProps: {color: 'primary'},
-                        tooltip: 'Delete Codeset',
+                        tooltip: 'Delete CBO',
                         onClick: (event, row) => deleteApplicationCodeset(row)
                     }
                         ]}
@@ -152,10 +150,10 @@ const ApplicationCodesetList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewApplicationCodeset toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={props.applicationCodesetList} formData={currentCodeset} loadCodeset={loadApplicationCodeset}/>
+            <NewCbo toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={props.applicationCodesetList} formData={currentCodeset} loadCodeset={loadApplicationCodeset}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
-                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Domain Area - {currentCodeset && currentCodeset.display ? currentCodeset.display : ""} </ModalHeader>
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete CBO  - {currentCodeset && currentCodeset.display ? currentCodeset.display : ""} </ModalHeader>
                     <ModalBody>
                         <p>Are you sure you want to proceed ?</p>
                     </ModalBody>

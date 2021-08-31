@@ -54,15 +54,15 @@ export const EMERGENCY_PATIENT = 4
  * LAB ORDER STATUS CODES
  */
 export const LAB_ORDER_STATUS = [{name:"Sample Collected", id: 1},
-{name:"Sample Transfer", id: 2},
-{name:"Sample Verified", id: 3},
-{name:"Sample Rejected", id: 4},
-{name:"Result Available", id: 5},
-{name:"Pending", id:0}];
+    {name:"Sample Transfer", id: 2},
+    {name:"Sample Verified", id: 3},
+    {name:"Sample Rejected", id: 4},
+    {name:"Result Available", id: 5},
+    {name:"Pending", id:0}];
 
 
 export const DRUG_ORDER_STATUS = [{name:"Not Dispensed", id: 0},
-{name:"Dispensed", id: 1}];
+    {name:"Dispensed", id: 1}];
 
 /**
  * @CODES

@@ -25,7 +25,7 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Reports',
-    to: '/dashboard',
+    to: '/report',
     icon: 'cilList',
   },
   {

@@ -72,49 +72,27 @@ const NewApplicationCodeset = (props) => {
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createGlobalVariable}>
-                    <ModalHeader toggle={props.toggleModal}>New Application Codeset </ModalHeader>
+                    <ModalHeader toggle={props.toggleModal}>New CBO Setup </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
                                     <Col md={12}>
-                                    {!showNewCodesetGroup ?
+                                    
                                             <FormGroup>
-                                                <Label>Codeset Group <span style={{cursor: "pointer", color: "blue"}}
-                                                                           onClick={() => setShowNewCodesetGroup(true)}> ( or Click to create new codeset group)</span></Label>
-                                                <Select
-                                                    required
-                                                    name="cg"
-                                                    id="cg"
-                                                    isOptionDisabled={option => formData.id ? option.value !== formData.codesetGroup : false}
-                                                    isMulti={false}
-                                                    onChange={handleCodesetGroupChange}
-                                                    options={props.loadApplicationCodeset ? Array.from(new Set(props.loadApplicationCodeset.map(x => x.codesetGroup))).sort().map(codesetGroup => ({
-                                                        value: codesetGroup,
-                                                        label: codesetGroup
-                                                    })) : []}
-                                                    value={formData.codesetGroup ? {
-                                                        value: formData.codesetGroup,
-                                                        label: formData.codesetGroup
-                                                    } : ""}
-                                                    isLoading={false}
-                                                />
-                                            </FormGroup> :
-                                            <FormGroup>
-                                                <Label>Codeset Group <span style={{cursor: "pointer", color: "blue"}}
-                                                                           onClick={() => setShowNewCodesetGroup(false)}> ( or Click to pick from existing codeset group)</span></Label>
+                                                <Label>CBO ID </Label>
                                                 <Input
                                                     type='text'
                                                     name='codesetGroup'
                                                     id='codesetGroup'
-                                                    placeholder='Enter new codeset group'
+                                                    placeholder='Enter CBO ID'
                                                     value={formData.codesetGroup}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
                                             </FormGroup>
 
-                                        }
+                                        
                                     </Col>
                                    
                                     <Col md={12}>
@@ -134,7 +112,7 @@ const NewApplicationCodeset = (props) => {
 
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label>Language</Label>
+                                            <Label>Description</Label>
                                             <Input
                                                 type='text'
                                                 name='language'
@@ -147,20 +125,7 @@ const NewApplicationCodeset = (props) => {
                                         </FormGroup>
                                     </Col>
 
-                                    <Col md={12}>
-                                        <FormGroup>
-                                            <Label>Version</Label>
-                                            <Input
-                                                type='text'
-                                                name='version'
-                                                id='version'
-                                                placeholder=' '
-                                                value={formData.version}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </FormGroup>
-                                    </Col>
+                                   
                                     
                                 </Row>
 
