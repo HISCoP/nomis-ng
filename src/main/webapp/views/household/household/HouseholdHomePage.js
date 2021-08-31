@@ -107,16 +107,24 @@ const HouseholdHomePage = (props) => {
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >
+                            {activeItem === "dashboard" &&
                             <HouseholdDashboard household={props.hh}/>
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'members'} >
+                            {activeItem === "members" &&
                             <HouseholdMember houseHoldId={houseHoldId}/>
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'careplan'} >
-                           <AssessmentCarePlanHome householdId={houseHoldId}/>
+                            {activeItem === "careplan" &&
+                            <AssessmentCarePlanHome householdId={houseHoldId}/>
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                           <HouseholdService householdId={houseHoldId}/>
+                            {activeItem === "services" &&
+                            <HouseholdService householdId={houseHoldId} activeItem={activeItem}/>
+                            }
                         </CTabPane>
                     </CTabContent>
 

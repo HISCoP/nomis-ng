@@ -1,35 +1,40 @@
 
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import React from 'react';
+import {  Modal, ModalHeader, ModalBody } from 'reactstrap';
 import FormRenderer from "../../formBuilder/FormRenderer";
+import {toast, ToastContainer} from "react-toastify";
+import * as CODES from "../../../api/codes";
 
 const NewCarePlan = (props) => {
   const {
-    buttonLabel,
     className
   } = props;
-  const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
 
 
+  const onSuccess = () => {
+    props.reloadSearch();
+    toast.success("Form saved successfully!", { appearance: "success" });
+    props.toggle();
+  }
 
 
   return (
-    <div>
-      
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true}>
-        <ModalHeader toggle={props.toggle}>New Care Plan</ModalHeader>
-        <ModalBody>
-          <p> Form will be here</p>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
-          <Button color="secondary" onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+      <div>
+        <ToastContainer />
+        <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size={"xl"}>
+          <ModalHeader toggle={props.toggle}>New Care Plan</ModalHeader>
+          <ModalBody>
+            <FormRenderer
+                formCode={CODES.CARE_PLAN}
+                householdId={props.householdId}
+                onSuccess={onSuccess}
+            />
+          </ModalBody>
+
+        </Modal>
+      </div>
   );
-  
+
 }
 
 export default NewCarePlan;

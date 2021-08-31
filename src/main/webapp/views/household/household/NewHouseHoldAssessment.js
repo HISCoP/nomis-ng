@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, ModalHeader, ModalBody, } from 'reactstrap';
 import * as CODES from './../../../api/codes'
 import FormRenderer from './../../formBuilder/FormRenderer'
@@ -8,11 +8,9 @@ import {toast, ToastContainer} from "react-toastify";
 
 const NewHouseHoldAssessment = (props) => {
   const {
-    buttonLabel,
     className
   } = props;
-  const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
+
 
   const currentForm = {
     code: CODES.HOUSEHOLD_ASSESSMENT,
@@ -23,12 +21,6 @@ const NewHouseHoldAssessment = (props) => {
     },
   };
 
-const saveAssessment = (e) => {
-      alert('Save Successfully');
-      props.togglestatus();
-
-  
-};
 
 const onSuccess = () => {
     props.reloadSearch();

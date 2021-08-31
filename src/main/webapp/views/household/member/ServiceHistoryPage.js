@@ -3,6 +3,7 @@ import MaterialTable from 'material-table';
 import { connect } from "react-redux";
 import { fetchAllHouseHoldServiceHistory } from "./../../../actions/houseHold";
 import moment from "moment";
+import {fetchAllHouseHoldMemberServiceHistory} from "../../../actions/houseHoldMember";
 
 const ServiceHistoryPage = (props) => {
 
@@ -21,54 +22,55 @@ const ServiceHistoryPage = (props) => {
         const onError = () => {
             setLoading(false);
         }
-        props.fetchAllHouseHoldServiceHistory(memberId, onSuccess, onError);
+        props.fetchAllHouseHoldMemberServiceHistory(memberId, onSuccess, onError);
     }
    
     return (
+        <>
+                <MaterialTable
+                    title="Services Form History"
+                    columns={[
+                        {title: 'Form Name', field: 'formName'},
+                        {title: 'Date', field: 'date'},
+                        // { title: 'Name', field: 'memberName' },
+                    ]}
+                    isLoading={loading}
+                    data={props.memberServiceHistory.map(service => ({
+                        formName: service.formName,
+                        date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
+                        memberName: service.householdMemberId
+                    }))}
+                    actions={[
+                        {
+                            icon: 'edit',
+                            tooltip: 'View Form',
+                            onClick: (event, rowData) => alert("You saved " + rowData.name)
+                        },
+                        rowData => ({
+                            icon: 'visibility',
+                            tooltip: 'View Form',
+                            onClick: (event, rowData) => alert("You want to delete " + rowData.name)
 
-            <MaterialTable
-                title="Services Form History"
-                columns={[
-                    { title: 'Form Name', field: 'formName' },
-                    { title: 'Date', field: 'date' },
-                    { title: 'Name', field: 'memberName' },
-                ]}
-                isLoading={loading}
-                data={props.householdServiceHistory.map(service => ({
-                    formName: service.formCode,
-                    date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
-                    memberName: service.householdMemberId
-                }))}
-                actions={[
-                    {
-                        icon: 'edit',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name)
-                    },
-                    rowData => ({
-                        icon: 'visibility',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You want to delete " + rowData.name)
-
-                    })
-                ]}
-                options={{
-                    actionsColumnIndex: -1,
-                    padding: 'dense',
-                    header: false
-                }}
-            />
+                        })
+                    ]}
+                    options={{
+                        actionsColumnIndex: -1,
+                        padding: 'dense',
+                        header: true
+                    }}
+                />
+        </>
     );
 
 }
 
 const mapStateToProps = state => {
     return {
-        householdServiceHistory: state.houseHold.householdServiceHistory
+        memberServiceHistory: state.houseHoldMember.serviceHistory
     };
   };
   const mapActionToProps = {
-    fetchAllHouseHoldServiceHistory: fetchAllHouseHoldServiceHistory
+      fetchAllHouseHoldMemberServiceHistory: fetchAllHouseHoldMemberServiceHistory
   };
   
   export default connect(mapStateToProps, mapActionToProps)(ServiceHistoryPage);

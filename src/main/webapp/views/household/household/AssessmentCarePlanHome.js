@@ -14,7 +14,7 @@ const AssessmentCarePlanHome = (props) => {
         },
         {
             menuItem: 'Care Plans',
-            render: () => <CarePlan householdId={props.houseHoldId}/>,
+            render: () => <CarePlan householdId={props.householdId}/>,
         }
     ]
 

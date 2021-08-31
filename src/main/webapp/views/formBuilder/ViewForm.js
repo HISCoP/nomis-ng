@@ -209,23 +209,13 @@ const Update = props => {
                                     <Form
                                         form={JSON.parse(res)}
                                         ref={form => myform = form}
-                                        submission={{data : {authHeader: authHeader(), baseUrl:url}}}
+                                        submission={{data : {authHeader: authHeader(), baseUrl:url, household: props.household}}}
                                         //src={url}
                                         hideComponents={props.hideComponents}
                                         //onSubmit={props.onSubmit}
                                         onSubmit={(submission) => {
                                             console.log(submission);
-                                            return fetch('https://lp-base-app.herokuapp.com/api/', {
-                                                body: JSON.stringify(submission),
-                                                headers: {
-                                                    'content-type': 'application/json'
-                                                },
-                                                method: 'POST',
-                                                mode: 'cors',
-                                            }).then(res => {
-                                                console.log(res);
-                                              //  myform.emit('submitDone', submission);
-                                            })}}
+                                            return alert(JSON.stringify(submission))}}
                                     />
                                 }
                                 <br></br>
@@ -252,6 +242,7 @@ const Update = props => {
 
 const mapStateToProps =  (state = { form:{}}) => {
     return {
+        household: state.houseHold.household,
         services: state.formReducers.services,
         formList: state.formReducers.form,
     }}

@@ -9,7 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
 import ServiceHomePage from "./ServiceHistoryPage";
-import Forms from "./Forms";
+import Forms from "./FillForms";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
@@ -124,13 +124,20 @@ const HomePage = (props) => {
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >
-                            <Dashboard member={props.member} household={props.hh} fetchingHousehold={fetchingHousehold} />
+                            {activeItem === "dashboard" &&
+                            <Dashboard member={props.member} household={props.hh} fetchingHousehold={fetchingHousehold}
+                                       />
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                            <ServiceHomePage />
+                            {activeItem === "services" &&
+                            <ServiceHomePage member={props.member} />
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'forms'} >
-                            <Forms />
+                            {activeItem === "forms" &&
+                            <Forms member={props.member} />
+                            }
                         </CTabPane>
 
                     </CTabContent>

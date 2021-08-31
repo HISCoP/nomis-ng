@@ -37,7 +37,7 @@ const ServiceHistoryPage = (props) => {
                 data={props.householdServiceHistory.map(service => ({
                     formName: service.formName,
                     date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
-                    memberName: service.firstName + " " + service.lastName
+                    memberName: service.firstName ? (service.firstName + " " + service.lastName) : ''
                 }))}
 
                 actions={[
@@ -56,7 +56,7 @@ const ServiceHistoryPage = (props) => {
                 options={{
                     actionsColumnIndex: -1,
                     padding: 'dense',
-                    header: false
+                    header: true
                 }}
             />
     );

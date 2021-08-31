@@ -7,6 +7,7 @@ import CIcon from "@coreui/icons-react";
 import {Button, List} from 'semantic-ui-react'
 import MaterialTable from 'material-table';
 import {fetchAllHouseHoldServiceHistory} from "../../../actions/houseHold";
+import {fetchAllHouseHoldMemberServiceHistory} from "../../../actions/houseHoldMember";
 import {connect} from "react-redux";
 import moment from "moment";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -22,7 +23,10 @@ const ServiceHistoryPage = (props) => {
     React.useEffect(() => {
         if(!memberId) {
             fetchHouseholdServiceHistory(houseHoldId);
+        } else {
+            fetchAllHouseHoldMemberServiceHistory(memberId);
         }
+
     }, [houseHoldId, memberId]);
 
     const fetchHouseholdServiceHistory = (houseHoldId) => {
@@ -36,6 +40,17 @@ const ServiceHistoryPage = (props) => {
         props.fetchAllHouseHoldServiceHistory(houseHoldId, onSuccess, onError);
     }
 
+    const fetchAllHouseHoldMemberServiceHistory = (memberId) => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+        const onError = () => {
+            setLoading(false);
+        }
+        props.fetchAllHouseHoldMemberServiceHistory(memberId, onSuccess, onError);
+    }
+
     if(isHistory) {
 
     return (
@@ -44,28 +59,51 @@ const ServiceHistoryPage = (props) => {
 
                     </CCardHeader>
                     <CCardBody>
-                    <List divided verticalAlign='middle'>
-                        {!loading && props.householdServiceHistory.length <= 0 &&
-                        <List.Item>
-                            <List.Content>There are no services in this household</List.Content>
-                        </List.Item>
-                        }
+                        {memberId ?
+                            <List divided verticalAlign='middle'>
+                                {!loading && props.memberServiceHistory.length <= 0 &&
+                                <List.Item>
+                                    <List.Content>There are no services for this household member</List.Content>
+                                </List.Item>
+                                }
 
-                        {loading &&
-                        <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
-                        }
-                        {props.householdServiceHistory.map(service =>
-                            <List.Item>
-                                <List.Content floated='right'>
-                                    <Button>View</Button>
-                                </List.Content>
-                                <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - '+service.firstName+' '+service.lastName) : ''}</List.Content>
-                                <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
-                            </List.Item>
-                        )
-                        }
+                                {loading &&
+                                <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                                }
+                                {props.memberServiceHistory.map(service =>
+                                    <List.Item>
+                                        <List.Content floated='right'>
+                                            <Button>View</Button>
+                                        </List.Content>
+                                        <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - '+service.firstName+' '+service.lastName) : ''}</List.Content>
+                                        <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
+                                    </List.Item>
+                                )
+                                }
+                            </List>
+                            :
+                            <List divided verticalAlign='middle'>
+                                {!loading && props.householdServiceHistory.length <= 0 &&
+                                <List.Item>
+                                    <List.Content>There are no services in this household</List.Content>
+                                </List.Item>
+                                }
 
-                    </List>
+                                {loading &&
+                                <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                                }
+                                {props.householdServiceHistory.map(service =>
+                                    <List.Item>
+                                        <List.Content floated='right'>
+                                            <Button>View</Button>
+                                        </List.Content>
+                                        <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - ' + service.firstName + ' ' + service.lastName) : ''}</List.Content>
+                                        <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
+                                    </List.Item>
+                                )
+                                }
+                            </List>
+                        }
                     </CCardBody>
                 </CCard>
     );
@@ -109,11 +147,13 @@ const ServiceHistoryPage = (props) => {
 
 const mapStateToProps = state => {
     return {
-        householdServiceHistory: state.houseHold.householdServiceHistory
+        householdServiceHistory: state.houseHold.householdServiceHistory,
+        memberServiceHistory: state.houseHoldMember.serviceHistory
     };
 };
 const mapActionToProps = {
-    fetchAllHouseHoldServiceHistory: fetchAllHouseHoldServiceHistory
+    fetchAllHouseHoldServiceHistory: fetchAllHouseHoldServiceHistory,
+    fetchAllHouseHoldMemberServiceHistory: fetchAllHouseHoldMemberServiceHistory
 };
 
 export default connect(mapStateToProps, mapActionToProps)(ServiceHistoryPage);

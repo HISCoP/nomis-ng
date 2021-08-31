@@ -14,22 +14,24 @@ import {connect} from "react-redux";
 import {calculateAge} from "./../../../utils/calculateAge";
 import axios from "axios";
 import {url} from "../../../api";
+import {toast} from "react-toastify";
+import * as CODES from "../../../api/codes";
 
 
 const Dashboard = (props) => {
 
     return (
         <>
-              <TopDashboardStats />
-              <MidDashboardStats member={props.member} household={props.household} fetchingHousehold={props.fetchingHousehold} />
-            <CRow>
+            <TopDashboardStats/>
+            < MidDashboardStats member={props.member} household={props.household} fetchingHousehold={props.fetchingHousehold} />
+                <CRow>
                 <CCol xs="12" >
-                    <RecentServiceOffered />
+                <RecentServiceOffered memberId={props.member.id}/>
                 </CCol>
                 <CCol xs="12" >
-                    <ServiceHistoryPage memberId={23}/>
+                <ServiceHistoryPage memberId={props.member.id}/>
                 </CCol>
-            </CRow>
+                </CRow>
 
     </>
 
@@ -154,21 +156,70 @@ const MidDashboardStats = (props) => {
     )
 }
 
-const RecentServiceOffered = () => {
+const RecentServiceOffered = (props) => {
+    const [loading, setLoading] = useState(false);
+    const [lastService, setLast] = useState([]);
+    const [serviceDate, setServiceDate] = useState();
+
+    React.useEffect(() => {
+        fetchServices();
+    }, [props.memberId]);
+
+    const fetchServices = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+
+        const onError = () => {
+            setLoading(false);
+            toast.error('Error: Could not fetch recent service!');
+        }
+        axios
+            .get(`${url}household-members/${props.memberId}/${CODES.Caregiver_Household_Service}/encounters`)
+            .then(response => {
+                if(response.data.length > 0){
+                    const formData = response.data[0].formData;
+                    const services = formData[0].data;
+                    console.log(services);
+                    setServiceDate(services.serviceDate);
+                    setLast(services.serviceOffered);
+                } else {
+                    setLast([]);
+                }
+                if(onSuccess){
+                    onSuccess();
+                }
+            })
+            .catch(error => {
+                    if(onError){
+                        onError();
+                    }
+                }
+
+            );
+    }
     return (
         <>
                     <CCard>
                         <CCardHeader>Recent Service Offered
                             <div className="card-header-actions">
-                                18-02-2020 12:00 PM
+                                {serviceDate || ''}
                             </div>
                         </CCardHeader>
                         <CCardBody>
-                            <Label.Group color='blue' >
-                                        <Label>Health Education</Label>
-                                        <Label>HIV Care & Support </Label>
-                                        <Label>Water Treatment </Label>
-                            </Label.Group>
+                            {loading ?
+                                <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                                :
+                                <Label.Group color='blue'>
+                                    {lastService ? lastService.map(x =>
+                                            <Label key={x.id}>{x.name}</Label>
+                                        ) :
+                                        <Label>No Service has been offered</Label>
+                                    }
+
+                                </Label.Group>
+                            }
                         </CCardBody>
                     </CCard>
             </>

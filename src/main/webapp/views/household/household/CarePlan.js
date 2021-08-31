@@ -1,35 +1,49 @@
 import React, {useState} from 'react';
-import {CButton, CCol, CRow, CCard, CDataTable, CCardBody} from "@coreui/react";
-import {Icon} from "semantic-ui-react";
+import {CButton, CCol, CRow, CCard, CCardBody} from "@coreui/react";
 import {CChartBar} from "@coreui/react-chartjs";
 import MaterialTable from 'material-table';
 import NewCarePlan from './NewCarePlan';
-import FormRenderer from "../../formBuilder/FormRenderer";
+import {toast} from "react-toastify";
+import axios from "axios";
+import {url} from "../../../api";
+import * as CODES from "../../../api/codes";
 
 const CarePlan = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
-    const onSubmit = (submission) => {
-        alert('Submitted');
-        console.log('submission is ');
-        console.log(submission);
+    const [loading, setLoading] = useState(false);
+    const [carePlanList, setCarePlanList] = useState([]);
+
+    React.useEffect(() => {
+        fetchCarePlan();
+    }, [props.householdId]);
+
+    const fetchCarePlan = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+
+        const onError = () => {
+            setLoading(false);
+            toast.error('Error: Could not fetch household careplans!');
+        }
+        axios
+            .get(`${url}households/${props.householdId}/${CODES.CARE_PLAN}/formData`)
+            .then(response => {
+                setCarePlanList(response.data)
+                if(onSuccess){
+                    onSuccess();
+                }
+            })
+            .catch(error => {
+                    if(onError){
+                        onError();
+                    }
+                }
+
+            );
     }
-    const onSuccess = () => {
-        alert('Successfull');
-    }
-    const currentForm ={
-        code: "",
-        programCode: "",
-        formName: "Household Care Plan",
-        options:{
-            hideHeader: true
-        },
-    };
-    const usersData = [
-        {pending: 0, totalServices: '10', dateCreated: '2018/01/01', inProgress: '3', completed: '7'},
-        {pending: 1, totalServices: '7', dateCreated: '2018/01/01', inProgress: '2', completed: '4'},
-        {pending: 2, totalServices: '5', dateCreated: '2018/02/01', inProgress: '3', completed: '0'}
-];
     return (
         <>
             <CRow>
@@ -49,7 +63,14 @@ const CarePlan = (props) => {
                             { title: 'In Progress', field: 'inProgress' },
                             { title: 'Completed', field: 'completed' },
                         ]}
-                        data={usersData}
+                        data={carePlanList}
+                    //     data={carePlanList.map((x)=>({
+                    // dateCreated: new Date(),
+                    // // totalServices: x.carePlan.length,
+                    // // pending: x.carePlan.length,
+                    // // inProgress: x.carePlan.length,
+                    // // completed: x.carePlan.length
+                    // }))}
                         actions={[
                             {
                                 icon: 'edit',
@@ -105,7 +126,7 @@ const CarePlan = (props) => {
                     </CCard>
                 </CCol>
             </CRow>
-            <NewCarePlan  modal={modal} toggle={toggle} onSubmit={onSubmit} onSuccess={onSuccess}/>
+            <NewCarePlan  modal={modal} toggle={toggle} reloadSearch={fetchCarePlan} householdId={props.householdId}/>
         </>
     )
 }

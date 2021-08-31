@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import {CButton, CCol, CRow, CCard, CDataTable, CCardBody} from "@coreui/react";
-import {Icon} from "semantic-ui-react";
-import {CChartBar} from "@coreui/react-chartjs";
+import {CButton, CCol, CRow} from "@coreui/react";
 import MaterialTable from 'material-table';
 import NewHouseHoldAssessment from './NewHouseHoldAssessment';
 import {toast} from "react-toastify";
