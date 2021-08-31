@@ -97,7 +97,7 @@ const HomePage = (props) => {
                         >
                            
                                 <FolderIcon fontSize="large" className={'text-center'}/>
-                                <p>Forms</p>
+                                <p>Other Forms</p>
                           
                         </Menu.Item>
                         <Menu.Item

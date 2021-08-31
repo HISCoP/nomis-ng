@@ -21,17 +21,17 @@ const FormRenderer = (props) => {
         readOnly: true,
     };
     //extract the formData as an obj (if form data length is one) or an array
-    // const extractFormData = (formData) => {
-    //   if (!formData) {
-    //     return null;
-    //   }
-    //   if (formData.length === 1) {
-    //     return formData[0].data;
-    //   }
-    //   return formData.map((item) => {
-    //     return item.data;
-    //   });
-    // };
+    const extractFormData = (formData) => {
+      if (!formData) {
+        return null;
+      }
+      if (formData.length === 1) {
+        return formData[0].data;
+      }
+      return formData.map((item) => {
+        return item.data;
+      });
+    };
 
     React.useEffect(() => {
         formRendererService
@@ -45,24 +45,24 @@ const FormRenderer = (props) => {
         });
     }, []);
 
-    // React.useEffect(() => {
-    //   formRendererService
-    //     .fetchEncounterById(props.encounterId)
-    //     .then((response) => {
-    //       setShowLoadingEncounter(false);
-    //       const extractedData = extractFormData(response.data.formDataObj);
-    //       if (!extractedData) {
-    //         setErrorMsg("Could not load encounter information");
-    //         setShowErrorMsg(true);
-    //       }
-    //       setSubmission({ data: extractedData });
-    //     })
-    //     .catch((error) => {
-    //       setErrorMsg("Could not load encounter information");
-    //       setShowErrorMsg(true);
-    //       setShowLoadingEncounter(false);
-    //     });
-    // }, []);
+    React.useEffect(() => {
+      formRendererService
+        .fetchEncounterById(props.encounterId)
+        .then((response) => {
+          setShowLoadingEncounter(false);
+          const extractedData = extractFormData(response.data.formData);
+          if (!extractedData) {
+            setErrorMsg("Could not load encounter information");
+            setShowErrorMsg(true);
+          }
+          setSubmission({ data: extractedData });
+        })
+        .catch((error) => {
+          setErrorMsg("Could not load encounter information");
+          setShowErrorMsg(true);
+          setShowLoadingEncounter(false);
+        });
+    }, []);
 
     if(showLoadingForm){
         return (<span className="text-center">
@@ -71,12 +71,12 @@ const FormRenderer = (props) => {
   </span>);
     }
 
-    // if(showLoadingEncounter){
-    //   return (<span className="text-center">
-    //   <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
-    //   Loading encounter information...
-    // </span>);
-    // }
+    if(showLoadingEncounter){
+      return (<span className="text-center">
+      <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
+      Loading encounter information...
+    </span>);
+    }
 
     return (
         <React.Fragment>
@@ -104,10 +104,10 @@ const FormRenderer = (props) => {
 
 const mapStateToProps = (state = { formManager: {} }) => {
     return {
-        form: state.formManager.form,
-        formEncounter: state.formManager.formEncounter,
-        errors: state.formManager.errors,
-        encounter: state.encounter.encounter,
+       // form: state.formManager.form,
+       // formEncounter: state.formManager.formEncounter,
+       // errors: state.formManager.errors,
+      //  encounter: state.encounter.encounter,
     };
 };
 

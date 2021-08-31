@@ -117,6 +117,9 @@ const ProvideService = (props) => {
           setSaving(false);
           toast.success('Service(s) saved successfully');
           props.toggle();
+          if(props.reloadSearch){
+              props.reloadSearch();
+          }
       };
       const onError = () => {
           setSaving(false);

@@ -16,6 +16,7 @@ import axios from "axios";
 import {url} from "../../../api";
 import {toast} from "react-toastify";
 import * as CODES from "../../../api/codes";
+import {last} from "rxjs/operators";
 
 
 const Dashboard = (props) => {
@@ -173,7 +174,7 @@ const RecentServiceOffered = (props) => {
 
         const onError = () => {
             setLoading(false);
-            toast.error('Error: Could not fetch recent service!');
+           // toast.error('Error: Could not fetch recent service!');
         }
         axios
             .get(`${url}household-members/${props.memberId}/${CODES.Caregiver_Household_Service}/encounters`)
@@ -212,7 +213,7 @@ const RecentServiceOffered = (props) => {
                                 <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
                                 :
                                 <Label.Group color='blue'>
-                                    {lastService ? lastService.map(x =>
+                                    {lastService && lastService.length > 0 ? lastService.map(x =>
                                             <Label key={x.id}>{x.name}</Label>
                                         ) :
                                         <Label>No Service has been offered</Label>

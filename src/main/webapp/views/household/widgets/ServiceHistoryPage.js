@@ -11,6 +11,8 @@ import {fetchAllHouseHoldMemberServiceHistory} from "../../../actions/houseHoldM
 import {connect} from "react-redux";
 import moment from "moment";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import {toast} from "react-toastify";
+import FormRendererModal from "../../formBuilder/FormRendererModal";
 
 const ServiceHistoryPage = (props) => {
     //should be able to fetch by either houseHoldId or memberId
@@ -19,6 +21,8 @@ const ServiceHistoryPage = (props) => {
     const memberId = props.memberId;
     const isBoolean = (variable) => typeof variable === "boolean";
     const isHistory = isBoolean(props.isHistory) ? props.isHistory : true;
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [currentForm, setCurrentForm] = useState(false);
 
     React.useEffect(() => {
         if(!memberId) {
@@ -51,9 +55,16 @@ const ServiceHistoryPage = (props) => {
         props.fetchAllHouseHoldMemberServiceHistory(memberId, onSuccess, onError);
     }
 
+    const viewForm = (row) => {
+        setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
+        setShowFormModal(true);
+    }
+
+
     if(isHistory) {
 
     return (
+        <>
      <CCard>
                     <CCardHeader>Recent Service Forms
 
@@ -73,7 +84,7 @@ const ServiceHistoryPage = (props) => {
                                 {props.memberServiceHistory.map(service =>
                                     <List.Item>
                                         <List.Content floated='right'>
-                                            <Button>View</Button>
+                                            <Button onClick={() => viewForm(service)}>View</Button>
                                         </List.Content>
                                         <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - '+service.firstName+' '+service.lastName) : ''}</List.Content>
                                         <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
@@ -95,7 +106,7 @@ const ServiceHistoryPage = (props) => {
                                 {props.householdServiceHistory.map(service =>
                                     <List.Item>
                                         <List.Content floated='right'>
-                                            <Button>View</Button>
+                                            <Button onClick={() => viewForm(service)}>View</Button>
                                         </List.Content>
                                         <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - ' + service.firstName + ' ' + service.lastName) : ''}</List.Content>
                                         <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
@@ -106,6 +117,15 @@ const ServiceHistoryPage = (props) => {
                         }
                     </CCardBody>
                 </CCard>
+            <FormRendererModal
+                showModal={showFormModal}
+                setShowModal={setShowFormModal}
+                currentForm={currentForm}
+                //onSuccess={onSuccess}
+                //onError={onError}
+                options={{modalSize:"xl"}}
+            />
+        </>
     );
     }
 

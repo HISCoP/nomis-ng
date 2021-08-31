@@ -6,12 +6,32 @@ import {toast} from "react-toastify";
 import axios from "axios";
 import {url} from "../../../api";
 import * as CODES from './../../../api/codes'
+import FormRendererModal from "../../formBuilder/FormRendererModal";
 
 const Assessment = (props) => {
     const [modal, setModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [assessmentList, setAssessmentList] = useState([]);
     const toggle = () => setModal(!modal);
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [currentForm, setCurrentForm] = useState(false);
+
+    const onSuccess = () => {
+        fetchAssessments();
+        toast.success("Form saved successfully!");
+        setShowFormModal(false);
+    }
+    const viewForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "VIEW", formCode: CODES.HOUSEHOLD_ASSESSMENT   });
+        setShowFormModal(true);
+    }
+
+    const editForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "EDIT", formCode: CODES.HOUSEHOLD_ASSESSMENT  });
+        setShowFormModal(true);
+    }
 
     React.useEffect(() => {
        fetchAssessments();
@@ -30,7 +50,7 @@ const Assessment = (props) => {
         axios
             .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
             .then(response => {
-                setAssessmentList(response.data.map(x => x.data))
+                setAssessmentList(response.data)
                 if(onSuccess){
                     onSuccess();
                 }
@@ -58,22 +78,22 @@ const Assessment = (props) => {
                         title="Assessment History"
                         isLoading={loading}
                         columns={[
-                            { title: 'Date Created', field: 'assessmentDate' },
-                            { title: 'Total Yes', field: 'totalYes' },
-                            { title: 'Total No', field: 'totalNo' },
-                            { title: 'Total N/A', field: 'totalNa' },
+                            { title: 'Date Created', field: 'data.assessmentDate' },
+                            { title: 'Total Yes', field: 'data.totalYes' },
+                            { title: 'Total No', field: 'data.totalNo' },
+                            { title: 'Total N/A', field: 'data.totalNa' },
                         ]}
                         data={assessmentList}
                         actions={[
                             {
                                 icon: 'edit',
                                 tooltip: 'edit Form',
-                                onClick: (event, rowData) => alert("You want to edit " + rowData.name)
+                                onClick: (event, rowData) => editForm(rowData)
                             },
                             rowData => ({
                                 icon: 'visibility',
                                 tooltip: 'View Form',
-                                onClick: (event, rowData) => alert("You want to view " + rowData.name)
+                                onClick: (event, rowData) => viewForm(rowData)
 
                             })
                         ]}
@@ -84,6 +104,14 @@ const Assessment = (props) => {
                     />
                 </CCol>
             </CRow>
+            <FormRendererModal
+                showModal={showFormModal}
+                setShowModal={setShowFormModal}
+                currentForm={currentForm}
+                onSuccess={onSuccess}
+                //onError={onError}
+                options={{modalSize:"xl"}}
+            />
             <NewHouseHoldAssessment  modal={modal} toggle={toggle} householdId={props.householdId} reloadSearch={fetchAssessments}/>
         </>
     )

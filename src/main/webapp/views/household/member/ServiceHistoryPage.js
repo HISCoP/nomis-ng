@@ -4,17 +4,25 @@ import { connect } from "react-redux";
 import { fetchAllHouseHoldServiceHistory } from "./../../../actions/houseHold";
 import moment from "moment";
 import {fetchAllHouseHoldMemberServiceHistory} from "../../../actions/houseHoldMember";
+import FormRendererModal from "../../formBuilder/FormRendererModal";
+import { toast, ToastContainer } from "react-toastify";
+import ProvideService from "../household/ProvideService";
+import {CButton, CCardHeader, CCol, CRow} from "@coreui/react";
 
 const ServiceHistoryPage = (props) => {
-
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [showServiceModal, setShowServiceModal] = useState(false);
+    const [currentForm, setCurrentForm] = useState(false);
     const [loading, setLoading] = useState(false);
-    const memberId = props.memberId;
+    const memberId = props.member.id;
+
+    const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
 
     useEffect(() => {
-        fetchHouseholdServiceHistory(memberId);
+        fetchHouseholdServiceHistory();
     }, [memberId]); //componentDidMount
 
-    const fetchHouseholdServiceHistory = (memberId) => {
+    const fetchHouseholdServiceHistory = () => {
         setLoading(true);
         const onSuccess = () => {
             setLoading(false);
@@ -24,9 +32,32 @@ const ServiceHistoryPage = (props) => {
         }
         props.fetchAllHouseHoldMemberServiceHistory(memberId, onSuccess, onError);
     }
+
+    const onSuccess = () => {
+        fetchHouseholdServiceHistory();
+        toast.success("Form saved successfully!");
+        setShowFormModal(false);
+    }
+    const viewForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
+        setShowFormModal(true);
+    }
+
+    const editForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "EDIT", encounterId: row.id });
+        setShowFormModal(true);
+    }
    
     return (
         <>
+            <ToastContainer />
+            <CRow>
+                <CCol md={12}>
+            <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggleServiceModal}>Provide Service For Member</CButton>
+                </CCol>
+                <CCol md={12}>
                 <MaterialTable
                     title="Services Form History"
                     columns={[
@@ -35,7 +66,7 @@ const ServiceHistoryPage = (props) => {
                         // { title: 'Name', field: 'memberName' },
                     ]}
                     isLoading={loading}
-                    data={props.memberServiceHistory.map(service => ({
+                    data={props.memberServiceHistory.map(service => ({...service,
                         formName: service.formName,
                         date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
                         memberName: service.householdMemberId
@@ -43,13 +74,13 @@ const ServiceHistoryPage = (props) => {
                     actions={[
                         {
                             icon: 'edit',
-                            tooltip: 'View Form',
-                            onClick: (event, rowData) => alert("You saved " + rowData.name)
+                            tooltip: 'Edit Form',
+                            onClick: (event, rowData) => editForm(rowData)
                         },
                         rowData => ({
                             icon: 'visibility',
                             tooltip: 'View Form',
-                            onClick: (event, rowData) => alert("You want to delete " + rowData.name)
+                            onClick: (event, rowData) => viewForm(rowData)
 
                         })
                     ]}
@@ -59,6 +90,18 @@ const ServiceHistoryPage = (props) => {
                         header: true
                     }}
                 />
+                </CCol>
+            </CRow>
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} reloadSearch={fetchHouseholdServiceHistory}/>
+               <FormRendererModal
+                   householdMemberId={props.member.id}
+                   showModal={showFormModal}
+                   setShowModal={setShowFormModal}
+                   currentForm={currentForm}
+                   onSuccess={onSuccess}
+                   //onError={onError}
+                   options={{modalSize:"xl"}}
+               />
         </>
     );
 
