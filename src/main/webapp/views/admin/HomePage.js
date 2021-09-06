@@ -14,7 +14,7 @@ import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 
-const HomePage = () => {
+const HomePage = (props) => {
     let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
@@ -24,7 +24,19 @@ const HomePage = () => {
         window.location.href = "/household/home";
     }
 
-   const [state, setState ]=useState({}) 
+   const [state, setState ]=useState({})
+
+    const cboSetup = () => {
+        props.history.push(`/cbo`)
+    }
+
+    const orgUnitSetup = () => {
+        props.history.push(`/organisation-unit-home`)
+    }
+
+    const donorSetup = () => {
+        props.history.push(`/donor`)
+    }
 
     return (
         <>
@@ -49,14 +61,6 @@ const HomePage = () => {
          <Link color="inherit" to ={{ pathname: "user-setup-home", }}  >
             <People fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  User Setup </span>
-        </Link>
-        </Menu.Item>
-        <Menu.Item
-          name='messages'
-          active={activeItem === 'usersetup'}>
-        <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
-            <AcUnitIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Organisation Unit </span>
         </Link>
         </Menu.Item>
         <Menu.Item
@@ -94,31 +98,18 @@ const HomePage = () => {
             <span className={'pl-2'}>  Report Builder  </span>
         </Link>
         </Menu.Item>
+         <Menu.Item>
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>Organisation Unit</span>
+        <Dropdown   className={'float-right'} >
 
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "cbo", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  CBO Setup  </span>
-        </Link>
-        </Menu.Item>
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "donor", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Donor Setup  </span>
-        </Link>
-        </Menu.Item>
-        {/* <Menu.Item>
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>Others</span>
-        <Dropdown   className={'float-right'} >  
-                
         <Dropdown.Menu >
-            <Dropdown.Item icon='edit' text='OVS Setting' />
-            <Dropdown.Item icon='globe' text='Ward Setup' />
-            <Dropdown.Item icon='settings' text='Facilities Setup' />
+            <Dropdown.Item icon='settings'  text={'Organisation Unit Setup'} onClick={orgUnitSetup}/>
+            <Dropdown.Item icon='settings'  text={'CBO Setup'} onClick={cboSetup}/>
+            <Dropdown.Item icon='settings'  text={'Donor Setup'} onClick={donorSetup}/>
           </Dropdown.Menu>
         </Dropdown>
-        </Menu.Item> */}
+        </Menu.Item>
 
             </Menu>
 

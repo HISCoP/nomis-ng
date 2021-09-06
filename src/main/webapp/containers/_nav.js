@@ -31,7 +31,7 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Visualization',
-    to: '/visualization',
+    to: '/report',
     icon: 'cilGraph',
   },
   {

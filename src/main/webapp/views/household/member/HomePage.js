@@ -163,16 +163,16 @@ const InfoSection = (props) => {
                     <span>Unique ID: <small>{props.member ? props.member.uniqueId : 'Nil'} </small></span><br/>
                     <span>Name: <small>{props.member ? props.member.firstName + ' ' + props.member.lastName : 'Nil'} </small></span><br/>
                     <span>Phone: <small>{props.member ? props.member.mobilePhoneNumber : 'Nil'}</small></span><br/>
-                    <span>Sex: <small>{props.member && props.member.sex ? props.member.sex.display : 'Nil'}</small></span> {'  '}
+                    <span>Sex: <small>{props.member && props.member.sex && props.member.sex.display ? props.member.sex.display : (props.member.sex === 2 ? "Male" : "Female")}</small></span> {'  '}
                         {props.member.dob ?
                     <span>Age:  <small>{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
                         <span>Age: <small>Nil</small></span>
                         }<br/>
                     <span>Date Of Assessment: <small>{props.member ? props.member.dateAssessment : 'Nil'}</small> </span><br/><br/>
 
-                    <span>State: <small>-</small></span><br/>
-                    <span>LGA: <small>-</small></span><br/>
-                    <span>CBO: <small>-</small></span><br/>
+                    {/*<span>State: <small>{props.member ? props.member.state : ""}</small></span><br/>*/}
+                    {/*<span>LGA: <small>-</small></span><br/>*/}
+                    {/*<span>CBO: <small>-</small></span><br/>*/}
                     </>}
                 </CCol>
             </CRow>

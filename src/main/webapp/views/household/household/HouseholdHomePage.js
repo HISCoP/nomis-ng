@@ -159,7 +159,7 @@ const HouseHoldInfo = (props) => {
                     <span>Date Of Assessment: <small>{props.household.details.assessmentDate || 'Nil'}</small> </span><br/>
                     <span>Primary Caregiver Name: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName: 'Nil' } </small></span><br/>
                     <span>Phone: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.mobilePhoneNumber : 'Nil' }</small></span><br/>
-                    <span>Sex: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.sex ? props.household.details.primaryCareGiver.sex.display : 'Nil' }</small></span><br/>
+                    <span>Sex: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.sex && props.household.details.primaryCareGiver.sex.display ? props.household.details.primaryCareGiver.sex.display : (props.household.details.primaryCareGiver.sex === 2 ? "Male" : "Female") }</small></span><br/>
                             {props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.dob ?
                     <span>Age: <small>{calculateAge(  props.household.details.primaryCareGiver.dob)} | {props.household.details.primaryCareGiver.dob}</small></span> :
                                 <span>Age: <small>Nil</small></span>

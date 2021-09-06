@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 const NewDomainService = (props) => {
     const [loading, setLoading] = useState(false)
-    const defaultValues = {name:"",domainId:"",serviceType:"", code:"" }
+    const defaultValues = {name:"",domainId:"",serviceType:"" }
     const [formData, setFormData] = useState(defaultValues)
     const classes = useStyles()
     //domainDetails
@@ -41,10 +41,10 @@ const getServices = () => {
 
     const handleNameInputChange = e => {
 
-        setFormData ({ ...formData, [e.target.name]: e.target.value.split(" ").join("")  });
+        setFormData ({ ...formData, [e.target.name]: e.target.value  });
     }
-    const handleServiceTypeChange = (newValue) => {
-        setFormData ({ ...formData, serviceType: newValue.value});
+    const handleServiceTypeChange = (e) => {
+        setFormData ({ ...formData, serviceType: e.target.value});
         
     };
 
