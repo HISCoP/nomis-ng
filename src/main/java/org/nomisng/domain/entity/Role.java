@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -33,9 +34,10 @@ public class Role extends Audit {
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private Set<Permission> permission;
-    //private Collection<ApplicationUserRole> applicationUserRolesById;
-    /*@OneToMany(mappedBy = "roleByRoleId")
+    private Set<Permission> permissions;
+
+    /*private Collection<ApplicationUserRole> applicationUserRolesById;
+    @OneToMany(mappedBy = "roleByRoleId")
     public Collection<ApplicationUserRole> getApplicationUserRolesById() {
         return applicationUserRolesById;
     }
@@ -72,7 +74,7 @@ public class Role extends Audit {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", dateModified='" + dateModified + '\'' +
-                ", permissions=" + permission +
+                ", permissions=" + permissions +
                 '}';
     }
 

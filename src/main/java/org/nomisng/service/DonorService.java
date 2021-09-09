@@ -43,7 +43,7 @@ public class DonorService {
         return donorRepository.save(donorMapper.toDonor(donorDTO));
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+
     }
 }

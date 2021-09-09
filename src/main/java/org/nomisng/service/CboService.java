@@ -42,7 +42,7 @@ public class CboService {
         return cboRepository.save(cboMapper.toCbo(cboDTO));
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+
     }
 }

@@ -64,11 +64,11 @@ public class FormService {
         return formRepository.save(formMapper.toForm(formDTO));
     }
 
-    public Integer delete(Long id) {
+    public void delete(Long id) {
         Form form = formRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Form.class, "Id", id+""));
 
         form.setArchived(ARCHIVED);
-        return formRepository.save(form).getArchived();
+        formRepository.save(form);
     }
 }

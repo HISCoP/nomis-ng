@@ -41,16 +41,6 @@ public class AccountController {
                 .map(UserDTO::new)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, principal.getName()+"","" ));
 
-        //User user = userRepository.getOne(userDTO.getId());
-
-        /*if(userDTO.getCurrentOrganisationUnitId() == null && !userDTO.getApplicationUserOrganisationUnits().isEmpty()){
-            for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : userDTO.getApplicationUserOrganisationUnits()) {
-                user.setCurrentOrganisationUnitId(applicationUserOrganisationUnit.getOrganisationUnitId());
-                userRepository.save(user);
-                break;
-            }
-        }*/
-
         return userDTO;
     }
 

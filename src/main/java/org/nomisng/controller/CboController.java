@@ -34,4 +34,11 @@ public class CboController {
     public ResponseEntity<Cbo> updateCbo(@RequestBody CboDTO cboDTO, @PathVariable Long id) {
         return ResponseEntity.ok(cboService.update(id, cboDTO));
     }
+
+    //TODO: Testing...
+    @RequestMapping("*")
+    @ResponseBody
+    public String fallbackMethod(){
+        return "fallback method";
+    }
 }

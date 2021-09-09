@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.VisitDTO;
 import org.nomisng.domain.entity.Visit;
 import org.nomisng.service.VisitService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,8 @@ public class VisitController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(this.visitService.delete(id));
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        visitService.delete(id);
     }
 }

@@ -49,7 +49,7 @@ public class AccessRight {
     public Set<String> getAllPermission(){
         Set<String> permissions = new HashSet<>();
         userService.getUserWithRoles().get().getRole().forEach(roles1 ->{
-            permissions.addAll(roles1.getPermission().stream().map(Permission::getName).collect(Collectors.toSet()));
+            permissions.addAll(roles1.getPermissions().stream().map(Permission::getName).collect(Collectors.toSet()));
         });
         return permissions;
     }

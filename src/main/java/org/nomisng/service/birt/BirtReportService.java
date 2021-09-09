@@ -277,12 +277,11 @@ public class BirtReportService implements ApplicationContextAware, DisposableBea
     }
 
 
-    public Integer delete(Long id) {
+    public void delete(Long id) {
         ReportInfo reportInfo = reportInfoRepository.findByIdAndArchived(id, UN_ARCHIVED).orElseThrow(()
                 -> new EntityNotFoundException(ReportInfo.class, "Id", id +""));
         reportInfo.setArchived(ARCHIVED);
         reportInfoRepository.save(reportInfo);
-        return reportInfo.getArchived();
     }
 
     public List<ReportInfoDTO> getReports() {

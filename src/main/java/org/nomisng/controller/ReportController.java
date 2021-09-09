@@ -8,12 +8,14 @@ import org.nomisng.service.birt.BirtReportService;
 import org.nomisng.service.birt.OutputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,7 @@ public class ReportController {
     private final BirtReportService reportService;
 
     @PostMapping
-    public ResponseEntity<ReportInfo> save(@RequestBody ReportInfoDTO reportInfoDTO) {
+    public ResponseEntity<ReportInfo> save(@Valid @RequestBody ReportInfoDTO reportInfoDTO) {
         reportInfoDTO.setId(0L);
         return ResponseEntity.ok(reportService.save(reportInfoDTO));
     }
@@ -44,11 +46,6 @@ public class ReportController {
         return ResponseEntity.ok(reportService.update(id, reportInfoDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(reportService.delete(id));
-    }
-
     @GetMapping
     public ResponseEntity<List<ReportInfoDTO>> getAllReports() {
         return ResponseEntity.ok(reportService.getReports());
@@ -58,4 +55,8 @@ public class ReportController {
     public ResponseEntity<ReportInfo> update(@PathVariable Long id) {
         return ResponseEntity.ok(reportService.getReport(id));
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) { reportService.delete(id); }
 }

@@ -42,7 +42,7 @@ public class IpService {
         return ipRepository.save(ipMapper.toIp(ipDTO));
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+
     }
 }

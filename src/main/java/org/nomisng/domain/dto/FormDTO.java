@@ -3,11 +3,15 @@ package org.nomisng.domain.dto;
 import lombok.Data;
 import org.nomisng.domain.entity.JsonBEntity;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
-public class FormDTO extends JsonBEntity {
+public class FormDTO {
 
     private Long id;
 
+    @NotBlank(message = "name is mandatory")
     private String name;
 
     private String code;
@@ -18,5 +22,6 @@ public class FormDTO extends JsonBEntity {
 
     private String supportServices;
 
+    @NotBlank(message = "version is mandatory")
     private String version;
 }

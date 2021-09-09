@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -81,7 +82,7 @@ public class HouseholdController {
 
     @PostMapping("/{id}/householdAddress")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<HouseholdAddressDTO>> saveHouseholdAddress(@PathVariable Long id, @RequestBody HouseholdAddress householdAddress) {
+    public ResponseEntity<List<HouseholdAddressDTO>> saveHouseholdAddress(@PathVariable Long id, @Valid @RequestBody HouseholdAddress householdAddress) {
         return ResponseEntity.ok(householdService.saveHouseholdAddress(id, householdAddress));
     }
 

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class OvcServiceController {
     private final OvcServiceService ovcServiceService;
 
     @PostMapping
-    public ResponseEntity<OvcService> save(@RequestBody OvcServiceDTO ovcServiceDTO) {
+    public ResponseEntity<OvcService> save(@Valid @RequestBody OvcServiceDTO ovcServiceDTO) {
         return ResponseEntity.ok(ovcServiceService.save(ovcServiceDTO));
     }
 
@@ -49,8 +50,6 @@ public class OvcServiceController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long id) {
-        ovcServiceService.delete(id);
-    }
+    public void delete(@PathVariable Long id) { ovcServiceService.delete(id); }
 
 }

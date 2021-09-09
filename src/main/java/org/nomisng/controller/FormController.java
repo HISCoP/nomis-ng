@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.entity.Form;
 import org.nomisng.service.FormService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -34,7 +36,7 @@ public class FormController {
     }
 
     @PostMapping
-    public ResponseEntity<Form> save(@RequestBody FormDTO formDTO) {
+    public ResponseEntity<Form> save(@Valid @RequestBody FormDTO formDTO) {
         return ResponseEntity.ok(formService.save(formDTO));
     }
 
@@ -45,7 +47,8 @@ public class FormController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(formService.delete(id));
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        formService.delete(id);
     }
 }

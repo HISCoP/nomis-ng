@@ -47,7 +47,5 @@ public class VisitService {
         return visitRepository.save(visitMapper.toVisit(visitDTO));
     }
 
-    public Integer delete(Long id) {
-        return null;
-    }
+    public void delete(Long id) { }
 }
