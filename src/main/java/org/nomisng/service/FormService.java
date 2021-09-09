@@ -2,6 +2,7 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.FormDTO;
@@ -61,6 +62,7 @@ public class FormService {
         formRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Form.class, "Id", id+""));
         formDTO.setId(id);
+        if(StringUtils.isBlank(formDTO.getCode())) throw new EntityNotFoundException(Form.class, "Code", formDTO.getCode()+"");
         return formRepository.save(formMapper.toForm(formDTO));
     }
 

@@ -67,7 +67,7 @@ public class HouseholdMemberController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HouseholdMember> update(@RequestBody HouseholdMemberDTO householdMemberDTO, @PathVariable Long id) {
+    public ResponseEntity<HouseholdMember> update(@Valid @RequestBody HouseholdMemberDTO householdMemberDTO, @PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.update(id, householdMemberDTO));
     }
 

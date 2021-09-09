@@ -55,8 +55,7 @@ public class TokenProvider {
         }
         org.nomisng.domain.entity.User user = userService.getUserWithRoles().get();
         //getting & adding user details to token
-        String name = user.getFirstName() + " " +
-                userService.getUserWithRoles().get().getLastName();
+        String name = user.getFirstName() + " " + user.getLastName();
 
         String authorities = user.getRole().stream().map(Role::getName).collect(Collectors.joining(","));
 

@@ -34,7 +34,7 @@ public class ReportController {
     }
 
     @PostMapping(value = "/generate")
-    public void generateReport(@RequestBody ReportDetailDTO data, HttpServletResponse response, HttpServletRequest request) {
+    public void generateReport(@Valid @RequestBody ReportDetailDTO data, HttpServletResponse response, HttpServletRequest request) {
         String reportFormat = data.getReportFormat().toLowerCase().trim();
         OutputType format = OutputType.from(reportFormat);
 
@@ -42,7 +42,7 @@ public class ReportController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReportInfo> update(@PathVariable Long id, @RequestBody ReportInfoDTO reportInfoDTO) {
+    public ResponseEntity<ReportInfo> update(@PathVariable Long id, @Valid @RequestBody ReportInfoDTO reportInfoDTO) {
         return ResponseEntity.ok(reportService.update(id, reportInfoDTO));
     }
 

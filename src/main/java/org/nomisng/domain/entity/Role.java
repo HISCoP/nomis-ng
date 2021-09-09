@@ -34,7 +34,7 @@ public class Role extends Audit {
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private Set<Permission> permissions;
+    private Set<Permission> permission;
 
     /*private Collection<ApplicationUserRole> applicationUserRolesById;
     @OneToMany(mappedBy = "roleByRoleId")
@@ -74,7 +74,7 @@ public class Role extends Audit {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", dateModified='" + dateModified + '\'' +
-                ", permissions=" + permissions +
+                ", permissions=" + permission +
                 '}';
     }
 

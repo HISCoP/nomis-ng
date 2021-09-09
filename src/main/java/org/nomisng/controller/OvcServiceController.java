@@ -26,7 +26,7 @@ public class OvcServiceController {
     }
 
     @PutMapping("/{id}")
-    public OvcService update(@PathVariable Long id, @RequestBody OvcServiceDTO ovcServiceDTO) {
+    public OvcService update(@PathVariable Long id, @Valid @RequestBody OvcServiceDTO ovcServiceDTO) {
         return ovcServiceService.update(id, ovcServiceDTO);
     }
 
@@ -42,9 +42,8 @@ public class OvcServiceController {
 
     @GetMapping("{serviceType}")
     public ResponseEntity<List<OvcServiceDTO>> getAllOvcServices(@PathVariable(value = "serviceType", required = false) Integer serviceType) {
-        if(serviceType != 0){
-            return ResponseEntity.ok(ovcServiceService.getOvcServiceByServiceType(serviceType));
-        }
+        if(serviceType != 0)return ResponseEntity.ok(ovcServiceService.getOvcServiceByServiceType(serviceType));
+
         return ResponseEntity.ok(ovcServiceService.getAllOvcServices());
     }
 

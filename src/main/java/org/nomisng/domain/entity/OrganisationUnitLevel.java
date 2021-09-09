@@ -34,7 +34,7 @@ public class OrganisationUnitLevel implements Serializable {
 
     @Basic
     @Column(name = "status")
-    private int status;
+    private Integer status;
 
     @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")
     @ToString.Exclude

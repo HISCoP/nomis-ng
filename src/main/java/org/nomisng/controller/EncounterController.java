@@ -53,7 +53,7 @@ public class EncounterController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Encounter> update(@PathVariable Long id, @RequestBody EncounterDTO encounterDTO) {
+    public ResponseEntity<Encounter> update(@PathVariable Long id, @Valid @RequestBody EncounterDTO encounterDTO) {
         return ResponseEntity.ok(encounterService.update(id, encounterDTO));
     }
 

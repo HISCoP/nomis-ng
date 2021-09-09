@@ -7,6 +7,7 @@ import org.nomisng.service.IpService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,12 +27,12 @@ public class IpController {
     }
 
     @PostMapping
-    public ResponseEntity<Ip> save(@RequestBody IpDTO ipDTO) {
+    public ResponseEntity<Ip> save(@Valid @RequestBody IpDTO ipDTO) {
         return ResponseEntity.ok(ipService.save(ipDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ip> updateIp(@RequestBody IpDTO ipDTO, @PathVariable Long id) {
+    public ResponseEntity<Ip> update(@PathVariable Long id, @Valid @RequestBody IpDTO ipDTO) {
         return ResponseEntity.ok(ipService.update(id, ipDTO));
     }
 }

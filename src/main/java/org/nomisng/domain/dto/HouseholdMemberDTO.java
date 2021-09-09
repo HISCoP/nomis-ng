@@ -24,6 +24,7 @@ public class HouseholdMemberDTO {
     @NotNull(message = "householdId is mandatory")
     private Long householdId;
 
+    @NotNull(message = "householdMemberType is mandatory")
     private Integer householdMemberType;
 
     private Object details;
