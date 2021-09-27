@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import axios from "axios";
 import {  Modal, ModalHeader, ModalBody,Form,Row,Col,FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
 import { connect } from 'react-redux';
 import MatButton from '@material-ui/core/Button'
@@ -9,8 +10,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 //import Select from "react-select/creatable";
-import { createDonor, updateDonor  } from "./../../../actions/donors";
+import { createIp, updateIp  } from "../../../actions/ip";
 import { Spinner } from 'reactstrap';
+import { url as baseUrl } from "../../../api";
 
 
 
@@ -23,9 +25,10 @@ const useStyles = makeStyles(theme => ({
 const NewDonor = (props) => {
     const [loading, setLoading] = useState(false)
     //const [showNewCbo, setShowNewCbo] = useState(false)
-    const defaultValues = { id:"",  name:"", description:"", code:""};
+    const defaultValues = { id:"",  name:"", description:"", code:"", donor: "",  };
     const [formData, setFormData] = useState( defaultValues)
     //const [errors, setErrors] = useState({});
+    const [donorList, setdonorList] = useState([]);
     const classes = useStyles()
   
     useEffect(() => {
@@ -33,20 +36,39 @@ const NewDonor = (props) => {
         //props.loadCbo();
         setFormData(props.formData ? props.formData : defaultValues);
         //setShowNewCbo(false);
+        async function getCharacters() {
+            axios
+              .get(`${baseUrl}donors`)
+              .then((response) => {
+                //console.log(Object.entries(response.data));
+                setdonorList(
+                  Object.entries(response.data).map(([key, value]) => ({
+                    label: value.name,
+                    value: value.id,
+                  }))
+                );
+              })
+              .catch((error) => {
+                
+              });
+          }
+          getCharacters();
     },  [props.formData,  props.showModal]);
+     /* Get list of gender parameter from the endpoint */
+
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
     
 
-    const createDonorSetup = e => {
+    const createIpSetup = e => {
         
         e.preventDefault()
             setLoading(true);
             const onSuccess = () => {
                 setLoading(false);
-                props.loadDonors();
+                props.loadIps();
                 props.toggleModal()
             }
             const onError = () => {
@@ -54,10 +76,10 @@ const NewDonor = (props) => {
                 props.toggleModal()
             }
             if(formData.id){
-                props.updateDonor(formData.id, formData, onSuccess, onError)
+                props.updateIp(formData.id, formData, onSuccess, onError)
                 return
             }
-            props.createDonor(formData, onSuccess,onError)
+            props.createIp(formData, onSuccess,onError)
 
     }
 
@@ -66,15 +88,54 @@ const NewDonor = (props) => {
 
         <div >
             <ToastContainer />
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
+            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
 
-                <Form onSubmit={createDonorSetup}>
-                    <ModalHeader toggle={props.toggleModal}>New Donor Setup </ModalHeader>
+                <Form onSubmit={createIpSetup}>
+                    <ModalHeader toggle={props.toggleModal}>New CBO-DONOR-IP Setup </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
-                                    
+                                    <Col md={12}>
+                                        <FormGroup>
+                                            <Label for="gender">IP *</Label>
+                                            <Input
+                                            type="select"
+                                            name="donor"
+                                            id="donor"
+                                            value={defaultValues.donor}
+                                            onChange={handleInputChange}
+                                            required
+                                            >
+                                            <option value=""> </option>
+                                            {donorList.map(({ label, value }) => (
+                                                <option key={value} value={value}>
+                                                {label}
+                                                </option>
+                                            ))}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md={12}>
+                                        <FormGroup>
+                                            <Label for="gender">CBO *</Label>
+                                            <Input
+                                            type="select"
+                                            name="donor"
+                                            id="donor"
+                                            value={defaultValues.donor}
+                                            onChange={handleInputChange}
+                                            required
+                                            >
+                                            <option value=""> </option>
+                                            {donorList.map(({ label, value }) => (
+                                                <option key={value} value={value}>
+                                                {label}
+                                                </option>
+                                            ))}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
                                     <Col md={12}>
                                         <FormGroup>
                                             <Label>Name</Label>
@@ -136,5 +197,5 @@ const NewDonor = (props) => {
 }
 
 
-export default connect(null, {createDonor, updateDonor})(NewDonor);
+export default connect(null, {createIp, updateIp})(NewDonor);
 

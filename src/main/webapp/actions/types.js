@@ -192,3 +192,15 @@ export const REPORTS_ERROR = 'REPORTS_ERROR'
  * DONOR 
  */
   export const FETCH_ALL_DONOR = 'FETCH_ALL_DONOR'
+/**
+ * @TYPES
+ * ===============================================
+ * IP 
+ */
+  export const FETCH_ALL_IP = 'FETCH_ALL_IP'
+/**
+ * @TYPES
+ * ===============================================
+ * CBO-IP  
+ */
+  export const FETCH_ALL_CBO_IP = 'FETCH_ALL_CBO_IP'

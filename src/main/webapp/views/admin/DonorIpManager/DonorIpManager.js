@@ -11,10 +11,10 @@ import Button from "@material-ui/core/Button";
 import { FaPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
-import { fetchAll, deleteDonor } from "../../../actions/donors";
-import NewDonorManager from "./NewDonorManager";
+import { fetchAll, deleteIp } from "../../../actions/ip";
+import NewDonorManager from "./NewDonorIpManager";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+//import DeleteIcon from "@material-ui/icons/Delete";
 import { toast } from "react-toastify";
 import SaveIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -26,20 +26,20 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const DonorListManager = (props) => {
+const IpListManager = (props) => {
     const [loading, setLoading] = React.useState(true);
     const [deleting, setDeleting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
-    const [currentDonor, setCurrentDonor] = React.useState(null);
+    const [currentIp, setcurrentIp] = React.useState(null);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
     const classes = useStyles()
     useEffect(() => {
-        loadDonorList()
+        loadIpList()
     }, []); //componentDidMount
 
- const loadDonorList = () => {
+ const loadIpList = () => {
   
     setLoading('true');
         const onSuccess = () => {
@@ -52,7 +52,7 @@ const DonorListManager = (props) => {
     }; //componentDidMount
 
     const openNewDomainModal = (row) => {
-        setCurrentDonor(row);
+        setcurrentIp(row);
         toggleModal();
     }
 
@@ -61,21 +61,21 @@ const DonorListManager = (props) => {
        const onSuccess = () => {
            setDeleting(false);
            toggleDeleteModal();
-           loadDonorList();
+           loadIpList();
        };
        const onError = () => {
            setDeleting(false);
            toggleDeleteModal();
        };
-       props.deleteDonor(id, onSuccess, onError);
+       props.deleteIp(id, onSuccess, onError);
        }
        const openDonor = (row) => {
-            setCurrentDonor(row);
+            setcurrentIp(row);
            toggleModal();
        }
    
-       const deleteDonorDetail = (row) => {
-           setCurrentDonor(row);
+       const deleteIpDetail = (row) => {
+           setcurrentIp(row);
            toggleDeleteModal();
        }
 
@@ -86,7 +86,7 @@ const DonorListManager = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Donor</Typography>
+                    <Typography color="textPrimary">DONOR-IP</Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -95,12 +95,12 @@ const DonorListManager = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Donor </span>
+                        <span style={{textTransform: 'capitalize'}}>Add New Donor-IP </span>
                     </Button>
 
                 </div>
                 <MaterialTable
-                    title="Find Donor"
+                    title="Find IP"
                     columns={[
                     {
                         title: "ID",
@@ -114,7 +114,7 @@ const DonorListManager = (props) => {
                     
                 ]}
                 isLoading={loading}
-                data={props.donorList.map((row) => ({
+                data={props.ipList.map((row) => ({
                     id:row.id,
                     name: row.name,
                     description: row.description,
@@ -153,10 +153,10 @@ const DonorListManager = (props) => {
                         }}
                 />
             </CardBody>
-            <NewDonorManager toggleModal={toggleModal} showModal={showModal} loadDonorList={props.donorList} formData={currentDonor} loadDonors={loadDonorList}/>
+            <NewDonorManager toggleModal={toggleModal} showModal={showModal} loadIpList={props.ipList} formData={currentIp} loadIps={loadIpList}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
-                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Donor - {currentDonor && currentDonor.name ? currentDonor.name : ""} </ModalHeader>
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Ip - {currentIp && currentIp.name ? currentIp.name : ""} </ModalHeader>
                     <ModalBody>
                         <p>Are you sure you want to proceed ?</p>
                     </ModalBody>
@@ -168,7 +168,7 @@ const DonorListManager = (props) => {
                         className={classes.button}
                         startIcon={<SaveIcon />}
                         disabled={deleting}
-                        onClick={() => processDelete(currentDonor.id)}
+                        onClick={() => processDelete(currentIp.id)}
                     >
                         Delete  {deleting ? <Spinner /> : ""}
                     </Button>
@@ -192,12 +192,12 @@ const DonorListManager = (props) => {
 
 const mapStateToProps = state => {
     return {
-        donorList: state.donorReducer.donorList
+        ipList: state.ipReducer.ipList
     };
   };
   const mapActionToProps = {
     fetchAllDonors: fetchAll,
-    deleteDonor: deleteDonor
+    deleteIp: deleteIp
   };
   
-  export default connect(mapStateToProps, mapActionToProps)(DonorListManager);
+  export default connect(mapStateToProps, mapActionToProps)(IpListManager);

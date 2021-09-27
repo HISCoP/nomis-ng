@@ -27,6 +27,9 @@ const ReportPage = React.lazy(() => import("./views/admin//Reports/ReportingPage
 const ReportView = React.lazy(() => import("./views/admin/Reports/ReportView"));
 const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"));
 const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
+const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
+const DonorIpManager = React.lazy(() => import("./views/admin/DonorIpManager/DonorIpManager"));
+const CboDonorIpManager = React.lazy(() => import("./views/admin/CboDonorIpManager/CboDonorIpManager"));
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: Dashboard },
@@ -47,14 +50,15 @@ const routes = [
   { path: "/domain-service", name: 'Domain Services', component: DomainServices},
   { path: "/user-registration", name: 'User Registration', component: UserRegistration},
   { path: "/roles", name: 'Role', component: Roles},
-  /* The rout to Report*/
   { path: "/report-builder", name: 'Report ', component: ReportBuilderPage},
    { path: "/build-report", name: 'Build Report', component: ReportTemplate},
   { path: "/report", name: 'Report', component: ReportPage},
   { path: "/report-view", name: 'Report View', component: ReportView},
   { path: "/cbo", name: 'CBO ', component: CboManager} ,
   { path: "/donor", name: 'Donor Manager', component: DonorManager} ,
-  
+  { path: "/ip", name: 'IP Manager', component: IpManager} ,
+  { path: "/donor-ip", name: 'Donor-IP Manager', component: DonorIpManager} ,
+  { path: "/cbo-donor-ip", name: 'CBO-Donor-IP Manager', component: CboDonorIpManager} ,
 ];
 
 export default routes;

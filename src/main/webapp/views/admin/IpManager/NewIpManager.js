@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 //import Select from "react-select/creatable";
-import { createDonor, updateDonor  } from "./../../../actions/donors";
+import { createIp, updateIp  } from "./../../../actions/ip";
 import { Spinner } from 'reactstrap';
 
 
@@ -40,13 +40,13 @@ const NewDonor = (props) => {
     }
     
 
-    const createDonorSetup = e => {
+    const createIpSetup = e => {
         
         e.preventDefault()
             setLoading(true);
             const onSuccess = () => {
                 setLoading(false);
-                props.loadDonors();
+                props.loadIps();
                 props.toggleModal()
             }
             const onError = () => {
@@ -54,10 +54,10 @@ const NewDonor = (props) => {
                 props.toggleModal()
             }
             if(formData.id){
-                props.updateDonor(formData.id, formData, onSuccess, onError)
+                props.updateIp(formData.id, formData, onSuccess, onError)
                 return
             }
-            props.createDonor(formData, onSuccess,onError)
+            props.createIp(formData, onSuccess,onError)
 
     }
 
@@ -68,8 +68,8 @@ const NewDonor = (props) => {
             <ToastContainer />
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
-                <Form onSubmit={createDonorSetup}>
-                    <ModalHeader toggle={props.toggleModal}>New Donor Setup </ModalHeader>
+                <Form onSubmit={createIpSetup}>
+                    <ModalHeader toggle={props.toggleModal}>New IP Setup </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
@@ -136,5 +136,5 @@ const NewDonor = (props) => {
 }
 
 
-export default connect(null, {createDonor, updateDonor})(NewDonor);
+export default connect(null, {createIp, updateIp})(NewDonor);
 

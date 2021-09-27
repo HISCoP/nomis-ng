@@ -107,6 +107,24 @@ const HomePage = () => {
             <span className={'pl-2'}>  Donor Setup  </span>
         </Link>
         </Menu.Item>
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "ip", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  IP Setup  </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "donor-ip", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Donor-IP Setup  </span>
+        </Link>
+        </Menu.Item>
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "cbo-donor-ip", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  CBO-Donor-IP Setup  </span>
+        </Link>
+        </Menu.Item>
         {/* <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>Others</span>
