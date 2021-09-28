@@ -118,7 +118,7 @@ const NewDonor = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label for="gender">IP *</Label>
+                                            <Label for="gender">Implementing Partner *</Label>
                                             <Input
                                             type="select"
                                             name="donor"

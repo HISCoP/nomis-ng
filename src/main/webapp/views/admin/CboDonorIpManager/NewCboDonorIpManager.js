@@ -91,14 +91,34 @@ const NewDonor = (props) => {
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
 
                 <Form onSubmit={createIpSetup}>
-                    <ModalHeader toggle={props.toggleModal}>New CBO-DONOR-IP Setup </ModalHeader>
+                    <ModalHeader toggle={props.toggleModal}>NEW CBO-DONOR-IMPLEMENTING PARTNERS SETUP </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
+                                <Col md={12}>
+                                        <FormGroup>
+                                            <Label for="gender">Donors *</Label>
+                                            <Input
+                                            type="select"
+                                            name="donor"
+                                            id="donor"
+                                            value={defaultValues.donor}
+                                            onChange={handleInputChange}
+                                            required
+                                            >
+                                            <option value=""> </option>
+                                            {donorList.map(({ label, value }) => (
+                                                <option key={value} value={value}>
+                                                {label}
+                                                </option>
+                                            ))}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label for="gender">IP *</Label>
+                                            <Label for="gender">Implementing Partners *</Label>
                                             <Input
                                             type="select"
                                             name="donor"
@@ -138,35 +158,24 @@ const NewDonor = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label>Name</Label>
+                                            <Label for="gender">Location *</Label>
                                             <Input
-                                                type='text'
-                                                name='name'
-                                                id='name'
-                                                placeholder=' '
-                                                value={formData.name}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
+                                            type="select"
+                                            name="donor"
+                                            id="donor"
+                                            value={defaultValues.donor}
+                                            onChange={handleInputChange}
+                                            required
+                                            >
+                                            <option value=""> </option>
+                                            {donorList.map(({ label, value }) => (
+                                                <option key={value} value={value}>
+                                                {label}
+                                                </option>
+                                            ))}
+                                            </Input>
                                         </FormGroup>
                                     </Col>
-
-                                    <Col md={12}>
-                                        <FormGroup>
-                                            <Label>Description</Label>
-                                            <Input
-                                                type='text'
-                                                name='description'
-                                                id='description'
-                                                placeholder=' '
-                                                value={formData.description}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </FormGroup>
-                                    </Col>
-
-                                   
                                     
                                 </Row>
 
