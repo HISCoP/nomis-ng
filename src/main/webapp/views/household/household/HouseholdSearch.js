@@ -63,7 +63,7 @@ const HouseHoldList = (props) => {
         <CCol>
           <CCard>
             <CCardHeader>
-             Find Household
+              Household Vulnerability Assessment
 
               <CButton 
                   color="primary" 
@@ -80,7 +80,7 @@ const HouseHoldList = (props) => {
                   { title: 'Total OVC', field: 'ovc', type: 'numeric' },
                   {
                     title: 'Status',
-                    field: 'status',
+                    field: 'staus',
                     
                   },
                   {

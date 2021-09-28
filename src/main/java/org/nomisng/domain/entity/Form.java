@@ -12,14 +12,16 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @EqualsAndHashCode
 @Table(name = "form")
-public class Form extends JsonBEntity {
+public class Form extends JsonBEntity implements Serializable {
 
     @Id
     @Column(name = "id", updatable = false)
@@ -105,4 +107,9 @@ public class Form extends JsonBEntity {
             this.code = UUID.randomUUID().toString();
         }
     }*/
+
+    @OneToMany(mappedBy = "formByFormCode")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<Encounter> FormByFormCode;
 }

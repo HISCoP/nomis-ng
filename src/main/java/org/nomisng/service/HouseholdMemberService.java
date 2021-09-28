@@ -7,16 +7,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
+import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
+import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.HouseholdMember;
+import org.nomisng.domain.mapper.EncounterMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
 import org.nomisng.repository.HouseholdMemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.nomisng.util.Constants.ArchiveStatus.*;
 
@@ -28,6 +34,8 @@ public class HouseholdMemberService {
     private final HouseholdMemberRepository householdMemberRepository;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdMapper householdMapper;
+    private final EncounterMapper encounterMapper;
+    private final EncounterService encounterService;
     private ObjectMapper mapper = new ObjectMapper();
     private String firstName = "firstName";
     private String lastName = "lastName";
@@ -67,6 +75,17 @@ public class HouseholdMemberService {
         HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
         return householdMapper.toHouseholdDTO(householdMember.getHouseholdByHouseholdId());
+    }
+
+    public List<EncounterDTO> getEncountersByHouseholdMemberId(Long id) {
+        HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
+        List<Encounter> encounters = householdMember.getEncounterByHouseholdMemberId().stream()
+                .map(encounter -> encounterService.addFirstNameAndLastNameAndFormNameToEncounter(encounter))
+                .filter(encounter -> encounter.getArchived() != null && encounter.getArchived()== UN_ARCHIVED)// get all unarchived
+                .sorted(Comparator.comparing(Encounter::getId).reversed()) // by id reversed/descending order
+                .collect(Collectors.toList());
+        return encounterMapper.toEncounterDTOS(encounters);
     }
 
     public HouseholdMember update(Long id, HouseholdMemberDTO householdMemberDTO) {

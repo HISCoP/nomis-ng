@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.domain.dto.*;
 import org.nomisng.domain.entity.*;
+import org.nomisng.domain.mapper.EncounterMapper;
 import org.nomisng.domain.mapper.HouseholdAddressMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
@@ -26,12 +27,13 @@ public class HouseholdService {
     private final HouseholdRepository householdRepository;
     private final HouseholdMemberRepository householdMemberRepository;
     private final HouseholdAddressRepository householdAddressRepository;
-    private final EncounterRepository encounterRepository;
+    private final EncounterMapper encounterMapper;
     private final HouseholdMapper householdMapper;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdAddressMapper householdAddressMapper;
     private static final int ACTIVE_HOUSEHOLD_ADDRESS = 1;
     private static final int INACTIVE_HOUSEHOLD_ADDRESS = 0;
+    private final EncounterService encounterService;
 
     private Long organisationUnitId = 1L;
 
@@ -58,11 +60,17 @@ public class HouseholdService {
         return householdMapper.toHouseholdDTO(household, householdMemberDTOS, householdAddressDTOS);
     }
 
-    //TODO: still in progress
-    public List<Encounter> getEncounterByHouseholdId(Long id) {
-        //Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
-                //.orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
-        return encounterRepository.findAllHouseholdMemberAndArchived(id, UN_ARCHIVED, UN_ARCHIVED);
+    public List<EncounterDTO> getEncounterByHouseholdId(Long householdId) {
+        Household household = householdRepository.findByIdAndArchived(householdId, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "householdId", householdId+""));
+
+        List<Encounter> encounters = household.getEncountersById().stream()
+                .filter(encounter ->encounter.getArchived()!= null && encounter.getArchived()== UN_ARCHIVED)
+                .map(encounter -> encounterService.addFirstNameAndLastNameAndFormNameToEncounter(encounter))
+                .sorted(Comparator.comparing(Encounter::getId).reversed())
+                .collect(Collectors.toList());
+
+        return encounterMapper.toEncounterDTOS(encounters);
     }
 
     public Household update(Long id, HouseholdDTO householdDTO) {

@@ -1,23 +1,74 @@
 import React, {useState} from 'react';
-import {CButton, CCol, CRow, CCard, CDataTable, CCardBody} from "@coreui/react";
-import {Icon} from "semantic-ui-react";
-import {CChartBar} from "@coreui/react-chartjs";
+import {CButton, CCol, CRow} from "@coreui/react";
 import MaterialTable from 'material-table';
 import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+import {toast} from "react-toastify";
+import axios from "axios";
+import {url} from "../../../api";
+import * as CODES from './../../../api/codes'
+import FormRendererModal from "../../formBuilder/FormRendererModal";
 
-const Assessment = () => {
+const Assessment = (props) => {
     const [modal, setModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [assessmentList, setAssessmentList] = useState([]);
     const toggle = () => setModal(!modal);
-    const usersData = [
-        {pending: 0, totalServices: '10', dateCreated: '2018/01/01', inProgress: '3', completed: '7'},
-        {pending: 1, totalServices: '7', dateCreated: '2018/01/01', inProgress: '2', completed: '4'},
-        {pending: 2, totalServices: '5', dateCreated: '2018/02/01', inProgress: '3', completed: '0'}
-];
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [currentForm, setCurrentForm] = useState(false);
+
+    const onSuccess = () => {
+        fetchAssessments();
+        toast.success("Form saved successfully!");
+        setShowFormModal(false);
+    }
+    const viewForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "VIEW", formCode: CODES.HOUSEHOLD_ASSESSMENT   });
+        setShowFormModal(true);
+    }
+
+    const editForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "EDIT", formCode: CODES.HOUSEHOLD_ASSESSMENT  });
+        setShowFormModal(true);
+    }
+
+    React.useEffect(() => {
+       fetchAssessments();
+    }, [props.householdId]);
+
+    const fetchAssessments = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+
+        const onError = () => {
+            setLoading(false);
+            toast.error('Error: Could not fetch household assessments!');
+        }
+        axios
+            .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
+            .then(response => {
+                setAssessmentList(response.data)
+                if(onSuccess){
+                    onSuccess();
+                }
+            })
+            .catch(error => {
+                    if(onError){
+                        onError();
+                    }
+                }
+
+            );
+    }
+
     return (
         <>
             <CRow >
                 <CCol xs="12" className={"pb-3"}>
-                    <CButton color={"primary"} className="float-right" onClick={toggle}> New Assessment</CButton>
+                    <CButton color={"primary"} className="float-right" onClick={toggle} > New Assessment</CButton>
                 </CCol>
             </CRow>
 
@@ -25,23 +76,24 @@ const Assessment = () => {
                 <CCol xs={"12"}>
                     <MaterialTable
                         title="Assessment History"
+                        isLoading={loading}
                         columns={[
-                            { title: 'Date Created', field: 'dateCreated' },
-                            { title: 'Total Yes', field: 'totalServices' },
-                            { title: 'Total No', field: 'pending' },
-                            { title: 'Total N/A', field: 'inProgress' },
+                            { title: 'Date Created', field: 'data.assessmentDate' },
+                            { title: 'Total Yes', field: 'data.totalYes' },
+                            { title: 'Total No', field: 'data.totalNo' },
+                            { title: 'Total N/A', field: 'data.totalNa' },
                         ]}
-                        data={usersData}
+                        data={assessmentList}
                         actions={[
                             {
                                 icon: 'edit',
                                 tooltip: 'edit Form',
-                                onClick: (event, rowData) => alert("You want to edit " + rowData.name)
+                                onClick: (event, rowData) => editForm(rowData)
                             },
                             rowData => ({
                                 icon: 'visibility',
                                 tooltip: 'View Form',
-                                onClick: (event, rowData) => alert("You want to view " + rowData.name)
+                                onClick: (event, rowData) => viewForm(rowData)
 
                             })
                         ]}
@@ -52,7 +104,15 @@ const Assessment = () => {
                     />
                 </CCol>
             </CRow>
-            <NewHouseHoldAssessment  modal={modal} toggle={toggle}/>
+            <FormRendererModal
+                showModal={showFormModal}
+                setShowModal={setShowFormModal}
+                currentForm={currentForm}
+                onSuccess={onSuccess}
+                //onError={onError}
+                options={{modalSize:"xl"}}
+            />
+            <NewHouseHoldAssessment  modal={modal} toggle={toggle} householdId={props.householdId} reloadSearch={fetchAssessments}/>
         </>
     )
 }

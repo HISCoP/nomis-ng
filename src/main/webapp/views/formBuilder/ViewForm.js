@@ -14,8 +14,7 @@ import {
     Input,
     Label,
     Col,
-    Row,
-    Modal, ModalBody, ModalHeader, CardBody, ModalFooter
+    Row, CardBody
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
@@ -30,6 +29,9 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import 'formiojs/dist/formio.builder.min.css';
 import CustomSelect from "./customComponents/CustomSelect";
+import {CModal, CModalBody, CModalHeader, CModalFooter} from "@coreui/react";
+import {fetchHouseHoldMemberById} from "../../actions/houseHoldMember";
+import {fetchHouseHoldById} from "../../actions/houseHold";
 
 Formio.use(CustomSelect);
 
@@ -50,7 +52,10 @@ const Update = props => {
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [displayType, setDisplayType] = React.useState("");
     const [formCode, setformCode] = React.useState();
-    //const [FormPrecedenceList, setFormPrecedenceList] = React.useState();
+    const [previewHHMemberId, setPreviewHHMemberId] = React.useState("7898");
+    const [previewHHId, setPreviewHHId] = React.useState("FCT-IO-PO-989");
+    const [fetchingMember, setFetchingMember] = useState(true);
+    const [fetchingHousehold, setFetchingHousehold] = useState(true);
     const [form2, setform2] = React.useState();
     const classes = useStyles();
     let myform;
@@ -92,6 +97,28 @@ const Update = props => {
         }
         fetchFormByCode();
     }, []);
+
+    useEffect(() => {
+        setFetchingMember(true);
+        const onSuccess = () => {
+            setFetchingMember(false);
+        };
+        const onError = () => {
+            setFetchingMember(false);
+        };
+        props.fetchHouseHoldMemberById(previewHHMemberId, onSuccess, onError);
+    }, [previewHHMemberId]);
+
+    useEffect(() => {
+        setFetchingHousehold(true);
+        const onSuccess = () => {
+            setFetchingHousehold(false);
+        };
+        const onError = () => {
+            setFetchingHousehold(false);
+        };
+        props.fetchHouseHoldById(previewHHId, onSuccess, onError);
+    }, [previewHHId]);
 
     const handleFileRead = (e) => {
         const content = fileReader.result;
@@ -165,7 +192,7 @@ const Update = props => {
                                 {/*only render form when loading is false and form2 has a value*/}
                                 { !loading && form2 ?
                                     <FormBuilder form={form2.resourceObject || {}} {...props}
-                                                 submission={{data :{baseUrl:url}}}
+                                                 submission={{data :{baseUrl:url, householdMember: props.member, household:props.hh}}}
                                                  onChange={(schema) => {
                                                      // console.log(JSON.stringify(schema));
                                                      setRes(JSON.stringify(schema));
@@ -197,52 +224,57 @@ const Update = props => {
 
 
                 {/*preview modal start*/}
-                <Modal isOpen={showModal} toggle={toggleModal} size="xl">
-                    <ModalHeader toggle={toggleModal}><h4>View Form</h4> </ModalHeader>
-                    <ModalBody>
+                {showModal &&
+                <CModal show={showModal} onClose={toggleModal} backdrop={true} size='xl'>
+                    <CModalHeader closeButton>View Form</CModalHeader>
+                    <CModalBody>
                         <Card>
                             <CardContent>
 
-                                <hr />
-                                <Errors errors={props.errors} />
+                                <hr/>
+                                <Errors errors={props.errors}/>
                                 {!res ? "" :
                                     <Form
                                         form={JSON.parse(res)}
                                         ref={form => myform = form}
-                                        submission={{data : {authHeader: authHeader(), baseUrl:url}}}
+                                        submission={{
+                                            data: {
+                                                authHeader: authHeader(),
+                                                baseUrl: url,
+                                                household: props.household
+                                            }
+                                        }}
                                         //src={url}
                                         hideComponents={props.hideComponents}
                                         //onSubmit={props.onSubmit}
                                         onSubmit={(submission) => {
+
+                                            delete submission.data.householdMember;
+                                            delete submission.data.household;
+                                            delete submission.data.authHeader;
+                                            delete submission.data.submit;
+                                            delete submission.data.baseUrl;
                                             console.log(submission);
-                                            return fetch('https://lp-base-app.herokuapp.com/api/', {
-                                                body: JSON.stringify(submission),
-                                                headers: {
-                                                    'content-type': 'application/json'
-                                                },
-                                                method: 'POST',
-                                                mode: 'cors',
-                                            }).then(res => {
-                                                console.log(res);
-                                              //  myform.emit('submitDone', submission);
-                                            })}}
+                                            return alert(JSON.stringify(submission))
+                                        }}
                                     />
                                 }
                                 <br></br>
                             </CardContent>
                         </Card>
-                    </ModalBody>
-                    <ModalFooter>
+                    </CModalBody>
+                    <CModalFooter>
                         <MatButton
                             variant='contained'
                             color='default'
                             onClick={toggleModal}
-                            startIcon={<CancelIcon />}
+                            startIcon={<CancelIcon/>}
                         >
                             Cancel
                         </MatButton>
-                    </ModalFooter>
-                </Modal>
+                    </CModalFooter>
+                </CModal>
+                }
                 <hr></hr>
 
             </CardBody>
@@ -252,14 +284,19 @@ const Update = props => {
 
 const mapStateToProps =  (state = { form:{}}) => {
     return {
+        household: state.houseHold.household,
         services: state.formReducers.services,
         formList: state.formReducers.form,
+        member: state.houseHoldMember.member,
+        hh: state.houseHold.household
     }}
 
 const mapActionsToProps = ({
     fetchById: fetchById,
     updateForm: updateForm,
     fetchService: fetchService,
+    fetchHouseHoldMemberById: fetchHouseHoldMemberById,
+    fetchHouseHoldById: fetchHouseHoldById,
 })
 
 export default connect(mapStateToProps, mapActionsToProps)(Update)

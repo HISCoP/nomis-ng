@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import * as CODES from './../../../api/codes'
 import FormRenderer from './../../formBuilder/FormRenderer'
 import {connect} from "react-redux";
@@ -9,7 +8,7 @@ import {url} from "../../../api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import {fetchHouseHoldById} from "./../../../actions/houseHold";
+import {CModal, CModalBody, CModalHeader} from "@coreui/react";
 
 
 const NewHouseHold = (props) => {
@@ -108,37 +107,37 @@ const saveAssessment = (e) => {
   return (
     <div>
         {props.household && props.household.id ?
-            <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='xl'>
-                <ModalHeader toggle={props.toggle}>Edit HouseHold</ModalHeader>
-                <ModalBody>
+            <CModal show={props.modal} onClose={props.toggle} className={className} backdrop={true} size='xl'>
+                <CModalHeader closeButton>Edit HouseHold</CModalHeader>
+                <CModalBody>
                     <ToastContainer/>
                     <FormRenderer
                         formCode={currentForm.code}
                         submission={props.household && props.household.details ? {data:props.household.details} : null}
                         onSubmit={updateAssessment}
                     />
-                </ModalBody>
+                </CModalBody>
                 {/* <ModalFooter>
           <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
           <Button color="secondary" onClick={props.toggle}>Cancel</Button>
         </ModalFooter> */}
-            </Modal>
+            </CModal>
             :
-            <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='xl'>
-                <ModalHeader toggle={props.toggle}>New HouseHold</ModalHeader>
-                <ModalBody>
+            <CModal show={props.modal} onClose={props.toggle} className={className} backdrop={true} size='xl'>
+                <CModalHeader closeButton>New HouseHold</CModalHeader>
+                <CModalBody>
                     <ToastContainer/>
                     <FormRenderer
                         formCode={currentForm.code}
                         programCode=""
                         onSubmit={saveAssessment}
                     />
-                </ModalBody>
+                </CModalBody>
                 {/* <ModalFooter>
           <Button color="primary" onClick={props.toggle}>Save</Button>{' '}
           <Button color="secondary" onClick={props.toggle}>Cancel</Button>
         </ModalFooter> */}
-            </Modal>
+            </CModal>
 
 
         }

@@ -45,7 +45,7 @@ public class User {
     @Basic
     @Column(name = "archived")
     @NonNull
-    private Integer archived = 1;
+    private Integer archived = 0;
 
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
@@ -104,7 +104,6 @@ public class User {
 
     @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.PERSIST)
     private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits;
-
 
     @ManyToOne
     @JoinColumn(name = "current_organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)

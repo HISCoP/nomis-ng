@@ -57,7 +57,7 @@ const HouseholdHomePage = (props) => {
             <CRow>
 
                 <CCol sm="3" lg="3">
-            <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+            <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#096150'}}>
                 <Menu.Item header className={'p-4'}>
                     <HouseHoldInfo household={props.hh}/>
                 </Menu.Item>
@@ -107,16 +107,24 @@ const HouseholdHomePage = (props) => {
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >
+                            {activeItem === "dashboard" &&
                             <HouseholdDashboard household={props.hh}/>
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'members'} >
+                            {activeItem === "members" &&
                             <HouseholdMember houseHoldId={houseHoldId}/>
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'careplan'} >
-                           <AssessmentCarePlanHome/>
+                            {activeItem === "careplan" &&
+                            <AssessmentCarePlanHome householdId={houseHoldId}/>
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                           <HouseholdService householdId={houseHoldId}/>
+                            {activeItem === "services" &&
+                            <HouseholdService householdId={houseHoldId} activeItem={activeItem}/>
+                            }
                         </CTabPane>
                     </CTabContent>
 
@@ -151,12 +159,12 @@ const HouseHoldInfo = (props) => {
                     <span>Date Of Assessment: <small>{props.household.details.assessmentDate || 'Nil'}</small> </span><br/>
                     <span>Primary Caregiver Name: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName: 'Nil' } </small></span><br/>
                     <span>Phone: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.mobilePhoneNumber : 'Nil' }</small></span><br/>
-                    <span>Sex: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.sex ? props.household.details.primaryCareGiver.sex.display : 'Nil' }</small></span><br/>
+                    <span>Sex: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.sex && props.household.details.primaryCareGiver.sex.display ? props.household.details.primaryCareGiver.sex.display : (props.household.details.primaryCareGiver.sex === 2 ? "Male" : "Female") }</small></span><br/>
                             {props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.dob ?
                     <span>Age: <small>{calculateAge(  props.household.details.primaryCareGiver.dob)} | {props.household.details.primaryCareGiver.dob}</small></span> :
                                 <span>Age: <small>Nil</small></span>
                             }<br/>
-                    <span>Marital Status: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.maritalStatus : 'Nil' }</small></span><br/>
+                    <span>Marital Status: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.maritalStatus.display : 'Nil' }</small></span><br/>
                     <span>Occupation: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.occupation ? props.household.details.primaryCareGiver.occupation : 'Nil' }</small></span><br/>
                     </> : <></>}
                 </CCol>

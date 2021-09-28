@@ -10,13 +10,15 @@ import java.util.Optional;
 
 @Repository
 public interface OvcServiceRepository extends JpaRepository<OvcService, Long>, JpaSpecificationExecutor {
-    String findByCode(String Code);
 
     Optional<OvcService> findProgramByCodeAndArchived(String Code, int archived);
-
 
     Optional<OvcService> findByIdAndArchived(Long id, int archived);
 
     List<OvcService> findAllByArchivedOrderByIdDesc(int archived);
+
+    Optional<OvcService> findByNameAndServiceTypeAndArchived(String name, int serviceType, int archived);
+
+    List<OvcService> findByServiceTypeAndArchived(Integer serviceType, int archived);
 }
 

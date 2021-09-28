@@ -6,14 +6,14 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.List;
 
-@Entity
 @Data
+@Entity
 @EqualsAndHashCode
 @Table(name = "organisation_unit_level")
-public class OrganisationUnitLevel extends Audit {
+public class OrganisationUnitLevel implements Serializable {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,18 +29,15 @@ public class OrganisationUnitLevel extends Audit {
 
     @Basic
     @Column(name = "archived")
+    @JsonIgnore
     private Integer archived = 0;
 
     @Basic
     @Column(name = "status")
-    private Integer status;
+    private int status;
 
     @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")
     @ToString.Exclude
     @JsonIgnore
-    private Collection<OrganisationUnit> organisationUnitsById;
-
-    @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")
-    @ToString.Exclude
-    private Collection<OrganisationUnitHierarchy> organisationUnitHierarchiesById;
+    public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById;
 }

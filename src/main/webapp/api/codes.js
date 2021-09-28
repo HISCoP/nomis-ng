@@ -35,7 +35,8 @@ export const DATA_VISUALIZATION = '738ed64d-f96b-433f-a096-13896f7a3509'
 export const BIOMETRICS_CAPTURE_FORM = 'e8a5260c-3f07-404e-a718-cd7f669c9aae'
 export const VULNERABLE_CHILDREN_ENROLMENT_FORM = 'afde4bd9-d3ac-44f4-ae78-1e2fd9fcaead'
 export const CARE_GIVER_ENROLMENT_FORM = '5457c394-4c2a-47c6-8a77-745e513bd3c6'
-
+export const  ChildServiceFrom= '6b8e6617-7182-40d0-9e8c-d6f33e9f4325'
+export const CARE_PLAN = 'c4666b04-9357-4229-8683-de5efed78ab7'
 /**
  * @CODES
  * ==============================================
@@ -77,7 +78,7 @@ export const RADIOLOGY_ORDER_STATUS = [{name:"Result Available", id: 1},
  */
 
 export const GENERAL_SERVICE = '25216afc-d158-4696-ada6-00df609b9a4c'
-export const RETROSPECTIVE_SERVICE = 'eca42373-057d-4a18-be50-622ceba0d931'
+
 
 /**
  * @CODES
