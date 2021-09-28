@@ -97,7 +97,7 @@ const MemberCard = (props) => {
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home", state: props.member.id
                 }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName }</span></Link><br/>
-                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  :(props.member.details.sex === 2 ? "Male" : "Female") } | {calculateAge(props.member.details.dob)} </span>
+                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>
             <CCardFooter>

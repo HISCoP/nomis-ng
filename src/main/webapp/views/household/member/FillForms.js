@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { CCol, CRow, CButton, CAlert, CCardHeader, CCard, CCardBody} from "@coreui/react";
-import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
-import MaterialTable from 'material-table';
-import { Tab } from 'semantic-ui-react'
-import ProvideService from './ProvideService';
-import {Col, FormGroup, Input, Label} from "reactstrap";
+import { CCol, CRow, CButton, CAlert, CCardHeader, CCard, CCardBody, CModal, CModalBody, CModalHeader} from "@coreui/react";
+import {Col, FormGroup, Input, Label, Modal, ModalBody, ModalHeader} from "reactstrap";
 import moment from "moment";
 import {toast, ToastContainer} from "react-toastify";
 import axios from "axios";
@@ -102,6 +98,18 @@ const FillForm = (props) => {
             </CRow>
             </CCardBody>
             </CCard>
+        }
+        {showFormPage &&
+        <CModal show={showFormPage} onClose={() => setShowForm(false)} backdrop={true} size='lg'>
+            <CModalHeader closeButton>New Care Giver</CModalHeader>
+            <CModalBody>
+                <FormRenderer
+                    formCode={selectedForm}
+                    householdMemberId={props.member.id}
+                    onSuccess={onSuccess}
+                />
+            </CModalBody>
+        </CModal>
         }
         {showFormPage &&
             <CCard>

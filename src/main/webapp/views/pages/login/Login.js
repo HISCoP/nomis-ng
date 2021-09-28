@@ -102,7 +102,7 @@ const Login = () => {
                 <CCardBody>
                 
                   <CForm onSubmit={handleLogin}>
-                    <h1 style={{color:'#021F54'}}>Login</h1>
+                    <h1 style={{color:'#0b795f'}}>Login</h1>
                     
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
@@ -135,7 +135,7 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs="12">
-                        <CButton style={{ backgroundColor:'#021F54', color:'#fff' }} className="px-4" onClick={handleLogin} disabled={isButtonDisabled}>{submitText}</CButton>
+                        <CButton style={{ backgroundColor:'#0b795f', color:'#fff' }} className="px-4" onClick={handleLogin} disabled={isButtonDisabled}>{submitText}</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
                         {/* <CButton color="link" className="px-0">Forgot password?</CButton> */}
@@ -147,10 +147,10 @@ const Login = () => {
                
                 </CCardBody>
               </CCard>
-              <CCard  style={{ backgroundColor:'#021F54' }} className="text-white py-5 d-md-down-none p-19">
-                <CCardBody className="text-center" style={{ backgroundColor:'#021F54' }}>
+              <CCard  style={{ backgroundColor:'#0b795f' }} className="text-white py-5 d-md-down-none p-19">
+                <CCardBody className="text-center" style={{ backgroundColor:'#0b795f' }}>
                   <div>
-                    <h1 style={{color:'#2EB85C'}}>NOMIS</h1>
+                    <h1 style={{color:'#fff'}}>NOMIS</h1>
                     <p> National OVC Management Information System  </p>
                     
                     <Link to="/register">

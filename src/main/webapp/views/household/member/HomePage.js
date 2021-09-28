@@ -65,7 +65,7 @@ const HomePage = (props) => {
             }
             <CRow>
                 <CCol sm="3" lg="3">
-                    <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+                    <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#026466'}}>
                         <Menu.Item header className={'p-4'}>
                             <InfoSection member={props.member && props.member.details ? props.member.details : props.member} householdMemberType={props.member ? props.member.householdMemberType : ''}/>
                         </Menu.Item>

@@ -57,7 +57,7 @@ const HouseholdHomePage = (props) => {
             <CRow>
 
                 <CCol sm="3" lg="3">
-            <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+            <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#096150'}}>
                 <Menu.Item header className={'p-4'}>
                     <HouseHoldInfo household={props.hh}/>
                 </Menu.Item>
@@ -164,7 +164,7 @@ const HouseHoldInfo = (props) => {
                     <span>Age: <small>{calculateAge(  props.household.details.primaryCareGiver.dob)} | {props.household.details.primaryCareGiver.dob}</small></span> :
                                 <span>Age: <small>Nil</small></span>
                             }<br/>
-                    <span>Marital Status: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.maritalStatus : 'Nil' }</small></span><br/>
+                    <span>Marital Status: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.maritalStatus.display : 'Nil' }</small></span><br/>
                     <span>Occupation: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.occupation ? props.household.details.primaryCareGiver.occupation : 'Nil' }</small></span><br/>
                     </> : <></>}
                 </CCol>

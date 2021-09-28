@@ -43,7 +43,7 @@ const HomePage = (props) => {
             <CRow>
                 <CCol sm="3" lg="3">
                     {/*className={'bg-success'}*/}
-             <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+             <Menu vertical fluid inverted style={{backgroundColor:'#026466'}}>
 
         <Menu.Item
           name='messages'
