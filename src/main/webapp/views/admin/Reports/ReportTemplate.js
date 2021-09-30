@@ -111,12 +111,12 @@ const CreateReports = props => {
                                         </FormGroup>
                                     </Col> */}
 
-                                <Col md={4}><FormGroup>
+                                <Col md={6}><FormGroup>
                                     <Label class="sr-only">Report Name</Label>
                                     <Input type="text" class="form-control" id="name" name="name" value={name}   onChange={e => setname(e.target.value)} required/>
                                 </FormGroup> </Col>
 
-                                <Col md={4}> <FormGroup>
+                                <Col md={6}> <FormGroup>
                                     <Label class="sr-only">Description</Label>
                                     <Input type="text" class="form-control" id="description" name="description" value={description}   onChange={e => setdescription(e.target.value)} required/>
                                 </FormGroup></Col>
