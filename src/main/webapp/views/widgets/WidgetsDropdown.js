@@ -23,7 +23,8 @@ const WidgetsDropdown = () => {
     <CRow>
       <CCol sm="6" lg="3">
         <CWidgetDropdown
-          color="gradient-primary"
+
+          color="xing"
           header="290"
           text="Total Household"
           footerSlot={
@@ -32,8 +33,8 @@ const WidgetsDropdown = () => {
               className="c-chart-wrapper mt-3 mx-3"
               style={{height: '70px'}}
               dataPoints={[65, 59, 84, 84, 51, 55, 40]}
-              pointHoverBackgroundColor="primary"
-              label="OVC"
+              pointHoverBackgroundColor="secondary"
+              label="VC"
               labels="months"
             />
           }
@@ -46,16 +47,16 @@ const WidgetsDropdown = () => {
 
       <CCol sm="6" lg="3">
         <CWidgetDropdown
-          color="gradient-info"
+          color="vimeo"
           header="230"
-          text="Total OVC"
+          text="Total VC"
           footerSlot={
             <ChartLineSimple
               pointed
               className="mt-3 mx-3"
               style={{height: '70px'}}
               dataPoints={[1, 18, 9, 17, 34, 22, 11]}
-              pointHoverBackgroundColor="info"
+              pointHoverBackgroundColor="success"
               options={{ elements: { line: { tension: 0.00001 }}}}
               label="Members"
               labels="months"
@@ -72,7 +73,7 @@ const WidgetsDropdown = () => {
         <CWidgetDropdown
           color="gradient-warning"
           header="14"
-          text="Total  OVC Graduated"
+          text="Total  VC Graduated"
           footerSlot={
             <ChartLineSimple
               className="mt-3"

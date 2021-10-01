@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface FormDataRepository extends JpaRepository<FormData, Long>, JpaSpecificationExecutor {
     Optional<FormData> findByIdAndArchived(Long id, int archived);
 
-    Optional<FormData> findByIdAndArchivedAndOrganisationUnitId(Long id, int archived, Long organisationUnitId);
+    //Optional<FormData> findByIdAndArchived(Long id, int archived, Long organisationUnitId);
 
-    List<FormData> findAllByArchivedAndOrganisationUnitIdOrderByIdDesc(int archived, Long organisationUnitId);
+    List<FormData> findAllByArchivedOrderByIdDesc(int archived);
 
     //List<FormData> findAllByEncounterIdAndArchivedAndOrganisationUnitIdOrderByIdDesc(Long encounterId, int archived, Long organisationUnitId);
 

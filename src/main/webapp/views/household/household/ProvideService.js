@@ -55,15 +55,15 @@ const ProvideService = (props) => {
   const fetchServices = () => {
     setFetchingServices(true);
     axios
-        .get(`${url}ovc-services`)
+        .get(`${url}ovc-services/0`)
         .then(response => {
           let services = response.data;
-          let domains = services.map(x => x.domainId);
+          let domains = services.map(x => x.domainName);
           let distinctDomain = new Set(domains);
           let serviceArray = [];
-          distinctDomain.forEach((domainId) => {
-            const domainServices = services.filter(service => service.domainId === domainId).map(x => ({...x, value :x.id, label:x.name}));
-            serviceArray.push({label: domainId, options: domainServices});
+          distinctDomain.forEach((domainName) => {
+            const domainServices = services.filter(service => service.domainName === domainName).map(x => ({...x, value :x.id, label:x.name}));
+            serviceArray.push({label: domainName, options: domainServices});
           });
 
           console.log(serviceArray);
@@ -82,23 +82,6 @@ const ProvideService = (props) => {
       console.log(values);
     setSelectedService(values);
   }
-  const saveAssessment = (e) => {
-    console.log(props)
-    const onSuccess = () => {
-        props.toggle();
-    };
-    const onError = () => {
-        props.toggle();
-    };
-
-      formData['dateEncounter'] = e.data.dataGrid[0].date;
-      formData['formCode'] = CODES.Caregiver_Household_Service;
-      formData['data'] = e.data.dataGrid ;
-      formData['householdMemberId'] = props.memberId;
-    
-    console.log(formData)
-    props.createProvideService(formData,onSuccess, onError);
-};
 
   const setDate = (e) => {
       setServiceDate(e.target.value);
@@ -125,7 +108,8 @@ const ProvideService = (props) => {
       }
       formData['dateEncounter'] = moment(serviceDate);
       formData['formCode'] = CODES.Caregiver_Household_Service;
-      formData['data'] = data ;
+      formData['formData'] = [{data: data}] ;
+      formData['archived'] = 0 ;
       formData['householdMemberId'] = props.memberId;
       console.log(formData)
 
@@ -133,6 +117,9 @@ const ProvideService = (props) => {
           setSaving(false);
           toast.success('Service(s) saved successfully');
           props.toggle();
+          if(props.reloadSearch){
+              props.reloadSearch();
+          }
       };
       const onError = () => {
           setSaving(false);

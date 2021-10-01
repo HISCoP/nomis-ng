@@ -44,3 +44,24 @@ export const fetchHouseHoldMemberById = (id, onSuccess , onError) => dispatch =>
 
         );
 };
+
+export const fetchAllHouseHoldMemberServiceHistory = (id, onSuccess , onError) => dispatch => {
+    axios
+        .get(`${url}household-members/${id}/encounters`)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.FETCH_HOUSEHOLD_MEMBER_SERVICE_HISTORY,
+                payload: response.data
+            });
+            if(onSuccess){
+                onSuccess();
+            }
+        })
+        .catch(error => {
+                if(onError){
+                    onError();
+                }
+            }
+
+        );
+};

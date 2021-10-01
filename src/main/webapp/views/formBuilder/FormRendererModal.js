@@ -36,6 +36,7 @@ const FormRendererModal = (props) => {
             isOpen={props.showModal}
             toggle={toggle}
             zIndex={"9999"}
+            size={"xl"}
             className={
                 props.options && props.options.modalSize ? props.options.modalSize : ""
             }
@@ -46,37 +47,50 @@ const FormRendererModal = (props) => {
                 <Alert color="danger" isOpen={showErrorMsg} toggle={onDismiss}>
                     {errorMsg}
                 </Alert>
+
+                
                 { props.currentForm && (!props.currentForm.type || props.currentForm.type === 'NEW') &&
                 <FormRenderer
-                    patientId={props.patientId}
-                    formCode={props.currentForm.code}
-                    programCode={props.currentForm.programCode}
-                    visitId={props.visitId || props.patient.visitId}
-                    onSuccess={props.onSuccess}
-                    onSubmit={props.currentForm.onSubmit}
-                    typePatient={props.currentForm.typePatient}
-                />
+                householdId={props.householdId}
+                householdMemberId={props.householdMemberId}
+                formCode={props.currentForm.code}
+                onSuccess={props.onSuccess}
+                onSubmit={props.currentForm.onSubmit}
+            />
                 }
 
                 { props.currentForm && props.currentForm.type === 'VIEW' &&
                 <ViewForm
                     formCode={props.currentForm.formCode}
-                    programCode={props.currentForm.programCode}
+                    encounterId={props.currentForm.encounterId}
+                    householdId={props.currentForm.householdId}
+                    householdMemberId={props.currentForm.householdMemberId}
                     onSuccess={props.onSuccess}
                     onSubmit={props.currentForm.onSubmit}
                 />
                 }
 
                 { props.currentForm && props.currentForm.type === 'EDIT' &&
-                <UpdateForm
-                    patientId={props.patientId}
-                    formCode={props.currentForm.formCode}
-                    programCode={props.currentForm.programCode}
-                    visitId={props.visitId || props.patient.visitId}
-                    onSuccess={props.onSuccess}
-                    onSubmit={props.currentForm.onSubmit}
-                    typePatient={props.currentForm.typePatient}
-                    encounterId={props.currentForm.encounterId}/>}
+                    <>
+                        <FormRenderer
+                            householdId={props.currentForm.householdId}
+                            householdMemberId={props.currentForm.householdMemberId}
+                            encounterId={props.currentForm.encounterId}
+                            formCode={props.currentForm.formCode}
+                            onSuccess={props.onSuccess}
+                           // onSubmit={props.currentForm.onSubmit}
+                        />
+                {/*// <UpdateForm*/}
+                {/*//     patientId={props.patientId}*/}
+                {/*//     formCode={props.currentForm.formCode}*/}
+                {/*//     programCode={props.currentForm.programCode}*/}
+                {/*//     visitId={props.visitId || props.patient.visitId}*/}
+                {/*//     onSuccess={props.onSuccess}*/}
+                {/*//     onSubmit={props.currentForm.onSubmit}*/}
+                {/*//     typePatient={props.currentForm.typePatient}*/}
+                {/*//     encounterId={props.currentForm.encounterId}/>*/}
+                </>
+                         }
             </ModalBody>
         </Modal>
     );
@@ -84,7 +98,7 @@ const FormRendererModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        patient: state.patients,
+     //   patient: state.patients,
     };
 };
 

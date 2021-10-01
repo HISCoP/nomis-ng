@@ -5,7 +5,7 @@ import * as actions from "../../actions/formManager";
 import { connect } from "react-redux";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import {Card, Alert, CardBody, Spinner, ModalBody} from "reactstrap";
 // import { fetchLastEncounter } from '../../_services/form-renderer';
 import { url } from "../../api/index";
@@ -15,6 +15,7 @@ import { formRendererService } from "../../_services/form-renderer";
 import _ from 'lodash';
 import {fetchHouseHoldById} from "../../actions/houseHold";
 import {fetchHouseHoldMemberById} from "../../actions/houseHoldMember";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 Moment.locale("en");
 momentLocalizer();
@@ -29,7 +30,7 @@ const FormRenderer = (props) => {
     const [formId, setFormId] = React.useState();
     const [household, setHousehold] = React.useState({});
     const [householdMember, setHouseholdMember] = React.useState({});
-    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { patient: props.patient, baseUrl: url }}));
+    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { household: props.household, baseUrl: url }}));
     const onDismiss = () => setShowErrorMsg(false);
     const options = {
         noAlerts: true,
@@ -45,11 +46,11 @@ const FormRenderer = (props) => {
                 setShowErrorMsg(true);
                 return;
             }
-            //for forms with usage code 0, check if an encounter exists for this patient
-            if(response.data && response.data.usageCode == 0){
-                console.log("fetching encounter")
-                fetchEncounter();
-            }
+            // //for forms with usage code 0, check if an encounter exists for this patient
+            // if(response.data && response.data.usageCode == 0){
+            //     console.log("fetching encounter")
+            //     fetchEncounter();
+            // }
             setForm(response.data);
         }) .catch((error) => {
             setErrorMsg("Error loading form, something went wrong");
@@ -58,8 +59,41 @@ const FormRenderer = (props) => {
         });
     }, []);
 
+    React.useEffect(() => {
+        if(props.encounterId) {
+            formRendererService
+                .fetchEncounterById(props.encounterId)
+                .then((response) => {
+                    setShowLoadingEncounter(false);
+                    const extractedData = extractFormData(response.data.formData);
+                    if (!extractedData) {
+                        setErrorMsg("Could not load encounter information");
+                        setShowErrorMsg(true);
+                    }
+                    setSubmission({data: extractedData.data});
+                    setFormId(extractedData.id);
+                })
+                .catch((error) => {
+                    setErrorMsg("Could not load encounter information");
+                    setShowErrorMsg(true);
+                    setShowLoadingEncounter(false);
+                });
+        }
+    }, []);
 
-    //Add patient info to the submission object. This make patient data accessible within the form
+    //extract the formData as an obj (if form data length is one) or an array
+    const extractFormData = (formData) => {
+        if (!formData) {
+            return null;
+        }
+        if (formData.length === 1) {
+            return formData[0];
+        }
+        return formData.map((item) => {
+            return item;
+        });
+    };
+
     async function fetchEncounter(){
         setShowLoadingEncounter(true);
         let url_slugs = "";
@@ -104,6 +138,7 @@ const FormRenderer = (props) => {
 
     }, []);
 
+
     //Add household data to submission
     React.useEffect(() => {
         setSubmission(_.merge(submission, { data: { household: props.household}}));
@@ -111,8 +146,8 @@ const FormRenderer = (props) => {
 
     //Add householdMember data to submission
     React.useEffect(() => {
-        setSubmission(_.merge(submission, { data: { householdMember: props.houseHoldMember}}));
-    }, [props.houseHoldMember]);
+        setSubmission(_.merge(submission, { data: { householdMember: props.householdMember}}));
+    }, [props.householdMember]);
 
     // Submit form to server
     const submitForm = (submission) => {
@@ -140,20 +175,15 @@ const FormRenderer = (props) => {
         const encounterDate = submission["dateEncounter"]
             ? submission["dateEncounter"]
             : new Date();
-        const formatedDate = Moment(encounterDate).format("DD-MM-YYYY");
+        const formatedDate = Moment(encounterDate);
 
         let data = {
-            data: [submission.data],
-            patientId: props.patientId,
+            formData: [{data:submission.data}],
+            householdId: props.householdId,
+            householdMemberId: props.householdMemberId,
             formCode: props.formCode,
-            programCode: form.programCode,
             dateEncounter: formatedDate,
-            visitId: props.visitId,
         };
-        //if the typePatient is changed
-        if (props.typePatient) {
-            data["typePatient"] = props.typePatient;
-        }
 
         props.saveEncounter(
             data,
@@ -165,6 +195,8 @@ const FormRenderer = (props) => {
     const updateForm = (submission, onSuccess, onError) => {
         const data = {
             data: submission.data,
+            encounterId: props.encounterId,
+            id: formId
         }
 
         formRendererService.updateFormData(formId, data)
@@ -191,6 +223,7 @@ const FormRenderer = (props) => {
 
     return (
         <React.Fragment>
+            <ToastContainer />
             <Card>
                 <CardBody>
                     { props.options && props.hideHeader &&
@@ -225,6 +258,9 @@ const FormRenderer = (props) => {
                             return submitForm(submission);
                         }}
                     />
+                    {showLoading &&
+                    <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                    }
                 </CardBody>
             </Card>
         </React.Fragment>
@@ -234,7 +270,7 @@ const FormRenderer = (props) => {
 const mapStateToProps = (state = { form: {} }) => {
     return {
         household: state.houseHold.household,
-        houseHoldMember: state.houseHoldMember.member,
+        householdMember: state.houseHoldMember.member,
         form: state.programManager.form,
         formEncounter: state.programManager.formEncounter,
         errors: state.programManager.errors,

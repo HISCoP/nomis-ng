@@ -70,8 +70,8 @@ const HouseholdMember = (props) => {
             :
             ""
             }
-            <NewOvc  modal={modal} toggle={toggle} householdId={houseHoldId} reload={fetchMembers}/>
-            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={houseHoldId} reload={fetchMembers}/>
+            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers}/>
+            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers}/>
             
             </>
     );
@@ -97,7 +97,7 @@ const MemberCard = (props) => {
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home", state: props.member.id
                 }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName }</span></Link><br/>
-                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : "Nil" } | {calculateAge(props.member.details.dob)} </span>
+                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>
             <CCardFooter>

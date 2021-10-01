@@ -5,6 +5,7 @@ const initialState = {
   members: [],
   errorMessage: [],
   member: {},
+  serviceHistory: []
 
 }
 
@@ -21,6 +22,9 @@ const houseHoldMemberReducer = (state = initialState, action) => {
 
     case ACTION_TYPES.FETCH_HOUSE_HOLD_MEMBER_BY_ID:
       return { ...state, member: action.payload}
+
+    case ACTION_TYPES.FETCH_HOUSEHOLD_MEMBER_SERVICE_HISTORY:
+      return {...state, serviceHistory: action.payload}
 
     default:
       return state

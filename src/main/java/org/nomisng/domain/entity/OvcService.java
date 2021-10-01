@@ -67,4 +67,7 @@ public class OvcService extends Audit implements Serializable {
             this.archived = 0;
         }
     }
+
+    @Transient
+    private String domainName;
 }

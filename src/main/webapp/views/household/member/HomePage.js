@@ -9,7 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
 import Dashboard from './Dashboard'
 import ServiceHomePage from "./ServiceHistoryPage";
-import Forms from "./Forms";
+import Forms from "./FillForms";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
@@ -65,10 +65,9 @@ const HomePage = (props) => {
             }
             <CRow>
                 <CCol sm="3" lg="3">
-                    <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#021f54'}}>
+                    <Menu className={classes.root} vertical fluid inverted style={{backgroundColor:'#096150'}}>
                         <Menu.Item header className={'p-4'}>
-
-                            <InfoSection member={props.member && props.member.details ? props.member.details : props.member}/>
+                            <InfoSection member={props.member && props.member.details ? props.member.details : props.member} householdMemberType={props.member ? props.member.householdMemberType : ''}/>
                         </Menu.Item>
                         <Menu.Item
                             name='dashboard'
@@ -98,7 +97,7 @@ const HomePage = (props) => {
                         >
                            
                                 <FolderIcon fontSize="large" className={'text-center'}/>
-                                <p>Forms</p>
+                                <p>Other Forms</p>
                           
                         </Menu.Item>
                         <Menu.Item
@@ -125,13 +124,20 @@ const HomePage = (props) => {
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >
-                            <Dashboard member={props.member} household={props.hh} fetchingHousehold={fetchingHousehold} />
+                            {activeItem === "dashboard" &&
+                            <Dashboard member={props.member} household={props.hh} fetchingHousehold={fetchingHousehold}
+                                       />
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
-                            <ServiceHomePage />
+                            {activeItem === "services" &&
+                            <ServiceHomePage member={props.member} />
+                            }
                         </CTabPane>
                         <CTabPane active={activeItem === 'forms'} >
-                            <Forms />
+                            {activeItem === "forms" &&
+                            <Forms member={props.member} />
+                            }
                         </CTabPane>
 
                     </CTabContent>
@@ -148,7 +154,7 @@ const InfoSection = (props) => {
             <CRow>
                 <CCol sm="12" lg="12">
                     <Header as='h3' inverted dividing>
-                        <Icon name='user' />  Member - {props.member.householdMemberType===1?"Caregiver": "OVC" || ''}
+                        <Icon name='user' />  Member - {props.householdMemberType === 1?"Caregiver": "OVC" }
                     </Header>
                 </CCol>
                 <CCol sm="12" lg="12" className={'text-left pt-3'}>
@@ -157,16 +163,16 @@ const InfoSection = (props) => {
                     <span>Unique ID: <small>{props.member ? props.member.uniqueId : 'Nil'} </small></span><br/>
                     <span>Name: <small>{props.member ? props.member.firstName + ' ' + props.member.lastName : 'Nil'} </small></span><br/>
                     <span>Phone: <small>{props.member ? props.member.mobilePhoneNumber : 'Nil'}</small></span><br/>
-                    <span>Sex: <small>{props.member && props.member.sex ? props.member.sex.display : 'Nil'}</small></span> {'  '}
+                    <span>Sex: <small>{props.member && props.member.sex && props.member.sex.display ? props.member.sex.display : (props.member.sex === 2 ? "Male" : "Female")}</small></span> {'  '}
                         {props.member.dob ?
                     <span>Age:  <small>{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
                         <span>Age: <small>Nil</small></span>
                         }<br/>
                     <span>Date Of Assessment: <small>{props.member ? props.member.dateAssessment : 'Nil'}</small> </span><br/><br/>
 
-                    <span>State: <small>-</small></span><br/>
-                    <span>LGA: <small>-</small></span><br/>
-                    <span>CBO: <small>-</small></span><br/>
+                    {/*<span>State: <small>{props.member ? props.member.state : ""}</small></span><br/>*/}
+                    {/*<span>LGA: <small>-</small></span><br/>*/}
+                    {/*<span>CBO: <small>-</small></span><br/>*/}
                     </>}
                 </CCol>
             </CRow>

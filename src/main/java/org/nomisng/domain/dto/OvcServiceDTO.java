@@ -15,5 +15,7 @@ public class OvcServiceDTO {
 
     private Integer archived;
 
-    private int serviceType;
+    private Integer serviceType;
+
+    private String domainName;
 }

@@ -19,7 +19,7 @@ public interface EncounterMapper {
 
     List<Encounter> toEncounters(List<EncounterDTO> encounterDTOS);
 
-    List<EncounterDTO> toEncounterDTO(List<Encounter> encounters);
+    List<EncounterDTO> toEncounterDTOS(List<Encounter> encounters);
 
     EncounterDTO toEncounterDTO(Encounter encounter);
 

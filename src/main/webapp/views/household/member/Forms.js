@@ -35,14 +35,15 @@ const ServicePage = (props) => {
         <>
             <CRow>
                 <CCol xs="12">
-                <CAlert
-                    color="success"
-                    closeButton
-                    show={open}
-                >
-                    Service Saved!  <CLink className="alert-link" onClick={() => props.setIndex(1)}>Click here to fill all supporting forms!</CLink>.
-                </CAlert>
+                {/*<CAlert*/}
+                {/*    color="success"*/}
+                {/*    closeButton*/}
+                {/*    show={open}*/}
+                {/*>*/}
+                {/*    Service Saved!  <CLink className="alert-link" onClick={() => props.setIndex(1)}>Click here to fill all supporting forms!</CLink>.*/}
+                {/*</CAlert>*/}
                 </CCol>
+
                 <CCol xs="12">
                     <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> New Form</CButton> {" "}
                     {/* <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "} */}

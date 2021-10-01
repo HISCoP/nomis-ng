@@ -14,21 +14,26 @@ const HouseholdDashboard = (props) => {
     return (
         <>
                 <CRow>
-                    <CCol xs="12" sm="6" lg="4">
+                    <CCol xs="12" sm="6" lg="3">
                 <CWidgetIcon text="Total OVC" header={props.household && props.household.details && props.household.details.noOfChildren ? props.household.details.noOfChildren : ''}  color="success" iconPadding={false}>
                     <CIcon width={24} name="cil-people"/>
                 </CWidgetIcon>
                     </CCol>
-                    <CCol xs="12" sm="6" lg="4">
+                    <CCol xs="12" sm="6" lg="3">
                         <CWidgetIcon text="Total Services" header={props.householdServiceHistory.length} color="success"  iconPadding={false}>
                             <CIcon width={24} name="cil-notes"/>
                         </CWidgetIcon>
                     </CCol>
-                    <CCol xs="12" sm="6" lg="4">
+                    <CCol xs="12" sm="6" lg="3">
                         <CWidgetIcon text="Total HIV Positive" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
                         </CCol>
+                    <CCol xs="12" sm="6" lg="3">
+                        <CWidgetIcon text="Total Virally Suppressed" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
+                            <CIcon width={24} name="cil-user"/>
+                        </CWidgetIcon>
+                    </CCol>
                 </CRow>
         <CRow>
             <CCol xs="12" >

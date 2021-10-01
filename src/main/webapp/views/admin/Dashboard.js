@@ -37,19 +37,19 @@ const TopDashboardStats = (props) => {
     return (
         <CRow>
             <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="Total Users" header="100"  color="success" iconPadding={false}>
+                <CWidgetIcon text="Total Users" header="100"  color="facebook" iconPadding={false}>
                     <PeopleAltIcon />
                 </CWidgetIcon>
             </CCol>
            
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Total Services" header="50" color="primary" iconPadding={false}>
+                    <CWidgetIcon text="Total Services" header="50" color="linkedin" iconPadding={false}>
                         <RoomServiceIcon />
                     </CWidgetIcon>
                 </CCol> 
           
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Total Programmes" header="22" color="info" iconPadding={false}>
+                    <CWidgetIcon text="Total Programmes" header="22" color="twitter" iconPadding={false}>
                         <AutorenewIcon />
                     </CWidgetIcon>
                 </CCol>

@@ -1,0 +1,13 @@
+package org.nomisng.repository;
+
+import org.nomisng.domain.entity.Cbo;
+import org.nomisng.domain.entity.Visit;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CboRepository extends JpaRepository<Cbo, Long>, JpaSpecificationExecutor {
+
+}
+

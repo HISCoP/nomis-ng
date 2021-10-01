@@ -35,7 +35,7 @@ const NewDomain = (props) => {
 
     const handleNameInputChange = e => {
 
-        setFormData ({ ...formData, [e.target.name]: e.target.value.split(" ").join("")  });
+        setFormData ({ ...formData, [e.target.name]: e.target.value  });
     }
 
     // const validate = () => {
