@@ -10,7 +10,7 @@ import People from '@material-ui/icons/People';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DomainIcon from '@material-ui/icons/Domain';
-import Dashboard from './Dashboard2'
+import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 
