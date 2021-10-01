@@ -11,7 +11,7 @@ const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
 const DataVisualisation = React.lazy(() => import('./views/visualization/HomePage'));
 
 /* Admin */
-const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
+const AdminHomePage = React.lazy(() => import('./views/admin/HomePage2'));
 const UserSetupHomePage = React.lazy(() => import('./views/admin/Users/UserPage'));
 const ApplicationCodeSetupHomePage = React.lazy(() => import('./views/admin/ApplicationCodeset/ApplicationCodesetSearch'));
 const OrganisationUnitHomepage = React.lazy(() => import('./views/admin/OrganizationUnit/Index'));

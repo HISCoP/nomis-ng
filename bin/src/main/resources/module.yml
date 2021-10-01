@@ -1,0 +1,4 @@
+name: NomisModule
+version: 1.0.0
+basePackage: org.nomisng
+menuUrl: /across/resources/static/nomis/index.html
