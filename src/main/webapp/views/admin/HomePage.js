@@ -14,17 +14,25 @@ import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 
-const HomePage = () => {
+const HomePage = (props) => {
     let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
-    const openHouseHoldPage = () => {
-        window.location.href = "/household/home";
+    const subMenu = (path) => {
+        if(path=='organisation-unit-home'){
+            props.history.push(`/organisation-unit-home`);
+        }else if(path=='ip'){
+            props.history.push(`/ip`);
+        }else if(path=='cbo'){
+            props.history.push(`/cbo`);
+        }
+        else if(path=='donor'){
+            props.history.push(`/donor`);
+        }
+        
     }
-
-   const [state, setState ]=useState({}) 
 
     return (
         <>
@@ -51,14 +59,14 @@ const HomePage = () => {
             <span className={'pl-2'}>  User Setup </span>
         </Link>
         </Menu.Item>
-        <Menu.Item
+        {/* <Menu.Item
           name='messages'
           active={activeItem === 'usersetup'}>
         <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
             <AcUnitIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  Organisation Unit </span>
         </Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item
           name='messages'
           active={activeItem === 'usersetup'}
@@ -93,51 +101,27 @@ const HomePage = () => {
             <ListIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  Report Builder  </span>
         </Link>
-        </Menu.Item>
-
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "cbo", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  CBO Setup  </span>
-        </Link>
-        </Menu.Item>
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "donor", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Donor Setup  </span>
-        </Link>
-        </Menu.Item>
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "ip", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  IP Setup  </span>
-        </Link>
-        </Menu.Item>
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "donor-ip", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Donor-IP Setup  </span>
-        </Link>
-        </Menu.Item>
+        </Menu.Item> 
         <Menu.Item>
         <Link color="inherit" to ={{ pathname: "cbo-donor-ip", }}  >
             <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  CBO-Donor-IP Setup  </span>
+            <span className={'pl-2'}>  CBO Account  Setup  </span>
         </Link>
         </Menu.Item>
-        {/* <Menu.Item>
+        <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>Others</span>
+            <span className={'pl-2'}>Organisation Unit</span>
         <Dropdown   className={'float-right'} >  
                 
         <Dropdown.Menu >
-            <Dropdown.Item icon='edit' text='OVS Setting' />
-            <Dropdown.Item icon='globe' text='Ward Setup' />
-            <Dropdown.Item icon='settings' text='Facilities Setup' />
+            <Dropdown.Item icon='settings' text='Organisation Unit Setup' onClick={() =>subMenu("organisation-unit-home")}/>
+            <Dropdown.Item icon='settings' text='CBO Setup' onClick={() =>subMenu("cbo")}/>
+            <Dropdown.Item icon='settings' text='Donor Setup' onClick={() =>subMenu("donor")}/>
+            <Dropdown.Item icon='settings' text='Implementing Partner Setup' onClick={() =>subMenu("ip")}/>
           </Dropdown.Menu>
         </Dropdown>
-        </Menu.Item> */}
-
+        </Menu.Item>
+        
             </Menu>
 
                 </CCol>
