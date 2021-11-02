@@ -100,8 +100,8 @@ const FillForm = (props) => {
             </CCard>
         }
         {showFormPage &&
-        <CModal show={showFormPage} onClose={() => setShowForm(false)} backdrop={true} size='lg'>
-            <CModalHeader closeButton>New Care Giver</CModalHeader>
+        <CModal show={showFormPage} onClose={() => setShowForm(false)} backdrop={true} size='xl'>
+            <CModalHeader closeButton>Fill Form </CModalHeader>
             <CModalBody>
                 <FormRenderer
                     formCode={selectedForm}
