@@ -1,15 +1,11 @@
-
 import React from 'react';
-import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Row, Col, Label, FormGroup, Input} from 'reactstrap';
+import {Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Label, FormGroup, Input} from 'reactstrap';
 import {CButton} from "@coreui/react";
 import * as CODES from './../../../api/codes';
-import FormRenderer from './../../formBuilder/FormRenderer';
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import {
-  createProvideService,
-} from "./../../../actions/householdCaregiverService";
+import { createProvideService } from "./../../../actions/householdCaregiverService";
 import axios from "axios";
 import {url} from "../../../api";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,6 +13,7 @@ import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import moment from "moment";
+import {formRendererService} from "../../../_services/form-renderer";
 
 const ProvideService = (props) => {
   const formData = {};
@@ -33,8 +30,7 @@ const ProvideService = (props) => {
 
   const currentForm = {
      code: CODES.Caregiver_Household_Service,
-    //programCode: CODES.GENERAL_SERVICE,
-    formName: "Hosehold Assesment",
+    formName: "Household Assessment",
     options:{
         hideHeader: true
     },
@@ -44,8 +40,8 @@ const ProvideService = (props) => {
 
       if(props.modal) {
           fetchServices();
-          setSelectedService([]);
-          setServiceDate(moment().format('YYYY-MM-DD'));
+          setSelectedService(props.serviceList ? props.serviceList : []);
+          setServiceDate(props.serviceDate ? props.serviceDate : moment().format('YYYY-MM-DD'));
           setFetchingServices(false);
           setSaving(false);
       }
@@ -111,7 +107,7 @@ const ProvideService = (props) => {
       formData['formData'] = [{data: data}] ;
       formData['archived'] = 0 ;
       formData['householdMemberId'] = props.memberId;
-      console.log(formData)
+
 
       const onSuccess = () => {
           setSaving(false);
@@ -125,9 +121,27 @@ const ProvideService = (props) => {
           setSaving(false);
           toast.error('An error occurred, service(s) not saved successfully');
       };
+      if(props.formDataId){
+          const body = {
+              data: data,
+              encounterId: props.encounterId,
+              id: props.formDataId
+          }
+          updateService(body, onSuccess, onError);
+          return;
+      }
       props.createProvideService(formData, onSuccess, onError);
   }
 
+  const updateService = (data, onSuccess, onError) => {
+      formRendererService.updateFormData(props.formDataId, data)
+          .then((response) => {
+              onSuccess();
+          })
+          .catch((error) => {
+               onError()
+          });
+  }
     const lang =  {
         availableFilterHeader: 'Filter available',
         availableHeader: 'Available Services',
@@ -181,7 +195,9 @@ const ProvideService = (props) => {
           {/*/>*/}
         </ModalBody>
         <ModalFooter>
-            <CButton color="primary" onClick={save}>Provide Services</CButton>
+            {props.type && props.type === "VIEW" ? "" :
+                <CButton color="primary" onClick={save}>Provide Services</CButton>
+            }
             <CButton color="danger" onClick={props.toggle}>Cancel</CButton>
         </ModalFooter>
       </Modal>

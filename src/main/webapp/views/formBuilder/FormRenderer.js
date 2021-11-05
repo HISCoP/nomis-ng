@@ -42,7 +42,7 @@ const FormRenderer = (props) => {
             .fetchFormByFormCode(props.formCode).then((response) => {
             setShowLoadingForm(false);
             if (!response.data.resourceObject) {
-                setErrorMsg("Form resource not found, please contact adminstration.");
+                setErrorMsg("Form resource not found, please contact admin.");
                 setShowErrorMsg(true);
                 return;
             }

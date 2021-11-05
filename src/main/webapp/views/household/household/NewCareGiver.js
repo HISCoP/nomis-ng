@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { CModal, CModalBody, CModalHeader} from "@coreui/react";
 import {CARE_GIVER_ENROLMENT_FORM} from './../../../api/codes'
 import FormRenderer from './../../formBuilder/FormRenderer'
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import axios from "axios";
 import {url} from "../../../api";
 
 
 const NewOvc = (props) => {
-  const {
-    className
-  } = props;
+
   const currentForm = {
     code: CARE_GIVER_ENROLMENT_FORM ,
     formName: "Care Giver Enrolment Form",
@@ -45,6 +44,7 @@ const NewOvc = (props) => {
 
         );
   }
+
   const save = (e) => {
     //alert('Save Successfully');
 
@@ -57,16 +57,20 @@ const NewOvc = (props) => {
 
   return (
       <div>
-<ToastContainer />
-        <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
-          <ModalHeader toggle={props.toggle}>New Care Giver</ModalHeader>
-          <ModalBody>
-            <FormRenderer
-                formCode={currentForm.code}
-                onSubmit={save}/>
-          </ModalBody>
-        </Modal>
-      </div>
+          {props.modal &&
+          <CModal show={props.modal} onClose={props.toggle} backdrop={true} size='xl'>
+              <CModalHeader  closeButton >New Care Giver</CModalHeader>
+              <CModalBody>
+                  <FormRenderer
+                      householdId={props.householdId}
+                      formCode={currentForm.code}
+                      submission={{}}
+                      onSubmit={save} />
+              </CModalBody>
+          </CModal>
+
+          }
+       </div>
   );
 
 }

@@ -108,7 +108,7 @@ const HouseholdHomePage = (props) => {
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >
                             {activeItem === "dashboard" &&
-                            <HouseholdDashboard household={props.hh}/>
+                            <HouseholdDashboard household={props.hh} houseHoldId={houseHoldId}/>
                             }
                         </CTabPane>
                         <CTabPane active={activeItem === 'members'} >

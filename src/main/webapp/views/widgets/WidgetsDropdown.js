@@ -25,7 +25,7 @@ const WidgetsDropdown = () => {
         <CWidgetDropdown
 
           color="xing"
-          header="290"
+          header="7"
           text="Total Household"
           footerSlot={
             <ChartLineSimple
@@ -48,7 +48,7 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="vimeo"
-          header="230"
+          header="13"
           text="Total VC"
           footerSlot={
             <ChartLineSimple
@@ -73,7 +73,7 @@ const WidgetsDropdown = () => {
         <CWidgetDropdown
           color="gradient-warning"
           header="14"
-          text="Total  VC Graduated"
+          text="Total VC Graduated"
           footerSlot={
             <ChartLineSimple
               className="mt-3"
@@ -99,7 +99,7 @@ const WidgetsDropdown = () => {
     <CCol sm="6" lg="3">
       <CWidgetBrand
         rightHeader="12"
-        rightFooter="Total OVC Positive"
+        rightFooter="Total VC Positive"
         leftHeader="4"
         leftFooter="Linked To Care "
         color="gradient-warning"
