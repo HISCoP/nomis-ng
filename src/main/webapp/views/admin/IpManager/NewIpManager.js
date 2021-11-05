@@ -69,7 +69,7 @@ const NewDonor = (props) => {
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createIpSetup}>
-                    <ModalHeader toggle={props.toggleModal}>New IP Setup </ModalHeader>
+                    <ModalHeader toggle={props.toggleModal}>New Implementing Partner Setup </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>

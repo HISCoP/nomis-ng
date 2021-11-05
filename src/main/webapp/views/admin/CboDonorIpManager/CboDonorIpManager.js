@@ -20,6 +20,7 @@ import SaveIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
 import {makeStyles} from "@material-ui/core/styles";
 
+
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1)
@@ -74,10 +75,10 @@ const IpListManager = (props) => {
            toggleModal();
        }
    
-       const deleteIpDetail = (row) => {
-           setcurrentIp(row);
-           toggleDeleteModal();
-       }
+    //    const deleteIpDetail = (row) => {
+    //        setcurrentIp(row);
+    //        toggleDeleteModal();
+    //    }
 
     return (
         <Card>

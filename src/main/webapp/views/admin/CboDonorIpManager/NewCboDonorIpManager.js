@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import {  Modal, ModalHeader, ModalBody,Form,Row,Col,FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import {  CFormGroup } from '@coreui/react';
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
@@ -9,18 +10,23 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-//import Select from "react-select/creatable";
+import Select from "react-select";
 import { createIp, updateIp  } from "../../../actions/ip";
 import { Spinner } from 'reactstrap';
 import { url as baseUrl } from "../../../api";
-
-
+import { CModal, CModalHeader, CModalBody,CForm} from '@coreui/react'
 
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1)
     }
 }))
+
+const options = [
+    { value: 'Kwali', label: 'Kwali' },
+    { value: 'Bwari', label: 'Bwari' },
+    { value: 'Amac', label: 'Amac' },
+  ];
 
 const NewDonor = (props) => {
     const [loading, setLoading] = useState(false)
@@ -29,7 +35,11 @@ const NewDonor = (props) => {
     const [formData, setFormData] = useState( defaultValues)
     //const [errors, setErrors] = useState({});
     const [donorList, setdonorList] = useState([]);
+    const [ipList, setipList] = useState([]);
+    const [cboList, setcboList] = useState([]);
     const classes = useStyles()
+
+    const [selectedOption, setSelectedOption] = useState(null);
   
     useEffect(() => {
         //for application CBO  edit, load form data
@@ -54,33 +64,80 @@ const NewDonor = (props) => {
           }
           getCharacters();
     },  [props.formData,  props.showModal]);
-     /* Get list of gender parameter from the endpoint */
+     /*  endpoint */
 
+     useEffect(() => {
+        async function getCharacters() {
+            axios
+              .get(`${baseUrl}ips`)
+              .then((response) => {
+                //console.log(Object.entries(response.data));
+                setipList(
+                  Object.entries(response.data).map(([key, value]) => ({
+                    label: value.name,
+                    value: value.id,
+                  }))
+                );
+              })
+              .catch((error) => {
+                
+              });
+          }
+          getCharacters();
+    },  []);
+     /*  endpoint */
+
+
+     useEffect(() => {
+        async function getCharacters() {
+            axios
+              .get(`${baseUrl}cbos`)
+              .then((response) => {
+                //console.log(Object.entries(response.data));
+                setcboList(
+                  Object.entries(response.data).map(([key, value]) => ({
+                    label: value.name,
+                    value: value.id,
+                  }))
+                );
+              })
+              .catch((error) => {
+                
+              });
+          }
+          getCharacters();
+    },  []);
+     /*  endpoint */
+
+     useEffect(() => {
+        async function getCharacters() {
+            try {
+                const response = await axios(
+                    baseUrl+ "cbos"
+                );
+                const body = response.data;
+                setcboList(
+                    body.map(({ display, id }) => ({ label: display, value: id }))
+                );
+            } catch (error) {
+            }
+        }
+        getCharacters();
+    }, []);
 
     const handleInputChange = e => {
-        setFormData ({ ...formData, [e.target.name]: e.target.value});
+        setFormData ({  [e.target.name]: e.target.value});
     }
     
-
-    const createIpSetup = e => {
-        
+    const createCboAccountSetup = e => {
+        const orgunitlga= selectedOption.map(item => { 
+            delete item['label'];
+            return item;
+        })
         e.preventDefault()
-            setLoading(true);
-            const onSuccess = () => {
-                setLoading(false);
-                props.loadIps();
-                props.toggleModal()
-            }
-            const onError = () => {
-                setLoading(false);
-                props.toggleModal()
-            }
-            if(formData.id){
-                props.updateIp(formData.id, formData, onSuccess, onError)
-                return
-            }
-            props.createIp(formData, onSuccess,onError)
-
+        console.log(orgunitlga);
+        return
+ 
     }
 
 
@@ -88,11 +145,11 @@ const NewDonor = (props) => {
 
         <div >
             <ToastContainer />
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
+            <CModal show={props.showModal} onClose={props.toggleModal} size="md">
 
-                <Form onSubmit={createIpSetup}>
-                    <ModalHeader toggle={props.toggleModal}>NEW CBO-DONOR-IMPLEMENTING PARTNERS SETUP </ModalHeader>
-                    <ModalBody>
+                <CForm >
+                    <CModalHeader toggle={props.toggleModal}>NEW CBO-DONOR-IMPLEMENTING PARTNERS SETUP </CModalHeader>
+                    <CModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
@@ -103,8 +160,8 @@ const NewDonor = (props) => {
                                             type="select"
                                             name="donor"
                                             id="donor"
-                                            value={defaultValues.donor}
-                                            onChange={handleInputChange}
+                                            //value={defaultValues.donor}
+                                            //onChange={handleInputChange}
                                             required
                                             >
                                             <option value=""> </option>
@@ -123,12 +180,12 @@ const NewDonor = (props) => {
                                             type="select"
                                             name="donor"
                                             id="donor"
-                                            value={defaultValues.donor}
+                                            //value={defaultValues.donor}
                                             onChange={handleInputChange}
                                             required
                                             >
                                             <option value=""> </option>
-                                            {donorList.map(({ label, value }) => (
+                                            {ipList.map(({ label, value }) => (
                                                 <option key={value} value={value}>
                                                 {label}
                                                 </option>
@@ -143,12 +200,12 @@ const NewDonor = (props) => {
                                             type="select"
                                             name="donor"
                                             id="donor"
-                                            value={defaultValues.donor}
+                                            //value={defaultValues.donor}
                                             onChange={handleInputChange}
                                             required
                                             >
                                             <option value=""> </option>
-                                            {donorList.map(({ label, value }) => (
+                                            {cboList.map(({ label, value }) => (
                                                 <option key={value} value={value}>
                                                 {label}
                                                 </option>
@@ -158,12 +215,12 @@ const NewDonor = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label for="gender">Location *</Label>
+                                            <Label for="gender">State *</Label>
                                             <Input
                                             type="select"
                                             name="donor"
                                             id="donor"
-                                            value={defaultValues.donor}
+                                            //value={defaultValues.donor}
                                             onChange={handleInputChange}
                                             required
                                             >
@@ -177,6 +234,19 @@ const NewDonor = (props) => {
                                         </FormGroup>
                                     </Col>
                                     
+                                    <Col md={12}>
+                                                <CFormGroup>
+                                                    <Label for="maritalStatus">LGA</Label>
+                                                    <Select
+                                                        defaultValue={selectedOption}
+                                                        onChange={setSelectedOption}
+                                                        options={options}
+                                                        isMulti="true"
+                                                    />
+                                                   
+                                                </CFormGroup>
+
+                                            </Col>
                                 </Row>
 
                                 <MatButton
@@ -185,7 +255,11 @@ const NewDonor = (props) => {
                                     color='primary'
                                     className={classes.button}
                                     startIcon={<SaveIcon />}
-                                    disabled={loading}>
+                                    disabled={loading}
+                                    onClick={createCboAccountSetup}
+                                    
+                                    >
+                                    
                                     Save  {loading ? <Spinner /> : ""}
                                 </MatButton>
                                 <MatButton
@@ -197,13 +271,14 @@ const NewDonor = (props) => {
                                 </MatButton>
                             </CardBody>
                         </Card>
-                    </ModalBody>
+                    </CModalBody>
 
-                </Form>
-            </Modal>
+                </CForm>
+            </CModal>
         </div>
     );
 }
+
 
 
 export default connect(null, {createIp, updateIp})(NewDonor);

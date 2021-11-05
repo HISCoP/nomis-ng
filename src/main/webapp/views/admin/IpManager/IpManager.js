@@ -86,7 +86,7 @@ const IpListManager = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">IP</Typography>
+                    <Typography color="textPrimary">Implementing Partner</Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -95,12 +95,12 @@ const IpListManager = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New IP </span>
+                        <span style={{textTransform: 'capitalize'}}>Add New Implementing Partner </span>
                     </Button>
 
                 </div>
                 <MaterialTable
-                    title="Find Donor"
+                    title="Find Implementing Partner"
                     columns={[
                     {
                         title: "ID",
@@ -156,7 +156,7 @@ const IpListManager = (props) => {
             <NewDonorManager toggleModal={toggleModal} showModal={showModal} loadIpList={props.ipList} formData={currentIp} loadIps={loadIpList}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
-                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Ip - {currentIp && currentIp.name ? currentIp.name : ""} </ModalHeader>
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Implementing Partner - {currentIp && currentIp.name ? currentIp.name : ""} </ModalHeader>
                     <ModalBody>
                         <p>Are you sure you want to proceed ?</p>
                     </ModalBody>
