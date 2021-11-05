@@ -64,7 +64,7 @@ const HouseholdMember = (props) => {
                 data={props.houseMemberList.map((row) => ({
                   id: <span> <Link
                       to={{pathname: "/household-member/home", state: row.id }}>{row.details.uniqueId}</Link></span>,
-                  date: null,
+                  date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : "",
                   name: row.details.firstName + " " + row.details.lastName,
                   age: calculateAge(row.details.dob),
                   action:

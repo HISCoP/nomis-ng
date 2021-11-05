@@ -80,7 +80,7 @@ const HouseHoldList = (props) => {
                   { title: 'Total OVC', field: 'ovc', type: 'numeric' },
                   {
                     title: 'Status',
-                    field: 'staus',
+                    field: 'status',
                     
                   },
                   {
@@ -94,7 +94,7 @@ const HouseHoldList = (props) => {
                       to={{pathname: "/household/home", state: row.id }}>{row.uniqueId}</Link></span>,
                   date: row.details && row.details.assessmentDate ? row.details.assessmentDate : "",
                   ovc: row.details &&  row.details.noOfChildren != null ?  row.details.noOfChildren : 0,
-                  status: row.status,
+                  status: row.status == 1 ? 'active' : "Not Active" ,
                   action:
                           <Menu>
                             <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
