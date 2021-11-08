@@ -28,4 +28,5 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
             "AND organisation_unit_level_id=2)", nativeQuery = true)
     Long findByOrganisationDetails(String parentOrganisationUnitName, String parentsParentOrganisationUnitName);
 
+    Optional<OrganisationUnit> findByNameAndArchived(String organisationUnitName, int archived);
 }

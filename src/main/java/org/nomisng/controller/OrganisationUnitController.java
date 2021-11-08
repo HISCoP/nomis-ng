@@ -24,6 +24,11 @@ public class OrganisationUnitController {
         return ResponseEntity.ok(organisationUnitService.save(organisationUnitDTO));
     }
 
+    /*@PostMapping("/save-all")
+    public ResponseEntity<List<OrganisationUnit>> saveAll(@RequestParam String path) {
+        return ResponseEntity.ok(organisationUnitService.saveAll(path));
+    }*/
+
     @PutMapping("{id}")
     public ResponseEntity<OrganisationUnit> update(@PathVariable Long id, @RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.update(id, organisationUnitDTO));

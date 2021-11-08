@@ -34,5 +34,5 @@ public class Donor extends Audit{
     private Integer archived = 0;
 
     @OneToMany(mappedBy = "donorByDonorId")
-    private List<CboDonorIpOrganisationUnit> cboDonorIpOrganisationUnitsById;
+    private List<CboDonorImplementerOrganisationUnit> cboDonorImplementerOrganisationUnitsById;
 }

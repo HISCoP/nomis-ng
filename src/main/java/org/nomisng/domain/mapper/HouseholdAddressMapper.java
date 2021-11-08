@@ -2,19 +2,19 @@ package org.nomisng.domain.mapper;
 
 import org.mapstruct.Mapper;
 import org.nomisng.domain.dto.HouseholdAddressDTO;
-import org.nomisng.domain.entity.HouseholdAddress;
+import org.nomisng.domain.entity.HouseholdMigration;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface HouseholdAddressMapper {
-    HouseholdAddress toHouseholdContact(HouseholdAddressDTO householdAddressDTO);
+    HouseholdMigration toHouseholdContact(HouseholdAddressDTO householdAddressDTO);
 
-    List<HouseholdAddress> toHouseholdContacts(List<HouseholdAddressDTO> householdAddressDTOS);
+    List<HouseholdMigration> toHouseholdContacts(List<HouseholdAddressDTO> householdAddressDTOS);
 
-    HouseholdAddressDTO toHouseholdContactDTO(HouseholdAddress householdAddress);
+    HouseholdAddressDTO toHouseholdContactDTO(HouseholdMigration householdMigration);
 
-    List<HouseholdAddressDTO> toHouseholdContactDTOS(List<HouseholdAddress> householdAddresses);
+    List<HouseholdAddressDTO> toHouseholdContactDTOS(List<HouseholdMigration> householdMigrations);
 
 
 

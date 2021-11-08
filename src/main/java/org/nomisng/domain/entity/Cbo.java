@@ -37,5 +37,5 @@ public class Cbo extends Audit {
     @OneToMany(mappedBy = "cboByCboId")
     @JsonIgnore
     @ToString.Exclude
-    private List<CboDonorIpOrganisationUnit> cboDonorIpOrganisationUnitsById;
+    private List<CboDonorImplementerOrganisationUnit> cboDonorImplementerOrganisationUnitsById;
 }

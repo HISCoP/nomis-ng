@@ -10,8 +10,9 @@ import javax.persistence.*;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "household_address")
-public class HouseholdAddress extends Audit {
+@Table(name = "household_migration")
+public class HouseholdMigration extends Audit {
+
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,18 +35,6 @@ public class HouseholdAddress extends Audit {
     private String landmark;
 
     @Basic
-    @Column(name = "country_id", nullable = false)
-    private Long countryId;
-
-    @Basic
-    @Column(name = "state_id", nullable = false)
-    private Long stateId;
-
-    @Basic
-    @Column(name = "province_id", nullable = false)
-    private Long provinceId;
-
-    @Basic
     @Column(name = "household_id")
     private Long householdId;
 
@@ -53,29 +42,15 @@ public class HouseholdAddress extends Audit {
     @Column(name = "active", nullable = false)
     private Integer active;
 
+    @Basic
+    @Column(name = "organisation_unit_id", nullable = false)
+    private Long organisationUnitId;
+
     @ManyToOne
     @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
     @JsonIgnore
     public Household householdByHouseholdId;
-
-    @ManyToOne
-    @JoinColumn(name = "country_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
-    @JsonIgnore
-    public OrganisationUnit organisationUnitByCountryId;
-
-    @ManyToOne
-    @JoinColumn(name = "state_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
-    @JsonIgnore
-    private OrganisationUnit organisationUnitByStateId;
-
-    @ManyToOne
-    @JoinColumn(name = "province_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
-    @JsonIgnore
-    private OrganisationUnit organisationUnitByProvinceId;
 
     @PrePersist
     public void persist() {
@@ -83,4 +58,8 @@ public class HouseholdAddress extends Audit {
             this.householdId = householdByHouseholdId.getId();
         }
     }
+
+    @ManyToOne
+    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private OrganisationUnit organisationUnitByOrganisationUnitId;
 }

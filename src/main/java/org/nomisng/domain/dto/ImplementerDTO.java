@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class IpDTO {
+public class ImplementerDTO {
 
     private Long id;
 

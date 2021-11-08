@@ -4,13 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "cbo_donor_ip_organisation_unit")
-public class CboDonorIpOrganisationUnit {
+@Table(name = "cbo_donor_implementer_organisation_unit")
+public class CboDonorImplementerOrganisationUnit {
 
     @Id
     @Column(name = "id", updatable = false)
@@ -26,8 +26,8 @@ public class CboDonorIpOrganisationUnit {
     private Long donorId;
 
     @Basic
-    @Column(name = "ip_id")
-    private Long ipId;
+    @Column(name = "implementer_id")
+    private Long implementerId;
 
     @Basic
     @Column(name = "organisation_unit_id")
@@ -42,10 +42,13 @@ public class CboDonorIpOrganisationUnit {
     private Donor donorByDonorId;
 
     @ManyToOne
-    @JoinColumn(name = "ip_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Ip ipByIpId;
+    @JoinColumn(name = "implementer_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Implementer implementerByImplementerId;
 
     @ManyToOne
     @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
     private OrganisationUnit organisationUnitByOrganisationUnitId;
+
+    @Transient
+    private List<Long> organisationUnitIds;
 }

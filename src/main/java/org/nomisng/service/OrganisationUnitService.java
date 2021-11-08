@@ -2,9 +2,15 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.OrganisationUnitDTO;
+import org.nomisng.domain.dto.OrganisationUnitExtraction;
 import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.domain.entity.OrganisationUnitHierarchy;
 import org.nomisng.domain.mapper.OrganisationUnitMapper;
@@ -13,7 +19,11 @@ import org.nomisng.repository.OrganisationUnitRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +51,7 @@ public class OrganisationUnitService {
         final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
 
         OrganisationUnit organisationUnit1 = organisationUnitRepository.save(organisationUnit);
+        log.info("organisationUnit is {}", organisationUnit1);
         Long level = organisationUnit1.getOrganisationUnitLevelId();
         List<OrganisationUnitHierarchy> organisationUnitHierarchies = new ArrayList<>();
         OrganisationUnit returnOrgUnit = organisationUnit1;
@@ -156,10 +167,10 @@ public class OrganisationUnitService {
         return organisationUnitRepository.findAllByOrganisationUnitLevelIdIn(levels);
     }
 
-    /*public List getAll(){
+    public List<OrganisationUnitDTO> getAll(String path){
         List orgList = new ArrayList();
         try {
-            orgList = this.readDataFromExcelFile("C:\\Users\\Dell\\Documents\\PALLADIUM WORKS\\PALLADIUM WORKS\\IP_Facilities.xlsx");
+            orgList = this.readDataFromExcelFile(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -173,9 +184,10 @@ public class OrganisationUnitService {
 
 
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+        XSSFWorkbook workbook = null;
         try {
 
-            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            workbook = new XSSFWorkbook(inputStream);
 
             Sheet firstSheet = workbook.getSheetAt(0);
 
@@ -203,8 +215,9 @@ public class OrganisationUnitService {
                         case 2:
                             String parentParentOrganisationUnitName = String.valueOf(nextCell).trim();
                             organisationUnitExtraction.setParentParentOrganisationUnitName(parentParentOrganisationUnitName);
-                            organisationUnitExtraction.setDescription("Facility in "+organisationUnitExtraction.getParentOrganisationUnitName());
-                            Long id = organisationUnitRepository.findByOrganisationDetails(organisationUnitExtraction.getParentOrganisationUnitName(), parentParentOrganisationUnitName);
+                            organisationUnitExtraction.setDescription("Ward in "+organisationUnitExtraction.getParentOrganisationUnitName());
+                            Long id = organisationUnitRepository.findByOrganisationDetails(organisationUnitExtraction.getParentOrganisationUnitName().trim(), parentParentOrganisationUnitName);
+                            log.info("parent name is {}", organisationUnitExtraction.getParentOrganisationUnitName().trim());
                             organisationUnitExtraction.setParentOrganisationUnitId(id);
 
                             organisationUnitDTO.setName(organisationUnitExtraction.getOrganisationUnitName());
@@ -218,9 +231,13 @@ public class OrganisationUnitService {
                 organisationUnitDTOS.add(organisationUnitDTO);
                 organisationUnitExtractions.add(organisationUnitExtraction);
             }
-            inputStream.close();
+
         }catch (Exception e){
             e.printStackTrace();
+        }
+        finally {
+            inputStream.close();
+            workbook.close();
         }
         return organisationUnitDTOS;
     }
@@ -235,7 +252,7 @@ public class OrganisationUnitService {
                 return cell.getNumericCellValue();
         }
         return null;
-    }*/
+    }
 
     private OrganisationUnit findOrganisationUnits(OrganisationUnit organisationUnit, Long orgUnitId){
         for(int i=0; i<2; i++) {
@@ -250,5 +267,13 @@ public class OrganisationUnitService {
             }
         }
         return organisationUnit;
+    }
+
+    public List<OrganisationUnit> saveAll(String path){
+        List<OrganisationUnit> organisationUnits = new ArrayList<>();
+        getAll(path).forEach(organisationUnitDTO -> {
+            organisationUnits.add(save(organisationUnitDTO));
+        });
+        return organisationUnits;
     }
 }

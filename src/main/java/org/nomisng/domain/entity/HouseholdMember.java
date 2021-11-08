@@ -40,14 +40,12 @@ public class HouseholdMember extends JsonBEntity {
     private Integer householdMemberType;
 
     @Basic
+    @Column(name = "organisation_unit_id", nullable = false)
+    private Long organisationUnitId;
+
+    @Basic
     @Column(name = "archived")
     private int archived;
-
-    @ManyToOne
-    @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
-    @ToString.Exclude
-    @JsonIgnore
-    public Household householdByHouseholdId;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
@@ -73,8 +71,18 @@ public class HouseholdMember extends JsonBEntity {
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
 
+    @ManyToOne
+    @JoinColumn(name = "household_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @ToString.Exclude
+    @JsonIgnore
+    public Household householdByHouseholdId;
+
     @OneToMany(mappedBy = "householdMemberByHouseholdMemberId")
     @ToString.Exclude
     @JsonIgnore
     private List<Encounter> encounterByHouseholdMemberId;
+
+    @ManyToOne
+    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private OrganisationUnit organisationUnitByOrganisationUnitId;
 }

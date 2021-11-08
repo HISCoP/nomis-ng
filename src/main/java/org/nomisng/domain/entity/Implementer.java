@@ -9,8 +9,8 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "ip")
-public class Ip extends Audit{
+@Table(name = "implementer")
+public class Implementer extends Audit{
 
     @Id
     @Column(name = "id", updatable = false)
@@ -33,6 +33,6 @@ public class Ip extends Audit{
     @Column(name = "archived")
     private Integer archived = 0;
 
-    @OneToMany(mappedBy = "ipByIpId")
-    private List<CboDonorIpOrganisationUnit> cboDonorIpOrganisationUnitsById;
+    @OneToMany(mappedBy = "implementerByImplementerId")
+    private List<CboDonorImplementerOrganisationUnit> cboDonorImplementerOrganisationUnitsById;
 }

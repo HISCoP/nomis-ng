@@ -6,6 +6,7 @@ import com.foreach.across.core.context.configurer.ComponentScanConfigurer;
 import com.foreach.across.modules.hibernate.jpa.AcrossHibernateJpaModule;
 import com.foreach.across.modules.web.AcrossWebModule;
 import org.lamisplus.modules.bootstrap.BootstrapModule;
+import org.springframework.context.annotation.Profile;
 
 @AcrossApplication(
         modules = {
@@ -14,6 +15,7 @@ import org.lamisplus.modules.bootstrap.BootstrapModule;
                 BootstrapModule.NAME
         }
 )
+@Profile("!test")
 public class NomisBaseModule extends AcrossModule {
     public static final String NAME = "NomisBaseModule";
 

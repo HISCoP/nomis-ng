@@ -53,10 +53,10 @@ public class HouseholdService {
         List<HouseholdMember> householdMembers = household.getHouseholdMembers().stream()
                 .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))
                 .collect(Collectors.toList());
-        List<HouseholdAddress> householdAddresses = household.getHouseholdAddresses();
+        List<HouseholdMigration> householdMigrations = household.getHouseholdMigrations();
 
         List<HouseholdMemberDTO> householdMemberDTOS = householdMemberMapper.toHouseholdMemberDTOS(householdMembers);
-        List<HouseholdAddressDTO> householdAddressDTOS = householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
+        List<HouseholdAddressDTO> householdAddressDTOS = householdAddressMapper.toHouseholdContactDTOS(householdMigrations);
         return householdMapper.toHouseholdDTO(household, householdMemberDTOS, householdAddressDTOS);
     }
 
@@ -88,7 +88,7 @@ public class HouseholdService {
 
     private Household saveOrUpdateHousehold( Long id, HouseholdDTO householdDTO){
         List<HouseholdMember> updatedHouseholdMembers = new ArrayList<>();
-        List<HouseholdAddress> updatedHouseholdAddresses = new ArrayList<>();
+        List<HouseholdMigration> updatedHouseholdMigrations = new ArrayList<>();
 
         Household household = householdMapper.toHousehold(householdDTO);
         //For updates and saving
@@ -101,11 +101,12 @@ public class HouseholdService {
         household = householdRepository.save(household);
 
         if(householdDTO.getHouseholdAddressDTOS() != null) {
-            List<HouseholdAddress> householdAddresses = householdAddressMapper.toHouseholdContacts(householdDTO.getHouseholdAddressDTOS());
-            for (HouseholdAddress householdAddress : householdAddresses) {
-                if(householdAddress.getActive() == null){householdAddress.setActive(ACTIVE_HOUSEHOLD_ADDRESS);}//only one address at registration of household
-                householdAddress.setHouseholdId(household.getId());
-                updatedHouseholdAddresses.add(householdAddress);
+            List<HouseholdMigration> householdMigrations = householdAddressMapper.toHouseholdContacts(householdDTO.getHouseholdAddressDTOS());
+            for (HouseholdMigration householdMigration : householdMigrations) {
+                if(householdMigration.getActive() == null){
+                    householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);}//only one address at registration of household
+                householdMigration.setHouseholdId(household.getId());
+                updatedHouseholdMigrations.add(householdMigration);
             }
         }
         if(householdDTO.getHouseholdMemberDTO() != null) {
@@ -114,7 +115,7 @@ public class HouseholdService {
             householdMember.setHouseholdId(household.getId());
             updatedHouseholdMembers.add(householdMember);
         }
-        householdAddressRepository.saveAll(updatedHouseholdAddresses);
+        householdAddressRepository.saveAll(updatedHouseholdMigrations);
         householdMemberRepository.saveAll(updatedHouseholdMembers);
         return household;
     }
@@ -133,26 +134,26 @@ public class HouseholdService {
         Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
 
-        List<HouseholdAddress> householdAddresses = household.getHouseholdAddresses().stream()
-                .sorted(Comparator.comparingLong(HouseholdAddress::getId).reversed())//sort by id in descending/reversed order
+        List<HouseholdMigration> householdMigrations = household.getHouseholdMigrations().stream()
+                .sorted(Comparator.comparingLong(HouseholdMigration::getId).reversed())//sort by id in descending/reversed order
                 .collect(Collectors.toList());
-        return householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
+        return householdAddressMapper.toHouseholdContactDTOS(householdMigrations);
     }
 
-    public List<HouseholdAddressDTO> saveHouseholdAddress(Long id, HouseholdAddress householdAddress) {
-        List<HouseholdAddress> householdAddresses = new ArrayList<>();
-        for (HouseholdAddress householdAddress1 : householdAddressRepository.findAll()) {
-            householdAddress1.setActive(INACTIVE_HOUSEHOLD_ADDRESS);
-            householdAddresses.add(householdAddress1);
+    public List<HouseholdAddressDTO> saveHouseholdAddress(Long id, HouseholdMigration householdMigration) {
+        List<HouseholdMigration> householdMigrations = new ArrayList<>();
+        for (HouseholdMigration householdMigration1 : householdAddressRepository.findAll()) {
+            householdMigration1.setActive(INACTIVE_HOUSEHOLD_ADDRESS);
+            householdMigrations.add(householdMigration1);
         }
-        householdAddress.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
-        householdAddress.setHouseholdId(id);
-        householdAddresses.add(householdAddress);
+        householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
+        householdMigration.setHouseholdId(id);
+        householdMigrations.add(householdMigration);
 
-        householdAddresses = householdAddressRepository.saveAll(householdAddresses).stream()
-                .sorted(Comparator.comparingLong(HouseholdAddress::getId).reversed())//sort by id in descending/reversed order
+        householdMigrations = householdAddressRepository.saveAll(householdMigrations).stream()
+                .sorted(Comparator.comparingLong(HouseholdMigration::getId).reversed())//sort by id in descending/reversed order
                 .collect(Collectors.toList());
 
-        return householdAddressMapper.toHouseholdContactDTOS(householdAddresses);
+        return householdAddressMapper.toHouseholdContactDTOS(householdMigrations);
     }
 }

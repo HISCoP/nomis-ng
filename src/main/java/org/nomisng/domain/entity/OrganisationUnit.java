@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -16,7 +17,6 @@ import java.util.List;
 @EqualsAndHashCode
 @Table(name = "organisation_unit")
 public class OrganisationUnit extends JsonBEntity implements Serializable {
-
 
     @Id
     @Column(name = "id", updatable = false)
@@ -59,6 +59,10 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     @ToString.Exclude
     private LocalDateTime dateCreated = LocalDateTime.now();
 
+    /*@OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<FormData> formDataById;*/
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
@@ -68,6 +72,7 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
+
     @Transient
     private String  parentOrganisationUnitName;
 
@@ -75,7 +80,19 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     private String  parentParentOrganisationUnitName;
 
     @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
-    private List<CboDonorIpOrganisationUnit> cboDonorIpOrganisationUnitsById;
+    private List<CboDonorImplementerOrganisationUnit> cboDonorImplementerOrganisationUnitsById;
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    private List<Household>householdsById;
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    private List<HouseholdMember> householdMembersById;
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    private List<HouseholdMigration> householdMigrationsById;
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    public List<Encounter> encountersById;
 
     @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
     @JsonIgnore
@@ -90,11 +107,6 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById_0;
-
-    /*@OneToMany(mappedBy = "organisationUnitByOrganisationalUnitId")
-    @JsonIgnore
-    @ToString.Exclude
-    public List<FormData> formDataById;*/
 
     @OneToMany(mappedBy = "organisationUnitByCurrentOrganisationUnitId")
     @JsonIgnore
