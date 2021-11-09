@@ -14,6 +14,8 @@ import rolesReducer from './rolesReducer';
 import reportReducer from './reportReducer';
 import cboReducer from './cboReducer';
 import donorReducer from './donorReducer';
+import ipReducer from './ipReducer';
+import cboDonorIpReducer from './cboDonorIpReducer';
 
 export default combineReducers({
  
@@ -31,6 +33,8 @@ export default combineReducers({
   roles: rolesReducer,
   cboReducer: cboReducer,
   donorReducer: donorReducer,
+  ipReducer: ipReducer,
+  cboDonorIpReducer: cboDonorIpReducer
 
 })
 

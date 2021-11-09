@@ -20,22 +20,18 @@ const HomePage = (props) => {
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
-    const openHouseHoldPage = () => {
-        window.location.href = "/household/home";
-    }
-
-   const [state, setState ]=useState({})
-
-    const cboSetup = () => {
-        props.history.push(`/cbo`)
-    }
-
-    const orgUnitSetup = () => {
-        props.history.push(`/organisation-unit-home`)
-    }
-
-    const donorSetup = () => {
-        props.history.push(`/donor`)
+    const subMenu = (path) => {
+        if(path=='organisation-unit-home'){
+            props.history.push(`/organisation-unit-home`);
+        }else if(path=='ip'){
+            props.history.push(`/ip`);
+        }else if(path=='cbo'){
+            props.history.push(`/cbo`);
+        }
+        else if(path=='donor'){
+            props.history.push(`/donor`);
+        }
+        
     }
 
     return (
@@ -63,6 +59,14 @@ const HomePage = (props) => {
             <span className={'pl-2'}>  User Setup </span>
         </Link>
         </Menu.Item>
+        {/* <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}>
+        <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
+            <AcUnitIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Organisation Unit </span>
+        </Link>
+        </Menu.Item> */}
         <Menu.Item
           name='messages'
           active={activeItem === 'usersetup'}
@@ -97,20 +101,27 @@ const HomePage = (props) => {
             <ListIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  Report Builder  </span>
         </Link>
+        </Menu.Item> 
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "cbo-donor-ip", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  CBO Account  Setup  </span>
+        </Link>
         </Menu.Item>
-         <Menu.Item>
+        <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>Organisation Unit</span>
-        <Dropdown   className={'float-right'} >
-
+        <Dropdown   className={'float-right'} >  
+                
         <Dropdown.Menu >
-            <Dropdown.Item icon='settings'  text={'Organisation Unit Setup'} onClick={orgUnitSetup}/>
-            <Dropdown.Item icon='settings'  text={'CBO Setup'} onClick={cboSetup}/>
-            <Dropdown.Item icon='settings'  text={'Donor Setup'} onClick={donorSetup}/>
+            <Dropdown.Item icon='settings' text='Organisation Unit Setup' onClick={() =>subMenu("organisation-unit-home")}/>
+            <Dropdown.Item icon='settings' text='CBO Setup' onClick={() =>subMenu("cbo")}/>
+            <Dropdown.Item icon='settings' text='Donor Setup' onClick={() =>subMenu("donor")}/>
+            <Dropdown.Item icon='settings' text='Implementing Partner Setup' onClick={() =>subMenu("ip")}/>
           </Dropdown.Menu>
         </Dropdown>
         </Menu.Item>
-
+        
             </Menu>
 
                 </CCol>

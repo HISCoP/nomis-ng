@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import { FaPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
-import { fetchAllCodeset, deleteApplicationCodeset } from "../../../actions/codeSet";
+import { fetchAll, deleteDonor } from "../../../actions/donors";
 import NewDonorManager from "./NewDonorManager";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -26,20 +26,20 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ApplicationCodesetList = (props) => {
+const DonorListManager = (props) => {
     const [loading, setLoading] = React.useState(true);
     const [deleting, setDeleting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
-    const [currentCodeset, setCurrentCodeset] = React.useState(null);
+    const [currentDonor, setCurrentDonor] = React.useState(null);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
     const classes = useStyles()
     useEffect(() => {
-        loadApplicationCodeset()
+        loadDonorList()
     }, []); //componentDidMount
 
- const loadApplicationCodeset = () => {
+ const loadDonorList = () => {
   
     setLoading('true');
         const onSuccess = () => {
@@ -48,11 +48,11 @@ const ApplicationCodesetList = (props) => {
         const onError = () => {
             setLoading(false)     
         }
-            props.fetchAllCApplicationCodeset(onSuccess, onError);
+            props.fetchAllDonors(onSuccess, onError);
     }; //componentDidMount
 
     const openNewDomainModal = (row) => {
-        setCurrentCodeset(row);
+        setCurrentDonor(row);
         toggleModal();
     }
 
@@ -61,21 +61,21 @@ const ApplicationCodesetList = (props) => {
        const onSuccess = () => {
            setDeleting(false);
            toggleDeleteModal();
-           loadApplicationCodeset();
+           loadDonorList();
        };
        const onError = () => {
            setDeleting(false);
-           toast.error("Something went wrong, please contact administration");
+           toggleDeleteModal();
        };
-       props.delete(id, onSuccess, onError);
+       props.deleteDonor(id, onSuccess, onError);
        }
-       const openApplicationCodeset = (row) => {
-           setCurrentCodeset(row);
+       const openDonor = (row) => {
+            setCurrentDonor(row);
            toggleModal();
        }
    
-       const deleteApplicationCodeset = (row) => {
-           setCurrentCodeset(row);
+       const deleteDonorDetail = (row) => {
+           setCurrentDonor(row);
            toggleDeleteModal();
        }
 
@@ -103,6 +103,10 @@ const ApplicationCodesetList = (props) => {
                     title="Find Donor"
                     columns={[
                     {
+                        title: "ID",
+                        field: "id",
+                    },
+                    {
                         title: "Name",
                         field: "name",
                     },
@@ -110,9 +114,10 @@ const ApplicationCodesetList = (props) => {
                     
                 ]}
                 isLoading={loading}
-                data={props.applicationCodesetList.map((row) => ({
-                    name: 'Heart Foundation',
-                    description: 'Heart Foundation Nigeria',
+                data={props.donorList.map((row) => ({
+                    id:row.id,
+                    name: row.name,
+                    description: row.description,
 
                 }))}
                 actions= {[
@@ -120,14 +125,14 @@ const ApplicationCodesetList = (props) => {
                         icon: EditIcon,
                         iconProps: {color: 'primary'},
                         tooltip: 'Edit Donor',
-                        onClick: (event, row) => openApplicationCodeset(row)
+                        onClick: (event, row) => openDonor(row)
                     },
-                    {
-                        icon: DeleteIcon,
-                        iconProps: {color: 'primary'},
-                        tooltip: 'Delete Donor',
-                        onClick: (event, row) => deleteApplicationCodeset(row)
-                    }
+                    // {
+                    //     icon: DeleteIcon,
+                    //     iconProps: {color: 'primary'},
+                    //     tooltip: 'Delete Donor',
+                    //     onClick: (event, row) => deleteDonorDetail(row)
+                    // }
                         ]}
                     
                         //overriding action menu with props.actions
@@ -148,10 +153,10 @@ const ApplicationCodesetList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewDonorManager toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={props.applicationCodesetList} formData={currentCodeset} loadCodeset={loadApplicationCodeset}/>
+            <NewDonorManager toggleModal={toggleModal} showModal={showModal} loadDonorList={props.donorList} formData={currentDonor} loadDonors={loadDonorList}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
-                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Donor - {currentCodeset && currentCodeset.display ? currentCodeset.display : ""} </ModalHeader>
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete Donor - {currentDonor && currentDonor.name ? currentDonor.name : ""} </ModalHeader>
                     <ModalBody>
                         <p>Are you sure you want to proceed ?</p>
                     </ModalBody>
@@ -163,7 +168,7 @@ const ApplicationCodesetList = (props) => {
                         className={classes.button}
                         startIcon={<SaveIcon />}
                         disabled={deleting}
-                        onClick={() => processDelete(currentCodeset.id)}
+                        onClick={() => processDelete(currentDonor.id)}
                     >
                         Delete  {deleting ? <Spinner /> : ""}
                     </Button>
@@ -187,12 +192,12 @@ const ApplicationCodesetList = (props) => {
 
 const mapStateToProps = state => {
     return {
-        applicationCodesetList: state.codesetsReducer.codesetList
+        donorList: state.donorReducer.donorList
     };
   };
   const mapActionToProps = {
-    fetchAllCApplicationCodeset: fetchAllCodeset,
-    delete: deleteApplicationCodeset
+    fetchAllDonors: fetchAll,
+    deleteDonor: deleteDonor
   };
   
-  export default connect(mapStateToProps, mapActionToProps)(ApplicationCodesetList);
+  export default connect(mapStateToProps, mapActionToProps)(DonorListManager);

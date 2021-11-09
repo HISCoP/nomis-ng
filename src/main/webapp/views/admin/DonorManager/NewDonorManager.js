@@ -8,8 +8,8 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import Select from "react-select/creatable";
-import { createApplicationCodeset , updateApplicationCodeset } from "../../../actions/codeSet";
+//import Select from "react-select/creatable";
+import { createDonor, updateDonor  } from "./../../../actions/donors";
 import { Spinner } from 'reactstrap';
 
 
@@ -20,38 +20,33 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const NewApplicationCodeset = (props) => {
+const NewDonor = (props) => {
     const [loading, setLoading] = useState(false)
-    const [showNewCodesetGroup, setShowNewCodesetGroup] = useState(false)
-    const defaultValues = {display:"", language:"", version:"", codesetGroup:""};
+    //const [showNewCbo, setShowNewCbo] = useState(false)
+    const defaultValues = { id:"",  name:"", description:"", code:""};
     const [formData, setFormData] = useState( defaultValues)
     //const [errors, setErrors] = useState({});
     const classes = useStyles()
   
     useEffect(() => {
-        //for application codeset edit, load form data
-
-        //props.loadCodeset();
+        //for application CBO  edit, load form data
+        //props.loadCbo();
         setFormData(props.formData ? props.formData : defaultValues);
-        setShowNewCodesetGroup(false);
+        //setShowNewCbo(false);
     },  [props.formData,  props.showModal]);
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
+    
 
-    const handleCodesetGroupChange = (newValue) => {
-        setFormData ({ ...formData, codesetGroup: newValue.value});
-    };
-
-
-    const createGlobalVariable = e => {
+    const createDonorSetup = e => {
+        
         e.preventDefault()
             setLoading(true);
-
             const onSuccess = () => {
                 setLoading(false);
-                props.loadCodeset();
+                props.loadDonors();
                 props.toggleModal()
             }
             const onError = () => {
@@ -59,53 +54,51 @@ const NewApplicationCodeset = (props) => {
                 props.toggleModal()
             }
             if(formData.id){
-                props.updateApplicationCodeset(formData.id, formData, onSuccess, onError)
+                props.updateDonor(formData.id, formData, onSuccess, onError)
                 return
             }
-            props.createApplicationCodeset(formData, onSuccess,onError)
+            props.createDonor(formData, onSuccess,onError)
 
     }
+
+
     return (
 
         <div >
             <ToastContainer />
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
-                <Form onSubmit={createGlobalVariable}>
-                    <ModalHeader toggle={props.toggleModal}>New Donor</ModalHeader>
+                <Form onSubmit={createDonorSetup}>
+                    <ModalHeader toggle={props.toggleModal}>New Donor Setup </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
+                                    
                                     <Col md={12}>
-                                   
-                                           
-                                            <FormGroup>
-                                                <Label>Name </Label>
-                                                <Input
-                                                    type='text'
-                                                    name='codesetGroup'
-                                                    id='codesetGroup'
-                                                    placeholder='Enter new Donor '
-                                                    value={formData.codesetGroup}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-                                            </FormGroup>
-
-                                        
+                                        <FormGroup>
+                                            <Label>Name</Label>
+                                            <Input
+                                                type='text'
+                                                name='name'
+                                                id='name'
+                                                placeholder=' '
+                                                value={formData.name}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </FormGroup>
                                     </Col>
-                                   
-                                   
+
                                     <Col md={12}>
                                         <FormGroup>
                                             <Label>Description</Label>
                                             <Input
                                                 type='text'
-                                                name='language'
-                                                id='language'
+                                                name='description'
+                                                id='description'
                                                 placeholder=' '
-                                                value={formData.language}
+                                                value={formData.description}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -143,5 +136,5 @@ const NewApplicationCodeset = (props) => {
 }
 
 
-export default connect(null, { createApplicationCodeset , updateApplicationCodeset})(NewApplicationCodeset);
+export default connect(null, {createDonor, updateDonor})(NewDonor);
 

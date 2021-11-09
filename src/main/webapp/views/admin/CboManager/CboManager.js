@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import { FaPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
-import { fetchAllCodeset, deleteApplicationCodeset } from "../../../actions/codeSet";
+import { fetchAllCbos, deleteCbo } from "../../../actions/cbos";
 import NewCbo from "./NewCbo";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -26,20 +26,20 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ApplicationCodesetList = (props) => {
+const CboList = (props) => {
     const [loading, setLoading] = React.useState(true);
     const [deleting, setDeleting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
-    const [currentCodeset, setCurrentCodeset] = React.useState(null);
+    const [currentCbo, setCurrentCbo] = React.useState(null);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
     const classes = useStyles()
     useEffect(() => {
-        loadApplicationCodeset()
+        loadCbo()
     }, []); //componentDidMount
 
- const loadApplicationCodeset = () => {
+ const loadCbo = () => {
   
     setLoading('true');
         const onSuccess = () => {
@@ -48,11 +48,11 @@ const ApplicationCodesetList = (props) => {
         const onError = () => {
             setLoading(false)     
         }
-            props.fetchAllCApplicationCodeset(onSuccess, onError);
+            props.fetchAllCbosList(onSuccess, onError);
     }; //componentDidMount
 
     const openNewDomainModal = (row) => {
-        setCurrentCodeset(row);
+        setCurrentCbo(row);
         toggleModal();
     }
 
@@ -61,23 +61,25 @@ const ApplicationCodesetList = (props) => {
        const onSuccess = () => {
            setDeleting(false);
            toggleDeleteModal();
-           loadApplicationCodeset();
+           loadCbo();
        };
        const onError = () => {
            setDeleting(false);
            toast.error("Something went wrong, please contact administration");
        };
-       props.delete(id, onSuccess, onError);
+       props.deleteCbo(id, onSuccess, onError);
        }
-       const openApplicationCodeset = (row) => {
-           setCurrentCodeset(row);
+       const openCbo= (row) => {
+           setCurrentCbo(row);
            toggleModal();
        }
    
-       const deleteApplicationCodeset = (row) => {
-           setCurrentCodeset(row);
+       const deleteCboAccount = (row) => {
+            setCurrentCbo(row);
            toggleDeleteModal();
        }
+
+
 
     return (
         <Card>
@@ -104,32 +106,37 @@ const ApplicationCodesetList = (props) => {
                     columns={[
                     {
                         title: "ID",
-                        field: "codesetGroup",
+                        field: "id",
+                    },
+                    {
+                        title: "Code",
+                        field: "code",
                     },
                     { title: "Name", field: "name" },
-                    { title: "Description", field: "version" },
+                    { title: "Description", field: "description" },
 
                     
                 ]}
                 isLoading={loading}
-                data={props.applicationCodesetList.map((row) => ({
-                    codesetGroup: 'Lagos/Aja/003/002',
-                    name: 'Emeka Emeka',
-                    display: 'Heart Foundation CBO',
+                data={props.cboList.map((row) => ({
+                    id: row.id,
+                    code: row.code,
+                    name: row.name,
+                    description: row.description,
                 }))}
                 actions= {[
                     {
                         icon: EditIcon,
                         iconProps: {color: 'primary'},
                         tooltip: 'Edit CBO',
-                        onClick: (event, row) => openApplicationCodeset(row)
+                        onClick: (event, row) => openCbo(row)
                     },
-                    {
-                        icon: DeleteIcon,
-                        iconProps: {color: 'primary'},
-                        tooltip: 'Delete CBO',
-                        onClick: (event, row) => deleteApplicationCodeset(row)
-                    }
+                    // {
+                    //     icon: DeleteIcon,
+                    //     iconProps: {color: 'primary'},
+                    //     tooltip: 'Delete CBO',
+                    //     onClick: (event, row) => deleteCboAccount(row)
+                    // }
                         ]}
                     
                         //overriding action menu with props.actions
@@ -150,10 +157,10 @@ const ApplicationCodesetList = (props) => {
                         }}
                 />
             </CardBody>
-            <NewCbo toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={props.applicationCodesetList} formData={currentCodeset} loadCodeset={loadApplicationCodeset}/>
+            <NewCbo toggleModal={toggleModal} showModal={showModal} loadCboList={props.cboList} formData={currentCbo} loadCbo={loadCbo}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
-                    <ModalHeader toggle={props.toggleDeleteModal}> Delete CBO  - {currentCodeset && currentCodeset.display ? currentCodeset.display : ""} </ModalHeader>
+                    <ModalHeader toggle={props.toggleDeleteModal}> Delete CBO  - {currentCbo && currentCbo.name ? currentCbo.name : ""} </ModalHeader>
                     <ModalBody>
                         <p>Are you sure you want to proceed ?</p>
                     </ModalBody>
@@ -165,9 +172,9 @@ const ApplicationCodesetList = (props) => {
                         className={classes.button}
                         startIcon={<SaveIcon />}
                         disabled={deleting}
-                        onClick={() => processDelete(currentCodeset.id)}
+                        onClick={() => processDelete(currentCbo.id)}
                     >
-                        Delete  {deleting ? <Spinner /> : ""}
+                      Delete  {deleting ? <Spinner /> : ""}
                     </Button>
                     <Button
                         variant='contained'
@@ -189,12 +196,12 @@ const ApplicationCodesetList = (props) => {
 
 const mapStateToProps = state => {
     return {
-        applicationCodesetList: state.codesetsReducer.codesetList
+        cboList: state.cboReducer.cboList
     };
   };
   const mapActionToProps = {
-    fetchAllCApplicationCodeset: fetchAllCodeset,
-    delete: deleteApplicationCodeset
+    fetchAllCbosList: fetchAllCbos,
+    deleteCbo: deleteCbo
   };
   
-  export default connect(mapStateToProps, mapActionToProps)(ApplicationCodesetList);
+  export default connect(mapStateToProps, mapActionToProps)(CboList);

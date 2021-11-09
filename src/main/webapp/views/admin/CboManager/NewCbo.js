@@ -8,8 +8,8 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import Select from "react-select/creatable";
-import { createApplicationCodeset , updateApplicationCodeset } from "../../../actions/codeSet";
+//import Select from "react-select/creatable";
+import { createCbosSetup, updateCbo  } from "./../../../actions/cbos";
 import { Spinner } from 'reactstrap';
 
 
@@ -20,38 +20,33 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const NewApplicationCodeset = (props) => {
+const NewCbo = (props) => {
     const [loading, setLoading] = useState(false)
-    const [showNewCodesetGroup, setShowNewCodesetGroup] = useState(false)
-    const defaultValues = {display:"", language:"", version:"", codesetGroup:""};
+    const [showNewCbo, setShowNewCbo] = useState(false)
+    const defaultValues = { id:"",  name:"", description:"", code:""};
     const [formData, setFormData] = useState( defaultValues)
     //const [errors, setErrors] = useState({});
     const classes = useStyles()
   
     useEffect(() => {
-        //for application codeset edit, load form data
-
-        //props.loadCodeset();
+        //for application CBO  edit, load form data
+        //props.loadCbo();
         setFormData(props.formData ? props.formData : defaultValues);
-        setShowNewCodesetGroup(false);
+        setShowNewCbo(false);
     },  [props.formData,  props.showModal]);
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
+    
 
-    const handleCodesetGroupChange = (newValue) => {
-        setFormData ({ ...formData, codesetGroup: newValue.value});
-    };
-
-
-    const createGlobalVariable = e => {
+    const createCbo = e => {
+        
         e.preventDefault()
             setLoading(true);
-
             const onSuccess = () => {
                 setLoading(false);
-                props.loadCodeset();
+                props.loadCbo();
                 props.toggleModal()
             }
             const onError = () => {
@@ -59,51 +54,36 @@ const NewApplicationCodeset = (props) => {
                 props.toggleModal()
             }
             if(formData.id){
-                props.updateApplicationCodeset(formData.id, formData, onSuccess, onError)
+                props.updateCbo(formData.id, formData, onSuccess, onError)
                 return
             }
-            props.createApplicationCodeset(formData, onSuccess,onError)
+            props.createCbosSetup(formData, onSuccess,onError)
 
     }
+
+
     return (
 
         <div >
             <ToastContainer />
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
-                <Form onSubmit={createGlobalVariable}>
+                <Form onSubmit={createCbo}>
                     <ModalHeader toggle={props.toggleModal}>New CBO Setup </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
-                                    <Col md={12}>
                                     
-                                            <FormGroup>
-                                                <Label>CBO ID </Label>
-                                                <Input
-                                                    type='text'
-                                                    name='codesetGroup'
-                                                    id='codesetGroup'
-                                                    placeholder='Enter CBO ID'
-                                                    value={formData.codesetGroup}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-                                            </FormGroup>
-
-                                        
-                                    </Col>
-                                   
                                     <Col md={12}>
                                         <FormGroup>
                                             <Label>Name</Label>
                                             <Input
                                                 type='text'
-                                                name='display'
-                                                id='display'
+                                                name='name'
+                                                id='name'
                                                 placeholder=' '
-                                                value={formData.display}
+                                                value={formData.name}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -115,10 +95,10 @@ const NewApplicationCodeset = (props) => {
                                             <Label>Description</Label>
                                             <Input
                                                 type='text'
-                                                name='language'
-                                                id='language'
+                                                name='description'
+                                                id='description'
                                                 placeholder=' '
-                                                value={formData.language}
+                                                value={formData.description}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -156,5 +136,5 @@ const NewApplicationCodeset = (props) => {
 }
 
 
-export default connect(null, { createApplicationCodeset , updateApplicationCodeset})(NewApplicationCodeset);
+export default connect(null, {createCbosSetup, updateCbo})(NewCbo);
 
