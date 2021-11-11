@@ -26,12 +26,16 @@ public interface EncounterRepository extends JpaRepository<Encounter, Long>, Jpa
 
     Page<Encounter> findAllByIdAndFormCodeAndArchivedOrderByIdDesc(Long id, String formCode, int archived, Pageable pageable);
 
-    Page<Encounter> findAllByHouseholdMemberIdAndFormCodeAndArchivedOrderByIdDesc(Long householdMemberId, String formCode, int archived, Pageable pageable);
+    Page<Encounter> findAllByHouseholdMemberIdAndFormCodeAndCboProjectIdAndArchivedOrderByIdDesc(Long householdMemberId, String formCode, Long cboProjectId, int archived, Pageable pageable);
 
-    Page<Encounter> findAllByHouseholdIdAndFormCodeAndArchivedOrderByIdDesc(Long householdId, String formCode, int archived, Pageable pageable);
+    Page<Encounter> findAllByHouseholdIdAndFormCodeAndCboProjectIdAndArchivedOrderByIdDesc(Long householdId, String formCode, Long cboProjectId, int archived, Pageable pageable);
 
     List<Encounter> findAllByHouseholdMemberIdAndArchived(Long householdId, int archived);
 
+    Optional<Encounter> findTopByFormCodeAndHouseholdMemberIdAndArchivedOrderByIdAsc(String formCode, Long householdMemberId, int archived);
 
+    List<Encounter> findAllByCboProjectIdAndArchived(Long cboProjectId, int archived);
+
+    Optional<Encounter> findByIdAndCboProjectIdAndArchived(Long id, Long cboProjectId, int archived);
 }
 

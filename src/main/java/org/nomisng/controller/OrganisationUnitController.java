@@ -5,9 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.nomisng.domain.dto.OrganisationUnitDTO;
 import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.service.OrganisationUnitService;
+import org.nomisng.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -67,8 +73,11 @@ public class OrganisationUnitController {
 
     @GetMapping ("/hierarchy/{parentOrgUnitId}/{orgUnitLevelId}")
     public  ResponseEntity<List<OrganisationUnitDTO>>  getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(
-            @PathVariable Long parentOrgUnitId, @PathVariable Long orgUnitLevelId) {
-        return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(parentOrgUnitId, orgUnitLevelId));
+            @PathVariable Long parentOrgUnitId, @PathVariable Long orgUnitLevelId, @PageableDefault(value = 100) Pageable pageable) {
+
+        Page page = this.organisationUnitService.getOrganisationUnitHierarchies(parentOrgUnitId, orgUnitLevelId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(this.organisationUnitService.getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(page), headers, HttpStatus.OK);
     }
 
     /*@DeleteMapping("/{id}")

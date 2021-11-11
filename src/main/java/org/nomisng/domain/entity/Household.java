@@ -35,9 +35,9 @@ public class Household extends JsonBEntity implements Serializable {
     private int status;
 
     @Basic
-    @Column(name = "cbo_id")
+    @Column(name = "cbo_project_id")
     @JsonIgnore
-    private Long cboId = 1L;
+    private Long cboProjectId;
 
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
@@ -104,5 +104,12 @@ public class Household extends JsonBEntity implements Serializable {
     private OrganisationUnit organisationUnitByOrganisationUnitId;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
-    private Collection<HouseholdMigration> householdMigrationsById;
+    private List<HouseholdMigration> householdMigrationsById;
+
+    @Transient
+    private Object assessment;
+
+    @ManyToOne
+    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private CboProject cboProjectByCboProjectId;
 }

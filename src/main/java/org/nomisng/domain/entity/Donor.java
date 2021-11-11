@@ -1,7 +1,9 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,8 +33,10 @@ public class Donor extends Audit{
 
     @Basic
     @Column(name = "archived")
-    private Integer archived = 0;
+    private Integer archived;
 
     @OneToMany(mappedBy = "donorByDonorId")
-    private List<CboDonorImplementerOrganisationUnit> cboDonorImplementerOrganisationUnitsById;
+    @JsonIgnore
+    @ToString.Exclude
+    private List<CboProject> cboDonorImplementerOrganisationUnitsById;
 }

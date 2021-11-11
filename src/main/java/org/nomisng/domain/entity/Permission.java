@@ -1,10 +1,7 @@
 package org.nomisng.domain.entity;
 
 import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -21,6 +18,9 @@ public class Permission extends Audit {
 
     @NonNull
     private String description;
+
+    @NonNull
+    private int archived;
 
     /*@OneToMany(mappedBy = "permissionByPermissionId")
     @ToString.Exclude

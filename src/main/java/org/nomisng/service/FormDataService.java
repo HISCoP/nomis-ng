@@ -26,7 +26,7 @@ public class FormDataService {
     /*public FormData save(FormData formData) {
         Optional<FormData> formDataOptional = formDataRepository.findByIdAndArchived(formData.getId(), UN_ARCHIVED);
         if(formDataOptional.isPresent())throw new RecordExistException(FormData.class, "Id", formData.getId() +"");
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         formData.setOrganisationalUnitId(organisationUnitId);
 
         return formDataRepository.save(formData);
@@ -35,7 +35,7 @@ public class FormDataService {
     public FormData update(Long id, FormDataDTO formDataDTO) {
         formDataRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(FormData.class, "Id", id +""));
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         FormData formData = formDataMapper.toFormData(formDataDTO);
         //formData.setOrganisationUnitId(organisationUnitId);
         formData.setId(id);
@@ -44,14 +44,14 @@ public class FormDataService {
     }
 
     public FormData getFormData(Long id){
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         FormData formData = formDataRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(FormData.class, "Id", id +""));
         return formData;
     }
 
     public List<FormData> getAllFormData() {
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         return formDataRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED);
     }
 
@@ -63,7 +63,7 @@ public class FormDataService {
     }
 
     /*public List<FormData> getAllFormDataByEncounterId(Long encounterId) {
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentOrganisationUnitId();
+        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         return formDataRepository.findAllByEncounterIdAndArchivedAndOrganisationUnitIdOrderByIdDesc(encounterId, UN_ARCHIVED, organisationUnitId);
     }*/
 }

@@ -27,7 +27,7 @@ public class DomainController {
     }
 
     @GetMapping("/domainCode")
-    public ResponseEntity<DomainDTO> getDomainByFormCode(@RequestParam String domainCode) {
+    public ResponseEntity<DomainDTO> getDomainByDomainCode(@RequestParam String domainCode) {
             return ResponseEntity.ok(domainService.getDomainByDomainCode(domainCode));
     }
 

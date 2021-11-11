@@ -7,8 +7,11 @@ import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.entity.Form;
+import org.nomisng.domain.entity.Permission;
 import org.nomisng.domain.mapper.FormMapper;
 import org.nomisng.repository.FormRepository;
+import org.nomisng.repository.PermissionRepository;
+import org.nomisng.util.AccessRight;
 import org.nomisng.util.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,15 @@ import java.util.*;
 public class FormService {
     private final FormRepository formRepository;
     private final FormMapper formMapper;
-    private static final int ARCHIVED = 1;
+    private final AccessRight accessRight;
+    private final PermissionRepository permissionRepository;
+    private static final int UN_ARCHIVED = 0;
+    private static final String READ = "Read";
+    private static final String WRITE = "Write";
+    private static final String DELETE = "Delete";
+    private static final String UNDERSCORE = "_";
+    private final Constants.ArchiveStatus constant;
+    private final UserService userService;
 
     public List getAllForms() {
         return formRepository.findAllByArchivedOrderByIdAsc(Constants.ArchiveStatus.UN_ARCHIVED);
@@ -32,13 +43,27 @@ public class FormService {
         if(formDTO.getCode() == null || formDTO.getCode().isEmpty()){
             formDTO.setCode(UUID.randomUUID().toString());
         }
-        Optional<Form> formOptional = formRepository.findByNameAndAndArchived(formDTO.getName(), Constants.ArchiveStatus.UN_ARCHIVED);
+        Optional<Form> formOptional = formRepository.findByNameAndArchived(formDTO.getName(), Constants.ArchiveStatus.UN_ARCHIVED);
         formOptional.ifPresent(form -> {
             throw new RecordExistException(Form.class, "Name", form.getName());
         });
         Form form = formMapper.toForm(formDTO);
-        form.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
 
+        form.setArchived(UN_ARCHIVED);
+        form.setCreatedBy(userService.getUserWithRoles().get().getUserName());
+
+        String read = UNDERSCORE + READ;
+        String write = UNDERSCORE + WRITE;
+        String delete = UNDERSCORE + DELETE;
+
+        List<Permission> permissions = new ArrayList<>();
+
+        permissions.add(new Permission(formDTO.getCode() + read, formDTO.getName() +" Read", constant.UN_ARCHIVED));
+        permissions.add(new Permission(formDTO.getCode() + write, formDTO.getName() +" Write", constant.UN_ARCHIVED));
+        permissions.add(new Permission(formDTO.getCode() + delete, formDTO.getName() +" Delete", constant.UN_ARCHIVED));
+        permissionRepository.saveAll(permissions);
+
+        form.setArchived(constant.UN_ARCHIVED);
         return formRepository.save(form);
     }
 
@@ -70,7 +95,7 @@ public class FormService {
         Form form = formRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Form.class, "Id", id+""));
 
-        form.setArchived(ARCHIVED);
+        form.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
         formRepository.save(form);
     }
 }

@@ -3,7 +3,7 @@ package org.nomisng.domain.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.nomisng.domain.dto.HouseholdAddressDTO;
+import org.nomisng.domain.dto.HouseholdMigrationDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
 import org.nomisng.domain.entity.Household;
@@ -28,13 +28,13 @@ public interface HouseholdMapper {
     @Mappings({
             @Mapping(source="household.id", target="id")
     })
-    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMemberDTO> householdMemberDTOS, List<HouseholdAddressDTO> householdAddressDTOS);
+    HouseholdDTO toHouseholdDTO(Household household, List<HouseholdMemberDTO> householdMemberDTOS, List<HouseholdMigrationDTO> householdMigrationDTOS);
 
 
     @Mappings({
             @Mapping(source="householdDTO.id", target="id")
     })
-    Household toHousehold(HouseholdDTO householdDTO, List<HouseholdMemberDTO> householdMemberDTOS, HouseholdAddressDTO householdAddressDTO);
+    Household toHousehold(HouseholdDTO householdDTO, List<HouseholdMemberDTO> householdMemberDTOS, HouseholdMigrationDTO householdMigrationDTO);
 
     @Mappings({
             @Mapping(source="householdDTO.id", target="id")

@@ -3,7 +3,9 @@ package org.nomisng.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.ImplementerDTO;
+import org.nomisng.domain.entity.Donor;
 import org.nomisng.domain.entity.Implementer;
 import org.nomisng.domain.mapper.ImplementerMapper;
 import org.nomisng.repository.ImplementerRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -19,14 +22,23 @@ import java.util.List;
 public class ImplementerService {
     private final ImplementerRepository implementerRepository;
     private final ImplementerMapper implementerMapper;
+    private final static int UN_ARCHIVED = 0;
 
     public List getAllIps() {
         return implementerMapper.toImplementerDTOS(implementerRepository.findAll());
     }
 
     public Implementer save(ImplementerDTO implementerDTO) {
-        return implementerRepository.save(implementerMapper.toImplementer(implementerDTO));
-    }
+        implementerRepository.findByNameAndArchived(implementerDTO.getName(), UN_ARCHIVED).ifPresent(implementer -> {
+            throw new RecordExistException(Implementer.class, "Name", ""+implementerDTO.getName());
+        });
+        //Temporary, will be replace with implementer code
+        if(implementerDTO.getCode() == null){
+            implementerDTO.setCode(UUID.randomUUID().toString());
+        }
+        Implementer implementer = implementerMapper.toImplementer(implementerDTO);
+        implementer.setArchived(UN_ARCHIVED);
+        return implementerRepository.save(implementer);}
 
     public ImplementerDTO getIp(Long id) {
         Implementer implementer = implementerRepository.findById(id)

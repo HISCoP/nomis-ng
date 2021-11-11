@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "application_user_organisation_unit")
-public class ApplicationUserOrganisationUnit extends Audit {
+@Table(name = "application_user_cbo_project")
+public class ApplicationUserCboProject extends Audit {
 
     @Id
     @Column(name = "id", updatable = false)
@@ -23,8 +23,8 @@ public class ApplicationUserOrganisationUnit extends Audit {
     private Long applicationUserId;
 
     @Basic
-    @Column(name = "organisation_unit_id")
-    private Long organisationUnitId;
+    @Column(name = "cbo_project_id")
+    private Long cboProjectId;
 
     @Basic
     @Column(name = "archived")
@@ -38,14 +38,14 @@ public class ApplicationUserOrganisationUnit extends Audit {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
-    private OrganisationUnit organisationUnitByOrganisationUnitId;
+    private CboProject cboProjectByCboProjectId;
 
-    public String getOrganisationUnitName(){
+    /*public String getOrganisationUnitName(){
         if (organisationUnitByOrganisationUnitId != null){
             return organisationUnitByOrganisationUnitId.getName();
         }
         return null;
-    }
+    }*/
 }

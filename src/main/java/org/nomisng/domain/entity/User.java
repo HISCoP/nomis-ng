@@ -79,17 +79,9 @@ public class User {
     @Column(name = "reset_key")
     private String resetKey;
 
-    /*@Basic
-    @Column(name = "uploaded")
-    private Integer uploaded;
-
     @Basic
-    @Column(name = "time_uploaded")
-    private Time timeUploaded;*/
-
-    @Basic
-    @Column(name = "current_organisation_unit_id")
-    private Long currentOrganisationUnitId;
+    @Column(name = "current_cbo_project_id")
+    private Long currentCboProjectId;
 
     @Basic
     @Column(name = "first_name")
@@ -103,10 +95,16 @@ public class User {
     private Set<Role> role;
 
     @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.PERSIST)
-    private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits;
+    private List<ApplicationUserCboProject> applicationUserCboProjects;
 
     @ManyToOne
-    @JoinColumn(name = "current_organisation_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
-    private OrganisationUnit organisationUnitByCurrentOrganisationUnitId;
+    private CboProject cboProjectByCurrentCboProjectId;
+
+    @ManyToOne
+    @JsonIgnore
+    @ToString.Exclude
+    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private CboProject cboProjectByCboId;
 }

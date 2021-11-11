@@ -40,8 +40,8 @@ public class HouseholdMember extends JsonBEntity {
     private Integer householdMemberType;
 
     @Basic
-    @Column(name = "organisation_unit_id", nullable = false)
-    private Long organisationUnitId;
+    @Column(name = "cbo_project_id", nullable = false)
+    private Long cboProjectId;
 
     @Basic
     @Column(name = "archived")
@@ -83,6 +83,6 @@ public class HouseholdMember extends JsonBEntity {
     private List<Encounter> encounterByHouseholdMemberId;
 
     @ManyToOne
-    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
-    private OrganisationUnit organisationUnitByOrganisationUnitId;
+    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private CboProject householdMemberByCboProjectId;
 }

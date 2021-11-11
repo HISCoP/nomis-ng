@@ -12,7 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class HouseholdAddressDTO {
+public class HouseholdMigrationDTO {
 
     private Long id;
 
@@ -31,6 +31,8 @@ public class HouseholdAddressDTO {
     private Long stateId;
 
     private Long provinceId;
+
+    private Long wardId;
 
     @NotNull(message = "householdId is mandatory")
     private Long householdId;

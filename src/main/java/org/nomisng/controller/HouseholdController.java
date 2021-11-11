@@ -29,7 +29,8 @@ public class HouseholdController {
     private final EncounterService encounterService;
 
 
-    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    //@RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<HouseholdDTO>> getAllHouseholds() {
         return ResponseEntity.ok(householdService.getAllHouseholds());
     }
@@ -57,7 +58,8 @@ public class HouseholdController {
         return new ResponseEntity<>(encounterService.getFormDataDTOFromPage(encounterPage), headers, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    //@RequestMapping(method = RequestMethod.GET, value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<HouseholdDTO> getHouseholdById(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdById(id));
     }
@@ -69,19 +71,20 @@ public class HouseholdController {
 
 
     @GetMapping("/{id}/householdAddress")
-    public ResponseEntity<List<HouseholdAddressDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
+    public ResponseEntity<List<HouseholdMigrationDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdAddressesByHouseholdId(id));
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Household> save(@RequestBody HouseholdDTO householdDTO) {
+    //@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
+    public ResponseEntity<Household> save(@RequestBody @Valid HouseholdDTO householdDTO) {
         return ResponseEntity.ok(householdService.save(householdDTO));
     }
 
-    @PostMapping("/{id}/householdAddress")
+    @PostMapping("/{id}/householdMigration")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<HouseholdAddressDTO>> saveHouseholdAddress(@PathVariable Long id, @Valid @RequestBody HouseholdMigration householdMigration) {
-        return ResponseEntity.ok(householdService.saveHouseholdAddress(id, householdMigration));
+    public ResponseEntity<List<HouseholdMigrationDTO>> saveHouseholdAddress(@PathVariable Long id, @Valid @RequestBody HouseholdMigration householdMigration) {
+        return ResponseEntity.ok(householdService.saveHouseholdMigration(id, householdMigration));
     }
 
     @PutMapping("/{id}")

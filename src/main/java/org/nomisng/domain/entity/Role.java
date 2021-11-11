@@ -1,12 +1,7 @@
 package org.nomisng.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -15,37 +10,24 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class Role extends Audit {
     @Id
-    @GeneratedValue
-    @Getter
-    @Setter
+    @Column(name = "id", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Basic
+    @Column(name = "name")
+    private String name;
 
     @NonNull
     @Getter
     @Setter
-    private String name;
-
-    @LastModifiedDate
-    @Column(name = "date_modified")
-    @JsonIgnore
-    @ToString.Exclude
-    private LocalDateTime dateModified = LocalDateTime.now();
+    private String code;
 
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Permission> permission;
 
-    /*private Collection<ApplicationUserRole> applicationUserRolesById;
-    @OneToMany(mappedBy = "roleByRoleId")
-    public Collection<ApplicationUserRole> getApplicationUserRolesById() {
-        return applicationUserRolesById;
-    }
-
-    public void setApplicationUserRolesById(Collection<ApplicationUserRole> applicationUserRolesById) {
-        this.applicationUserRolesById = applicationUserRolesById;
-    }*/
-    //private Collection<RolePermission> rolePermissionsById;
 
     @Override
     public int hashCode() {
@@ -73,17 +55,8 @@ public class Role extends Audit {
         return "Roles{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", dateModified='" + dateModified + '\'' +
+                ", code='" + code + '\'' +
                 ", permissions=" + permission +
                 '}';
     }
-
-    /*@OneToMany(mappedBy = "roleByRoleId")
-    public Collection<RolePermission> getRolePermissionsById() {
-        return rolePermissionsById;
-    }
-
-    public void setRolePermissionsById(Collection<RolePermission> rolePermissionsById) {
-        this.rolePermissionsById = rolePermissionsById;
-    }*/
 }

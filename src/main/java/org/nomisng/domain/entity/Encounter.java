@@ -34,7 +34,7 @@ public class Encounter extends Audit implements Serializable {
 
     @Basic
     @Column(name = "archived")
-    private Integer archived=0;
+    private Integer archived;
 
     @Basic
     @Column(name = "household_id")
@@ -49,9 +49,9 @@ public class Encounter extends Audit implements Serializable {
     private Long householdMemberId;
 
     @Basic
-    @Column(name = "organisation_unit_id")
+    @Column(name = "cbo_project_id")
     @JsonIgnore
-    private Long organisationUnitId;
+    private Long cboProjectId;
 
     @OneToMany(mappedBy = "encounterByEncounterId")
     @ToStringExclude
@@ -92,6 +92,6 @@ public class Encounter extends Audit implements Serializable {
     private Household householdByHouseholdId;
 
     @ManyToOne
-    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
-    public OrganisationUnit organisationUnitByOrganisationUnitId;
+    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private CboProject encounterByCboProjectId;
 }
