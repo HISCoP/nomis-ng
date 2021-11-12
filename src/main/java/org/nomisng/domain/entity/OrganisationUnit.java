@@ -78,14 +78,21 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+
     @Column(name = "date_modified")
     @JsonIgnore
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();
+
     @Transient
     private String  parentOrganisationUnitName;
+
     @Transient
     private String  parentParentOrganisationUnitName;
+
+    @Transient
+    private Long householdMaxCount;
+
     @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
     @JsonIgnore
     @ToString.Exclude

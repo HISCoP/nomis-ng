@@ -61,19 +61,32 @@ public class OrganisationUnitController {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(parentOrgUnitId, orgUnitLevelId));
     }
 
-    @GetMapping ("/organisation-unit-level/{id}")
+/*    @GetMapping ("/organisation-unit-level/{id}")
     public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id) {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByOrganisationUnitLevelId(id));
+    }*/
+
+    @GetMapping ("/organisation-unit-level/{id}")
+    public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id, @RequestParam(required = false, defaultValue = "*") String orgUnitName,
+                                                                                                    @PageableDefault(value = 300) Pageable pageable) {
+
+        Page<OrganisationUnit> page = this.organisationUnitService.getOrganisationUnitByOrganisationUnitLevelId(id, orgUnitName, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(this.organisationUnitService.getOrganisationUnitByOrganisationUnitLevelIdPageContent(page), headers, HttpStatus.OK);
     }
 
     @GetMapping ("/organisation-unit-levels/{id}")
-    public  ResponseEntity<List<OrganisationUnit>>  getAllOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id) {
-        return ResponseEntity.ok(this.organisationUnitService.getAllOrganisationUnitByOrganisationUnitLevelId(id));
+    public  ResponseEntity<List<OrganisationUnit>>  getAllOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id, @RequestParam(required = false, defaultValue = "*") String orgUnitName,
+                                                                                                    @PageableDefault(value = 300) Pageable pageable) {
+
+        Page<OrganisationUnit> page = this.organisationUnitService.getAllOrganisationUnitByOrganisationUnitLevelId(id, orgUnitName, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     @GetMapping ("/hierarchy/{parentOrgUnitId}/{orgUnitLevelId}")
     public  ResponseEntity<List<OrganisationUnitDTO>>  getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(
-            @PathVariable Long parentOrgUnitId, @PathVariable Long orgUnitLevelId, @PageableDefault(value = 100) Pageable pageable) {
+            @PathVariable Long parentOrgUnitId, @PathVariable Long orgUnitLevelId, @PageableDefault(value = 300) Pageable pageable) {
 
         Page page = this.organisationUnitService.getOrganisationUnitHierarchies(parentOrgUnitId, orgUnitLevelId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

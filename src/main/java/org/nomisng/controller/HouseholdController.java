@@ -97,4 +97,9 @@ public class HouseholdController {
     public void delete(@PathVariable Long id) {
         householdService.delete(id);
     }
+
+    /*@GetMapping("/organisation-unit/{id}")
+    public ResponseEntity<Long> getHouseholdIdForWard(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getMaxHouseholdIdByOrganisation(id));
+    }*/
 }

@@ -17,13 +17,13 @@ public class ImplementerController {
     private final ImplementerService implementerService;
 
     @GetMapping
-    public ResponseEntity<List<ImplementerDTO>> getAllIps() {
-        return ResponseEntity.ok(implementerService.getAllIps());
+    public ResponseEntity<List<ImplementerDTO>> getAllImplementers() {
+        return ResponseEntity.ok(implementerService.getAllImplementers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ImplementerDTO> getIp(@PathVariable Long id) {
-        return ResponseEntity.ok(implementerService.getIp(id));
+    public ResponseEntity<ImplementerDTO> getImplementer(@PathVariable Long id) {
+        return ResponseEntity.ok(implementerService.getImplementer(id));
     }
 
     @PostMapping

@@ -75,6 +75,7 @@ public class CboProject {
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
     @ToString.Exclude
     private List<CboProjectLocation> cboProjectLocationsById;
+
     @OneToMany(mappedBy = "cboProjectByCboId")
     @ToString.Exclude
     private List<User> usersById;

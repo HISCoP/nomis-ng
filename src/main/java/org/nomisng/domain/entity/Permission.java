@@ -10,7 +10,8 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 public class Permission extends Audit {
     @Id
-    @GeneratedValue
+    @Column(name = "id", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
@@ -21,6 +22,7 @@ public class Permission extends Audit {
 
     @NonNull
     private int archived;
+
 
     /*@OneToMany(mappedBy = "permissionByPermissionId")
     @ToString.Exclude

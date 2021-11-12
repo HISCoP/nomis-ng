@@ -18,10 +18,6 @@ public class CboProjectDTO {
 
     private List<Long> organisationUnitIds;
 
-    private List<OrganisationUnitDTO> organisationUnitDTOS;
-
-    private OrganisationUnitDTO organisationUnitDTO;
-
     private String cboName;
 
     private String donorName;

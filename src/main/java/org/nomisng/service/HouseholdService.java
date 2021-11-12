@@ -202,4 +202,8 @@ public class HouseholdService {
         return householdRepository.findByIdAndCboProjectIdAndArchived(id, getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
     }
+
+    public Long getMaxHouseholdIdByOrganisation(Long id) {
+        return householdMigrationRepository.findByWardId(id);
+    }
 }

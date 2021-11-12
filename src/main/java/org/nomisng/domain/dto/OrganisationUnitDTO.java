@@ -25,4 +25,6 @@ public class OrganisationUnitDTO {
 
     private String  parentParentOrganisationUnitName;
 
+    private Long householdMaxCount;
+
 }

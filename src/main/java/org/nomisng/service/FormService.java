@@ -36,7 +36,10 @@ public class FormService {
     private final UserService userService;
 
     public List getAllForms() {
-        return formRepository.findAllByArchivedOrderByIdAsc(Constants.ArchiveStatus.UN_ARCHIVED);
+        List<Form> forms = formRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
+        Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
+
+        return getForms(forms, permissions);
     }
 
     public Form save(FormDTO formDTO) {
@@ -71,11 +74,19 @@ public class FormService {
         Form form = this.formRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Form.class, "Id", id+""));
 
+        Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
+
+        accessRight.grantAccess(form.getCode(), FormService.class, permissions);
+
         FormDTO formDTO = formMapper.toFormDTO(form);
         return formDTO;
     }
 
     public FormDTO getFormByFormCode(String formCode) {
+        Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
+
+        accessRight.grantAccess(formCode, FormService.class, permissions);
+
         Form form = this.formRepository.findByCodeAndArchived(formCode, Constants.ArchiveStatus.UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Form.class, "formCode", formCode+""));
 
@@ -97,5 +108,31 @@ public class FormService {
 
         form.setArchived(Constants.ArchiveStatus.UN_ARCHIVED);
         formRepository.save(form);
+    }
+
+    /*public void setPermission(){
+        List<Long> permissions = new ArrayList<>();
+        List<RolePermission> rolePermissions = new ArrayList<>();
+        permissionRepository.findAll().forEach(permission -> {
+            if(permission.getId() != 1){
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setPermissionId(permission.getId());
+                rolePermission.setRoleId(2L);
+                rolePermissions.add(rolePermission);
+            }
+        });
+        rolePermissionRepository.saveAll(rolePermissions);
+    }*/
+
+    private List getForms(List<Form> forms, Set<String> permissions){
+        List<FormDTO> formList = new ArrayList<>();
+        forms.forEach(form -> {
+            if(!accessRight.grantAccessForm(form.getCode(), permissions)){
+                return;
+            }
+            final FormDTO formDTO = formMapper.toFormDTO(form);
+            formList.add(formDTO);
+        });
+        return formList;
     }
 }

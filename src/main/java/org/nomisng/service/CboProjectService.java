@@ -17,9 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -36,24 +38,15 @@ public class CboProjectService {
     private final OrganisationUnitService organisationUnitService;
     private final CboProjectLocationRepository cboProjectLocationRepository;
 
-    /*public List<CboProjectDTO> getAllCboProjects() {
-        List<CboProject> cboProjectList = new ArrayList<>();
-        cboProjectRepository.findAllByArchived(UN_ARCHIVED).forEach(cboProject -> {
-            cboProjectList.add(setNames(cboProject));
-        });
-        return cboProjectMapper.toCboProjectDTOS(cboProjectRepository.findAll());
-    }*/
-
-
 
     public CboProjectDTO save(CboProjectDTO cboProjectDTO) {
-        cboProjectRepository.findByCboIdAndDonorIdAndImplementerIdAndArchived(cboProjectDTO.getCboId(), cboProjectDTO.getDonorId(),
+        cboProjectRepository.findTopByCboIdAndDonorIdAndImplementerIdAndArchivedOrderByIdDesc(cboProjectDTO.getCboId(), cboProjectDTO.getDonorId(),
                 cboProjectDTO.getImplementerId(), constant.UN_ARCHIVED).ifPresent(cboProject -> {
                     throw new RecordExistException(CboProject.class, "Cbo Project", "already exist");
         });
 
         List<Long> organisationUnitIds = new ArrayList<>();
-        Long orgUnitLevelId = 4L;
+        Long orgUnitLevelId = 3L;
         List<CboProjectLocation> cboProjectLocations = new ArrayList<>();
 
         //Preparing the organisation Unit
@@ -63,23 +56,20 @@ public class CboProjectService {
             Long organisationUnitLevelId = organisationUnit.getOrganisationUnitLevelByOrganisationUnitLevelId().getId();
 
             //maybe a country
-            if(organisationUnitLevelId < 2 ){
-                throw new IllegalTypeException(OrganisationUnitLevel.class, "Level", ""+organisationUnitLevelId + " must be province/lga or ward");
-            }
-
-            //not a ward level
-            if(organisationUnitLevelId != orgUnitLevelId) {
-                Pageable pageable = PageRequest.of(0, 1000);
+            if(organisationUnitLevelId != orgUnitLevelId ){
+                throw new IllegalTypeException(OrganisationUnitLevel.class, "Level", " must be province/lga");
+            } else {
+                /*Pageable pageable = PageRequest.of(0, 1000);
 
                 Page<OrganisationUnitHierarchy> page = organisationUnitService.getOrganisationUnitHierarchies(organisationUnit.getId(), orgUnitLevelId,pageable);
                 List<Long> orgUnitIds = page.getContent().stream().map(OrganisationUnitHierarchy::getOrganisationUnitId)
-                        .collect(Collectors.toList());
-                organisationUnitIds.addAll(orgUnitIds);
+                        .collect(Collectors.toList());*/
+                organisationUnitIds.add(organisationUnitId);
             }
-            //Is a ward
+            /*//Is a ward
             if(organisationUnitLevelId == orgUnitLevelId) {
                 organisationUnitIds.add(organisationUnitId) ;
-            }
+            }*/
         });
         //setting the organisation unit
         cboProjectDTO.setOrganisationUnitIds(organisationUnitIds);
@@ -136,11 +126,12 @@ public class CboProjectService {
         String implementerName = cboProject.getImplementerByImplementerId().getName();
         HashMap<Long, String> map = new HashMap<>();
 
-        cboProject.setOrganisationUnits(cboProject.getCboProjectLocationsById().stream()
-                .map(cboProjectLocation -> {map.put(cboProjectLocation.getOrganisationUnitByOrganisationUnitId().getId(),
-                        cboProjectLocation.getOrganisationUnitByOrganisationUnitId().getName());
-                    return map;})
-                .collect(Collectors.toList()));
+        cboProject.getCboProjectLocationsById().forEach(cboProjectLocation -> {
+            map.put(cboProjectLocation.getOrganisationUnitByOrganisationUnitId().getId(),
+                    cboProjectLocation.getOrganisationUnitByOrganisationUnitId().getName());
+        });
+
+        cboProject.setOrganisationUnits(Collections.singletonList(map));
 
         cboProject.setCboName(cboName);
         cboProject.setDonorName(donorName);

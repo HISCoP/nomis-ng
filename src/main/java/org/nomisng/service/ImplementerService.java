@@ -24,7 +24,7 @@ public class ImplementerService {
     private final ImplementerMapper implementerMapper;
     private final static int UN_ARCHIVED = 0;
 
-    public List getAllIps() {
+    public List getAllImplementers() {
         return implementerMapper.toImplementerDTOS(implementerRepository.findAll());
     }
 
@@ -40,7 +40,7 @@ public class ImplementerService {
         implementer.setArchived(UN_ARCHIVED);
         return implementerRepository.save(implementer);}
 
-    public ImplementerDTO getIp(Long id) {
+    public ImplementerDTO getImplementer(Long id) {
         Implementer implementer = implementerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Implementer.class, "Id", id+""));
        return implementerMapper.toImplementerDTO(implementer);

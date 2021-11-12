@@ -2,4 +2,4 @@ spring:
   datasource:
     username: postgres
     password: emeka
-    url: jdbc:postgresql://localhost:5432/nomis_30_08_21
+    url: jdbc:postgresql://localhost:5432/nomis_integrated

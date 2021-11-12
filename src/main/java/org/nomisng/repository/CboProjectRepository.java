@@ -18,6 +18,9 @@ public interface CboProjectRepository extends JpaRepository<CboProject, Long>, J
 
     Optional<CboProject> findByCboIdAndDonorIdAndImplementerIdAndArchived(Long cboId, Long donorId, Long implementer, int archived);
 
+    Optional<CboProject> findTopByCboIdAndDonorIdAndImplementerIdAndArchivedOrderByIdDesc(Long cboId, Long donorId, Long implementer, int archived);
+
+
     List<CboProject> findAllByArchived(int archived);
 
     @Query(value = "SELECT * FROM cbo_project WHERE cbo_id IN (?1) " +
