@@ -5,6 +5,7 @@ import org.nomisng.domain.dto.CboDTO;
 import org.nomisng.domain.entity.Cbo;
 import org.nomisng.service.CboService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,11 +28,13 @@ public class CboController {
     }
 
     @PostMapping
+    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Cbo> save(@Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.save(cboDTO));
     }
 
     @PutMapping("/{id}")
+    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Cbo> update(@PathVariable Long id, @Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.update(id, cboDTO));
     }

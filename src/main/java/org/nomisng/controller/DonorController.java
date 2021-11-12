@@ -5,6 +5,7 @@ import org.nomisng.domain.dto.DonorDTO;
 import org.nomisng.domain.entity.Donor;
 import org.nomisng.service.DonorService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,12 +28,14 @@ public class DonorController {
     }
 
     @PostMapping
+    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Donor> save(@Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.save(donorDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Donor> updateDonor(@PathVariable Long id, @Valid @RequestBody DonorDTO donorDTO) {
+    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
+    public ResponseEntity<Donor> update(@PathVariable Long id, @Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.update(id, donorDTO));
     }
 }

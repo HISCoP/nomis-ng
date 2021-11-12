@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,6 +27,7 @@ public class OrganisationUnitController {
     private final OrganisationUnitService organisationUnitService;
 
     @PostMapping
+    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<OrganisationUnit> save(@RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.save(organisationUnitDTO));
     }
@@ -36,6 +38,7 @@ public class OrganisationUnitController {
     }*/
 
     @PutMapping("{id}")
+    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<OrganisationUnit> update(@PathVariable Long id, @RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.update(id, organisationUnitDTO));
     }

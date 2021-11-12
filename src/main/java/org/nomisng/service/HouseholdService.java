@@ -11,6 +11,8 @@ import org.nomisng.domain.mapper.HouseholdMigrationMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
 import org.nomisng.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +46,18 @@ public class HouseholdService {
     private final static String HH_ASSESSMENT_FORM_CODE = "5f451d7d-213c-4478-b700-69a262667b89";
 
 
-    public List<HouseholdDTO> getAllHouseholds() {
-        return householdMapper.toHouseholdDTOS(householdRepository.findByCboProjectIdAndArchivedOrderByIdDesc(getCurrentCboProjectId(), UN_ARCHIVED));
+    public Page<Household> getAllHouseholdsByPage(String search, Pageable pageable) {
+        if(search == null || search.equalsIgnoreCase("*")) {
+            return householdRepository
+                    .findByCboProjectIdAndArchivedOrderByIdDesc(getCurrentCboProjectId(), UN_ARCHIVED, pageable);
+        }
+        search = "%"+search+"%";
+        return householdRepository
+                .findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(search, getCurrentCboProjectId(), UN_ARCHIVED, pageable);
+    }
+
+    public List<HouseholdDTO> getAllHouseholdsFromPage(Page<Household> householdPage) {
+        return householdMapper.toHouseholdDTOS(householdPage.getContent());
     }
 
     public Household save(HouseholdDTO householdDTO) {

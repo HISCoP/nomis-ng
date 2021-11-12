@@ -32,8 +32,11 @@ public class HouseholdMemberController {
 
 
     @GetMapping
-    public ResponseEntity<List<HouseholdMemberDTO>> getAllHouseholds() {
-        return ResponseEntity.ok(householdMemberService.getAllHouseholdMembers());
+    public ResponseEntity<List<HouseholdMemberDTO>> getAllHouseholds(@RequestParam (required = false, defaultValue = "*") String search,
+                                                                     @PageableDefault(value = 100) Pageable pageable) {
+        Page<HouseholdMember> householdMembersPage = householdMemberService.getAllHouseholdMembersPage(search, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), householdMembersPage);
+        return new ResponseEntity<>(householdMemberService.getAllHouseholdMembersFromPage(householdMembersPage), headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

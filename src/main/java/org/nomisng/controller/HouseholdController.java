@@ -31,8 +31,11 @@ public class HouseholdController {
 
     //@RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping
-    public ResponseEntity<List<HouseholdDTO>> getAllHouseholds() {
-        return ResponseEntity.ok(householdService.getAllHouseholds());
+    public ResponseEntity<List<HouseholdDTO>> getAllHouseholds(@RequestParam (required = false, defaultValue = "*") String search,
+                                                               @PageableDefault(value = 100) Pageable pageable) {
+        Page<Household> householdPage = householdService.getAllHouseholdsByPage(search, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), householdPage);
+        return new ResponseEntity<>(householdService.getAllHouseholdsFromPage(householdPage), headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/encounters")
