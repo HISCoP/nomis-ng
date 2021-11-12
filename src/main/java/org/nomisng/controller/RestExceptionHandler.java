@@ -27,6 +27,7 @@ import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.*;
 
+// A Global exception handling with @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @Slf4j
@@ -163,7 +164,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param ex the EntityNotFoundException
      * @return the ApiError object
      */
-    @ExceptionHandler({EntityNotFoundException.class,NoSuchElementException.class, NullPointerException.class})
+    @ExceptionHandler({EntityNotFoundException.class})
     protected ResponseEntity<Object> handleNotFound(
             Exception ex) {
         ApiError apiError = new ApiError(NOT_FOUND);
@@ -226,7 +227,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handle javax.persistence.EntityNotFoundException
      */
-    @ExceptionHandler(javax.persistence.EntityNotFoundException.class)
+    @ExceptionHandler({javax.persistence.EntityNotFoundException.class})
     protected ResponseEntity<Object> handleEntityNotFound(javax.persistence.EntityNotFoundException ex) {
         return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, ex));
     }

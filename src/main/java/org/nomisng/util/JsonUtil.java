@@ -118,4 +118,29 @@ public class JsonUtil {
     public static String traverse(JsonNode root, String field) {
         return root.get(field).toString();
     }
+
+    public static <T> T getObjectFromJson(String json, Class<T> clazz) {
+
+//        ObjectMapper mapper = JsonObjectMapper.makeMapper();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(json, clazz);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static <T> String getJsonFromObject(T obj) {
+
+//        ObjectMapper mapper = JsonObjectMapper.makeMapper();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

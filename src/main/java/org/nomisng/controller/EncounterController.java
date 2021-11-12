@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -47,12 +48,12 @@ public class EncounterController {
     }
 
     @PostMapping
-    public ResponseEntity<Encounter> save(@RequestBody EncounterDTO encounterDTO) {
+    public ResponseEntity<Encounter> save(@Valid @RequestBody EncounterDTO encounterDTO) {
         return ResponseEntity.ok(encounterService.save(encounterDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Encounter> update(@PathVariable Long id, @RequestBody EncounterDTO encounterDTO) {
+    public ResponseEntity<Encounter> update(@PathVariable Long id, @Valid @RequestBody EncounterDTO encounterDTO) {
         return ResponseEntity.ok(encounterService.update(id, encounterDTO));
     }
 

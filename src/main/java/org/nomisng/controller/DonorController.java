@@ -7,6 +7,7 @@ import org.nomisng.service.DonorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,12 +27,12 @@ public class DonorController {
     }
 
     @PostMapping
-    public ResponseEntity<Donor> save(@RequestBody DonorDTO donorDTO) {
+    public ResponseEntity<Donor> save(@Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.save(donorDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Donor> updateDonor(@RequestBody DonorDTO donorDTO, @PathVariable Long id) {
+    public ResponseEntity<Donor> updateDonor(@PathVariable Long id, @Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.update(id, donorDTO));
     }
 }

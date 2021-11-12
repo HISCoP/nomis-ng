@@ -10,6 +10,7 @@ import org.nomisng.service.DomainService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class DomainController {
     }
 
     @GetMapping("/domainCode")
-    public ResponseEntity<DomainDTO> getDomainByFormCode(@RequestParam String domainCode) {
+    public ResponseEntity<DomainDTO> getDomainByDomainCode(@RequestParam String domainCode) {
             return ResponseEntity.ok(domainService.getDomainByDomainCode(domainCode));
     }
 
@@ -46,12 +47,12 @@ public class DomainController {
     }
 
     @PostMapping
-    public ResponseEntity<Domain> save(@RequestBody DomainDTO domainDTO) {
+    public ResponseEntity<Domain> save(@Valid @RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.save(domainDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Domain> update(@PathVariable Long id, @RequestBody DomainDTO domainDTO) {
+    public ResponseEntity<Domain> update(@PathVariable Long id, @Valid @RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.update(id, domainDTO));
     }
 

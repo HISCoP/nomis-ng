@@ -33,18 +33,27 @@ public class Household extends JsonBEntity implements Serializable {
     @Basic
     @Column(name = "status") // 1  - active, 2 - graduated
     private int status;
+
     @Basic
-    @Column(name = "cbo_id")
+    @Column(name = "cbo_project_id")
     @JsonIgnore
-    private Long cboId = 1L;
+    private Long cboProjectId;
+
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "details", nullable = false, columnDefinition = "jsonb")
     private Object details;
+
     @Basic
     @Column(name = "archived")
     @JsonIgnore
     private int archived;
+
+    @Basic
+    @Column(name = "organisation_unit_id")
+    @JsonIgnore
+    private Long organisationUnitId;
+
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
@@ -83,10 +92,24 @@ public class Household extends JsonBEntity implements Serializable {
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
     @JsonIgnore
-    private List<HouseholdAddress> householdAddresses;
+    private List<HouseholdMigration> householdMigrations;
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
     @JsonIgnore
     private List<HouseholdMember> householdMembers;
+
+    @ManyToOne
+    @JoinColumn(name = "organisation_unit_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private OrganisationUnit organisationUnitByOrganisationUnitId;
+
+    @OneToMany(mappedBy = "householdByHouseholdId")
+    private List<HouseholdMigration> householdMigrationsById;
+
+    @Transient
+    private Object assessment;
+
+    @ManyToOne
+    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private CboProject cboProjectByCboProjectId;
 }

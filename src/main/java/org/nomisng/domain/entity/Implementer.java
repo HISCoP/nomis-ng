@@ -1,7 +1,9 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,8 +11,8 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "ip")
-public class Ip extends Audit{
+@Table(name = "implementer")
+public class Implementer extends Audit{
 
     @Id
     @Column(name = "id", updatable = false)
@@ -31,8 +33,10 @@ public class Ip extends Audit{
 
     @Basic
     @Column(name = "archived")
-    private Integer archived = 0;
+    private Integer archived;
 
-    @OneToMany(mappedBy = "ipByIpId")
-    private List<CboDonorIpOrganisationUnit> cboDonorIpOrganisationUnitsById;
+    @OneToMany(mappedBy = "implementerByImplementerId")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<CboProject> cboDonorImplementerOrganisationUnitsById;
 }

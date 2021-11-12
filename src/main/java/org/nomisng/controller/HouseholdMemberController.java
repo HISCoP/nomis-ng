@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -61,12 +62,12 @@ public class HouseholdMemberController {
 
 
     @PostMapping
-    public ResponseEntity<HouseholdMember> save(@RequestBody HouseholdMemberDTO householdMemberDTO) {
+    public ResponseEntity<HouseholdMember> save(@Valid @RequestBody HouseholdMemberDTO householdMemberDTO) {
         return ResponseEntity.ok(householdMemberService.save(householdMemberDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HouseholdMember> update(@RequestBody HouseholdMemberDTO householdMemberDTO, @PathVariable Long id) {
+    public ResponseEntity<HouseholdMember> update(@Valid @RequestBody HouseholdMemberDTO householdMemberDTO, @PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.update(id, householdMemberDTO));
     }
 

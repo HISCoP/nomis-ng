@@ -1,9 +1,6 @@
 package org.nomisng.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.NoArgsConstructor;
 import org.nomisng.domain.entity.Role;
 import org.nomisng.repository.UserRepository;
@@ -55,8 +52,7 @@ public class TokenProvider {
         }
         org.nomisng.domain.entity.User user = userService.getUserWithRoles().get();
         //getting & adding user details to token
-        String name = user.getFirstName() + " " +
-                userService.getUserWithRoles().get().getLastName();
+        String name = user.getFirstName() + " " + user.getLastName();
 
         String authorities = user.getRole().stream().map(Role::getName).collect(Collectors.joining(","));
 
@@ -89,9 +85,14 @@ public class TokenProvider {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            log.info("Invalid JWT token.");
-            log.trace("Invalid JWT token trace.", e);
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT token: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            log.error("JWT token is expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.error("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
     }

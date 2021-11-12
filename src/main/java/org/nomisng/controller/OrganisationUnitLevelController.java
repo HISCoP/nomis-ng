@@ -26,7 +26,6 @@ public class OrganisationUnitLevelController {
     @PutMapping("{id}")
     public ResponseEntity<OrganisationUnitLevelDTO> update(@PathVariable Long id, @RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO){
         return ResponseEntity.ok(organisationUnitLevelService.update(id, organisationUnitLevelDTO));
-
     }
 
     @GetMapping

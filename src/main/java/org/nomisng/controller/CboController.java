@@ -7,6 +7,7 @@ import org.nomisng.service.CboService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,12 +27,12 @@ public class CboController {
     }
 
     @PostMapping
-    public ResponseEntity<Cbo> save(@RequestBody CboDTO cboDTO) {
+    public ResponseEntity<Cbo> save(@Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.save(cboDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cbo> updateCbo(@RequestBody CboDTO cboDTO, @PathVariable Long id) {
+    public ResponseEntity<Cbo> update(@PathVariable Long id, @Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.update(id, cboDTO));
     }
 }

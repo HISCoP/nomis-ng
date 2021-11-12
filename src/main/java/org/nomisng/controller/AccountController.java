@@ -3,7 +3,6 @@ package org.nomisng.controller;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.vm.ManagedUserVM;
 import org.nomisng.domain.dto.UserDTO;
-import org.nomisng.domain.entity.ApplicationUserOrganisationUnit;
 import org.nomisng.domain.entity.User;
 import org.nomisng.repository.UserRepository;
 import org.nomisng.service.UserService;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -40,16 +38,6 @@ public class AccountController {
                 .getUserWithRoles()
                 .map(UserDTO::new)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, principal.getName()+"","" ));
-
-        //User user = userRepository.getOne(userDTO.getId());
-
-        /*if(userDTO.getCurrentOrganisationUnitId() == null && !userDTO.getApplicationUserOrganisationUnits().isEmpty()){
-            for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : userDTO.getApplicationUserOrganisationUnits()) {
-                user.setCurrentOrganisationUnitId(applicationUserOrganisationUnit.getOrganisationUnitId());
-                userRepository.save(user);
-                break;
-            }
-        }*/
 
         return userDTO;
     }

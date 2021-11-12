@@ -9,6 +9,7 @@ import org.nomisng.service.ApplicationCodesetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,13 +35,13 @@ public class ApplicationCodesetController {
     }
 
     @PostMapping
-    public ResponseEntity<ApplicationCodeset> save(@RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
+    public ResponseEntity<ApplicationCodeset> save(@Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.save(applicationCodesetDTO));
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApplicationCodeset> update(@PathVariable Long id, @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
+    public ResponseEntity<ApplicationCodeset> update(@PathVariable Long id, @Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.update(id, applicationCodesetDTO));
 
     }

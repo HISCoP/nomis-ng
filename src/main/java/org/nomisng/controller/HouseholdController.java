@@ -4,31 +4,32 @@ import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.*;
 import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.Household;
-import org.nomisng.domain.entity.HouseholdAddress;
-import org.nomisng.domain.entity.Visit;
+import org.nomisng.domain.entity.HouseholdMigration;
 import org.nomisng.service.EncounterService;
 import org.nomisng.service.HouseholdService;
-import org.nomisng.service.VisitService;
 import org.nomisng.util.PaginationUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/households")
+@RequestMapping("/api/households")
 @RequiredArgsConstructor
 public class HouseholdController {
     private final HouseholdService householdService;
     private final EncounterService encounterService;
 
 
+    //@RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping
     public ResponseEntity<List<HouseholdDTO>> getAllHouseholds() {
         return ResponseEntity.ok(householdService.getAllHouseholds());
@@ -57,6 +58,7 @@ public class HouseholdController {
         return new ResponseEntity<>(encounterService.getFormDataDTOFromPage(encounterPage), headers, HttpStatus.OK);
     }
 
+    //@RequestMapping(method = RequestMethod.GET, value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping("/{id}")
     public ResponseEntity<HouseholdDTO> getHouseholdById(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdById(id));
@@ -69,20 +71,20 @@ public class HouseholdController {
 
 
     @GetMapping("/{id}/householdAddress")
-    public ResponseEntity<List<HouseholdAddressDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
+    public ResponseEntity<List<HouseholdMigrationDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdAddressesByHouseholdId(id));
     }
 
+    //@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Household> save(@RequestBody HouseholdDTO householdDTO) {
+    public ResponseEntity<Household> save(@RequestBody @Valid HouseholdDTO householdDTO) {
         return ResponseEntity.ok(householdService.save(householdDTO));
     }
 
-    @PostMapping("/{id}/householdAddress")
+    @PostMapping("/{id}/householdMigration")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<HouseholdAddressDTO>> saveHouseholdAddress(@PathVariable Long id, @RequestBody HouseholdAddress householdAddress) {
-        return ResponseEntity.ok(householdService.saveHouseholdAddress(id, householdAddress));
+    public ResponseEntity<List<HouseholdMigrationDTO>> saveHouseholdAddress(@PathVariable Long id, @Valid @RequestBody HouseholdMigration householdMigration) {
+        return ResponseEntity.ok(householdService.saveHouseholdMigration(id, householdMigration));
     }
 
     @PutMapping("/{id}")
@@ -95,4 +97,9 @@ public class HouseholdController {
     public void delete(@PathVariable Long id) {
         householdService.delete(id);
     }
+
+    /*@GetMapping("/organisation-unit/{id}")
+    public ResponseEntity<Long> getHouseholdIdForWard(@PathVariable Long id) {
+        return ResponseEntity.ok(householdService.getMaxHouseholdIdByOrganisation(id));
+    }*/
 }
