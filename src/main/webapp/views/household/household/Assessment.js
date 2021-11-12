@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {CButton, CCol, CRow} from "@coreui/react";
+import {CButton, CCol, CRow, CCard} from "@coreui/react";
 import MaterialTable from 'material-table';
 import NewHouseHoldAssessment from './NewHouseHoldAssessment';
 import {toast} from "react-toastify";
@@ -65,10 +65,10 @@ const Assessment = (props) => {
     }
 
     return (
-        <>
+        <CCard>
             <CRow >
-                <CCol xs="12" className={"pb-3"}>
-                    <CButton color={"primary"} className="float-right" onClick={toggle} > New Assessment</CButton>
+                <CCol xs="12" className={"text-right p-4"}>
+                    <CButton color={"primary"}  onClick={toggle} > New Assessment</CButton>
                 </CCol>
             </CRow>
 
@@ -113,7 +113,7 @@ const Assessment = (props) => {
                 options={{modalSize:"xl"}}
             />
             <NewHouseHoldAssessment  modal={modal} toggle={toggle} householdId={props.householdId} reloadSearch={fetchAssessments}/>
-        </>
+        </CCard>
     )
 }
 

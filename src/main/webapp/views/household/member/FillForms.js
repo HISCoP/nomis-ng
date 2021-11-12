@@ -119,6 +119,7 @@ const FillForm = (props) => {
             <CCardBody>
             <FormRenderer
             formCode={selectedForm}
+            showHeader
             householdMemberId={props.member.id}
             onSuccess={onSuccess}
             />

@@ -32,7 +32,7 @@ const HouseholdDashboard = (props) => {
         <>
                 <CRow>
                     <CCol xs="12" sm="6" lg="3">
-                <CWidgetIcon text="Total VC" header={props.household && props.household.details && props.household.details.noOfChildren ? props.household.details.noOfChildren : ''}  color="success" iconPadding={false}>
+                <CWidgetIcon text="Total Enrolled VC" header={props.houseMemberList ? props.houseMemberList.filter(x => x.householdMemberType === 2).length : ''}  color="success" iconPadding={false}>
                     <CIcon width={24} name="cil-people"/>
                 </CWidgetIcon>
                     </CCol>

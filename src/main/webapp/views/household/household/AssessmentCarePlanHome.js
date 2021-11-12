@@ -2,6 +2,7 @@ import React from "react";
 import {Tab} from "semantic-ui-react";
 import CarePlan from "./CarePlan";
 import Assessment from "./Assessment";
+import './tab.css';
 
 const AssessmentCarePlanHome = (props) => {
 
@@ -9,17 +10,20 @@ const AssessmentCarePlanHome = (props) => {
     const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
         {
-            menuItem: 'Household Assessments',
+            menuItem: { key: 'users', icon: 'folder open', content: 'Household Assessments' },
             render: () => <Assessment setIndex={setIndex} householdId={props.householdId}/>,
         },
         {
-            menuItem: 'Care Plans',
+            menuItem: { key: 'careplan', icon: 'medkit', content: 'Care Plans' },
             render: () => <CarePlan householdId={props.householdId}/>,
         }
     ]
 
     return (
-        <Tab menu={{ secondary: true, pointing: true }} panes={panes} activeIndex={index}  onTabChange={handleTabChange}/>
+        <Tab
+          //  menu={{ color:"red", inverted: true  }}
+         //   menu={{ fluid: true, vertical: true, tabular: 'left' }}
+            panes={panes} activeIndex={index}  onTabChange={handleTabChange}/>
     );
 }
 

@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import {CModal, CModalBody, CModalHeader} from "@coreui/react";
+import "./tab.css";
 
 
 const NewHouseHold = (props) => {
@@ -83,9 +84,11 @@ const saveAssessment = (e) => {
     const data = e.data;
     const assessment = {details: data,
         householdMemberDTO: { details: data.primaryCareGiver, householdMemberType: 1},
+        assessment: data.assessment,
         householdAddressDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
         uniqueId: data.uniqueId };
-  console.log(assessment);
+
+    console.log(assessment);
 
       createAssessment(assessment);
     //  props.togglestatus();
@@ -94,6 +97,7 @@ const saveAssessment = (e) => {
     const updateAssessment = (e) => {
         const data = e.data;
         const assessment = {details: data,
+            assessment: data.assessment,
             householdMemberDTO: { details: data.primaryCareGiver, householdMemberType: 1},
             householdAddressDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
             uniqueId: data.uniqueId };

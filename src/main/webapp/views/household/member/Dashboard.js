@@ -16,14 +16,13 @@ import axios from "axios";
 import {url} from "../../../api";
 import {toast} from "react-toastify";
 import * as CODES from "../../../api/codes";
-import {last} from "rxjs/operators";
 
 
 const Dashboard = (props) => {
 
     return (
         <>
-            <TopDashboardStats/>
+            <TopDashboardStats household={props.household} member={props.member}/>
             < MidDashboardStats member={props.member} household={props.household} fetchingHousehold={props.fetchingHousehold} />
                 <CRow>
                 <CCol xs="12" >
@@ -40,36 +39,115 @@ const Dashboard = (props) => {
 }
 
 const TopDashboardStats = (props) => {
+    const [nutritionAssessment, setNutritionAssessment] = useState();
+    const [statusUpdate, setStatusUpdate] = useState();
+    const [hivStatus, setHivStatus] = useState();
+    const [bmi, setBMI] = useState(" ");
+    const [bmiStatus, setBMIStatus] = useState(" ");
+    const [color, setColor] = useState("info");
+
+    React.useEffect(() => {
+        getColor();
+        fetchNutritionAssessments();
+        fetchLastStatusUpdate();
+    }, [props.member]);
+
+    const getColor = () => {
+        if(props.member.details && props.member.details.sex && props.member.details.sex.display.toLowerCase() == "female"){
+            setColor("dribbble");
+        } else {
+            setColor("github");
+        }
+    }
+    const fetchNutritionAssessments = () => {
+        axios
+            .get(`${url}household-members/${props.member.id}/${CODES.NUTRITIONAL_ASSESSMENT_FORM}/encounters?page=0&size=1`)
+            .then(response => {
+                if(response.data && response.data.length > 0){
+                    const nutritionAssessment = response.data[0].formData[0].data;
+                    setNutritionAssessment(nutritionAssessment);
+                    calculateBMI(nutritionAssessment.weight, nutritionAssessment.height)
+                }
+
+            })
+            .catch(error => {
+
+                }
+            );
+    }
+
+    const fetchLastStatusUpdate = () => {
+        axios
+            .get(`${url}household-members/${props.member.id}/${CODES.STATUS_UPDATE_FORM}/encounters?page=0&size=1`)
+            .then(response => {
+                let hivStats = "";
+                if(response.data && response.data.length > 0){
+                    const update = response.data[0].formData[0].data;
+                    setStatusUpdate(update);
+                    hivStats = update.hivStatus && update.hivStatus.display ? update.hivStatus.display : "-"
+                    setHivStatus(hivStats);
+                }
+
+                if(!hivStats){
+                    hivStats = props.member.details && props.member.details.hivStatus && props.member.details.hivStatus.display ? props.member.details.hivStatus.display : "-";
+                    setHivStatus(hivStats);
+                }
+            })
+            .catch(error => {
+
+                }
+            );
+    }
+
+    const calculateBMI = (weight, height) => {
+       if(weight && height){
+            const bmi = (weight /  (height * height)) * 10000;
+            if(bmi <= 18.5){
+                setBMIStatus('Underweight');
+            }
+            else if (bmi > 18.5 && bmi <= 24.9){
+                setBMIStatus('Healthy Weight');
+            }
+            else if (bmi > 25.0 && bmi <= 29.9){
+                setBMIStatus('Overweight');
+            } else {
+                setBMIStatus('Obese');
+            }
+            setBMI(Number(bmi).toFixed(1));
+        }
+    }
     const isCareGiver = false;
     return (
         <CRow>
             <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="HIV Status" header="Negative"  color="success" iconPadding={false}>
+                <CWidgetIcon text="HIV Status"
+                             header={hivStatus}
+                             color={color} iconPadding={false}>
                     <FavoriteBorderIcon />
                 </CWidgetIcon>
             </CCol>
             {isCareGiver ?
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Viral Load" header="1000 copies/ml" color="success" iconPadding={false}>
+                    <CWidgetIcon text="Viral Load" header="1000 copies/ml" color={color} iconPadding={false}>
                         <CIcon width={24} name="cil-graph"/>
                     </CWidgetIcon>
                 </CCol> :
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Weight" header="50 kg" color="success"  iconPadding={false}>
+                    <CWidgetIcon text="Weight" header={nutritionAssessment && nutritionAssessment.weight ? (nutritionAssessment.weight + " kg"): "-"} color={color}  iconPadding={false}>
                         <CIcon width={24} name="cil-graph"/>
                     </CWidgetIcon>
                 </CCol>
             }
             {isCareGiver ?
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Children" header="2" color="success" iconPadding={false}>
+                    <CWidgetIcon text="Children" header="2" color={color} iconPadding={false}>
                         <ChildCareIcon/>
                     </CWidgetIcon>
                 </CCol>
                 :
 
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="BMI" header="6 - Underweight" color="success" iconPadding={false}>
+                    <CWidgetIcon text="BMI" header={bmi + " - "+bmiStatus} color={color} iconPadding={false}>
                         <AccessibilityNewIcon/>
                     </CWidgetIcon>
                 </CCol>

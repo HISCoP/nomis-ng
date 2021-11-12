@@ -71,10 +71,10 @@ const CarePlan = (props) => {
     }
 
     return (
-        <>
+        <CCard>
             <CRow>
-                <CCol xs="12" className={"pb-3"}>
-                    <CButton color={"primary"} className="float-right" onClick={toggle}> New Care Plan</CButton>
+                <CCol xs="12" className={"text-right p-4"}>
+                    <CButton color={"primary"} onClick={toggle}> New Care Plan</CButton>
                 </CCol>
             </CRow>
 
@@ -111,6 +111,7 @@ const CarePlan = (props) => {
                     />
                 </CCol>
             </CRow>
+            {carePlanList.length > 0 &&
             <CRow>
                 <CCol xs="12">
                     <CCard>
@@ -120,17 +121,17 @@ const CarePlan = (props) => {
                                     {
                                         label: 'Pending',
                                         backgroundColor: '#f87979',
-                                        data: carePlanList.map(x=>x.pending)
+                                        data: carePlanList.map(x => x.pending)
                                     },
                                     {
                                         label: 'In Progress',
                                         backgroundColor: '#f8a121',
-                                        data: carePlanList.map(x=>x.inProgress)
+                                        data: carePlanList.map(x => x.inProgress)
                                     },
                                     {
                                         label: 'Completed',
                                         backgroundColor: '#01f83a',
-                                        data: carePlanList.map(x=>x.completed)
+                                        data: carePlanList.map(x => x.completed)
                                     }
                                 ]}
                                 labels="services"
@@ -146,6 +147,7 @@ const CarePlan = (props) => {
                     </CCard>
                 </CCol>
             </CRow>
+            }
             <FormRendererModal
                 showModal={showFormModal}
                 setShowModal={setShowFormModal}
@@ -155,7 +157,7 @@ const CarePlan = (props) => {
                 options={{modalSize:"xl"}}
             />
             <NewCarePlan  modal={modal} toggle={toggle} reloadSearch={fetchCarePlan} householdId={props.householdId}/>
-        </>
+        </CCard>
     )
 }
 

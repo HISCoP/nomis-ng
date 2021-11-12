@@ -77,7 +77,7 @@ const HouseHoldList = (props) => {
                 columns={[
                   { title: 'Unique ID', field: 'id' },
                   { title: 'Date Assessed', field: 'date' },
-                  { title: 'Total VC', field: 'ovc', type: 'numeric' },
+                  { title: 'Total VC', field: 'ovc'},
                   {
                     title: 'Address',
                     field: 'address',

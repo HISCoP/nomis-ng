@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
+import HomeIcon from '@material-ui/icons/Home';
+import ListIcon from '@material-ui/icons/List';
 import Dashboard from './Dashboard'
 import ServiceHomePage from "./ServiceHistoryPage";
 import Forms from "./FillForms";
@@ -16,6 +18,7 @@ import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
 import {connect} from "react-redux";
 import {calculateAge} from "./../../../utils/calculateAge";
 import {fetchHouseHoldById} from "../../../actions/houseHold";
+import ProvideService from "../household/ProvideService";
 
 const useStyles = makeStyles({
     root: {
@@ -33,8 +36,15 @@ const HomePage = (props) => {
     const [fetchingMember, setFetchingMember] = useState(true);
     const [fetchingHousehold, setFetchingHousehold] = useState(true);
     const [activeItem, setActiveItem] = React.useState('dashboard');
+    const [showServiceModal, setShowServiceModal] = useState(false);
+    const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
+    }
+    const reloadPage = () => {
+        let item = activeItem;
+        setActiveItem("");
+        setActiveItem(activeItem);
     }
 
     React.useEffect(() => {
@@ -78,17 +88,17 @@ const HomePage = (props) => {
                             <DashboardIcon fontSize="large" className={'text-center'}/>
                             <p>Dashboard</p>
                         </Menu.Item>
-
                         <Menu.Item
-                            name='services'
-                            active={activeItem === 'services'}
-                            onClick={handleItemClick}
+                            name='provide_services'
+                            active={activeItem === 'provide_services'}
+                            onClick={toggleServiceModal}
                             className={'text-center'}
                         >
                             <DescriptionIcon fontSize="large" className={'text-center'}/>
-                            <p>Services</p>
+                            <p>Provide Service</p>
 
                         </Menu.Item>
+
                         <Menu.Item
                             name='forms'
                             active={activeItem === 'forms'}
@@ -101,6 +111,16 @@ const HomePage = (props) => {
                           
                         </Menu.Item>
                         <Menu.Item
+                            name='services'
+                            active={activeItem === 'services'}
+                            onClick={handleItemClick}
+                            className={'text-center'}
+                        >
+                            <ListIcon fontSize="large" className={'text-center'}/>
+                            <p>Form History</p>
+
+                        </Menu.Item>
+                        <Menu.Item
                             name='household'
                             active={activeItem === 'household'}
                             className={'text-center'}
@@ -110,7 +130,7 @@ const HomePage = (props) => {
                                 pathname: "/household/home",
                                 state:householdId
                             }}  >
-                                <FolderIcon fontSize="large" className={'text-center'}/>
+                                <HomeIcon fontSize="large" className={'text-center'}/>
                                 <p>Household</p>
                             </Link>
                         </Menu.Item>
@@ -144,6 +164,8 @@ const HomePage = (props) => {
 
                 </CCol>
             </CRow>
+
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} reloadSearch={reloadPage} />
         </>
     )
 }
@@ -168,7 +190,7 @@ const InfoSection = (props) => {
                     <span>Age:  <small>{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
                         <span>Age: <small>Nil</small></span>
                         }<br/>
-                    <span>Date Of Assessment: <small>{props.member ? props.member.dateAssessment : 'Nil'}</small> </span><br/><br/>
+                    <span>Date Of Assessment: <small>{props.member ? props.member.dateOfEnrolment : 'Nil'}</small> </span><br/><br/>
 
                     {/*<span>State: <small>{props.member ? props.member.state : ""}</small></span><br/>*/}
                     {/*<span>LGA: <small>-</small></span><br/>*/}

@@ -8,7 +8,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import GroupIcon from '@material-ui/icons/Group';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
-import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/AddCircle';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import HouseholdDashboard from './HouseholdDashboard'
 import HouseholdMember from "./HouseholdMember";
@@ -153,7 +153,7 @@ const HouseHoldInfo = (props) => {
                         <>
                     <span>Household ID: <small> {props.household ? props.household.uniqueId : 'Nil'} </small></span><br/>
                     <span>Address: <small>{props.household.details ? props.household.details.street : 'Nil'} </small>
-                        <EditIcon titleAccess="Change household address" fontSize="inherit" className={'text-center'}/>
+                        <AddIcon titleAccess="Change household address" fontSize="inherit" className={'text-center'}/>
                     {" "}<VisibilityIcon titleAccess="View Full Address" fontSize="inherit" className={'text-center'}/>
                     </span><br/>
                     <span>Date Of Assessment: <small>{props.household.details.assessmentDate || 'Nil'}</small> </span><br/>

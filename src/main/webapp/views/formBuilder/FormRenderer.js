@@ -32,6 +32,7 @@ const FormRenderer = (props) => {
     const [householdMember, setHouseholdMember] = React.useState({});
     const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { household: props.household, baseUrl: url }}));
     const onDismiss = () => setShowErrorMsg(false);
+    const [last, setLast] = React.useState();
     const options = {
         noAlerts: true,
     };
@@ -46,11 +47,11 @@ const FormRenderer = (props) => {
                 setShowErrorMsg(true);
                 return;
             }
-            // //for forms with usage code 0, check if an encounter exists for this patient
-            // if(response.data && response.data.usageCode == 0){
-            //     console.log("fetching encounter")
-            //     fetchEncounter();
-            // }
+            //fetch last encounter and add to submission if is not an update
+            console.log("fetching encounter")
+            if(!props.encounterId) {
+                fetchEncounter();
+            }
             setForm(response.data);
         }) .catch((error) => {
             setErrorMsg("Error loading form, something went wrong");
@@ -70,7 +71,8 @@ const FormRenderer = (props) => {
                         setErrorMsg("Could not load encounter information");
                         setShowErrorMsg(true);
                     }
-                    setSubmission({data: extractedData.data});
+                    setSubmission(_.merge(submission, {data: extractedData.data}));
+                    //setSubmission({data: extractedData.data});
                     setFormId(extractedData.id);
                 })
                 .catch((error) => {
@@ -80,6 +82,7 @@ const FormRenderer = (props) => {
                 });
         }
     }, []);
+
 
     //extract the formData as an obj (if form data length is one) or an array
     const extractFormData = (formData) => {
@@ -95,26 +98,28 @@ const FormRenderer = (props) => {
     };
 
     async function fetchEncounter(){
+        //return if household id or member id was not passed. This could be household enrollment form
+        if(!props.houseHoldId || !props.householdMemberId){
+            return ;
+        }
         setShowLoadingEncounter(true);
         let url_slugs = "";
+
         if(props.houseHoldId){
-            url_slugs = `${url}households/${props.houseHoldId}/encounters/${props.formCode}`;
+            url_slugs = `${url}households/${props.houseHoldId}/${props.formCode}/encounters?page=0&size=1`;
         }
         if(props.householdMemberId){
-            url_slugs = `${url}household-members/${props.householdMemberId}/encounters/${props.formCode}`;
+            url_slugs = `${url}household-members/${props.householdMemberId}/${props.formCode}/encounters?page=0&size=1`;
         }
+
         await axios.get(url_slugs, {})
             .then(response => {
                 //get encounter form data and store it in submission object
-
-                if( response.data.length > 0 ){
-                    const lastEncounter = response.data[0]
-                    setFormId(lastEncounter.formDataId);
-                    const e = {
-                        ...submission, ...{...submission.data, ...{data: lastEncounter}}
-                    };
-                    setSubmission(e);
-                };
+                if(response.data && response.data.length > 0){
+                    const update = response.data[0].formData[0].data;
+                    setLast(update);
+                    setSubmission(_.merge(submission, { data: { last: update}}));
+                }
                 setShowLoadingEncounter(false);
             }) .catch((error) => {
                 setErrorMsg("Error loading encounter, something went wrong");
@@ -172,8 +177,8 @@ const FormRenderer = (props) => {
 
     const saveForm = (submission, onSuccess, onError) => {
 
-        const encounterDate = submission["dateEncounter"]
-            ? submission["dateEncounter"]
+        const encounterDate = submission.data["encounterDate"]
+            ? submission.data["encounterDate"]
             : new Date();
         const formatedDate = Moment(encounterDate);
 
@@ -226,12 +231,12 @@ const FormRenderer = (props) => {
             <ToastContainer />
             <Card>
                 <CardBody>
-                    { props.options && props.hideHeader &&
+                    { props.showHeader &&
                     <>
-                        <h4 class="text-capitalize">
-                            {"New: "}
+                        <h3 class="text-capitalize">
+                            {/*{"New: "}*/}
                             {props.title || (form && form.name ? form.name : '')}
-                        </h4>
+                        </h3>
                         <hr />
                     </>
                     }
@@ -251,6 +256,7 @@ const FormRenderer = (props) => {
                             delete submission.data.authHeader;
                             delete submission.data.submit;
                             delete submission.data.baseUrl;
+                            delete submission.data.last;
 
                             if (props.onSubmit) {
                                 return props.onSubmit(submission);
