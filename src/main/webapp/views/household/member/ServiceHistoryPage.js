@@ -8,6 +8,7 @@ import FormRendererModal from "../../formBuilder/FormRendererModal";
 import { toast, ToastContainer } from "react-toastify";
 import ProvideService from "../household/ProvideService";
 import {CButton, CCardHeader, CCol, CRow} from "@coreui/react";
+import{HOUSEHOLD_MEMBER_SERVICE_PROVISION} from "../../../api/codes";
 
 const ServiceHistoryPage = (props) => {
     const [showFormModal, setShowFormModal] = useState(false);
@@ -41,7 +42,7 @@ const ServiceHistoryPage = (props) => {
     }
     const viewForm = (row) => {
         //check if it is service provision page (static html) else use formio view
-        if(row.formCode == "9ec328a9-1b3c-4043-98d0-84ea5f47de55"){
+        if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
             const formData = row.formData[0];
             const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id};
             console.log(selectedService);
@@ -109,7 +110,7 @@ const ServiceHistoryPage = (props) => {
                 />
                 </CCol>
             </CRow>
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} reloadSearch={fetchHouseholdServiceHistory}
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} householdId={props.householdId} reloadSearch={fetchHouseholdServiceHistory}
                              serviceList={provideServiceData.serviceList} serviceDate={provideServiceData.serviceDate}
                                 formDataId={provideServiceData.formDataId} encounterId={provideServiceData.encounterId} type={provideServiceData.type}/>
                <FormRendererModal

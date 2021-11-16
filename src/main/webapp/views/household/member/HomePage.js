@@ -151,12 +151,12 @@ const HomePage = (props) => {
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
                             {activeItem === "services" &&
-                            <ServiceHomePage member={props.member} />
+                            <ServiceHomePage member={props.member} householdId={householdId}/>
                             }
                         </CTabPane>
                         <CTabPane active={activeItem === 'forms'} >
                             {activeItem === "forms" &&
-                            <Forms member={props.member} />
+                            <Forms member={props.member} householdId={householdId}/>
                             }
                         </CTabPane>
 
@@ -165,7 +165,7 @@ const HomePage = (props) => {
                 </CCol>
             </CRow>
 
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} reloadSearch={reloadPage} />
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} householdId={householdId} reloadSearch={reloadPage} />
         </>
     )
 }

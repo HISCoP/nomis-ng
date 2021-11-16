@@ -11,7 +11,7 @@ import {Card, Alert, CardBody, Spinner, ModalBody} from "reactstrap";
 import { url } from "../../api/index";
 import axios from "axios";
 import { formRendererService } from "../../_services/form-renderer";
-// import { authHeader } from '../../_helpers/auth-header';
+import { authHeader } from '../../_helpers/auth-header';
 import _ from 'lodash';
 import {fetchHouseHoldById} from "../../actions/houseHold";
 import {fetchHouseHoldMemberById} from "../../actions/houseHoldMember";
@@ -30,7 +30,7 @@ const FormRenderer = (props) => {
     const [formId, setFormId] = React.useState();
     const [household, setHousehold] = React.useState({});
     const [householdMember, setHouseholdMember] = React.useState({});
-    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { household: props.household, baseUrl: url }}));
+    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { household: props.household, baseUrl: url, authHeader: authHeader().Authorization }}));
     const onDismiss = () => setShowErrorMsg(false);
     const [last, setLast] = React.useState();
     const options = {

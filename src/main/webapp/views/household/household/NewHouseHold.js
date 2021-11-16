@@ -85,7 +85,7 @@ const saveAssessment = (e) => {
     const assessment = {details: data,
         householdMemberDTO: { details: data.primaryCareGiver, householdMemberType: 1},
         assessment: data.assessment,
-        householdAddressDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
+        householdMigrationDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
         uniqueId: data.uniqueId };
 
     console.log(assessment);

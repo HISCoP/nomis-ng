@@ -93,12 +93,12 @@ const ProvideService = (props) => {
           serviceDate: serviceDate,
           serviceOffered: merged
       }
-      formData['dateEncounter'] = moment(serviceDate);
-      formData['formCode'] = CODES.Caregiver_Household_Service;
+      formData['dateEncounter'] = new Date(serviceDate);
+      formData['formCode'] = CODES.HOUSEHOLD_MEMBER_SERVICE_PROVISION;
       formData['formData'] = [{data: data}] ;
       formData['archived'] = 0 ;
       formData['householdMemberId'] = props.memberId;
-
+      formData['householdId'] = props.householdId;
 
       const onSuccess = () => {
           setSaving(false);

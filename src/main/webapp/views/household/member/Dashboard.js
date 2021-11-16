@@ -159,7 +159,7 @@ const TopDashboardStats = (props) => {
 const MidDashboardStats = (props) => {
     const [fetchingMember, setFetchingMember] = useState(true);
     const [caregiver, setCaregiver] = useState(null);
-    const caregiverId = props.member && props.member.details && props.member.details.caregiver ? props.member.details.caregiver : null;
+    const caregiverId = props.member && props.member.details && props.member.details.caregiver ? props.member.details.caregiver.id : null;
     React.useEffect(() => {
         fetchCaregiver();
     }, [caregiverId]);
@@ -255,7 +255,7 @@ const RecentServiceOffered = (props) => {
            // toast.error('Error: Could not fetch recent service!');
         }
         axios
-            .get(`${url}household-members/${props.memberId}/${CODES.Caregiver_Household_Service}/encounters`)
+            .get(`${url}household-members/${props.memberId}/${CODES.HOUSEHOLD_MEMBER_SERVICE_PROVISION}/encounters`)
             .then(response => {
                 if(response.data.length > 0){
                     const formData = response.data[0].formData;
