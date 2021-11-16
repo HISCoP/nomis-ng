@@ -38,7 +38,7 @@ const HouseHoldList = (props) => {
   }, []); //componentDidMount
 
     const performSearch = () => {
-        setLoading('true');
+        setLoading(true);
         const onSuccess = () => {
             setLoading(false)
         }

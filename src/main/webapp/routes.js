@@ -9,7 +9,7 @@ const FormBuilder = React.lazy(() => import('./views/formBuilder/formBuilder'));
 const ViewForm = React.lazy(() => import('./views/formBuilder/ViewForm'));
 const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
 const DataVisualisation = React.lazy(() => import('./views/visualization/HomePage'));
-
+const RetrospectivePage = React.lazy(() => import('./views/retrospective/HomePage'));
 /* Admin */
 const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
 const UserSetupHomePage = React.lazy(() => import('./views/admin/Users/UserPage'));
@@ -41,10 +41,11 @@ const routes = [
   { path: '/household-members', name: 'Household Members', component: MemberSearch },
   { path: '/form-builder', name: 'Form Builder', component: FormBuilder },
   { path: '/edit-form', name: 'Edit Form', component: ViewForm },
+  { path: '/retrospective', name: 'Retrospective', component: RetrospectivePage, isPrivate: true},
   /* Administrative Link */
   { path: "/form-home", name: 'Form Builder', component: FormPage},
   { path: "/user-setup-home", name: 'User Setup', component: UserSetupHomePage},
-  { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage},
+  { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage, isPrivate: true},
   { path: "/program-setup-home", name: 'Domain Setup', component: ProgramSetupHomePage},
   { path: "/organisation-unit-home", name: 'Organisation Unit', component: OrganisationUnitHomepage},
   { path: "/domain-service", name: 'Domain Services', component: DomainServices},
