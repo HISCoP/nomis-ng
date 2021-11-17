@@ -29,9 +29,8 @@ public interface HouseholdRepository extends JpaRepository<Household, Long>, Jpa
             "OR details ->>'ward' ilike ?1 OR details ->>'state' ilike ?1 " +
             "OR details ->>'community' ilike ?1 OR details ->>'uniqueId' ilike ?1 " +
             "OR cbo_project_id = ?2 AND archived = ?3", nativeQuery = true)
-    Page<Household> findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(String search, Long cboProjectId, int archived, Pageable pageable);
-
-
+    Page<Household> findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(String search, Long cboProjectId,
+                                                                                    int archived, Pageable pageable);
 
 }
 

@@ -3,6 +3,7 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.FormDataDTO;
@@ -18,6 +19,9 @@ import org.nomisng.util.JsonUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -163,5 +167,49 @@ public class EncounterService {
 
     private Set<String> checkForEncounterAndGetPermission(){
         return accessRight.getAllPermissionForCurrentUser();
+    }
+
+    public Page<Encounter> getEncounterByHouseholdIdAndFormCodeAndDateEncounter(Long householdId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+
+        HashMap<String, LocalDate> localDateHashMap = getDates(dateFrom, dateTo);
+        LocalDate localDateFrom = localDateHashMap.get("dateFrom");
+        LocalDate localDateTo = localDateHashMap.get("dateTo");
+        Long currentCboId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+
+        return encounterRepository.findAllByHouseholdIdAndFormCodeAndArchivedAndCboProjectIdAndDateEncounterOrderByIdDesc(
+                householdId, formCode, UN_ARCHIVED, currentCboId, localDateTo, localDateFrom, pageable);
+    }
+
+    public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCodeAndDateEncounter(Long householdMemberId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+
+        HashMap<String, LocalDate> localDateHashMap = getDates(dateFrom, dateTo);
+        LocalDate localDateFrom = localDateHashMap.get("dateFrom");
+        LocalDate localDateTo = localDateHashMap.get("dateTo");
+
+        return encounterRepository.findAllByHouseholdMemberIdAndFormCodeAndArchivedAndCboProjectIdAndDateEncounterOrderByIdDesc(
+                householdMemberId, formCode, UN_ARCHIVED, userService.getUserWithRoles().get().getCurrentCboProjectId(),
+                localDateTo, localDateFrom, pageable);
+    }
+
+    private HashMap<String, LocalDate> getDates(String dateFrom, String dateTo){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        HashMap<String, LocalDate> localDateHashMap = new HashMap<>();
+
+        LocalDate localDateFrom = LocalDate.now();
+        LocalDate localDateTo;
+
+        if(!StringUtils.isBlank(dateFrom) && !dateFrom.equalsIgnoreCase("*")) {
+            localDateFrom = LocalDate.parse(dateFrom, formatter);
+        }
+        if(!StringUtils.isBlank(dateTo) && !dateTo.equalsIgnoreCase("*")) {
+            localDateTo = LocalDate.parse(dateTo, formatter);
+        } else {
+            localDateTo = localDateFrom;
+        }
+        localDateHashMap.put("dateFrom", localDateFrom);
+        localDateHashMap.put("dateTo", localDateTo);
+        return localDateHashMap;
     }
 }

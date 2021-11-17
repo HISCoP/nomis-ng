@@ -44,10 +44,16 @@ public class HouseholdController {
     }
 
     @GetMapping("/{id}/{formCode}/encounters")
-    public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdIdAndFormCode(@PathVariable Long id,
-                                                                                          @PathVariable String formCode,
-                                                                                          @PageableDefault(value = 100) Pageable pageable) {
-        Page<Encounter> encounterPage = encounterService.getEncountersByHouseholdIdAndFormCode(id, formCode, pageable);
+    public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdIdAndFormCode(@PathVariable Long id, @PathVariable String formCode,
+                                                                                    @RequestParam(required = false, defaultValue = "*")String dateFrom,
+                                                                                    @RequestParam(required = false, defaultValue = "*")String dateTo,
+                                                                                    @PageableDefault(value = 100) Pageable pageable) {
+        Page<Encounter> encounterPage;
+        if(dateTo != null || !dateTo.equalsIgnoreCase("*") || dateFrom != null || !dateFrom.equalsIgnoreCase("*")){
+            encounterPage = encounterService.getEncounterByHouseholdIdAndFormCodeAndDateEncounter(id, formCode, dateFrom, dateTo, pageable);
+        } else {
+            encounterPage = encounterService.getEncountersByHouseholdIdAndFormCode(id, formCode, pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), encounterPage);
         return new ResponseEntity<>(encounterService.getEncounterDTOFromPage(encounterPage), headers, HttpStatus.OK);
     }
