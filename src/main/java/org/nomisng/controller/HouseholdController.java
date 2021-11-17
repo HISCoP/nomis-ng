@@ -49,7 +49,7 @@ public class HouseholdController {
                                                                                     @RequestParam(required = false, defaultValue = "*")String dateTo,
                                                                                     @PageableDefault(value = 100) Pageable pageable) {
         Page<Encounter> encounterPage;
-        if(dateTo != null || !dateTo.equalsIgnoreCase("*") || dateFrom != null || !dateFrom.equalsIgnoreCase("*")){
+        if((dateFrom != null && !dateFrom.equalsIgnoreCase("*")) && (dateTo != null || !dateTo.equalsIgnoreCase("*"))){
             encounterPage = encounterService.getEncounterByHouseholdIdAndFormCodeAndDateEncounter(id, formCode, dateFrom, dateTo, pageable);
         } else {
             encounterPage = encounterService.getEncountersByHouseholdIdAndFormCode(id, formCode, pageable);
