@@ -20,7 +20,6 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 public class FormDataService {
 
     private final FormDataRepository formDataRepository;
-    private final Long organisationUnitId = 1L;
     private final FormDataMapper formDataMapper;
 
     /*public FormData save(FormData formData) {
@@ -61,9 +60,4 @@ public class FormDataService {
         formData.setArchived(UN_ARCHIVED);
         formDataRepository.save(formData);
     }
-
-    /*public List<FormData> getAllFormDataByEncounterId(Long encounterId) {
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
-        return formDataRepository.findAllByEncounterIdAndArchivedAndOrganisationUnitIdOrderByIdDesc(encounterId, UN_ARCHIVED, organisationUnitId);
-    }*/
 }

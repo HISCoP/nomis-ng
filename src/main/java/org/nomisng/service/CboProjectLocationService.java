@@ -36,13 +36,6 @@ public class CboProjectLocationService {
 
     public List<OrganisationUnit> getOrganisationUnitByCboProjectId() {
         Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
-        List<OrganisationUnit> organisationUnits = new ArrayList<>();
-        List<CboProjectLocation> cboProjectLocations = cboProjectLocationRepository.findAllById(cboProjectId);
-        cboProjectLocations.forEach(cboProjectLocation -> {
-            OrganisationUnit organisationUnit = cboProjectLocation.getOrganisationUnitByOrganisationUnitId();
-            //organisationUnit.setParentOrganisationUnitName(organisationUnitRepository.findById(organisationUnit.getParentOrganisationUnitId()).get().getName());
-            organisationUnits.add(cboProjectLocation.getOrganisationUnitByOrganisationUnitId());
-        });
-        return organisationUnits;
+        return organisationUnitRepository.findAllByCboProjectIdId(cboProjectId);
     }
 }

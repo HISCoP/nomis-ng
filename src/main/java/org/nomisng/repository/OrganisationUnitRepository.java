@@ -48,4 +48,8 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
             " AND name ilike ?2", nativeQuery = true)
     Page<OrganisationUnit> findAllByOrganisationByLevelAndName(Long organisationUnitLevelId, String organisationUnitName, Pageable pageable);
 
+    @Query(value = "SELECT * FROM organisation_unit WHERE id " +
+            "IN (SELECT organisation_unit_id FROM cbo_project_location WHERE cbo_project_id=?1)", nativeQuery = true)
+    List<OrganisationUnit> findAllByCboProjectIdId(Long cboProjectId);
+
 }
