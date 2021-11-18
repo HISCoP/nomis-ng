@@ -29,4 +29,13 @@ public class CboProjectLocationController {
     public ResponseEntity<List<OrganisationUnit>> getOrganisationUnitByCboProjectId() {
         return ResponseEntity.ok(cboProjectLocationService.getOrganisationUnitByCboProjectId());
     }
+
+    @GetMapping("/state")
+    public ResponseEntity<List<OrganisationUnit>> getState() {
+        return ResponseEntity.ok(cboProjectLocationService.getState());
+    }
+    @GetMapping("/state/{stateId}/lga")
+    public ResponseEntity<List<OrganisationUnit>> getState(@PathVariable Long stateId) {
+        return ResponseEntity.ok(cboProjectLocationService.getLga(stateId));
+    }
 }

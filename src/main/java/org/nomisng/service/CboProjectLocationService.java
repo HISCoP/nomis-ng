@@ -38,4 +38,14 @@ public class CboProjectLocationService {
         Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         return organisationUnitRepository.findAllByCboProjectIdId(cboProjectId);
     }
+
+    public List<OrganisationUnit> getState() {
+        Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+        return organisationUnitRepository.findStateByCboProjectId(cboProjectId);
+    }
+
+    public List<OrganisationUnit> getLga(Long stateId) {
+        Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+        return organisationUnitRepository.findLgaByStateIdAndCboProjectId(stateId, cboProjectId);
+    }
 }
