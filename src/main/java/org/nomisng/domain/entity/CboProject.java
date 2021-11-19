@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "cbo_project")
+@Table(name = "cbo_project", schema = "public", catalog = "nomis_debbie_17_11_21")
 public class CboProject {
 
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
@@ -100,4 +100,7 @@ public class CboProject {
     @JsonIgnore
     @ToString.Exclude
     private List<FormData> formData;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    private List<ApplicationUserCboProject> applicationUserCboProjectsById;
 }

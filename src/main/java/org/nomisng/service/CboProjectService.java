@@ -38,6 +38,10 @@ public class CboProjectService {
     private final OrganisationUnitService organisationUnitService;
     private final CboProjectLocationRepository cboProjectLocationRepository;
     private final UserService userService;
+    private final static int UN_ARCHIVED = 0;
+    private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
+    private final UserRepository userRepository;
+
 
 
     public CboProjectDTO save(CboProjectDTO cboProjectDTO) {
@@ -102,7 +106,7 @@ public class CboProjectService {
     }*/
 
     public CboProject update(Long id, CboProjectDTO cboProjectDTO) {
-        cboProjectRepository.findById(id)
+        cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
 
         List<CboProjectLocation> cboProjectLocations = cboProjectLocationRepository
@@ -183,5 +187,20 @@ public class CboProjectService {
             ids.add(id);
         }
         return ids;
+    }
+
+    public void switchCboProject(Long id) {
+        if(cboProjectLocationRepository.findAllById(id).isEmpty()){
+            new EntityNotFoundException(CboProject.class, "Id", id+"");
+        }
+
+        User user = userService.getUserWithRoles().get();
+        Long userId = user.getId();
+
+        applicationUserCboProjectRepository.findByApplicationUserIdAndCboProjectId(userId, id)
+                .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "User & Cbo Project", "does not match"));
+
+        user.setCurrentCboProjectId(id);
+        userRepository.save(user);
     }
 }

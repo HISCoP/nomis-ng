@@ -98,8 +98,9 @@ public class User {
     private List<ApplicationUserCboProject> applicationUserCboProjects;
 
     @ManyToOne
-    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
     @ToString.Exclude
+    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
     private CboProject cboProjectByCurrentCboProjectId;
 
     @ManyToOne
@@ -107,4 +108,9 @@ public class User {
     @ToString.Exclude
     @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
     private CboProject cboProjectByCboId;
+
+    @OneToMany(mappedBy = "applicationUserByApplicationUserId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<ApplicationUserCboProject> applicationUserCboProjectsById;
 }

@@ -63,4 +63,9 @@ public class CboProjectController {
     public ResponseEntity<List<OrganisationUnit>> getOrganisationUnitByCboProjectId() {
         return ResponseEntity.ok(cboProjectService.getOrganisationUnitByCboProjectId());
     }*/
+
+    @PostMapping("/{id}")
+    public void switchCboProject(@PathVariable Long id) {
+        cboProjectService.switchCboProject(id);
+    }
 }

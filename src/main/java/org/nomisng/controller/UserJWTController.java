@@ -3,6 +3,8 @@ package org.nomisng.controller;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import org.nomisng.controller.vm.LoginVM;
+import org.nomisng.domain.entity.User;
+import org.nomisng.repository.ApplicationUserCboProjectRepository;
 import org.nomisng.security.jwt.JWTFilter;
 import org.nomisng.security.jwt.TokenProvider;
 import org.nomisng.service.UserJWTService;
@@ -20,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserJWTController {
     private final UserJWTService userJWTService;
+    //private final UserService userService;
+    //private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
 
 
     @PostMapping("/authenticate")
@@ -34,6 +39,10 @@ public class UserJWTController {
         String jwt = userJWTService.authorize(loginVM);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        /*Optional<User> optionalUser = userService.getUserWithAuthoritiesByUsername(loginVM.getUsername());
+        optionalUser.ifPresent(user -> {
+            applicationUserCboProjectRepository.find
+        });*/
 
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
