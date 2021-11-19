@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -90,8 +91,13 @@ public class CboProject {
     @ToString.Exclude
     private List<HouseholdMember> householdMembersById;
 
-    @OneToMany(mappedBy = "encounterByCboProjectId")
+    @OneToMany(mappedBy = "encounterByCboProjectId", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private List<Encounter> encountersById;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
+    private List<FormData> formData;
 }

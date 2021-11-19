@@ -16,11 +16,20 @@ import ProvideService from "../household/household/ProvideService";
 import NewOvc from "../household/household/NewOvc";
 import NewCareGiver from "../household/household/NewCareGiver";
 import NewHouseHold from "../household/household/NewHouseHold";
-
+import { DatePicker } from "react-widgets";
+import "react-widgets/dist/css/react-widgets.css";
+import Moment from "moment";
+import momentLocalizer from "react-widgets-moment";
+import _ from "lodash";
+//Dtate Picker package
+Moment.locale("en");
+momentLocalizer();
 
 const HomePage = (props) => {
     const [hhLoading, setHHLoading] = useState(true);
     const [hmLoading, setHMLoading] = useState(true);
+    const [submission, setSubmission] = useState();
+    const [loadingEncounter, setShowLoadingEncounter] = useState(false);
     const [selectedHH, setHH] = useState();
     const [selectedHM, setHM] = useState();
     const [formList, setFormList] = React.useState([]);
@@ -30,6 +39,8 @@ const HomePage = (props) => {
     const [newOvcModal, setShowOvcModal] = React.useState(false);
     const [newCaregiverModal, setShowCaregiverModal] = React.useState(false);
     const [newHouseholdModal, setShowHHModal] = React.useState(false);
+    const [serviceDate, setServiceDate] = React.useState();
+    const [encounter, setEncounter] = React.useState();
     const toggleHousehold = () => setShowHHModal(!newHouseholdModal);
     const toggleOvc = () => setShowOvcModal(!newOvcModal);
     const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
@@ -112,6 +123,17 @@ const HomePage = (props) => {
             toast.error("Select a form to proceed")
             return;
         }
+
+        if(selectedForm.code === CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM){
+            toggleOvc();
+            return;
+        }
+
+        if(selectedForm.code === CODES.CARE_GIVER_ENROLMENT_FORM){
+            toggleCaregiver();
+            return;
+        }
+
         //check if it is a household member form
         if((selectedForm.code !== CODES.CARE_GIVER_ENROLMENT_FORM
             && selectedForm.code !== CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM
@@ -124,25 +146,67 @@ const HomePage = (props) => {
         }
 
         if(selectedForm.code === CODES.HOUSEHOLD_MEMBER_SERVICE_PROVISION){
-            toggleServiceModal();
+            if(!serviceDate){
+                toast.error("Pick a service date to proceed")
+                return;
+            }
+            fetchEncounterByEncounterDate(serviceDate).then(x=>{
+                toggleServiceModal();
+                }
+            );
+
             return;
         }
 
-        if(selectedForm.code === CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM){
-            toggleOvc();
-            return;
-        }
+        fetchEncounterByEncounterDate(serviceDate).then(x=>{
+            setShowForm(true);
+            }
+        );
 
-        if(selectedForm.code === CODES.CARE_GIVER_ENROLMENT_FORM){
-            toggleCaregiver();
-            return;
-        }
-        setShowForm(true);
+
     }
 
     const onSuccess = () => {
         setShowForm(false);
         toast.success("Form saved successfully!", { appearance: "success" });
+    }
+
+    const setDate = (e) => {
+        setServiceDate(e );
+    }
+
+    async function fetchEncounterByEncounterDate(date){
+        //return if household id or member id was not passed. This could be household enrollment form
+        if(!selectedHH || !selectedHM){
+            return ;
+        }
+        const encounterDate = Moment(date).format('YYYY-MM-DD');
+        setShowLoadingEncounter(true);
+        let url_slugs = "";
+
+        if(selectedHH){
+            url_slugs = `${url}households/${selectedHH.id}/${selectedForm.code}/encounters?page=0&size=1&dateFrom=${encounterDate}&dateTo=${encounterDate}`;
+        }
+        if(selectedForm.code !== CODES.HOUSEHOLD_ASSESSMENT && selectedForm.code !== CODES.CARE_PLAN && selectedHM){
+            url_slugs = `${url}household-members/${selectedHM.id}/${selectedForm.code}/encounters?page=0&size=1&dateFrom=${encounterDate}&dateTo=${encounterDate}`;
+        }
+
+       await  axios.get(url_slugs, {})
+            .then(response => {
+                //get encounter form data and store it in submission object
+                if(response.data && response.data.length > 0){
+                    const fd = response.data[0].formData[0];
+                    setEncounter(fd);
+                    setSubmission( { data: fd.data});
+                }
+                setShowLoadingEncounter(false);
+            }) .catch((error) => {
+                toast.error("Error loading encounter, something went wrong");
+                setShowLoadingEncounter(false);
+            });
+
+        ;
+
     }
 
     return (
@@ -198,6 +262,19 @@ const HomePage = (props) => {
                                         label: x.name,
                                         value: x,
                                     }))}
+                                />
+                            </FormGroup>
+                        </CCol>
+                        <CCol md={6}>
+                            <FormGroup>
+                                <Label >Service Date</Label>
+                                <DatePicker
+                                    name="serviceDate"
+                                    id="serviceDate"
+                                    defaultValue={serviceDate}
+                                    max={new Date()}
+                                    required
+                                    onChange={setDate}
                                 />
                             </FormGroup>
                         </CCol>
@@ -285,7 +362,10 @@ const HomePage = (props) => {
                 <CCardBody>
                     <FormRenderer
                         formCode={selectedForm.code}
+                        encounterDate={serviceDate}
                         householdId={selectedHH.id}
+                        submission={submission}
+                        encounterId={encounter ? encounter.encounterId : ""}
                         householdMemberId = {(selectedForm.code !== CODES.HOUSEHOLD_ASSESSMENT && selectedForm.code !== CODES.CARE_PLAN) && selectedHM && selectedHM.id ? selectedHM.id : null}
                         onSuccess={onSuccess}
                     />
@@ -294,7 +374,11 @@ const HomePage = (props) => {
             }
             {/*Display form*/}
 
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={selectedHM ? selectedHM.id : ""} householdId={selectedHH ? selectedHH.id : ""}  />
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={selectedHM ? selectedHM.id : ""} householdId={selectedHH ? selectedHH.id : ""}
+                             serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : ""}
+                             formDataId={encounter ? encounter.id : ""} encounterId={encounter ? encounter.encounterId : ""}
+            />
+
             <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)}/>
             <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} />
             <NewHouseHold  modal={newHouseholdModal} toggle={toggleHousehold} reloadSearch={fetchHousehold}/>

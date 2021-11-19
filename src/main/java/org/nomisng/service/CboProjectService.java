@@ -37,6 +37,7 @@ public class CboProjectService {
     private final Constants.ArchiveStatus constant;
     private final OrganisationUnitService organisationUnitService;
     private final CboProjectLocationRepository cboProjectLocationRepository;
+    private final UserService userService;
 
 
     public CboProjectDTO save(CboProjectDTO cboProjectDTO) {
@@ -92,6 +93,13 @@ public class CboProjectService {
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
        return cboProjectMapper.toCboProjectDTO(setNames(cboProject));
     }
+
+    /*public List<OrganisationUnit> getOrganisationUnitByCboProjectId() {
+        Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+        CboProject cboProject = cboProjectRepository.findByIdAndArchived(cboProjectId, constant.UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "cboProjectId", cboProjectId+""));
+        return cboProject.getOrganisationUnits();
+    }*/
 
     public CboProject update(Long id, CboProjectDTO cboProjectDTO) {
         cboProjectRepository.findById(id)

@@ -174,7 +174,7 @@ const ProvideService = (props) => {
                           required
                           onChange={setDate}
                       />
-                  <Input type={"date"} onChange={setDate} value={serviceDate} max={new Date()}/>
+                  {/*<Input type={"date"} onChange={setDate} value={serviceDate} max={new Date()}/>*/}
                   </FormGroup>
               </Col>
               <Col md={12}>

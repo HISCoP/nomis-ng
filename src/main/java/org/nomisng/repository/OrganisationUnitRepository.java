@@ -48,4 +48,20 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
             " AND name ilike ?2", nativeQuery = true)
     Page<OrganisationUnit> findAllByOrganisationByLevelAndName(Long organisationUnitLevelId, String organisationUnitName, Pageable pageable);
 
+    @Query(value = "SELECT * FROM organisation_unit WHERE id " +
+            "IN (SELECT organisation_unit_id FROM cbo_project_location " +
+            "WHERE cbo_project_id=?1 AND archived = 0)", nativeQuery = true)
+    List<OrganisationUnit> findAllByCboProjectIdId(Long cboProjectId);
+
+    @Query(value = "SELECT * FROM organisation_unit WHERE id IN" +
+            "(SELECT parent_organisation_unit_id FROM organisation_unit " +
+            "WHERE id IN (SELECT organisation_unit_id FROM cbo_project_location " +
+            "WHERE cbo_project_id=?1 AND archived = 0))", nativeQuery = true)
+    List<OrganisationUnit> findStateByCboProjectId(Long cboProjectId);
+
+    @Query(value = "SELECT * FROM organisation_unit WHERE parent_organisation_unit_id = ?1 " +
+            "AND id IN (SELECT organisation_unit_id FROM cbo_project_location " +
+            "WHERE cbo_project_id=?2 AND archived = 0)", nativeQuery = true)
+    List<OrganisationUnit> findLgaByStateIdAndCboProjectId(Long stateId, Long cboProjectId);
+
 }

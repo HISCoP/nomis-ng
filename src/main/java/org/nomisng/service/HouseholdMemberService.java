@@ -16,6 +16,8 @@ import org.nomisng.domain.mapper.EncounterMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
 import org.nomisng.repository.HouseholdMemberRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +38,24 @@ public class HouseholdMemberService {
     private final HouseholdMapper householdMapper;
     private final EncounterMapper encounterMapper;
     private final EncounterService encounterService;
+    private final UserService userService;
     private ObjectMapper mapper = new ObjectMapper();
     private String firstName = "firstName";
     private String lastName = "lastName";
 
 
 
-    public List<HouseholdMemberDTO> getAllHouseholdMembers() {
-        return householdMemberMapper.toHouseholdDTOS(householdMemberRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED));
+    public Page<HouseholdMember> getAllHouseholdMembersPage(String search, Pageable pageable) {
+        Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+        if(search == null || search.equalsIgnoreCase("*")) {
+            return householdMemberRepository.findAllByCboProjectIdAndArchivedOrderByIdDesc(currentCboProjectId, UN_ARCHIVED, pageable);
+        }
+        search = "%"+search+"%";
+        return householdMemberRepository.findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(search, currentCboProjectId, UN_ARCHIVED, pageable);
+    }
+
+    public List<HouseholdMemberDTO> getAllHouseholdMembersFromPage(Page<HouseholdMember> householdMembersPage) {
+        return householdMemberMapper.toHouseholdDTOS(householdMembersPage.getContent());
     }
 
     public HouseholdMember save(HouseholdMemberDTO householdMemberDTO) {

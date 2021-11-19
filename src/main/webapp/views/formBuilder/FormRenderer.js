@@ -50,7 +50,11 @@ const FormRenderer = (props) => {
             //fetch last encounter and add to submission if is not an update
             console.log("fetching encounter")
             if(!props.encounterId) {
-                fetchEncounter();
+                //fetchEncounter();
+            }
+
+            if(props.encounterDate){
+                //fetchEncounterByEncounterDate(props.encounterDate);
             }
             setForm(response.data);
         }) .catch((error) => {
@@ -99,14 +103,14 @@ const FormRenderer = (props) => {
 
     async function fetchEncounter(){
         //return if household id or member id was not passed. This could be household enrollment form
-        if(!props.houseHoldId || !props.householdMemberId){
+        if(!props.householdId || !props.householdMemberId){
             return ;
         }
         setShowLoadingEncounter(true);
         let url_slugs = "";
 
-        if(props.houseHoldId){
-            url_slugs = `${url}households/${props.houseHoldId}/${props.formCode}/encounters?page=0&size=1`;
+        if(props.householdId){
+            url_slugs = `${url}households/${props.householdId}/${props.formCode}/encounters?page=0&size=1`;
         }
         if(props.householdMemberId){
             url_slugs = `${url}household-members/${props.householdMemberId}/${props.formCode}/encounters?page=0&size=1`;
@@ -130,6 +134,7 @@ const FormRenderer = (props) => {
         ;
 
     }
+
 
     //fetch household and household member
     React.useEffect(() => {

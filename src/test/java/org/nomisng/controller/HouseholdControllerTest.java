@@ -101,7 +101,7 @@ public class HouseholdControllerTest {
         Assert.assertNotNull(returnedHouseholdDTO);
     }
 
-    @Test
+    /*@Test
     public void getAllHouseholds_success() throws Exception {
         Mockito.when(householdService.getAllHouseholds()).thenReturn(householdDTOS);
         mockMvc.perform(MockMvcRequestBuilders
@@ -110,7 +110,7 @@ public class HouseholdControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
-    }
+    }*/
 
     @After
     public void resetDb() {
