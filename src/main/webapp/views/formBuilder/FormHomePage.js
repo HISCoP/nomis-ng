@@ -150,10 +150,10 @@ function FormSearch(props) {
         </React.Fragment>
     );
 }
-const mapStateToProps =  (state = { form:{}}) => {
+const mapStateToProps =  (state = { form:[]}) => {
     // console.log(state.forms)
     return {
-        formList: state.formReducers.form !==null ? state.formReducers.form : {},
+        formList: state.formReducers.formList !==null ? state.formReducers.formList : [],
     }}
 
 const mapActionToProps = {

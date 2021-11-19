@@ -9,7 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { createDomain, updateDomain } from "../../../actions/domainsServices";
-import { v4 as uuidv4 } from 'uuid';
 import { Spinner } from 'reactstrap';
 
 
@@ -24,29 +23,30 @@ const NewDomain = (props) => {
     const [loading, setLoading] = useState(false)
     const defaultValues = {name:""}
     const [formData, setFormData] = useState(defaultValues)
-    const [errors, setErrors] = useState({});
     const classes = useStyles()
 
-
-
-    const handleInputChange = e => {
-        setFormData ({ ...formData, [e.target.name]: e.target.value});
-    }
+    
+    useEffect(() => {
+        //for Domain Area edit, load form data
+        if(props.currentDomain){
+            setFormData({...formData, name:props.currentDomain.name });
+        }
+    },  [props.currentDomain,  props.showModal]);
 
     const handleNameInputChange = e => {
 
-        setFormData ({ ...formData, [e.target.name]: e.target.value.split(" ").join("")  });
+        setFormData ({ ...formData, [e.target.name]: e.target.value  });
     }
 
-    const validate = () => {
-        let temp = { ...errors }
-        temp.name = formData.name ? "" : "Name is required"
-        setErrors({
-            ...temp
-        })
-        console.log(temp)
-        return Object.values(temp).every(x => x == "")
-    }
+    // const validate = () => {
+    //     let temp = { ...errors }
+    //     temp.name = formData.name ? "" : "Name is required"
+    //     setErrors({
+    //         ...temp
+    //     })
+    //     console.log(temp)
+    //     return Object.values(temp).every(x => x == "")
+    // }
 
     const createGlobalDomain = e => {
         e.preventDefault()
@@ -60,12 +60,10 @@ const NewDomain = (props) => {
             setLoading(false);
            
         }
-
-        if(formData.id){
-            props.updateDomain(formData.id, formData, onSuccess, onError)
+        if(props.currentDomain){
+            props.updateDomain(props.currentDomain.id, formData, onSuccess, onError)
             return
         }
-        //formData.code= uuidv4();
         props.createDomain(formData, onSuccess,onError)
 
     }

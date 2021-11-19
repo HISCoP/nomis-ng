@@ -2,64 +2,101 @@ import React, {useState, useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { connect } from "react-redux";
 import { fetchAllHouseHoldServiceHistory } from "./../../../actions/houseHold";
+import moment from "moment";
+import FormRendererModal from "../../formBuilder/FormRendererModal";
+import {toast} from "react-toastify";
 
 const ServiceHistoryPage = (props) => {
 
-    const [loading, setLoading] = useState('')
+    const [loading, setLoading] = useState(false);
+    const householdId = props.householdId;
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [currentForm, setCurrentForm] = useState(false);
 
-    console.log(props.holdHoldServiceHistory)
     useEffect(() => {
-    setLoading('true');
+        fetchHouseholdServiceHistory(householdId);
+    }, [householdId]); //componentDidMount
+
+    const fetchHouseholdServiceHistory = (householdId) => {
+        setLoading(true);
         const onSuccess = () => {
-            setLoading(false)
+            setLoading(false);
         }
         const onError = () => {
-            setLoading(false)     
+            setLoading(false);
         }
-            props.fetchAllHouseHoldServiceHistory(onSuccess, onError);
-    }, []); //componentDidMount
+        props.fetchAllHouseHoldServiceHistory(householdId, onSuccess, onError);
+    }
 
-   
+    const onSuccess = () => {
+        fetchHouseholdServiceHistory();
+        toast.success("Form saved successfully!");
+        setShowFormModal(false);
+    }
+    const viewForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
+        setShowFormModal(true);
+    }
+
+    const editForm = (row) => {
+        console.log(row);
+        setCurrentForm({ ...row, type: "EDIT", encounterId: row.id });
+        setShowFormModal(true);
+    }
+
     return (
-
+<>
             <MaterialTable
                 title="Services Form History"
                 columns={[
-                    { title: 'Form Name', field: 'name' },
+                    { title: 'Form Name', field: 'formName' },
                     { title: 'Date', field: 'date' },
-                      { title: 'Name', field: 'surname' },
+                      { title: 'Name', field: 'memberName' },
                 ]}
                 isLoading={loading}
-                data={[
-                    { name: 'Household Vunerabilty Assessment', surname: 'Ama Kindu', date: '12/11/2020 08:35 AM', birthCity: 63 },
-                    { name: 'Household Followup Assessment', surname: 'Nisa Baran', date: '12/11/2020 08:35 AM', birthCity: 34 },
-                ]}
+                data={props.householdServiceHistory.map(service => ({...service,
+                    formName: service.formName,
+                    date: service.dateEncounter ? moment(service.dateEncounter).format('LLL') : '',
+                    memberName: service.firstName ? (service.firstName + " " + service.lastName) : ''
+                }))}
+
                 actions={[
                     {
                         icon: 'edit',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name)
+                        tooltip: 'Edit Form',
+                        onClick: (event, rowData) => editForm(rowData)
                     },
                     rowData => ({
                         icon: 'visibility',
                         tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You want to delete " + rowData.name)
+                        onClick: (event, rowData) => viewForm(rowData)
 
                     })
                 ]}
                 options={{
                     actionsColumnIndex: -1,
                     padding: 'dense',
-                    header: false
+                    header: true
                 }}
             />
+
+    <FormRendererModal
+        showModal={showFormModal}
+        setShowModal={setShowFormModal}
+        currentForm={currentForm}
+        onSuccess={onSuccess}
+        //onError={onError}
+        options={{modalSize:"xl"}}
+    />
+            </>
     );
 
 }
 
 const mapStateToProps = state => {
     return {
-        holdHoldServiceHistory: state.houseHold.holdHoldServiceHistory
+        householdServiceHistory: state.houseHold.householdServiceHistory
     };
   };
   const mapActionToProps = {

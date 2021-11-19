@@ -1,44 +1,76 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
-import * as CODES from './../../../api/codes'
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { CModal, CModalBody, CModalHeader} from "@coreui/react";
+import {CARE_GIVER_ENROLMENT_FORM} from './../../../api/codes'
 import FormRenderer from './../../formBuilder/FormRenderer'
+import {toast} from "react-toastify";
+import axios from "axios";
+import {url} from "../../../api";
 
 
 const NewOvc = (props) => {
-  const {
-    buttonLabel,
-    className
-  } = props;
-  const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
+
   const currentForm = {
-    code: CODES.CARE_GIVER_ENROLMENT_FORM ,
+    code: CARE_GIVER_ENROLMENT_FORM ,
     formName: "Care Giver Enrolment Form",
     options:{
       hideHeader: true
     },
   };
 
-  const saveAssessment = (e) => {
-    alert('Save Successfully');
-    props.togglestatus();
+  const createMember = (body) => {
+    const onSuccess = () => {
+      toast.success('Household caregiver saved!');
+      props.reload();
+      props.toggle();
 
+    }
+
+    const onError = () => {
+      toast.error('Error: Household caregiver not saved!');
+    }
+    axios
+        .post(`${url}household-members`, body)
+        .then(response => {
+          if(onSuccess){
+            onSuccess();
+          }
+        })
+        .catch(error => {
+              if(onError){
+                onError();
+              }
+            }
+
+        );
+  }
+
+  const save = (e) => {
+    //alert('Save Successfully');
+
+    const data = e.data;
+    const member = {details: data, householdMemberType: 1, householdId: props.householdId};
+   createMember(member)
 
   };
 
 
   return (
       <div>
+          {props.modal &&
+          <CModal show={props.modal} onClose={props.toggle} backdrop={true} size='xl'>
+              <CModalHeader  closeButton >New Care Giver</CModalHeader>
+              <CModalBody>
+                  <FormRenderer
+                      householdId={props.householdId}
+                      formCode={currentForm.code}
+                      submission={{}}
+                      onSubmit={save} />
+              </CModalBody>
+          </CModal>
 
-        <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={true} size='lg'>
-          <ModalHeader toggle={props.toggle}>New Care Giver</ModalHeader>
-          <ModalBody>
-            <FormRenderer
-                formCode={currentForm.code}
-                onSubmit={saveAssessment}/>
-          </ModalBody>
-        </Modal>
-      </div>
+          }
+       </div>
   );
 
 }

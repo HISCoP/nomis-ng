@@ -27,7 +27,7 @@ const UserPage = (props) => {
       <Card className={classes.cardBottom}>
         <CardContent>
           <Title>
-          <Link to="/roles">
+          <Link to="/user-setup-home">
               <Button
                 variant="contained"
                 color="primary"

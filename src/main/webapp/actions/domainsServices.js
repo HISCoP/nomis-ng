@@ -27,7 +27,7 @@ export const fetchAllDomains = (onSuccess , onError) => dispatch => {
 export const fetchAllDomainServices = (id, onSuccess , onError) => dispatch => {
     
     axios
-        .get(`${url}domains/${id}`)
+        .get(`${url}domains/${id}/ovcServices`)
         .then(response => {
             console.log(response.data)
             dispatch({
@@ -72,11 +72,13 @@ export const updateDomain = (id, formData, onSuccess , onError) => dispatch => {
         .then(response => {
             if(onSuccess){
                 onSuccess();
+                toast.success("Domain updated successfully!")
             }
         })
         .catch(error => {
                 if(onError){
                     onError();
+                    toast.error("Something went wrong, please try again..");
                 }
             }
 
@@ -85,10 +87,11 @@ export const updateDomain = (id, formData, onSuccess , onError) => dispatch => {
 
 export const deleteDomain = (id, onSuccess , onError) => dispatch => {
     axios
-        .delete(`${url}global-variables/${id}`)
+        .delete(`${url}domains/${id}`)
         .then(response => {
             if(onSuccess){
                 onSuccess();
+                toast.success("Domain deleted successfully!");
             }
         })
         .catch(error => {
@@ -104,15 +107,17 @@ export const createDomainService = (formData, onSuccess , onError) => dispatch =
     axios
         .post(`${url}ovc-services`, formData)
         .then(response => {
-            if(onSuccess){
+            console.log(response.status)
+
+            if(response ){
                 onSuccess();
-                toast.success("Domain saved successfully!")
+
             }
         })
         .catch(error => {
                 if(onError){
                     onError();
-                    toast.error("Something went wrong, please contact administration");
+    
                 }
             }
 
@@ -125,11 +130,13 @@ export const updateDomainService = (id, formData, onSuccess , onError) => dispat
         .then(response => {
             if(onSuccess){
                 onSuccess();
+                toast.success("Domain Service updated successfully!")
             }
         })
         .catch(error => {
                 if(onError){
                     onError();
+                    toast.error("Something went wrong, please try again...");
                 }
             }
 
@@ -142,11 +149,13 @@ export const deleteDomainService = (id, onSuccess , onError) => dispatch => {
         .then(response => {
             if(onSuccess){
                 onSuccess();
+                toast.success("Domain Service deleted successfully!")
             }
         })
         .catch(error => {
                 if(onError){
                     onError();
+                    toast.error("Something went wrong, please try again...");
                 }
             }
 

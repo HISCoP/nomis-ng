@@ -110,6 +110,11 @@ export const PATIENT_RADIOLOGY_ORDERS = 'PATIENT_RADIOLOGY_ORDERS'
  export const FETCH_HOUSE_HOLD_MEMBER = 'FETCH_HOUSE_HOLD_MEMBER'
  export const FETCH_HOUSE_HOLD = 'FETCH_HOUSE_HOLD'
  export const FETCH_HOUSEHOLD_SERVICE_HISTORY = 'FETCH_HOUSEHOLD_SERVICE_HISTORY'
+export const FETCH_HOUSE_HOLD_MEMBER_BY_ID = 'FETCH_HOUSE_HOLD_MEMBER_BY_ID'
+export const FETCH_HOUSE_HOLD_BY_ID = 'FETCH_HOUSE_HOLD_BY_ID'
+export const FETCH_HOUSEHOLD_MEMBERS_BY_HOUSEHOLD_ID = 'FETCH_HOUSEHOLD_MEMBERS_BY_HOUSEHOLD_ID'
+export const FETCH_HOUSEHOLD_MEMBER_SERVICE_HISTORY = 'FETCH_HOUSEHOLD_MEMBER_SERVICE_HISTORY'
+
 
  /**
  * @TYPES
@@ -163,3 +168,41 @@ export const FETCH_ALL_CODESET = 'FETCH_ALL_CODESET'
  */
  export const FETCH_ALL_DOMAINS = 'FETCH_ALL_DOMAINS'
 export const FETCH_ALL_DOMAIN_SERVICES = 'FETCH_ALL_DOMAIN_SERVICES'
+
+/**
+ * @TYPES
+ * ===============================================
+ * REPORTTEMPLATE
+ */
+export const REPORTS_FETCH_ALL = 'REPORTS_FETCH_ALL'
+export const REPORTS_CREATE_REPORT = 'REPORTS_CREATE_REPORT'
+export const REPORTS_GENERATE_REPORT = 'REPORTS_GENERATE_REPORT'
+export const REPORTS_UPDATE = 'REPORTS_UPDATE'
+export const REPORTS_DELETE = 'REPORTS_DELETE'
+export const REPORTS_ERROR = 'REPORTS_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * CBO 
+ */
+ export const FETCH_ALL_CBO = 'FETCH_ALL_CBO'
+
+ /**
+ * @TYPES
+ * ===============================================
+ * DONOR 
+ */
+  export const FETCH_ALL_DONOR = 'FETCH_ALL_DONOR'
+/**
+ * @TYPES
+ * ===============================================
+ * IP 
+ */
+  export const FETCH_ALL_IP = 'FETCH_ALL_IP'
+/**
+ * @TYPES
+ * ===============================================
+ * CBO-IP  
+ */
+  export const FETCH_ALL_CBO_IP = 'FETCH_ALL_CBO_IP'

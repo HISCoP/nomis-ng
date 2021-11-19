@@ -24,14 +24,20 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Retrospective',
+    to: '/retrospective',
+    icon: 'cilList',
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Reports',
-    to: '/dashboard',
+    to: '/report',
     icon: 'cilList',
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Visualization',
-    to: '/visualization',
+    to: '/report',
     icon: 'cilGraph',
   },
   {

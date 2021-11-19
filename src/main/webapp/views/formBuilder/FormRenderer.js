@@ -5,15 +5,17 @@ import * as actions from "../../actions/formManager";
 import { connect } from "react-redux";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import {Card, Alert, CardBody, Spinner, ModalBody} from "reactstrap";
 // import { fetchLastEncounter } from '../../_services/form-renderer';
 import { url } from "../../api/index";
 import axios from "axios";
 import { formRendererService } from "../../_services/form-renderer";
-// import { authHeader } from '../../_helpers/auth-header';
+import { authHeader } from '../../_helpers/auth-header';
 import _ from 'lodash';
-import {fetchByHospitalNumber} from "../../actions/patients";
+import {fetchHouseHoldById} from "../../actions/houseHold";
+import {fetchHouseHoldMemberById} from "../../actions/houseHoldMember";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 Moment.locale("en");
 momentLocalizer();
@@ -25,9 +27,12 @@ const FormRenderer = (props) => {
     const [showLoading, setShowLoading] = React.useState(false);
     const [showLoadingForm, setShowLoadingForm] = React.useState(true);
     const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
-    const [formId, setFormId] = React.useState()
-    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { patient: props.patient, baseUrl: url }}));
+    const [formId, setFormId] = React.useState();
+    const [household, setHousehold] = React.useState({});
+    const [householdMember, setHouseholdMember] = React.useState({});
+    const [submission, setSubmission] = React.useState(_.merge(props.submission, { data: { household: props.household, baseUrl: url, authHeader: authHeader().Authorization }}));
     const onDismiss = () => setShowErrorMsg(false);
+    const [last, setLast] = React.useState();
     const options = {
         noAlerts: true,
     };
@@ -38,14 +43,18 @@ const FormRenderer = (props) => {
             .fetchFormByFormCode(props.formCode).then((response) => {
             setShowLoadingForm(false);
             if (!response.data.resourceObject) {
-                setErrorMsg("Form resource not found, please contact adminstration.");
+                setErrorMsg("Form resource not found, please contact admin.");
                 setShowErrorMsg(true);
                 return;
             }
-            //for forms with usage code 0, check if an encounter exists for this patient
-            if(response.data && response.data.usageCode == 0){
-                console.log("fetching encounter")
-                fetchEncounter();
+            //fetch last encounter and add to submission if is not an update
+            console.log("fetching encounter")
+            if(!props.encounterId) {
+                //fetchEncounter();
+            }
+
+            if(props.encounterDate){
+                //fetchEncounterByEncounterDate(props.encounterDate);
             }
             setForm(response.data);
         }) .catch((error) => {
@@ -55,22 +64,66 @@ const FormRenderer = (props) => {
         });
     }, []);
 
+    React.useEffect(() => {
+        if(props.encounterId) {
+            formRendererService
+                .fetchEncounterById(props.encounterId)
+                .then((response) => {
+                    setShowLoadingEncounter(false);
+                    const extractedData = extractFormData(response.data.formData);
+                    if (!extractedData) {
+                        setErrorMsg("Could not load encounter information");
+                        setShowErrorMsg(true);
+                    }
+                    setSubmission(_.merge(submission, {data: extractedData.data}));
+                    //setSubmission({data: extractedData.data});
+                    setFormId(extractedData.id);
+                })
+                .catch((error) => {
+                    setErrorMsg("Could not load encounter information");
+                    setShowErrorMsg(true);
+                    setShowLoadingEncounter(false);
+                });
+        }
+    }, []);
 
-    //Add patient info to the submission object. This make patient data accessible within the form
+
+    //extract the formData as an obj (if form data length is one) or an array
+    const extractFormData = (formData) => {
+        if (!formData) {
+            return null;
+        }
+        if (formData.length === 1) {
+            return formData[0];
+        }
+        return formData.map((item) => {
+            return item;
+        });
+    };
+
     async function fetchEncounter(){
+        //return if household id or member id was not passed. This could be household enrollment form
+        if(!props.householdId || !props.householdMemberId){
+            return ;
+        }
         setShowLoadingEncounter(true);
-        await axios.get(`${url}patients/${props.patientId}/encounters/${props.formCode}`, {})
+        let url_slugs = "";
+
+        if(props.householdId){
+            url_slugs = `${url}households/${props.householdId}/${props.formCode}/encounters?page=0&size=1`;
+        }
+        if(props.householdMemberId){
+            url_slugs = `${url}household-members/${props.householdMemberId}/${props.formCode}/encounters?page=0&size=1`;
+        }
+
+        await axios.get(url_slugs, {})
             .then(response => {
                 //get encounter form data and store it in submission object
-
-                if( response.data.length > 0 ){
-                    const lastEncounter = response.data[0]
-                    setFormId(lastEncounter.formDataId);
-                    const e = {
-                        ...submission, ...{...submission.data, ...{data: lastEncounter}}
-                    };
-                    setSubmission(e);
-                };
+                if(response.data && response.data.length > 0){
+                    const update = response.data[0].formData[0].data;
+                    setLast(update);
+                    setSubmission(_.merge(submission, { data: { last: update}}));
+                }
                 setShowLoadingEncounter(false);
             }) .catch((error) => {
                 setErrorMsg("Error loading encounter, something went wrong");
@@ -82,19 +135,29 @@ const FormRenderer = (props) => {
 
     }
 
-    //fetch patient by patient hospital number if patient is not in the props object
+
+    //fetch household and household member
     React.useEffect(() => {
-        if(props.patientHospitalNumber) {
-            console.log('form render')
-           props.fetchPatientByHospitalNumber(props.patientHospitalNumber);
+        //fetch household by householdId if householdId is in the props object
+        if(props.householdId) {
+            props.fetchHouseHoldById(props.householdId);
+        }
+        if(props.householdMemberId) {
+            props.fetchHouseHoldMemberById(props.householdMemberId);
         }
 
     }, []);
 
-    //Add patient data to submission
+
+    //Add household data to submission
     React.useEffect(() => {
-        setSubmission(_.merge(submission, { data: { patient: props.patient}}));
-    }, [props.patient]);
+        setSubmission(_.merge(submission, { data: { household: props.household}}));
+    }, [props.household]);
+
+    //Add householdMember data to submission
+    React.useEffect(() => {
+        setSubmission(_.merge(submission, { data: { householdMember: props.householdMember}}));
+    }, [props.householdMember]);
 
     // Submit form to server
     const submitForm = (submission) => {
@@ -119,23 +182,18 @@ const FormRenderer = (props) => {
 
     const saveForm = (submission, onSuccess, onError) => {
 
-        const encounterDate = submission["dateEncounter"]
-            ? submission["dateEncounter"]
+        const encounterDate = submission.data["encounterDate"]
+            ? submission.data["encounterDate"]
             : new Date();
-        const formatedDate = Moment(encounterDate).format("DD-MM-YYYY");
+        const formatedDate = Moment(encounterDate);
 
         let data = {
-            data: [submission.data],
-            patientId: props.patientId,
+            formData: [{data:submission.data}],
+            householdId: props.householdId,
+            householdMemberId: props.householdMemberId,
             formCode: props.formCode,
-            programCode: form.programCode,
             dateEncounter: formatedDate,
-            visitId: props.visitId,
         };
-        //if the typePatient is changed
-        if (props.typePatient) {
-            data["typePatient"] = props.typePatient;
-        }
 
         props.saveEncounter(
             data,
@@ -147,6 +205,8 @@ const FormRenderer = (props) => {
     const updateForm = (submission, onSuccess, onError) => {
         const data = {
             data: submission.data,
+            encounterId: props.encounterId,
+            id: formId
         }
 
         formRendererService.updateFormData(formId, data)
@@ -173,14 +233,15 @@ const FormRenderer = (props) => {
 
     return (
         <React.Fragment>
+            <ToastContainer />
             <Card>
                 <CardBody>
-                    { props.options && props.hideHeader &&
+                    { props.showHeader &&
                     <>
-                        <h4 class="text-capitalize">
-                            {"New: "}
+                        <h3 class="text-capitalize">
+                            {/*{"New: "}*/}
                             {props.title || (form && form.name ? form.name : '')}
-                        </h4>
+                        </h3>
                         <hr />
                     </>
                     }
@@ -195,10 +256,12 @@ const FormRenderer = (props) => {
                         hideComponents={props.hideComponents}
                         options={options}
                         onSubmit={(submission) => {
-                            delete submission.data.patient;
+                            delete submission.data.householdMember;
+                            delete submission.data.household;
                             delete submission.data.authHeader;
                             delete submission.data.submit;
                             delete submission.data.baseUrl;
+                            delete submission.data.last;
 
                             if (props.onSubmit) {
                                 return props.onSubmit(submission);
@@ -206,6 +269,9 @@ const FormRenderer = (props) => {
                             return submitForm(submission);
                         }}
                     />
+                    {showLoading &&
+                    <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                    }
                 </CardBody>
             </Card>
         </React.Fragment>
@@ -214,7 +280,8 @@ const FormRenderer = (props) => {
 
 const mapStateToProps = (state = { form: {} }) => {
     return {
-        patient: state.patients,
+        household: state.houseHold.household,
+        householdMember: state.houseHoldMember.member,
         form: state.programManager.form,
         formEncounter: state.programManager.formEncounter,
         errors: state.programManager.errors,
@@ -224,7 +291,8 @@ const mapStateToProps = (state = { form: {} }) => {
 const mapActionToProps = {
     fetchForm: actions.fetchById,
     saveEncounter: actions.saveEncounter,
-    fetchPatientByHospitalNumber: fetchByHospitalNumber
+    fetchHouseHoldById: fetchHouseHoldById,
+    fetchHouseHoldMemberById: fetchHouseHoldMemberById
 };
 
 export default connect(mapStateToProps, mapActionToProps)(FormRenderer);

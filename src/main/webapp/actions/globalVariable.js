@@ -1,6 +1,5 @@
 import axios from "axios";
 import { url } from "api";
-import {APPOINTMENT_FORM, GENERAL_SERVICE} from "./../api/codes";
 import * as ACTION_TYPES from "./types";
 
 

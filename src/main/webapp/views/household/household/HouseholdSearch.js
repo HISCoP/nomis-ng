@@ -13,29 +13,52 @@ import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
 import NewHouseHoldAssessment from './NewHouseHoldAssessment';
-import { fetchAllHouseHold } from "./../../../actions/houseHold";
+import { ToastContainer, toast } from "react-toastify";
+
+import NewHouseHold from './NewHouseHold';
+import { fetchAllHouseHold, deleteHousehold } from "./../../../actions/houseHold";
 
 
 const HouseHoldList = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-  const [loading, setLoading] = useState('')
+    const toggleNew = () => {
+        setCurrentHousehold(null);
+        setModal(!modal);
+    };
+    const toggleUpdate = (hh) => {
+        setCurrentHousehold(hh);
+        setModal(!modal);
+    };
+  const [loading, setLoading] = useState(true);
+  const [currentHousehold, setCurrentHousehold] = useState(null);
 
-  console.log(props.houseHoldList)
   useEffect(() => {
-  setLoading('true');
-      const onSuccess = () => {
-          setLoading(false)
-      }
-      const onError = () => {
-          setLoading(false)     
-      }
-          props.fetchAllHouseHold(onSuccess, onError);
+    performSearch();
   }, []); //componentDidMount
 
+    const performSearch = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false)
+        }
+        const onError = () => {
+            setLoading(false)
+        }
+        props.fetchAllHouseHold(onSuccess, onError);
+    }
+
+    const onDelete = row => {
+        const onSuccess = () =>{
+            toast.success("Household deleted successfully");
+            props.fetchAllHouseHold();
+        }
+        if (window.confirm(`Are you sure to delete this record? ${row.uniqueId}`))
+            props.deleteHousehold(row.id, onSuccess, () => toast.error("An error occurred, household not deleted successfully"));
+    }
   return (
     <>
-      
+      <ToastContainer />
         <CRow>
         <CCol>
           <CCard>
@@ -45,8 +68,8 @@ const HouseHoldList = (props) => {
               <CButton 
                   color="primary" 
                   className="float-right"
-                  onClick={toggle}
-                >New Household Assessment</CButton>
+                  onClick={toggleNew}
+                >New Household </CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable
@@ -54,10 +77,10 @@ const HouseHoldList = (props) => {
                 columns={[
                   { title: 'Unique ID', field: 'id' },
                   { title: 'Date Assessed', field: 'date' },
-                  { title: 'Total OVC', field: 'ovc', type: 'numeric' },
+                  { title: 'Total VC', field: 'ovc'},
                   {
-                    title: 'Status',
-                    field: 'staus',
+                    title: 'Address',
+                    field: 'address',
                     
                   },
                   {
@@ -67,10 +90,11 @@ const HouseHoldList = (props) => {
                   },
                 ]}
                 data={props.houseHoldList.map((row) => ({
-                  id: row.id,
-                  date: null,
-                  ovc: row.householdMemberDTOS &&  row.householdMemberDTOS !==null ?  row.householdMemberDTOS.length : 0,
-                  status: row.status,
+                  id: <span> <Link
+                      to={{pathname: "/household/home", state: row.id }}>{row.uniqueId}</Link></span>,
+                  date: row.details && row.details.assessmentDate ? row.details.assessmentDate : "",
+                  ovc: row.details &&  row.details.noOfChildren != null ?  row.details.noOfChildren : 0,
+                  address: row.details && row.details.street ? row.details.street : null,
                   action:
                           <Menu>
                             <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
@@ -79,13 +103,13 @@ const HouseHoldList = (props) => {
                                 <MenuList style={{hover:"#eee"}}>
                                 <MenuItem >
                                   <Link
-                                        to={{pathname: "/household/home", houseHoldId: row.id }}>
+                                        to={{pathname: "/household/home", state: row.id }}>
                                         View Dashboard
                                   </Link>
                                   
                                 </MenuItem>                            
-                                <MenuItem >{" "}Edit</MenuItem>
-                                <MenuItem >{" "}Delete</MenuItem>
+                                <MenuItem onClick={() => toggleUpdate(row)}>{" "}Edit</MenuItem>
+                                <MenuItem onClick={() => onDelete(row)} >{" "}Delete</MenuItem>
                                 </MenuList>
                           </Menu>
                  
@@ -100,7 +124,7 @@ const HouseHoldList = (props) => {
         </CCol>
       </CRow>
       {modal ?
-        <NewHouseHoldAssessment  modal={modal} toggle={toggle} />
+        <NewHouseHold  modal={modal} toggle={toggle} reloadSearch={performSearch} household={currentHousehold}/>
         :
         ""
       }
@@ -118,7 +142,8 @@ const mapStateToProps = state => {
   };
 };
 const mapActionToProps = {
-  fetchAllHouseHold: fetchAllHouseHold
+  fetchAllHouseHold: fetchAllHouseHold,
+    deleteHousehold: deleteHousehold
 };
 
 export default connect(mapStateToProps, mapActionToProps)(HouseHoldList);

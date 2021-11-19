@@ -25,7 +25,7 @@ const NewApplicationCodeset = (props) => {
     const [showNewCodesetGroup, setShowNewCodesetGroup] = useState(false)
     const defaultValues = {display:"", language:"", version:"", codesetGroup:""};
     const [formData, setFormData] = useState( defaultValues)
-    const [errors, setErrors] = useState({});
+    //const [errors, setErrors] = useState({});
     const classes = useStyles()
   
     useEffect(() => {
