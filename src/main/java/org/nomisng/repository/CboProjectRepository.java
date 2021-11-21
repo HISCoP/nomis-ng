@@ -35,6 +35,6 @@ public interface CboProjectRepository extends JpaRepository<CboProject, Long>, J
     Optional<CboProject> findByIdAndArchived(Long id, int archived);
 
     @Query(value = "SELECT id, description FROM cbo_project WHERE archived=0", nativeQuery = true)
-    List findAllId();
+    List getAllCboProjectIdAndDescription();
 }
 

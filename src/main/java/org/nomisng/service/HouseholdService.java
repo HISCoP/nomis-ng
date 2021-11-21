@@ -159,6 +159,7 @@ public class HouseholdService {
             FormData formData = new FormData();
             formData.setData(householdDTO.getAssessment());
             formData.setArchived(UN_ARCHIVED);
+            formData.setCboProjectId(currentCboProjectId);
             formDataList.add(formData);
 
             //set the formData in encounter

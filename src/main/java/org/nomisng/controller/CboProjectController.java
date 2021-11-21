@@ -23,8 +23,8 @@ public class CboProjectController {
     private final CboProjectService cboProjectService;
 
     @GetMapping("/id/description")
-    public ResponseEntity<List<Object>> getAllCboProjectId() {
-        return ResponseEntity.ok(cboProjectService.getAllCboProjectId());
+    public ResponseEntity<List<Object>> getAllCboProjectIdAndDescription() {
+        return ResponseEntity.ok(cboProjectService.getAllCboProjectIdAndDescription());
     }
 
     /*@GetMapping("/{id}")
