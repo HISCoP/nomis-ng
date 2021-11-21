@@ -25,7 +25,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.nomisng.util.Constants.ArchiveStatus.*;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @org.springframework.stereotype.Service
 @Transactional

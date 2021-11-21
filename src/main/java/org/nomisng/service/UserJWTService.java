@@ -1,8 +1,6 @@
 package org.nomisng.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
-import org.nomisng.controller.UserJWTController;
 import org.nomisng.controller.vm.LoginVM;
 import org.nomisng.security.jwt.TokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

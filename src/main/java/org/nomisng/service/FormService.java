@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
@@ -27,12 +29,10 @@ public class FormService {
     private final FormMapper formMapper;
     private final AccessRight accessRight;
     private final PermissionRepository permissionRepository;
-    private static final int UN_ARCHIVED = 0;
     private static final String READ = "Read";
     private static final String WRITE = "Write";
     private static final String DELETE = "Delete";
     private static final String UNDERSCORE = "_";
-    private final Constants.ArchiveStatus constant;
     private final UserService userService;
 
     public List getAllForms() {
@@ -61,12 +61,12 @@ public class FormService {
 
         List<Permission> permissions = new ArrayList<>();
 
-        permissions.add(new Permission(formDTO.getCode() + read, formDTO.getName() +" Read", constant.UN_ARCHIVED));
-        permissions.add(new Permission(formDTO.getCode() + write, formDTO.getName() +" Write", constant.UN_ARCHIVED));
-        permissions.add(new Permission(formDTO.getCode() + delete, formDTO.getName() +" Delete", constant.UN_ARCHIVED));
+        permissions.add(new Permission(formDTO.getCode() + read, formDTO.getName() +" Read", UN_ARCHIVED));
+        permissions.add(new Permission(formDTO.getCode() + write, formDTO.getName() +" Write", UN_ARCHIVED));
+        permissions.add(new Permission(formDTO.getCode() + delete, formDTO.getName() +" Delete", UN_ARCHIVED));
         permissionRepository.saveAll(permissions);
 
-        form.setArchived(constant.UN_ARCHIVED);
+        form.setArchived(UN_ARCHIVED);
         return formRepository.save(form);
     }
 

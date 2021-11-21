@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class ApplicationUserCboProjectService {
-    private final static int UN_ARCHIVED = 0;
     private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
 
 
