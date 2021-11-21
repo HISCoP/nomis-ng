@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class OrganisationUnitController {
 
     @PostMapping
     //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
-    public ResponseEntity<OrganisationUnit> save(@RequestBody OrganisationUnitDTO organisationUnitDTO) {
+    public ResponseEntity<OrganisationUnit> save(@Valid @RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.save(organisationUnitDTO));
     }
 
@@ -39,7 +40,7 @@ public class OrganisationUnitController {
 
     @PutMapping("{id}")
     //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
-    public ResponseEntity<OrganisationUnit> update(@PathVariable Long id, @RequestBody OrganisationUnitDTO organisationUnitDTO) {
+    public ResponseEntity<OrganisationUnit> update(@PathVariable Long id, @Valid @RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.update(id, organisationUnitDTO));
     }
 

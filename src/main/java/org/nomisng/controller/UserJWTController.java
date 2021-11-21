@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 public class UserJWTController {
     private final UserJWTService userJWTService;
     private final UserService userService;
+    private static final long DEFAULT_CBO_PROJECT_ID = 0L;
 
 
     @PostMapping("/authenticate")
@@ -55,7 +56,7 @@ public class UserJWTController {
 
         //if cboProject does not exist default the cboProject to zero(0)
         if(!cboProjectIds.contains(currentCboProjectId)){
-            currentCboProjectId = 0L;
+            currentCboProjectId = DEFAULT_CBO_PROJECT_ID;
         }
         //set current cbo project
         user.setCurrentCboProjectId(currentCboProjectId);

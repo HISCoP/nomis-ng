@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,12 +28,12 @@ public class VisitController {
     }
 
     @PostMapping
-    public ResponseEntity<Visit> save(@RequestBody VisitDTO visitDTO) {
+    public ResponseEntity<Visit> save(@Valid @RequestBody VisitDTO visitDTO) {
         return ResponseEntity.ok(visitService.save(visitDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Visit> updateVisit(@RequestBody VisitDTO visitDTO, @PathVariable Long id) {
+    public ResponseEntity<Visit> updateVisit(@Valid @RequestBody VisitDTO visitDTO, @PathVariable Long id) {
         return ResponseEntity.ok(visitService.update(id, visitDTO));
     }
 

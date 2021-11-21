@@ -6,6 +6,7 @@ import org.nomisng.repository.PermissionRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class PermissionController {
 
 
     @PostMapping
-    public ResponseEntity<List<Permission>> save(@RequestBody List<Permission> permissions) {
+    public ResponseEntity<List<Permission>> save(@Valid @RequestBody List<Permission> permissions) {
         return ResponseEntity.ok(this.permissionRepository.saveAll(permissions));
     }
 }

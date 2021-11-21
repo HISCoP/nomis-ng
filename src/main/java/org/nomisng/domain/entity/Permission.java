@@ -20,8 +20,7 @@ public class Permission extends Audit {
     @NonNull
     private String description;
 
-    @NonNull
-    private int archived;
+    private int archived=0;
 
 
     /*@OneToMany(mappedBy = "permissionByPermissionId")
