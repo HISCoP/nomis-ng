@@ -22,5 +22,10 @@ public interface ApplicationUserCboProjectRepository extends JpaRepository<Appli
     List<ApplicationUserCboProject> findAllByApplicationUserIdAndCboProjectIdAndArchived(Long userId,
                                                                                          int archived,
                                                                                          List<Long> cboProjectIds);
+
+    @Query(value = "SELECT cbo_project_id FROM application_user_cbo_project WHERE archived = ?1 ", nativeQuery = true)
+    List<Long> findAllCboProjectIdByArchived(int archived);
+
+    List<ApplicationUserCboProject> findAllByApplicationUserId(Long userId);
 }
 

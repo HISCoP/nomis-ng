@@ -3,8 +3,10 @@ package org.nomisng.controller;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import org.nomisng.controller.vm.LoginVM;
+import org.nomisng.domain.entity.ApplicationUserCboProject;
 import org.nomisng.domain.entity.User;
 import org.nomisng.repository.ApplicationUserCboProjectRepository;
+import org.nomisng.repository.UserRepository;
 import org.nomisng.security.jwt.JWTFilter;
 import org.nomisng.security.jwt.TokenProvider;
 import org.nomisng.service.UserJWTService;
@@ -22,15 +24,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserJWTController {
     private final UserJWTService userJWTService;
-    //private final UserService userService;
-    //private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
+    private final UserService userService;
 
 
     @PostMapping("/authenticate")
@@ -39,11 +42,25 @@ public class UserJWTController {
         String jwt = userJWTService.authorize(loginVM);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        /*Optional<User> optionalUser = userService.getUserWithAuthoritiesByUsername(loginVM.getUsername());
-        optionalUser.ifPresent(user -> {
-            applicationUserCboProjectRepository.find
-        });*/
 
+        //get user
+        User user = userService.getUserWithAuthoritiesByUsername(loginVM.getUsername()).get();
+        Long currentCboProjectId = loginVM.getCboProjectId();
+
+        //get all cboProjectIds for the login user
+        List<Long> cboProjectIds = user.getApplicationUserCboProjects()
+                .stream()
+                .map(ApplicationUserCboProject::getCboProjectId)
+                .collect(Collectors.toList());
+
+        //if cboProject does not exist default the cboProject to zero(0)
+        if(!cboProjectIds.contains(currentCboProjectId)){
+            currentCboProjectId = 0L;
+        }
+        //set current cbo project
+        user.setCurrentCboProjectId(currentCboProjectId);
+        //update user
+        userService.update(user.getId(), user);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
 

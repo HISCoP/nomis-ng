@@ -34,6 +34,14 @@ public class LoginVM {
         this.password = password;
     }
 
+    public Long getCboProjectId() {
+        return cboProjectId;
+    }
+
+    public void setCboProjectId(Long cboProjectId) {
+        this.cboProjectId = cboProjectId;
+    }
+
     public Boolean isRememberMe() {
         return rememberMe;
     }

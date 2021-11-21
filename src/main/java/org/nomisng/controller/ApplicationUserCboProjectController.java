@@ -3,6 +3,7 @@ package org.nomisng.controller;
 import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.ApplicationUserCboProjectDTO;
 import org.nomisng.domain.entity.ApplicationUserCboProject;
+import org.nomisng.domain.entity.CboProjectLocation;
 import org.nomisng.service.ApplicationUserCboProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

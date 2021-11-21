@@ -203,4 +203,8 @@ public class CboProjectService {
         user.setCurrentCboProjectId(id);
         userRepository.save(user);
     }
+
+    public List<Object> getAllCboProjectId() {
+        return cboProjectRepository.findAllId();
+    }
 }

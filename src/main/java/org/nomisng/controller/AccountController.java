@@ -3,6 +3,8 @@ package org.nomisng.controller;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.vm.ManagedUserVM;
 import org.nomisng.domain.dto.UserDTO;
+import org.nomisng.domain.entity.CboProject;
+import org.nomisng.domain.entity.CboProjectLocation;
 import org.nomisng.domain.entity.User;
 import org.nomisng.repository.UserRepository;
 import org.nomisng.service.UserService;
@@ -55,5 +57,10 @@ public class AccountController {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{id}/cbo-projects")
+    public ResponseEntity<List<CboProject>> getCboLocation(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getCboProject(id));
     }
 }
