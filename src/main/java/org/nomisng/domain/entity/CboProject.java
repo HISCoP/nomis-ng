@@ -13,21 +13,10 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "cbo_project")
+@Table(name = "cbo_project", schema = "public", catalog = "nomis_debbie_17_11_21")
 public class CboProject {
 
-    @OneToMany(mappedBy = "cboProjectByCboProjectId")
-    @JsonIgnore
-    @ToString.Exclude
-    public List<ApplicationUserCboProject> applicationUserCboProjectById;
-    @OneToMany(mappedBy = "cboProjectByCurrentCboProjectId")
-    @JsonIgnore
-    @ToString.Exclude
-    public List<User> users;
-    @OneToMany(mappedBy = "cboProjectByCboProjectId")
-    @JsonIgnore
-    @ToString.Exclude
-    public List<Household> households;
+
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,9 +66,9 @@ public class CboProject {
     @ToString.Exclude
     private List<CboProjectLocation> cboProjectLocationsById;
 
-    @OneToMany(mappedBy = "cboProjectByCboId")
+    /*@OneToMany(mappedBy = "cboProjectByCboId")
     @ToString.Exclude
-    private List<User> usersById;
+    private List<User> usersById;*/
 
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
     @JsonIgnore
@@ -100,4 +89,22 @@ public class CboProject {
     @JsonIgnore
     @ToString.Exclude
     private List<FormData> formData;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    private List<ApplicationUserCboProject> applicationUserCboProjectsById;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<ApplicationUserCboProject> applicationUserCboProjectById;
+
+/*    @OneToMany(mappedBy = "cboProjectByCurrentCboProjectId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<User> users;*/
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<Household> households;
 }

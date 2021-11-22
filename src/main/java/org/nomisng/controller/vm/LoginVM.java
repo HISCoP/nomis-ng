@@ -1,5 +1,7 @@
 package org.nomisng.controller.vm;
 
+import org.nomisng.domain.entity.CboProject;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -13,6 +15,8 @@ public class LoginVM {
     private String password;
 
     private Boolean rememberMe;
+
+    private Long cboProjectId;
 
     public String getUsername() {
         return username;
@@ -28,6 +32,14 @@ public class LoginVM {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getCboProjectId() {
+        return cboProjectId;
+    }
+
+    public void setCboProjectId(Long cboProjectId) {
+        this.cboProjectId = cboProjectId;
     }
 
     public Boolean isRememberMe() {

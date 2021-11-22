@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -19,6 +20,5 @@ public interface CboProjectLocationRepository extends JpaRepository<CboProjectLo
 
     @Query(value = "SELECT * FROM cbo_project_location WHERE cbo_project_id = ?1", nativeQuery = true)
     List<CboProjectLocation> findAllById(Long cboProjectId);
-
 }
 

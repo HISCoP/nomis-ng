@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -28,24 +30,25 @@ public class ApplicationUserCboProject extends Audit {
 
     @Basic
     @Column(name = "archived")
-    private int archived = 0;
+    @JsonIgnore
+    private int archived;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "application_user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
+    @JoinColumn(name = "application_user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User applicationUserByApplicationUserId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
+    @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
     private CboProject cboProjectByCboProjectId;
 
-    /*public String getOrganisationUnitName(){
-        if (organisationUnitByOrganisationUnitId != null){
-            return organisationUnitByOrganisationUnitId.getName();
-        }
-        return null;
-    }*/
+
+    @ManyToOne
+    @JsonIgnore
+    @ToString.Exclude
+    @JoinColumn(name = "application_user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private User getUserByApplicationUserId;
 }

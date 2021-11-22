@@ -5,14 +5,9 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.UserDTO;
-import org.nomisng.domain.entity.ApplicationUserCboProject;
-import org.nomisng.domain.entity.OrganisationUnit;
-import org.nomisng.domain.entity.Role;
-import org.nomisng.domain.entity.User;
+import org.nomisng.domain.entity.*;
 import org.nomisng.domain.mapper.UserMapper;
-import org.nomisng.repository.OrganisationUnitRepository;
-import org.nomisng.repository.RoleRepository;
-import org.nomisng.repository.UserRepository;
+import org.nomisng.repository.*;
 import org.nomisng.security.RolesConstants;
 //import org.nomisng.security.SecurityUtils;
 import org.nomisng.security.SecurityUtils;
@@ -29,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,10 +42,9 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    private final OrganisationUnitRepository organisationUnitRepository;
+    private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
 
-    private Long currentOrganisationUnit = 0L;
-
+    private final CboProjectRepository cboProjectRepository;
 
 
     @Transactional
@@ -159,12 +154,10 @@ public class UserService {
         user.setCurrentCboProjectId(cboProjectId);
         return userMapper.userToUserDTO(userRepository.save(user));
     }
-}
 
-/*class UsernameAlreadyUsedException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-
-    public UsernameAlreadyUsedException() {
-        super("Login name already used!");
+    public List<CboProject> getCboProject(Long userId) {
+        return applicationUserCboProjectRepository.findAllByApplicationUserId(userId).stream()
+                .map(ApplicationUserCboProject::getCboProjectByCboProjectId)
+                .collect(Collectors.toList());
     }
-}*/
+}

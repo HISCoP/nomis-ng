@@ -22,13 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitService {
-    private static final int UNARCHIVED = 0;
-    private static final int ARCHIVED = 1;
     private static final Long FIRST_ORG_LEVEL = 1L;
     public static final long WARD_LEVEL = 4L;
     private final OrganisationUnitRepository organisationUnitRepository;
@@ -37,7 +38,7 @@ public class OrganisationUnitService {
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
 
     public OrganisationUnit save(OrganisationUnitDTO organisationUnitDTO) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UN_ARCHIVED);
         if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnit.class, "Name", organisationUnitDTO.getName() +"");
         final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
 
@@ -64,7 +65,7 @@ public class OrganisationUnitService {
 
     //TODO: work on this
     public OrganisationUnit update(Long id, OrganisationUnitDTO organisationUnitDTO) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if(!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
         final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
 
@@ -73,28 +74,28 @@ public class OrganisationUnitService {
     }
 
     public Integer delete(Long id) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if (!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
         organizationOptional.get().setArchived(ARCHIVED);
         return organizationOptional.get().getArchived();
     }
 
     public OrganisationUnit getOrganizationUnit(Long id){
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if (!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
         return organizationOptional.get();
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitId(Long id) {
-        return  organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived(id, UNARCHIVED);
+        return  organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived(id, UN_ARCHIVED);
     }
 
     public List<OrganisationUnit> getAllOrganizationUnit() {
-        return organisationUnitRepository.findAllByArchivedOrderByIdAsc(UNARCHIVED);
+        return organisationUnitRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(Long parentOrgUnitId, Long orgUnitLevelId) {
-        OrganisationUnit parentOrganisationUnit = organisationUnitRepository.findByIdAndArchived(parentOrgUnitId, UNARCHIVED).orElseThrow(
+        OrganisationUnit parentOrganisationUnit = organisationUnitRepository.findByIdAndArchived(parentOrgUnitId, UN_ARCHIVED).orElseThrow(
                 () -> new EntityNotFoundException(OrganisationUnit.class, "Parent OrganisationUnit", "invalid"));
 
         List<OrganisationUnit> organisationUnits = new ArrayList<>();
@@ -244,7 +245,7 @@ public class OrganisationUnitService {
 
     private OrganisationUnit findOrganisationUnits(OrganisationUnit organisationUnit, Long orgUnitId){
         for(int i=0; i<2; i++) {
-            Optional<OrganisationUnit> optionalOrganisationUnit = organisationUnitRepository.findByIdAndArchived(orgUnitId, UNARCHIVED);
+            Optional<OrganisationUnit> optionalOrganisationUnit = organisationUnitRepository.findByIdAndArchived(orgUnitId, UN_ARCHIVED);
             if(optionalOrganisationUnit.isPresent()){
                 if(organisationUnit.getParentOrganisationUnitName() == null) {
                     organisationUnit.setParentOrganisationUnitName(optionalOrganisationUnit.get().getName());

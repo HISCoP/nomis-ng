@@ -97,14 +97,20 @@ public class User {
     @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.PERSIST)
     private List<ApplicationUserCboProject> applicationUserCboProjects;
 
-    @ManyToOne
-    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
+    /*@ManyToOne
+    @JsonIgnore
     @ToString.Exclude
-    private CboProject cboProjectByCurrentCboProjectId;
+    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private CboProject cboProjectByCurrentCboProjectId;*/
 
-    @ManyToOne
+    /*@ManyToOne
     @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
-    private CboProject cboProjectByCboId;
+    private CboProject cboProjectByCboId;*/
+
+    @OneToMany(mappedBy = "applicationUserByApplicationUserId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<ApplicationUserCboProject> applicationUserCboProjectsById;
 }

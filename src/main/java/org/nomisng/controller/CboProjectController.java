@@ -3,7 +3,6 @@ package org.nomisng.controller;
 import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.CboProjectDTO;
 import org.nomisng.domain.entity.CboProject;
-import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.service.CboProjectService;
 import org.nomisng.util.PaginationUtil;
 import org.springframework.data.domain.Page;
@@ -12,27 +11,27 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/cbo-project")
+@RequestMapping("api/cbo-projects")
 @RequiredArgsConstructor
 public class CboProjectController {
     private final CboProjectService cboProjectService;
 
-    /*@GetMapping
-    public ResponseEntity<List<CboDonorImplementerOrganisationUnitDTO>> getAllCboDonorIpOrganisationUnits() {
-        return ResponseEntity.ok(cboDonorImplementerOrganisationUnitService.getAllCboDonorIpOrganisationUnits());
-    }*/
+    @GetMapping("/id/description")
+    public ResponseEntity<List<Object>> getAllCboProjectIdAndDescription() {
+        return ResponseEntity.ok(cboProjectService.getAllCboProjectIdAndDescription());
+    }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public ResponseEntity<CboProjectDTO> getCboProjectById(@PathVariable Long id) {
         return ResponseEntity.ok(cboProjectService.getCboProjectById(id));
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<CboProjectDTO>> getCboProject(@RequestParam(required = false, defaultValue = "0") Long cboId,
@@ -49,7 +48,7 @@ public class CboProjectController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
-    public ResponseEntity<CboProjectDTO> save(@RequestBody CboProjectDTO cboProjectDTO) {
+    public ResponseEntity<CboProjectDTO> save(@Valid @RequestBody CboProjectDTO cboProjectDTO) {
         return ResponseEntity.ok(cboProjectService.save(cboProjectDTO));
     }
 
@@ -63,4 +62,9 @@ public class CboProjectController {
     public ResponseEntity<List<OrganisationUnit>> getOrganisationUnitByCboProjectId() {
         return ResponseEntity.ok(cboProjectService.getOrganisationUnitByCboProjectId());
     }*/
+
+    @PostMapping("/{id}")
+    public void switchCboProject(@PathVariable Long id) {
+        cboProjectService.switchCboProject(id);
+    }
 }

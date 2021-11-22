@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
@@ -22,7 +24,6 @@ import java.util.UUID;
 public class DonorService {
     private final DonorRepository donorRepository;
     private final DonorMapper donorMapper;
-    private final static int UN_ARCHIVED = 0;
 
     public List getAllDonors() {
         return donorMapper.toDonorDTOS(donorRepository.findAll());

@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Transactional
 @Slf4j
@@ -22,7 +25,6 @@ import java.util.UUID;
 public class ImplementerService {
     private final ImplementerRepository implementerRepository;
     private final ImplementerMapper implementerMapper;
-    private final static int UN_ARCHIVED = 0;
 
     public List getAllImplementers() {
         return implementerMapper.toImplementerDTOS(implementerRepository.findAll());

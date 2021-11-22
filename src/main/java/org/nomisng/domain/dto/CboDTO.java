@@ -12,6 +12,7 @@ public class CboDTO {
     @NotBlank(message = "name is mandatory")
     private String name;
 
+    @NotBlank(message = "description is mandatory")
     private String description;
 
     private String code;

@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
@@ -21,7 +23,6 @@ import java.util.UUID;
 public class CboService {
     private final CboRepository cboRepository;
     private final CboMapper cboMapper;
-    private final static int UN_ARCHIVED = 0;
 
     public List getAllCbos() {
         return cboMapper.toCboDTOS(cboRepository.findAllByArchived(UN_ARCHIVED));

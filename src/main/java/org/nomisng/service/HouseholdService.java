@@ -22,8 +22,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import static org.nomisng.util.Constants.ArchiveStatus.*;
-
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 @Service
 @Transactional
 @Slf4j
@@ -34,7 +34,6 @@ public class HouseholdService {
     private final HouseholdMemberRepository householdMemberRepository;
     private final HouseholdMigrationRepository householdMigrationRepository;
     private final EncounterMapper encounterMapper;
-    private final CboProjectRepository cboProjectRepository;
     private final EncounterRepository encounterRepository;
     private final HouseholdMapper householdMapper;
     private final HouseholdMemberMapper householdMemberMapper;
@@ -159,6 +158,7 @@ public class HouseholdService {
             FormData formData = new FormData();
             formData.setData(householdDTO.getAssessment());
             formData.setArchived(UN_ARCHIVED);
+            formData.setCboProjectId(currentCboProjectId);
             formDataList.add(formData);
 
             //set the formData in encounter

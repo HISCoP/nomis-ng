@@ -18,20 +18,21 @@ import javax.persistence.PersistenceContext;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class RoleService {
-    private static final int UN_ARCHIVED = 0;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
     @PersistenceContext
     EntityManager em;
 
-    public Role save(RoleDTO roleDTO) throws Exception{
+    public Role save(RoleDTO roleDTO) {
         Optional<Role> RoleOptional = roleRepository.findByName(roleDTO.getName());
         if (RoleOptional.isPresent()) throw new RecordExistException(Role.class, "Name", roleDTO.getName());
         try{

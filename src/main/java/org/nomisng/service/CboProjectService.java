@@ -11,7 +11,6 @@ import org.nomisng.domain.mapper.CboProjectMapper;
 import org.nomisng.repository.*;
 import org.nomisng.util.Constants;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +20,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 @Service
 @Transactional
 @Slf4j
@@ -35,14 +34,16 @@ public class CboProjectService {
     private final OrganisationUnitRepository organisationUnitRepository;
     private final CboProjectMapper cboProjectMapper;
     private final Constants.ArchiveStatus constant;
-    private final OrganisationUnitService organisationUnitService;
     private final CboProjectLocationRepository cboProjectLocationRepository;
     private final UserService userService;
+    private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
+    private final UserRepository userRepository;
+
 
 
     public CboProjectDTO save(CboProjectDTO cboProjectDTO) {
         cboProjectRepository.findTopByCboIdAndDonorIdAndImplementerIdAndArchivedOrderByIdDesc(cboProjectDTO.getCboId(), cboProjectDTO.getDonorId(),
-                cboProjectDTO.getImplementerId(), constant.UN_ARCHIVED).ifPresent(cboProject -> {
+                cboProjectDTO.getImplementerId(), UN_ARCHIVED).ifPresent(cboProject -> {
                     throw new RecordExistException(CboProject.class, "Cbo Project", "already exist");
         });
 
@@ -52,7 +53,7 @@ public class CboProjectService {
 
         //Preparing the organisation Unit
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
-            OrganisationUnit organisationUnit = organisationUnitRepository.findByIdAndArchived(organisationUnitId, constant.UN_ARCHIVED)
+            OrganisationUnit organisationUnit = organisationUnitRepository.findByIdAndArchived(organisationUnitId, UN_ARCHIVED)
                     .orElseThrow(() -> new EntityNotFoundException(OrganisationUnit.class, "id", ""+organisationUnitId));
             Long organisationUnitLevelId = organisationUnit.getOrganisationUnitLevelByOrganisationUnitLevelId().getId();
 
@@ -75,7 +76,7 @@ public class CboProjectService {
         //setting the organisation unit
         cboProjectDTO.setOrganisationUnitIds(organisationUnitIds);
         CboProject cboProject = cboProjectMapper.toCboProject(cboProjectDTO);
-        cboProject.setArchived(constant.UN_ARCHIVED);
+        cboProject.setArchived(UN_ARCHIVED);
         cboProject = cboProjectRepository.save(cboProject);
         final Long cboProjectId = cboProject.getId();
 
@@ -89,7 +90,7 @@ public class CboProjectService {
     }
 
     public CboProjectDTO getCboProjectById(Long id) {
-        CboProject cboProject = cboProjectRepository.findByIdAndArchived(id, constant.UN_ARCHIVED)
+        CboProject cboProject = cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
        return cboProjectMapper.toCboProjectDTO(setNames(cboProject));
     }
@@ -102,7 +103,7 @@ public class CboProjectService {
     }*/
 
     public CboProject update(Long id, CboProjectDTO cboProjectDTO) {
-        cboProjectRepository.findById(id)
+        cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
 
         List<CboProjectLocation> cboProjectLocations = cboProjectLocationRepository
@@ -183,5 +184,24 @@ public class CboProjectService {
             ids.add(id);
         }
         return ids;
+    }
+
+    public void switchCboProject(Long id) {
+        if(cboProjectLocationRepository.findAllById(id).isEmpty()){
+            new EntityNotFoundException(CboProject.class, "Id", id+"");
+        }
+
+        User user = userService.getUserWithRoles().get();
+        Long userId = user.getId();
+
+        applicationUserCboProjectRepository.findByApplicationUserIdAndCboProjectId(userId, id)
+                .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "User & Cbo Project", "does not match"));
+
+        user.setCurrentCboProjectId(id);
+        userRepository.save(user);
+    }
+
+    public List<Object> getAllCboProjectIdAndDescription() {
+        return cboProjectRepository.getAllCboProjectIdAndDescription();
     }
 }
