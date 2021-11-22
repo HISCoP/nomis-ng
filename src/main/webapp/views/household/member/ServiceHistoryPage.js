@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { connect } from "react-redux";
-import { fetchAllHouseHoldServiceHistory } from "./../../../actions/houseHold";
 import moment from "moment";
 import {fetchAllHouseHoldMemberServiceHistory} from "../../../actions/houseHoldMember";
 import FormRendererModal from "../../formBuilder/FormRendererModal";
@@ -56,7 +55,7 @@ const ServiceHistoryPage = (props) => {
 
     const editForm = (row) => {
         //check if it is service provision page (static html) else use formio update
-        if(row.formCode == "9ec328a9-1b3c-4043-98d0-84ea5f47de55"){
+        if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
             const formData = row.formData[0];
             const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"UPDATE", formDataId: formData.id, encounterId: formData.encounterId};
             console.log(selectedService);
@@ -72,9 +71,9 @@ const ServiceHistoryPage = (props) => {
         <>
             <ToastContainer />
             <CRow>
-                <CCol md={12}>
-            <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggleServiceModal}>Provide Service For Member</CButton>
-                </CCol>
+            {/*    <CCol md={12}>*/}
+            {/*<CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggleServiceModal}>Provide Service For Member</CButton>*/}
+            {/*    </CCol>*/}
                 <CCol md={12}>
                 <MaterialTable
                     title="Services Form History"
