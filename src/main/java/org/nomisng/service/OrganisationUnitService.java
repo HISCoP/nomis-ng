@@ -37,6 +37,7 @@ public class OrganisationUnitService {
     private final HouseholdRepository householdRepository;
     private final OrganisationUnitMapper organisationUnitMapper;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
+    private final HouseholdService householdService;
 
     public OrganisationUnit save(OrganisationUnitDTO organisationUnitDTO) {
         Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UN_ARCHIVED);
@@ -147,7 +148,7 @@ public class OrganisationUnitService {
             Long orgUnitId = organisationUnit.getParentOrganisationUnitId();
 
             if(organisationUnit.getOrganisationUnitLevelId() == WARD_LEVEL){
-                organisationUnit.setHouseholdMaxCount(householdRepository.findMaxSerialNumber(organisationUnit.getId()));
+                organisationUnit.setHouseholdMaxCount(householdService.getMaxHouseholdIdByWardId(organisationUnit.getId()));
             }
             organisationUnitDTOS.add(organisationUnitMapper.toOrganisationUnitDTO(findOrganisationUnits(organisationUnit, orgUnitId)));
         });

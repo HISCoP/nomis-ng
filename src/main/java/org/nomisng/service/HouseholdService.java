@@ -121,6 +121,12 @@ public class HouseholdService {
         household.setCboProjectId(currentCboProjectId);
         household.setStatus(ACTIVE);
         household.setCboProjectId(currentCboProjectId);
+        if(household.getSerialNumber() == null){
+            Optional<Long> optionalLong = householdRepository.findMaxSerialNumber(household.getWardId());
+            if(optionalLong.isPresent()){
+                household.setSerialNumber(optionalLong.get());
+            }
+        }
 
         //save household
         household = householdRepository.save(household);
@@ -136,9 +142,6 @@ public class HouseholdService {
             for (HouseholdMigration householdMigration : householdMigrations) {
                 if(householdMigration.getActive() == null){
                     householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
-                    /*householdMigration.getStateId();
-                    householdMigration.getProvinceId();
-                    householdMigration.getWardId();*/
                 }//only one address at registration of household
                 householdMigration.setHouseholdId(household.getId());
                 householdMigrationRepository.save(householdMigration);
@@ -148,7 +151,6 @@ public class HouseholdService {
             householdMember = householdMemberMapper.toHouseholdMember(householdDTO.getHouseholdMemberDTO());
             if(firstTime) {
                 householdMember.setUniqueId(household.getUniqueId() + "/1"); //First household member
-                householdMember.setSerial_number(FIRST_MEMBER);
             }
             householdMember.setCboProjectId(currentCboProjectId);
             householdMember.setHouseholdId(household.getId());
@@ -227,6 +229,10 @@ public class HouseholdService {
     }
 
     public Long getMaxHouseholdIdByWardId(Long wardId) {
-        return householdRepository.findMaxSerialNumber(wardId);
+        Optional<Long> optionalLong = householdRepository.findMaxSerialNumber(wardId);
+        if(optionalLong.isPresent()){
+            return optionalLong.get();
+        }
+        return 0L;
     }
 }
