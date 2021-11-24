@@ -1,5 +1,6 @@
 package org.nomisng.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.vm.ManagedUserVM;
 import org.nomisng.domain.dto.UserDTO;
@@ -23,17 +24,11 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class AccountController {
 
-    private final UserRepository userRepository;
-
     private final UserService userService;
-
-    public AccountController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
-        this.userService = userService;
-    }
 
     @GetMapping("/account")
     public UserDTO getAccount(Principal principal){
@@ -41,7 +36,6 @@ public class AccountController {
                 .getUserWithRoles()
                 .map(UserDTO::new)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, principal.getName()+"","" ));
-
         return userDTO;
     }
 
@@ -60,7 +54,7 @@ public class AccountController {
     }
 
     @GetMapping("/users/{id}/cbo-projects")
-    public ResponseEntity<List<CboProject>> getCboLocation(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getCboProject(id));
+    public ResponseEntity<List<CboProject>> getCboProjectByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getCboProjectByUserId(id));
     }
 }

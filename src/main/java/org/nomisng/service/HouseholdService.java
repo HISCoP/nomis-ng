@@ -30,6 +30,7 @@ import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 @RequiredArgsConstructor
 public class HouseholdService {
     public static final int HOUSEHOLD_MEMBER_TYPE = 1;
+    public static final int ACTIVE = 1;
     private final HouseholdRepository householdRepository;
     private final HouseholdMemberRepository householdMemberRepository;
     private final HouseholdMigrationRepository householdMigrationRepository;
@@ -107,6 +108,7 @@ public class HouseholdService {
     private Household saveOrUpdateHousehold(Long id, Boolean firstTime, HouseholdDTO householdDTO){
         List<FormData> formDataList = new ArrayList<>();
         Long currentCboProjectId = getCurrentCboProjectId();
+        householdDTO.setWardId(householdDTO.getWard().getId());
 
         Household household = householdMapper.toHousehold(householdDTO);
         //For updates and saving
@@ -116,7 +118,7 @@ public class HouseholdService {
 
         household.setArchived(UN_ARCHIVED);
         household.setCboProjectId(currentCboProjectId);
-        household.setStatus(1);
+        household.setStatus(ACTIVE);
         household.setCboProjectId(currentCboProjectId);
 
         //save household
@@ -132,13 +134,18 @@ public class HouseholdService {
             List<HouseholdMigration> householdMigrations = householdMigrationMapper.toHouseholdMigration(householdDTO.getHouseholdMigrationDTOS());
             for (HouseholdMigration householdMigration : householdMigrations) {
                 if(householdMigration.getActive() == null){
-                    householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);}//only one address at registration of household
+                    householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
+                    /*householdMigration.getStateId();
+                    householdMigration.getProvinceId();
+                    householdMigration.getWardId();*/
+                }//only one address at registration of household
                 householdMigration.setHouseholdId(household.getId());
                 householdMigrationRepository.save(householdMigration);
             }
         }
         if(householdDTO.getHouseholdMemberDTO() != null){
             householdMember = householdMemberMapper.toHouseholdMember(householdDTO.getHouseholdMemberDTO());
+            householdMember.setUniqueId(household.getUniqueId() + "/1"); //First household member
             householdMember.setCboProjectId(currentCboProjectId);
             householdMember.setHouseholdId(household.getId());
             householdMember.setHouseholdMemberType(HOUSEHOLD_MEMBER_TYPE);
@@ -150,7 +157,7 @@ public class HouseholdService {
             EncounterDTO encounterDTO = new EncounterDTO();
             encounterDTO.setDateEncounter(LocalDateTime.now());
             encounterDTO.setFormCode(HH_ASSESSMENT_FORM_CODE);
-            encounterDTO.setHouseholdMemberId(householdMember.getId());
+            //encounterDTO.setHouseholdMemberId(householdMember.getId()); don't save the memberId
             encounterDTO.setHouseholdId(household.getId());
             encounterDTO.setCboProjectId(currentCboProjectId);
 

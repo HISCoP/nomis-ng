@@ -2,6 +2,7 @@ package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.CboProjectDTO;
+import org.nomisng.domain.dto.CboProjectLocationDTO;
 import org.nomisng.domain.entity.CboProject;
 import org.nomisng.domain.entity.CboProjectLocation;
 import org.nomisng.domain.entity.OrganisationUnit;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,5 +39,10 @@ public class CboProjectLocationController {
     @GetMapping("/state/{stateId}/lga")
     public ResponseEntity<List<OrganisationUnit>> getState(@PathVariable Long stateId) {
         return ResponseEntity.ok(cboProjectLocationService.getLga(stateId));
+    }
+
+    @PutMapping
+    public ResponseEntity<List<CboProjectLocation>> update(@Valid @RequestBody List<CboProjectLocationDTO> cboProjectLocationDTOS) {
+        return ResponseEntity.ok(cboProjectLocationService.update(cboProjectLocationDTOS));
     }
 }

@@ -13,7 +13,7 @@ public interface HouseholdMigrationRepository extends JpaRepository<HouseholdMig
 
     List<HouseholdMigration> findAllByHouseholdIdAndActive(Long householdId, int active);
 
-    @Query(value = "SELECT max(household_id) FROM household_migration WHERE ward_id = ?1 ", nativeQuery = true)
+    @Query(value = "SELECT count(household_id) FROM household_migration WHERE ward_id = ?1 ", nativeQuery = true)
     Long findByWardId(Long wardId);
 }
 

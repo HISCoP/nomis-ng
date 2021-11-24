@@ -27,4 +27,6 @@ public class OrganisationUnitDTO {
 
     private Long householdMaxCount;
 
+    private Object details;
+
 }

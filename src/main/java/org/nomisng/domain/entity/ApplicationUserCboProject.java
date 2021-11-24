@@ -51,4 +51,11 @@ public class ApplicationUserCboProject extends Audit {
     @ToString.Exclude
     @JoinColumn(name = "application_user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User getUserByApplicationUserId;
+
+    public String getCboProjectDescription(){
+        if (cboProjectId != null){
+            return cboProjectByCboProjectId.getDescription();
+        }
+        return null;
+    }
 }

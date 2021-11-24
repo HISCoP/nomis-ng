@@ -27,5 +27,7 @@ public class HouseholdMemberDTO {
     @NotNull(message = "householdMemberType is mandatory")
     private Integer householdMemberType;
 
+    private String uniqueId;
+
     private Object details;
 }

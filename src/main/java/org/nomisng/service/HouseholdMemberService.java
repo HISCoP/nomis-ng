@@ -11,11 +11,13 @@ import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
 import org.nomisng.domain.entity.Encounter;
+import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.HouseholdMember;
 import org.nomisng.domain.mapper.EncounterMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
 import org.nomisng.repository.HouseholdMemberRepository;
+import org.nomisng.repository.HouseholdRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 @RequiredArgsConstructor
 public class HouseholdMemberService {
     private final HouseholdMemberRepository householdMemberRepository;
+    private final HouseholdRepository householdRepository;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdMapper householdMapper;
     private final EncounterMapper encounterMapper;
@@ -72,6 +75,10 @@ public class HouseholdMemberService {
         optionalHouseholdMember.ifPresent(householdMember -> {
             throw new RecordExistException(HouseholdMember.class, firstName + " " + lastName, "already exist in household");
         });
+        Household household = householdRepository.findById(householdMemberDTO.getHouseholdId())
+                .orElseThrow(()-> new EntityNotFoundException(Household.class, "id", "" +householdMemberDTO.getHouseholdId()));
+        Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId()) + 1;
+        householdMemberDTO.setUniqueId(household + "/" +serialNumber);
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
         return householdMemberRepository.save(householdMember);

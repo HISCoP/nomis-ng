@@ -42,7 +42,7 @@ public class HouseholdMigration extends Audit {
     @Column(name = "organisation_unit_id", nullable = false)
     private Long organisationUnitId;
 
-    @Basic
+    /*@Basic
     @Column(name = "country_id")
     private Long countryId;
     @Basic
@@ -53,7 +53,7 @@ public class HouseholdMigration extends Audit {
     private Long provinceId;
     @Basic
     @Column(name = "ward_id")
-    private Long wardId;
+    private Long wardId;*/
     @Basic
     @Column(name = "cbo_project_id")
     private Long cboProjectId;
