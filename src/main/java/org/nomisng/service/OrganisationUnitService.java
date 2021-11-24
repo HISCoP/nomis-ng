@@ -12,6 +12,7 @@ import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.domain.entity.OrganisationUnitHierarchy;
 import org.nomisng.domain.mapper.OrganisationUnitMapper;
 import org.nomisng.repository.HouseholdMigrationRepository;
+import org.nomisng.repository.HouseholdRepository;
 import org.nomisng.repository.OrganisationUnitHierarchyRepository;
 import org.nomisng.repository.OrganisationUnitRepository;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public class OrganisationUnitService {
     private static final Long FIRST_ORG_LEVEL = 1L;
     public static final long WARD_LEVEL = 4L;
     private final OrganisationUnitRepository organisationUnitRepository;
-    private final HouseholdMigrationRepository householdMigrationRepository;
+    private final HouseholdRepository householdRepository;
     private final OrganisationUnitMapper organisationUnitMapper;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
 
@@ -146,7 +147,7 @@ public class OrganisationUnitService {
             Long orgUnitId = organisationUnit.getParentOrganisationUnitId();
 
             if(organisationUnit.getOrganisationUnitLevelId() == WARD_LEVEL){
-                organisationUnit.setHouseholdMaxCount(householdMigrationRepository.findByWardId(organisationUnit.getId()));
+                organisationUnit.setHouseholdMaxCount(householdRepository.findMaxSerialNumber(organisationUnit.getId()));
             }
             organisationUnitDTOS.add(organisationUnitMapper.toOrganisationUnitDTO(findOrganisationUnits(organisationUnit, orgUnitId)));
         });

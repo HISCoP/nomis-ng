@@ -222,7 +222,7 @@ public class HouseholdService {
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
     }
 
-    public Long getMaxHouseholdIdByOrganisation(Long id) {
-        return householdMigrationRepository.findByWardId(id);
+    public Long getMaxHouseholdIdByWardId(Long wardId) {
+        return householdRepository.findMaxSerialNumber(wardId);
     }
 }

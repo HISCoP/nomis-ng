@@ -32,5 +32,9 @@ public interface HouseholdRepository extends JpaRepository<Household, Long>, Jpa
     Page<Household> findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(String search, Long cboProjectId,
                                                                                     int archived, Pageable pageable);
 
+    @Query(value = "SELECT max(serial_number) FROM household WHERE ward_id = ?1", nativeQuery = true)
+    Long findMaxSerialNumber(Long wardId);
+
+
 }
 
