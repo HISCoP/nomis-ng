@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-//import org.nomisng.security.SecurityUtils;
+import org.nomisng.security.SecurityUtils;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,7 +27,7 @@ public class Audit {
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy = "guest@nomisng.org";/*SecurityUtils.getCurrentUserLogin().orElse(null);*/
+    private String createdBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
@@ -36,13 +36,13 @@ public class Audit {
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     @LastModifiedBy
-    @Column(name = "modified_by")
+    @Column(name = "modified_by", nullable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+    private String modifiedBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @LastModifiedDate
-    @Column(name = "date_modified")
+    @Column(name = "date_modified", nullable = false)
     @JsonIgnore
     @ToString.Exclude
     private LocalDateTime dateModified = LocalDateTime.now();

@@ -132,7 +132,11 @@ public class HouseholdService {
             List<HouseholdMigration> householdMigrations = householdMigrationMapper.toHouseholdMigration(householdDTO.getHouseholdMigrationDTOS());
             for (HouseholdMigration householdMigration : householdMigrations) {
                 if(householdMigration.getActive() == null){
-                    householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);}//only one address at registration of household
+                    householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
+                    /*householdMigration.getStateId();
+                    householdMigration.getProvinceId();
+                    householdMigration.getWardId();*/
+                }//only one address at registration of household
                 householdMigration.setHouseholdId(household.getId());
                 householdMigrationRepository.save(householdMigration);
             }

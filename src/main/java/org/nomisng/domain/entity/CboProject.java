@@ -16,7 +16,6 @@ import java.util.List;
 @Table(name = "cbo_project", schema = "public", catalog = "nomis_debbie_17_11_21")
 public class CboProject {
 
-
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +34,7 @@ public class CboProject {
     private String description;
     @Basic
     @Column(name = "archived")
+    @JsonIgnore
     private Integer archived;
     @ManyToOne
     @JsonIgnore
@@ -52,51 +52,44 @@ public class CboProject {
     @JoinColumn(name = "implementer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Implementer implementerByImplementerId;
     @Transient
+    @JsonIgnore
     private String cboName;
     @Transient
+    @JsonIgnore
     private String donorName;
     @Transient
+    @JsonIgnore
     private String implementerName;
     @Transient
+    @JsonIgnore
     private String organisationUnitName;
-    @Transient
-    private List organisationUnits;
-
-    @OneToMany(mappedBy = "cboProjectByCboProjectId")
-    @ToString.Exclude
-    private List<CboProjectLocation> cboProjectLocationsById;
 
     /*@OneToMany(mappedBy = "cboProjectByCboId")
     @ToString.Exclude
     private List<User> usersById;*/
-
+    @Transient
+    @JsonIgnore
+    private List organisationUnits;
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<CboProjectLocation> cboProjectLocationsById;
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
     @JsonIgnore
     @ToString.Exclude
     private List<HouseholdMigration> householdMigrationsById;
-
     @OneToMany(mappedBy = "householdMemberByCboProjectId")
     @JsonIgnore
     @ToString.Exclude
     private List<HouseholdMember> householdMembersById;
-
     @OneToMany(mappedBy = "encounterByCboProjectId", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private List<Encounter> encountersById;
-
     @OneToMany(mappedBy = "cboProjectByCboProjectId", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private List<FormData> formData;
-
-    @OneToMany(mappedBy = "cboProjectByCboProjectId")
-    private List<ApplicationUserCboProject> applicationUserCboProjectsById;
-
-    @OneToMany(mappedBy = "cboProjectByCboProjectId")
-    @JsonIgnore
-    @ToString.Exclude
-    public List<ApplicationUserCboProject> applicationUserCboProjectById;
 
 /*    @OneToMany(mappedBy = "cboProjectByCurrentCboProjectId")
     @JsonIgnore
@@ -105,6 +98,20 @@ public class CboProject {
 
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
     @JsonIgnore
+    private List<ApplicationUserCboProject> applicationUserCboProjectsById;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    @JsonIgnore
     @ToString.Exclude
-    public List<Household> households;
+    public List<HouseholdUniqueIdCboProjectHistory> householdUniqueIdCboProjectHistoriesById;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<ApplicationUserCboProject> applicationUserCboProjectById;
+
+    @OneToMany(mappedBy = "cboProjectByCboProjectId")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<Household> households;
 }

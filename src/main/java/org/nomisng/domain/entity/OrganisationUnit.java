@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "organisation_unit", schema = "public", catalog = "nomis_30_08_21")
+@Table(name = "organisation_unit")
 public class OrganisationUnit extends JsonBEntity implements Serializable {
 
     @ManyToOne

@@ -25,6 +25,10 @@ public class CboProjectLocation {
     @Column(name = "organisation_unit_id")
     private Long organisationUnitId;
 
+    @Basic
+    @Column(name = "archived")
+    private int archived;
+
     @ManyToOne
     @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
     @JsonIgnore

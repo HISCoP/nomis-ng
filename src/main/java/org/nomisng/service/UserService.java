@@ -155,7 +155,7 @@ public class UserService {
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
-    public List<CboProject> getCboProject(Long userId) {
+    public List<CboProject> getCboProjectByUserId(Long userId) {
         return applicationUserCboProjectRepository.findAllByApplicationUserId(userId).stream()
                 .map(ApplicationUserCboProject::getCboProjectByCboProjectId)
                 .collect(Collectors.toList());

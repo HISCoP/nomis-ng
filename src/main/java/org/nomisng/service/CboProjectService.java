@@ -27,13 +27,13 @@ import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 @Slf4j
 @RequiredArgsConstructor
 public class CboProjectService {
+    private static final long LGA_ORG_UNIT_LEVEL_ID = 3L;
     private final CboProjectRepository cboProjectRepository;
     private final CboRepository cboRepository;
     private final DonorRepository donorRepository;
     private final ImplementerRepository implementerRepository;
     private final OrganisationUnitRepository organisationUnitRepository;
     private final CboProjectMapper cboProjectMapper;
-    private final Constants.ArchiveStatus constant;
     private final CboProjectLocationRepository cboProjectLocationRepository;
     private final UserService userService;
     private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
@@ -48,7 +48,7 @@ public class CboProjectService {
         });
 
         List<Long> organisationUnitIds = new ArrayList<>();
-        Long orgUnitLevelId = 3L;
+        Long orgUnitLevelId = LGA_ORG_UNIT_LEVEL_ID;
         List<CboProjectLocation> cboProjectLocations = new ArrayList<>();
 
         //Preparing the organisation Unit
@@ -61,17 +61,8 @@ public class CboProjectService {
             if(organisationUnitLevelId != orgUnitLevelId ){
                 throw new IllegalTypeException(OrganisationUnitLevel.class, "Level", " must be province/lga");
             } else {
-                /*Pageable pageable = PageRequest.of(0, 1000);
-
-                Page<OrganisationUnitHierarchy> page = organisationUnitService.getOrganisationUnitHierarchies(organisationUnit.getId(), orgUnitLevelId,pageable);
-                List<Long> orgUnitIds = page.getContent().stream().map(OrganisationUnitHierarchy::getOrganisationUnitId)
-                        .collect(Collectors.toList());*/
                 organisationUnitIds.add(organisationUnitId);
             }
-            /*//Is a ward
-            if(organisationUnitLevelId == orgUnitLevelId) {
-                organisationUnitIds.add(organisationUnitId) ;
-            }*/
         });
         //setting the organisation unit
         cboProjectDTO.setOrganisationUnitIds(organisationUnitIds);
@@ -82,7 +73,7 @@ public class CboProjectService {
 
         //saving the cbo
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
-            cboProjectLocations.add(new CboProjectLocation(null, cboProjectId, organisationUnitId, null, null));
+            cboProjectLocations.add(new CboProjectLocation(null, cboProjectId, organisationUnitId, UN_ARCHIVED, null, null));
         });
         cboProjectLocationRepository.saveAll(cboProjectLocations);
 
@@ -92,7 +83,7 @@ public class CboProjectService {
     public CboProjectDTO getCboProjectById(Long id) {
         CboProject cboProject = cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
-       return cboProjectMapper.toCboProjectDTO(setNames(cboProject));
+       return cboProjectMapper.toCboProjectDTO(transformCboProjectObject(cboProject));
     }
 
     /*public List<OrganisationUnit> getOrganisationUnitByCboProjectId() {
@@ -111,6 +102,7 @@ public class CboProjectService {
 
         if(!cboProjectLocations.isEmpty()){
             List<Long> orgUnitIds = cboProjectLocations.stream()
+                    .filter(cboProjectLocation -> cboProjectLocation.getArchived() == UN_ARCHIVED)
                     .map(CboProjectLocation::getOrganisationUnitId)
                     .collect(Collectors.toList());
             throw new RecordExistException(CboProjectLocation.class, "Cbo Project Location", orgUnitIds.toString());
@@ -118,29 +110,39 @@ public class CboProjectService {
 
         CboProject cboProject = cboProjectRepository.save(cboProjectMapper.toCboProject(cboProjectDTO));
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
-            cboProjectLocations.add(new CboProjectLocation(null, id, organisationUnitId, null, null));
+            cboProjectLocations.add(new CboProjectLocation(null, id, organisationUnitId, UN_ARCHIVED, null, null));
         });
         cboProjectLocationRepository.saveAll(cboProjectLocations);
 
-        return setNames(cboProject);
+        return transformCboProjectObject(cboProject);
     }
 
     public Integer delete(Long id) {
         return null;
     }
 
-    private CboProject setNames(CboProject cboProject){
+    private CboProject transformCboProjectObject(CboProject cboProject){
         String cboName = cboProject.getCboByCboId().getName();
         String donorName = cboProject.getDonorByDonorId().getName();
         String implementerName = cboProject.getImplementerByImplementerId().getName();
-        HashMap<Long, String> map = new HashMap<>();
+        List<Object> orgObject = new ArrayList<>();
+
 
         cboProject.getCboProjectLocationsById().forEach(cboProjectLocation -> {
-            map.put(cboProjectLocation.getOrganisationUnitByOrganisationUnitId().getId(),
-                    cboProjectLocation.getOrganisationUnitByOrganisationUnitId().getName());
+            if(cboProjectLocation.getArchived() == UN_ARCHIVED) {
+                OrganisationUnit organisationUnit = cboProjectLocation.getOrganisationUnitByOrganisationUnitId();
+                OrganisationUnit parentOrgUnit = organisationUnitRepository.findByIdAndArchived(organisationUnit.getParentOrganisationUnitId(), UN_ARCHIVED).get();
+                HashMap<String, String> map = new HashMap<>();
+                map.put("id", String.valueOf(organisationUnit.getId()));
+                map.put("Name", organisationUnit.getName());
+                map.put("State", parentOrgUnit.getName());
+                map.put("cboProjectLocationId", String.valueOf(cboProjectLocation.getId()));
+                orgObject.add(map);
+            }
         });
 
-        cboProject.setOrganisationUnits(Collections.singletonList(map));
+
+        cboProject.setOrganisationUnits(orgObject);
 
         cboProject.setCboName(cboName);
         cboProject.setDonorName(donorName);
@@ -149,7 +151,7 @@ public class CboProjectService {
         return cboProject;
     }
 
-    public Page<CboProject> getCboProject(Long cboId, Long donorId, Long implementerId, Pageable pageable){
+    public Page<CboProject> getCboProjects(Long cboId, Long donorId, Long implementerId, Pageable pageable){
         List<Long> cboIds = getIds(cboId);
         List<Long> donorIds = getIds(donorId);
         List<Long> implementerIds = getIds(implementerId);
@@ -173,7 +175,7 @@ public class CboProjectService {
         List<CboProject> cboProjectList = new ArrayList<>();
 
         page.getContent().forEach(cboProject -> {
-            cboProjectList.add(setNames(cboProject));
+            cboProjectList.add(transformCboProjectObject(cboProject));
         });
         return cboProjectMapper.toCboProjectDTOS(cboProjectList);
     }
@@ -201,7 +203,7 @@ public class CboProjectService {
         userRepository.save(user);
     }
 
-    public List<Object> getAllCboProjectIdAndDescription() {
-        return cboProjectRepository.getAllCboProjectIdAndDescription();
+    public List<CboProject> getAll() {
+        return cboProjectRepository.findAllByArchived(UN_ARCHIVED);
     }
 }
