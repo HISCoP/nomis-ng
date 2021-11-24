@@ -121,6 +121,9 @@ public class HouseholdService {
         household.setCboProjectId(currentCboProjectId);
         household.setStatus(ACTIVE);
         household.setCboProjectId(currentCboProjectId);
+        if(household.getSerial_number() == null){
+            householdRepository.findMaxSerialNumber(household.getWardId());
+        }
 
         //save household
         household = householdRepository.save(household);
@@ -148,7 +151,6 @@ public class HouseholdService {
             householdMember = householdMemberMapper.toHouseholdMember(householdDTO.getHouseholdMemberDTO());
             if(firstTime) {
                 householdMember.setUniqueId(household.getUniqueId() + "/1"); //First household member
-                householdMember.setSerial_number(FIRST_MEMBER);
             }
             householdMember.setCboProjectId(currentCboProjectId);
             householdMember.setHouseholdId(household.getId());

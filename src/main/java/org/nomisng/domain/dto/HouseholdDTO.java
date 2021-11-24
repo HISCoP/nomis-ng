@@ -29,6 +29,7 @@ public class HouseholdDTO {
 
     private Object assessment;
 
+    @NotNull(message = "ward is mandatory")
     private OrganisationUnit ward;
 
     private Long wardId;
