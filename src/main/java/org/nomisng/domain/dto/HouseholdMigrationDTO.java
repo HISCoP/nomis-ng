@@ -24,7 +24,7 @@ public class HouseholdMigrationDTO {
 
     private String landmark;
 
-    @NotNull(message = "countryId is mandatory")
+/*    @NotNull(message = "countryId is mandatory")
     private Long countryId;
 
     @NotNull(message = "stateId is mandatory")
@@ -32,7 +32,7 @@ public class HouseholdMigrationDTO {
 
     private Long provinceId;
 
-    private Long wardId;
+    private Long wardId;*/
 
     @NotNull(message = "householdId is mandatory")
     private Long householdId;

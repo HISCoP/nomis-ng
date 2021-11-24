@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
+import org.nomisng.security.SecurityUtils;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -51,7 +52,7 @@ public class HouseholdMember extends JsonBEntity {
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy = "guest@nomisng.org";/*SecurityUtils.getCurrentUserLogin().orElse(null);*/
+    private String createdBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
@@ -63,7 +64,7 @@ public class HouseholdMember extends JsonBEntity {
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy = "guest@nomisng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+    private String modifiedBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @LastModifiedDate
     @Column(name = "date_modified")
@@ -85,4 +86,8 @@ public class HouseholdMember extends JsonBEntity {
     @ManyToOne
     @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
     private CboProject householdMemberByCboProjectId;
+
+    @Basic
+    @Column(name = "unique_id", nullable = false)
+    private String uniqueId;
 }

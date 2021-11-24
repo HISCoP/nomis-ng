@@ -30,5 +30,9 @@ public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember
             "AND cbo_project_id = ?2 AND h.archived=?3", nativeQuery = true)
     Page<HouseholdMember> findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(String search, Long cboProjectId, int archived, Pageable pageable);
 
+    @Query(value = "SELECT Count(*) FROM household_member WHERE household_id = ?1", nativeQuery = true)
+    Long findHouseholdMemberCountOfHousehold(Long householdId);
+
+
 }
 

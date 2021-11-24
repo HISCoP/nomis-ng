@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "cbo_project", schema = "public", catalog = "nomis_debbie_17_11_21")
+@Table(name = "cbo_project")
 public class CboProject {
 
     @Id
