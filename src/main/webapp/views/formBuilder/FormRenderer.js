@@ -185,7 +185,7 @@ const FormRenderer = (props) => {
         const encounterDate = submission.data["encounterDate"]
             ? submission.data["encounterDate"]
             : new Date();
-        const formatedDate = Moment(encounterDate);
+        const formatedDate = new Date(encounterDate);
 
         let data = {
             formData: [{data:submission.data}],

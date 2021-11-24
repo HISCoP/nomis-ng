@@ -90,7 +90,7 @@ const ProvideService = (props) => {
       const services = selectedServices.map(x => x.options);
       let merged = [].concat.apply([], services);
       const data = {
-          serviceDate: serviceDate,
+          serviceDate: Moment(serviceDate).format('YYYY-MM-DD'),
           serviceOffered: merged
       }
       formData['dateEncounter'] = new Date(serviceDate);

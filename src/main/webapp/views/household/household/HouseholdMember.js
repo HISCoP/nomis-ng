@@ -53,7 +53,7 @@ const HouseholdMember = (props) => {
             {!loading && props.houseMemberList !==null ? props.houseMemberList.map((member) => (
                 (
                 <CCol xs="12" sm="6" lg="4" key={member.id}>
-                   <MemberCard  member={member} />
+                   <MemberCard  member={member} householdId={houseHoldId} />
                 </CCol>
                 )
             )
@@ -104,7 +104,7 @@ const MemberCard = (props) => {
                 <CButton color="primary" block onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton>
             </CCardFooter>
         </CCard>
-        <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId}/>
+        <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} householdId={props.householdId}/>
     </>
     );
 }

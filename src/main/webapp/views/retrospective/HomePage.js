@@ -198,6 +198,9 @@ const HomePage = (props) => {
                     const fd = response.data[0].formData[0];
                     setEncounter(fd);
                     setSubmission( { data: fd.data});
+                } else {
+                    setEncounter(null);
+                    setSubmission(null);
                 }
                 setShowLoadingEncounter(false);
             }) .catch((error) => {
@@ -375,7 +378,7 @@ const HomePage = (props) => {
             {/*Display form*/}
 
             <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={selectedHM ? selectedHM.id : ""} householdId={selectedHH ? selectedHH.id : ""}
-                             serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : ""}
+                             serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : Moment(serviceDate).format('YYYY-MM-DD')}
                              formDataId={encounter ? encounter.id : ""} encounterId={encounter ? encounter.encounterId : ""}
             />
 

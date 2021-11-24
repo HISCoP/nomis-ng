@@ -1,6 +1,8 @@
 package org.nomisng.domain.entity;
 
 import lombok.*;
+import org.nomisng.domain.entity.Audit;
+
 import javax.persistence.*;
 
 @Data
@@ -10,8 +12,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 public class Permission extends Audit {
     @Id
-    @Column(name = "id", updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @NonNull
@@ -20,8 +21,8 @@ public class Permission extends Audit {
     @NonNull
     private String description;
 
-    private int archived=0;
-
+    @NonNull
+    private int archived;
 
     /*@OneToMany(mappedBy = "permissionByPermissionId")
     @ToString.Exclude
