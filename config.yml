@@ -2,4 +2,4 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: jdbc:postgresql://localhost:5432/nomis_23_11
+    url: jdbc:postgresql://localhost:5432/nomis_24_11
