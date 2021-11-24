@@ -24,7 +24,7 @@ import java.util.UUID;
 public class Form extends JsonBEntity implements Serializable {
 
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

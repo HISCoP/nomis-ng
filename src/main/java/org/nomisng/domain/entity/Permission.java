@@ -12,7 +12,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 public class Permission extends Audit {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull

@@ -121,8 +121,11 @@ public class HouseholdService {
         household.setCboProjectId(currentCboProjectId);
         household.setStatus(ACTIVE);
         household.setCboProjectId(currentCboProjectId);
-        if(household.getSerial_number() == null){
-            householdRepository.findMaxSerialNumber(household.getWardId());
+        if(household.getSerialNumber() == null){
+            Optional<Long> optionalLong = householdRepository.findMaxSerialNumber(household.getWardId());
+            if(optionalLong.isPresent()){
+                household.setSerialNumber(optionalLong.get());
+            }
         }
 
         //save household
@@ -139,9 +142,6 @@ public class HouseholdService {
             for (HouseholdMigration householdMigration : householdMigrations) {
                 if(householdMigration.getActive() == null){
                     householdMigration.setActive(ACTIVE_HOUSEHOLD_ADDRESS);
-                    /*householdMigration.getStateId();
-                    householdMigration.getProvinceId();
-                    householdMigration.getWardId();*/
                 }//only one address at registration of household
                 householdMigration.setHouseholdId(household.getId());
                 householdMigrationRepository.save(householdMigration);
@@ -229,6 +229,10 @@ public class HouseholdService {
     }
 
     public Long getMaxHouseholdIdByWardId(Long wardId) {
-        return householdRepository.findMaxSerialNumber(wardId);
+        Optional<Long> optionalLong = householdRepository.findMaxSerialNumber(wardId);
+        if(optionalLong.isPresent()){
+            return optionalLong.get();
+        }
+        return 0L;
     }
 }
