@@ -189,7 +189,7 @@ const MidDashboardStats = (props) => {
                             {props.fetchingHousehold &&
                             <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
                             }
-                            <span>Household ID: <small>{props.household && props.household.details ? props.household.details.uniqueId : 'Nil'} </small></span><br/>
+                            <span>Household ID: <small>{props.household ? props.household.uniqueId : 'Nil'} </small></span><br/>
                             <span>Address: <small> {props.household && props.household.details ? props.household.details.street : 'Nil'}</small></span><br/>
                             <span>Date Of Assessment: <small>{props.household && props.household.details ? props.household.details.assessmentDate : 'Nil'}</small> </span><br/>
                             <span>Primary Caregiver Name: <small>{props.household && props.household.details && props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName : 'Nil'}  </small></span><br/>

@@ -23,12 +23,12 @@ const NewOvc = (props) => {
         axios
             .post(`${url}household-members`, body)
             .then(response => {
-                toast.success('VC saved!');
+                toast.success('VC saved successfully!');
                 props.reload();
                 props.toggle();
             })
             .catch(error => {
-                toast.error('Error: VC not saved!');
+                toast.error('An error occurred, VC not saved!');
                 }
 
             );
@@ -38,7 +38,12 @@ const NewOvc = (props) => {
         //alert('Save Successfully');
 
         const data = e.data;
-        const member = {details: data, householdMemberType: 2, householdId: props.householdId};
+        delete data.totalMembers;
+
+        const member = {details: data,
+            uniqueId: data.uniqueId,
+            householdMemberType: 2,
+            householdId: props.householdId};
         createMember(member)
 
     };
@@ -54,7 +59,7 @@ const NewOvc = (props) => {
                     householdId={props.householdId}
                     formCode={currentForm.code}
                     programCode=""
-                    submission={{}}
+                    submission={{data:{totalMembers: props.totalMembers} }}
                     onSubmit={save}
                 />
             </CModalBody>

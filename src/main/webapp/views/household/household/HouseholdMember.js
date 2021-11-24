@@ -70,8 +70,8 @@ const HouseholdMember = (props) => {
             :
             ""
             }
-            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers}/>
-            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers}/>
+            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.length}/>
+            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.length}/>
             
             </>
     );

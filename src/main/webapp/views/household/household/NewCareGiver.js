@@ -27,7 +27,7 @@ const NewOvc = (props) => {
     }
 
     const onError = () => {
-      toast.error('Error: Household caregiver not saved!');
+      toast.error('An error occurred, household caregiver not saved!');
     }
     axios
         .post(`${url}household-members`, body)
@@ -49,7 +49,10 @@ const NewOvc = (props) => {
     //alert('Save Successfully');
 
     const data = e.data;
-    const member = {details: data, householdMemberType: 1, householdId: props.householdId};
+      delete data.totalMembers;
+    const member = {details: data,
+        uniqueId: data.uniqueId,
+        householdMemberType: 1, householdId: props.householdId};
    createMember(member)
 
   };
@@ -64,7 +67,7 @@ const NewOvc = (props) => {
                   <FormRenderer
                       householdId={props.householdId}
                       formCode={currentForm.code}
-                      submission={{}}
+                      submission={{data:{totalMembers: props.totalMembers} }}
                       onSubmit={save} />
               </CModalBody>
           </CModal>
