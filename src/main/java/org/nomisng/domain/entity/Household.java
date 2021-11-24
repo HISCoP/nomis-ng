@@ -84,11 +84,11 @@ public class Household extends JsonBEntity implements Serializable {
     @ToString.Exclude
     private List<Encounter> encountersById;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "cbo_id", referencedColumnName = "id", updatable = false, insertable = false)
     @ToString.Exclude
     @JsonIgnore
-    private OrganisationUnit organisationUnitById;
+    private OrganisationUnit organisationUnitById;*/
 
     @OneToMany(mappedBy = "householdByHouseholdId")
     @ToString.Exclude
