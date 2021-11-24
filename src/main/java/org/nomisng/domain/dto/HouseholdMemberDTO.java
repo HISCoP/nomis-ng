@@ -30,6 +30,4 @@ public class HouseholdMemberDTO {
     private String uniqueId;
 
     private Object details;
-
-    private Long serial_number;
 }

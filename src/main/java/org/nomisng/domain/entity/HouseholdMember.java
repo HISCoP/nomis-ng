@@ -90,10 +90,4 @@ public class HouseholdMember extends JsonBEntity {
     @Basic
     @Column(name = "unique_id")
     private String uniqueId;
-
-    @Basic
-    @Column(name = "serial_number")
-    @JsonIgnore
-    private Long serial_number;
-
 }
