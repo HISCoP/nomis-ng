@@ -32,4 +32,6 @@ public class HouseholdDTO {
     private OrganisationUnit ward;
 
     private Long wardId;
+
+    private Long serial_number;
 }

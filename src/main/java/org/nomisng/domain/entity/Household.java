@@ -55,6 +55,11 @@ public class Household extends JsonBEntity implements Serializable {
     @JsonIgnore
     private Long wardId;
 
+    @Basic
+    @Column(name = "serial_number")
+    @JsonIgnore
+    private Long serial_number;
+
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore

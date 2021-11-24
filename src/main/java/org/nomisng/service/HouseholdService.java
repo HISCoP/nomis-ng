@@ -31,6 +31,7 @@ import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 public class HouseholdService {
     public static final int HOUSEHOLD_MEMBER_TYPE = 1;
     public static final int ACTIVE = 1;
+    public static final long FIRST_MEMBER = 1L;
     private final HouseholdRepository householdRepository;
     private final HouseholdMemberRepository householdMemberRepository;
     private final HouseholdMigrationRepository householdMigrationRepository;
@@ -145,12 +146,15 @@ public class HouseholdService {
         }
         if(householdDTO.getHouseholdMemberDTO() != null){
             householdMember = householdMemberMapper.toHouseholdMember(householdDTO.getHouseholdMemberDTO());
-            householdMember.setUniqueId(household.getUniqueId() + "/1"); //First household member
+            if(firstTime) {
+                householdMember.setUniqueId(household.getUniqueId() + "/1"); //First household member
+                householdMember.setSerial_number(FIRST_MEMBER);
+            }
             householdMember.setCboProjectId(currentCboProjectId);
             householdMember.setHouseholdId(household.getId());
             householdMember.setHouseholdMemberType(HOUSEHOLD_MEMBER_TYPE);
 
-            householdMember = householdMemberRepository.save(householdMember);
+            householdMemberRepository.save(householdMember);
         }
         if(firstTime) {
             //Encounter for assessment
@@ -222,7 +226,7 @@ public class HouseholdService {
                 .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
     }
 
-    public Long getMaxHouseholdIdByOrganisation(Long id) {
-        return householdMigrationRepository.findByWardId(id);
+    public Long getMaxHouseholdIdByWardId(Long wardId) {
+        return householdRepository.findMaxSerialNumber(wardId);
     }
 }

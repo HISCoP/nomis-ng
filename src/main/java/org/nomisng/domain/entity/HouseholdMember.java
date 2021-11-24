@@ -88,6 +88,6 @@ public class HouseholdMember extends JsonBEntity {
     private CboProject householdMemberByCboProjectId;
 
     @Basic
-    @Column(name = "unique_id", nullable = false)
+    @Column(name = "unique_id")
     private String uniqueId;
 }
