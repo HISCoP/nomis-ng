@@ -81,7 +81,7 @@ public class HouseholdMemberService {
         Household household = householdRepository.findById(householdMemberDTO.getHouseholdId())
                 .orElseThrow(()-> new EntityNotFoundException(Household.class, "id", "" +householdMemberDTO.getHouseholdId()));
         Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId()) + 1;
-        householdMemberDTO.setUniqueId(household.getUniqueId() + "/" +serialNumber);
+        householdMemberDTO.setUniqueId(household.getUniqueId()+household.getSerialNumber() + "/" +serialNumber);
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
         return householdMemberRepository.save(householdMember);
