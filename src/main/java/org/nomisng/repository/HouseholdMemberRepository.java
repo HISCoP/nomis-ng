@@ -33,6 +33,5 @@ public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember
     @Query(value = "SELECT Count(*) FROM household_member WHERE household_id = ?1", nativeQuery = true)
     Long findHouseholdMemberCountOfHousehold(Long householdId);
 
-
 }
 

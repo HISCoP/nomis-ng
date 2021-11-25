@@ -48,15 +48,18 @@ public class UserJWTController {
         User user = userService.getUserWithAuthoritiesByUsername(loginVM.getUsername()).get();
         Long currentCboProjectId = loginVM.getCboProjectId();
 
-        //get all cboProjectIds for the login user
-        List<Long> cboProjectIds = user.getApplicationUserCboProjects()
-                .stream()
-                .map(ApplicationUserCboProject::getCboProjectId)
-                .collect(Collectors.toList());
+        if(currentCboProjectId != DEFAULT_CBO_PROJECT_ID) {
 
-        //if cboProject does not exist default the cboProject to zero(0)
-        if(!cboProjectIds.contains(currentCboProjectId)){
-            currentCboProjectId = DEFAULT_CBO_PROJECT_ID;
+            //get all cboProjectIds for the login user
+            List<Long> cboProjectIds = user.getApplicationUserCboProjects()
+                    .stream()
+                    .map(ApplicationUserCboProject::getCboProjectId)
+                    .collect(Collectors.toList());
+
+            //if cboProject does not exist default the cboProject to zero(0)
+            if (!cboProjectIds.contains(currentCboProjectId)) {
+                currentCboProjectId = DEFAULT_CBO_PROJECT_ID;
+            }
         }
         //set current cbo project
         user.setCurrentCboProjectId(currentCboProjectId);
