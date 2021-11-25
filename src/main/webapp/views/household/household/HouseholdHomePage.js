@@ -17,7 +17,7 @@ import {calculateAge} from "./../../../utils/calculateAge";
 import { makeStyles } from "@material-ui/core/styles";
 import AssessmentCarePlanHome from "./AssessmentCarePlanHome";
 import {fetchHouseHoldById} from "./../../../actions/houseHold";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles({
@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 const HouseholdHomePage = (props) => {
     //Getting the house Hold details from the props
     console.log(props.location)
+    const dispatch = useDispatch();
     const houseHoldId = props.location.state;
     const [fetchingHousehold, setFetchingHousehold] = useState(true);
     const classes = useStyles();
@@ -37,6 +38,7 @@ const HouseholdHomePage = (props) => {
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
+
 
     React.useEffect(() => {
         setFetchingHousehold(true);
@@ -47,6 +49,8 @@ const HouseholdHomePage = (props) => {
             setFetchingHousehold(false);
         };
         props.fetchHouseHoldById(houseHoldId, onSuccess, onError);
+        //minimize side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: true });
     }, [houseHoldId]);
 
     return (

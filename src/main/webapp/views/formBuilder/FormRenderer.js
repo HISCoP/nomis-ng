@@ -262,6 +262,7 @@ const FormRenderer = (props) => {
                             delete submission.data.submit;
                             delete submission.data.baseUrl;
                             delete submission.data.last;
+                            delete submission.data.checklist;
 
                             if (props.onSubmit) {
                                 return props.onSubmit(submission);

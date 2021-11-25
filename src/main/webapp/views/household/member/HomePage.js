@@ -15,7 +15,7 @@ import Forms from "./FillForms";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import {calculateAge} from "./../../../utils/calculateAge";
 import {fetchHouseHoldById} from "../../../actions/houseHold";
 import ProvideService from "../household/ProvideService";
@@ -41,6 +41,10 @@ const HomePage = (props) => {
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
     const [showPreventiveServiceModal, setShowPreventiveServiceModal] = useState(false);
     const togglePreventiveServiceModal = () => setShowPreventiveServiceModal(!showPreventiveServiceModal);
+
+    const dispatch = useDispatch();
+    const menu = useSelector(state => state.menu).minimize;
+
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
@@ -48,6 +52,11 @@ const HomePage = (props) => {
         setActiveItem("");
         setActiveItem(activeItem);
     }
+
+    React.useEffect(() => {
+        //minimize side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: true });
+    },[]);
 
     React.useEffect(() => {
         setFetchingMember(true);
@@ -58,6 +67,7 @@ const HomePage = (props) => {
             setFetchingMember(false);
         };
         props.fetchHouseHoldMemberById(memberId, onSuccess, onError);
+
     }, [memberId]);
     React.useEffect(() => {
         setFetchingHousehold(true);

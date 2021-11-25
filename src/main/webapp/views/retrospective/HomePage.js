@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { CCol, CRow, CButton, CCard, CCardBody, CCardHeader,} from "@coreui/react";
-import {FormGroup, Input, Label} from "reactstrap";
+import {FormGroup,  Label} from "reactstrap";
 import Select from "react-select";
 import {connect} from "react-redux";
 import {fetchAllHouseHoldMembersByHouseholdId, fetchAllHouseHold} from "../../actions/houseHold";
@@ -8,7 +8,6 @@ import axios from "axios";
 import {url} from "../../api";
 import * as CODES from "../../api/codes";
 import {toast, ToastContainer} from "react-toastify";
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import {calculateAge} from "../../utils/calculateAge";
 import { Link } from 'react-router-dom';
 import FormRenderer from "../formBuilder/FormRenderer";
@@ -20,7 +19,7 @@ import { DatePicker } from "react-widgets";
 import "react-widgets/dist/css/react-widgets.css";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import _ from "lodash";
+import NewCarePlan from "../household/household/NewCarePlan";
 //Dtate Picker package
 Moment.locale("en");
 momentLocalizer();
@@ -41,10 +40,12 @@ const HomePage = (props) => {
     const [newHouseholdModal, setShowHHModal] = React.useState(false);
     const [serviceDate, setServiceDate] = React.useState();
     const [encounter, setEncounter] = React.useState();
+    const [newCarePlanModal, setShowCarePlanModal] = React.useState(false);
     const toggleHousehold = () => setShowHHModal(!newHouseholdModal);
     const toggleOvc = () => setShowOvcModal(!newOvcModal);
     const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
+    const toggleCarePlan = () => setShowCarePlanModal(!newCarePlanModal);
 
     useEffect(() => {
         fetchHousehold();
@@ -134,6 +135,10 @@ const HomePage = (props) => {
             return;
         }
 
+        if(selectedForm.code === CODES.CARE_PLAN){
+            toggleCarePlan();
+            return;
+        }
         //check if it is a household member form
         if((selectedForm.code !== CODES.CARE_GIVER_ENROLMENT_FORM
             && selectedForm.code !== CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM
@@ -381,7 +386,7 @@ const HomePage = (props) => {
                              serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : Moment(serviceDate).format('YYYY-MM-DD')}
                              formDataId={encounter ? encounter.id : ""} encounterId={encounter ? encounter.encounterId : ""}
             />
-
+            <NewCarePlan  modal={newCarePlanModal} toggle={toggleCarePlan} householdId={selectedHH ? selectedHH.id : ""} />
             <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length}/>
             <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length}/>
             <NewHouseHold  modal={newHouseholdModal} toggle={toggleHousehold} reloadSearch={fetchHousehold} />

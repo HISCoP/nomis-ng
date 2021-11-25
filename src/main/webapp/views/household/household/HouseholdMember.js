@@ -95,8 +95,7 @@ const MemberCard = (props) => {
                 <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "VC" || ''}</b></p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
                 <Link color="inherit" to ={{
-                    pathname: "/household-member/home", state: props.member.id
-                }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName }</span></Link><br/>
+                    pathname: "/household-member/home", state: props.member.id, householdId:props.householdId }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName } <br /> {props.member.uniqueId}</span></Link><br/>
                 <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>

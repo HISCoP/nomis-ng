@@ -19,12 +19,15 @@ import navigation from './_nav'
 
 const TheSidebar = () => {
   const dispatch = useDispatch()
-  const show = useSelector(state => state.sidebarShow)
+  const show = useSelector(state => state.sidebarShow);
+  const menu = useSelector(state => state.menu);
 
   return (
     <CSidebar
       show={show}
-      onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
+      minimize={menu.minimize}
+      onShowChange={(val) => {dispatch({type: 'set', sidebarShow: val })}}
+      onMinimizeChange={(val) => dispatch({type: 'MENU_MINIMIZE', payload: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
         {"NOMIS"}

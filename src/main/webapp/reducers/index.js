@@ -35,6 +35,5 @@ export default combineReducers({
   donorReducer: donorReducer,
   ipReducer: ipReducer,
   cboDonorIpReducer: cboDonorIpReducer
-
 })
 
