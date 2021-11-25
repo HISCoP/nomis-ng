@@ -33,7 +33,7 @@ public class UserDTO {
     private Long cboProjectId;
     @ToString.Exclude
     private List<ApplicationUserCboProject> applicationUserCboProjects;
-    private String currentCboProjectName;
+    private String currentCboProjectDescription;
 
 
 
@@ -52,6 +52,7 @@ public class UserDTO {
         this.gender = user.getGender();
         this.currentCboProjectId = user.getCurrentCboProjectId();
         this.applicationUserCboProjects = user.getApplicationUserCboProjects();
+        this.currentCboProjectDescription = user.getCboProjectByCurrentCboProjectId() != null ? user.getCboProjectByCurrentCboProjectId().getDescription() : null;
     }
 
 

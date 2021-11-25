@@ -9,8 +9,8 @@ acrossHibernate:
     create-unit-of-work-factory: true
     hibernate-properties:
         hibernate.format_sql: true
-        hibernate.use_sql_comments: true
-        hibernate.show_sql: true
+        hibernate.use_sql_comments: false
+        hibernate.show_sql: false
         hibernate.event.merge.enty_copy_observer: allow
 applicationInfo:
     applicationId: lamisplus
