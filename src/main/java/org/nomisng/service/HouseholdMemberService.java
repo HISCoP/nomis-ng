@@ -84,6 +84,10 @@ public class HouseholdMemberService {
         householdMemberDTO.setUniqueId(household.getUniqueId()+household.getSerialNumber() + "/" +serialNumber);
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
+        Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+
+        householdMember.setCboProjectId(currentCboProjectId);
+
         return householdMemberRepository.save(householdMember);
     }
 
