@@ -2,6 +2,7 @@ package org.nomisng.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.nomisng.security.SecurityUtils;
 //import org.nomisng.security.SecurityUtils;
 import javax.persistence.*;
 import java.sql.Date;
@@ -50,7 +51,7 @@ public class User {
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy = "guest@nomis-ng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+    private String createdBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @Column(name = "date_created", nullable = false, updatable = false)
     @JsonIgnore
@@ -60,7 +61,7 @@ public class User {
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy = "guest@nomis-ng.org";//SecurityUtils.getCurrentUserLogin().orElse(null);
+    private String modifiedBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @Column(name = "date_modified")
     @JsonIgnore
@@ -97,17 +98,11 @@ public class User {
     @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.PERSIST)
     private List<ApplicationUserCboProject> applicationUserCboProjects;
 
-    /*@ManyToOne
+    @ManyToOne
     @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private CboProject cboProjectByCurrentCboProjectId;*/
-
-    /*@ManyToOne
-    @JsonIgnore
-    @ToString.Exclude
-    @JoinColumn(name = "current_cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
-    private CboProject cboProjectByCboId;*/
+    private CboProject cboProjectByCurrentCboProjectId;
 
     @OneToMany(mappedBy = "applicationUserByApplicationUserId")
     @JsonIgnore
