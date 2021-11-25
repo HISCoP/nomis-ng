@@ -297,15 +297,30 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.innoventsolutions.birt.runtime</groupId>
+			<artifactId>org.eclipse.birt.runtime_4.8.0-20180626</artifactId>
+			<version>4.8.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.innoventsolutions.birt.runtime</groupId>
+					<artifactId>org.apache.xml.serializer_2.7.1.v201005080400</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.innoventsolutions.birt.runtime</groupId>
+					<artifactId>org.apache.felix.scr_2.0.14.v20180117-1452</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>-->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>4.1.2</version>
-		</dependency>
+		</dependency>-->
 		<!--<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-maven-plugin</artifactId>

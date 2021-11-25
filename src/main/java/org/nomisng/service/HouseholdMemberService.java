@@ -85,7 +85,6 @@ public class HouseholdMemberService {
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
         Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
-
         householdMember.setCboProjectId(currentCboProjectId);
 
         return householdMemberRepository.save(householdMember);
