@@ -28,6 +28,11 @@ const Dashboard = (props) => {
                 <CCol xs="12" >
                 <RecentServiceOffered memberId={props.member.id}/>
                 </CCol>
+                    {props.member.householdMemberType === 2 &&
+                    <CCol xs="12">
+                        <RecentPreventiveServiceOffered memberId={props.member.id}/>
+                    </CCol>
+                    }
                 <CCol xs="12" >
                 <ServiceHistoryPage memberId={props.member.id}/>
                 </CCol>
@@ -260,7 +265,6 @@ const RecentServiceOffered = (props) => {
                 if(response.data.length > 0){
                     const formData = response.data[0].formData;
                     const services = formData[0].data;
-                    console.log(services);
                     setServiceDate(services.serviceDate);
                     setLast(services.serviceOffered);
                 } else {
@@ -283,7 +287,7 @@ const RecentServiceOffered = (props) => {
                     <CCard>
                         <CCardHeader>Recent Service Offered
                             <div className="card-header-actions">
-                                {serviceDate || ''}
+                              <b>  {serviceDate || ''}</b>
                             </div>
                         </CCardHeader>
                         <CCardBody>
@@ -304,6 +308,77 @@ const RecentServiceOffered = (props) => {
             </>
     );
 }
+
+const RecentPreventiveServiceOffered = (props) => {
+    const [loading, setLoading] = useState(false);
+    const [lastService, setLast] = useState([]);
+    const [serviceDate, setServiceDate] = useState();
+
+    React.useEffect(() => {
+        fetchServices();
+    }, [props.memberId]);
+
+    const fetchServices = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+
+        const onError = () => {
+            setLoading(false);
+            // toast.error('Error: Could not fetch recent service!');
+        }
+        axios
+            .get(`${url}household-members/${props.memberId}/${CODES.PREVENTIVE_SERVICE_FORM}/encounters`)
+            .then(response => {
+                if(response.data.length > 0){
+                    const formData = response.data[0].formData;
+                    const services = formData[0].data;
+                    setServiceDate(services.encounterDate + " ("+ services.cohortName+")");
+                    setLast(services.serviceOffered);
+                } else {
+                    setLast([]);
+                }
+                if(onSuccess){
+                    onSuccess();
+                }
+            })
+            .catch(error => {
+                    if(onError){
+                        onError();
+                    }
+                }
+
+            );
+    }
+    return (
+        <>
+            <CCard>
+                <CCardHeader>Recent Preventive Service Offered
+                    <div className="card-header-actions">
+                       <b> {serviceDate || ''}</b>
+                    </div>
+                </CCardHeader>
+                <CCardBody>
+                    {loading ?
+                        <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                        :
+                        <Label.Group color='blue'>
+                            {lastService && lastService.length > 0 ? lastService.map(x =>
+                                    <Label key={x.id}>{x.display}</Label>
+                                ) :
+                                <Label>No Preventive Service has been offered</Label>
+                            }
+
+                        </Label.Group>
+                    }
+                </CCardBody>
+            </CCard>
+        </>
+    );
+}
+
+
 const mapStateToProps = (state) => {
     return {
         caregiver: state.houseHoldMember.member,

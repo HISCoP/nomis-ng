@@ -11,7 +11,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import Select from "react-select/creatable";
 import { createApplicationCodeset , updateApplicationCodeset } from "../../../actions/codeSet";
 import { Spinner } from 'reactstrap';
-
+import {toast} from "react-toastify";
 
 
 const useStyles = makeStyles(theme => ({
@@ -56,7 +56,8 @@ const NewApplicationCodeset = (props) => {
             }
             const onError = () => {
                 setLoading(false);
-                props.toggleModal()
+                toast.error("An error occured, could not save application codeset");
+              //  props.toggleModal()
             }
             if(formData.id){
                 props.updateApplicationCodeset(formData.id, formData, onSuccess, onError)
