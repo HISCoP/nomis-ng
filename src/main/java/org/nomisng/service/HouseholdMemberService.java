@@ -48,9 +48,12 @@ public class HouseholdMemberService {
 
 
 
-    public Page<HouseholdMember> getAllHouseholdMembersPage(String search, Pageable pageable) {
+    public Page<HouseholdMember> getAllHouseholdMembersPage(String search, Integer memberType, Pageable pageable) {
         Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         if(search == null || search.equalsIgnoreCase("*")) {
+            if(memberType != null && memberType > 0){
+
+            }
             return householdMemberRepository.findAllByCboProjectIdAndArchivedOrderByIdDesc(currentCboProjectId, UN_ARCHIVED, pageable);
         }
         search = "%"+search+"%";
@@ -78,7 +81,7 @@ public class HouseholdMemberService {
         Household household = householdRepository.findById(householdMemberDTO.getHouseholdId())
                 .orElseThrow(()-> new EntityNotFoundException(Household.class, "id", "" +householdMemberDTO.getHouseholdId()));
         Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId()) + 1;
-        householdMemberDTO.setUniqueId(household + "/" +serialNumber);
+        householdMemberDTO.setUniqueId(household.getUniqueId() + "/" +serialNumber);
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
         return householdMemberRepository.save(householdMember);
