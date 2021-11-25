@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import {connect, useDispatch} from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import {calculateAge} from "./../../../utils/calculateAge";
+import NewOvc from "../household/NewOvc";
 
 
 const HouseholdMember = (props) => {
@@ -86,7 +87,6 @@ const HouseholdMember = (props) => {
                                 </Link>
                                 
                               </MenuItem>
-                              <MenuItem >{" "}Edit</MenuItem>
                               {/*<MenuItem >{" "}Delete</MenuItem>*/}
                               </MenuList>
                           </Menu>

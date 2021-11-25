@@ -102,7 +102,7 @@ const saveAssessment = (e) => {
             assessment: data.assessment,
             ward: data.ward,
             householdMemberDTO: { details: data.primaryCareGiver, householdMemberType: 1},
-            householdAddressDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
+            householdMigrationDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
             serialNumber: data.uniqueId,
             uniqueId: data.code+data.uniqueId };
         editAssessment(assessment);

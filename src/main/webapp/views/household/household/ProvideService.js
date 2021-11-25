@@ -172,6 +172,7 @@ const ProvideService = (props) => {
                           defaultValue={serviceDate}
                           max={new Date()}
                           required
+                          disabled={props.type && props.type === "VIEW" ? true : false}
                           onChange={setDate}
                       />
                   {/*<Input type={"date"} onChange={setDate} value={serviceDate} max={new Date()}/>*/}
@@ -181,6 +182,7 @@ const ProvideService = (props) => {
                   <DualListBox options={serviceList} onChange={onChange}
                                selected={selectedServices} canFilter
                                lang={lang}
+                     disabled={props.type && props.type === "VIEW" ? true : false}
                                simpleValue={false} showHeaderLabels={true}/>
 
               </Col>

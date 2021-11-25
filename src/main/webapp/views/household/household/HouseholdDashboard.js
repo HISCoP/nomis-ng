@@ -71,7 +71,7 @@ const HouseholdDashboard = (props) => {
                                         <List.Item>
                                             <List.Content floated='right'>
                                                 <Link color="inherit" to={{
-                                                    pathname: "/household-member/home", state: member.id
+                                                    pathname: "/household-member/home", state: member.id, householdId:props.household.id
                                                 }}> <Button> View</Button> </Link>
                                             </List.Content>
                                             <List.Content>{member.details.firstName + " " + member.details.lastName} - {member.details.sex && member.details.sex.display ? member.details.sex.display : "Nil"} </List.Content>

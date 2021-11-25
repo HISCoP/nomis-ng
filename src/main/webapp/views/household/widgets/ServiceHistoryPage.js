@@ -13,6 +13,8 @@ import moment from "moment";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {toast} from "react-toastify";
 import FormRendererModal from "../../formBuilder/FormRendererModal";
+import ProvideService from "../household/ProvideService";
+import {HOUSEHOLD_MEMBER_SERVICE_PROVISION} from "../../../api/codes";
 
 const ServiceHistoryPage = (props) => {
     //should be able to fetch by either houseHoldId or memberId
@@ -23,6 +25,9 @@ const ServiceHistoryPage = (props) => {
     const isHistory = isBoolean(props.isHistory) ? props.isHistory : true;
     const [showFormModal, setShowFormModal] = useState(false);
     const [currentForm, setCurrentForm] = useState(false);
+    const [showServiceModal, setShowServiceModal] = useState(false);
+    const [provideServiceData, setProvideServiceData] = useState({serviceList:[], serviceDate: null, formDataId: 0, encounterId:0, type:"VIEW"});
+    const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
 
     React.useEffect(() => {
         if(!memberId) {
@@ -56,6 +61,16 @@ const ServiceHistoryPage = (props) => {
     }
 
     const viewForm = (row) => {
+        //check if it is service provision page (static html) else use formio view
+        if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
+            const formData = row.formData[0];
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id};
+            console.log(selectedService);
+            setProvideServiceData(selectedService);
+            toggleServiceModal();
+            return;
+        }
+
         setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
         setShowFormModal(true);
     }
@@ -125,44 +140,14 @@ const ServiceHistoryPage = (props) => {
                 //onError={onError}
                 options={{modalSize:"xl"}}
             />
+
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal}  householdId={props.householdId} reloadSearch={fetchHouseholdServiceHistory}
+                             serviceList={provideServiceData.serviceList} serviceDate={provideServiceData.serviceDate}
+                             formDataId={provideServiceData.formDataId} encounterId={provideServiceData.encounterId} type={provideServiceData.type}/>
+
         </>
     );
     }
-
-    return (
-
- <MaterialTable
-                title="Services Form History"
-                isLoading={loading}
-                columns={[
-                    { title: 'Form Name', field: 'name' },
-                    { title: 'Date', field: 'date' },
-                      { title: 'Name', field: 'surname', hidden: memberId ? true:false },
-                ]}
-                data={[
-                    { name: 'Household Vunerabilty Assessment', surname: 'Ama Kindu', date: '12/11/2020 08:35 AM', birthCity: 63 },
-                    { name: 'Household Followup Assessment', surname: 'Nisa Baran', date: '12/11/2020 08:35 AM', birthCity: 34 },
-                ]}
-                actions={[
-                    {
-                        icon: 'edit',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name)
-                    },
-                    rowData => ({
-                        icon: 'visibility',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You want to delete " + rowData.name)
-
-                    })
-                ]}
-                options={{
-                    actionsColumnIndex: -1,
-                    padding: 'dense',
-                    header: false
-                }}
-            />
-                        );
 }
 
 const mapStateToProps = state => {

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { CCol, CRow, CButton, CCard, CCardBody, CCardHeader,} from "@coreui/react";
 import {FormGroup,  Label} from "reactstrap";
 import Select from "react-select";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {fetchAllHouseHoldMembersByHouseholdId, fetchAllHouseHold} from "../../actions/houseHold";
 import axios from "axios";
 import {url} from "../../api";
@@ -46,7 +46,11 @@ const HomePage = (props) => {
     const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
     const toggleCarePlan = () => setShowCarePlanModal(!newCarePlanModal);
-
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        //show side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: true });
+    },[]);
     useEffect(() => {
         fetchHousehold();
         fetchForms();
@@ -64,9 +68,12 @@ const HomePage = (props) => {
     }
 
     const onSelectHousehold = (x) => {
-        setHH(x.value);
         if(x){
+            setHH(x.value);
             fetchMembers(x.value.id);
+        } else {
+            setHH(null);
+            setHM(null);
         }
     }
 
@@ -230,6 +237,7 @@ const HomePage = (props) => {
                                 <Label for="household">Search Household*</Label>
                                 <Select
                                     required
+                                    isClearable
                                     isLoading={hhLoading}
                                     isMulti={false}
                                     value={!selectedHH ? {} : {label: selectedHH.uniqueId, value: selectedHH}}
@@ -247,11 +255,18 @@ const HomePage = (props) => {
                                 <Label for="householdM">Search Household Member</Label>
                                 <Select
                                     required
+                                    isClearable
                                     isLoading={hmLoading}
                                     isMulti={false}
                                     value={!selectedHM ? {} : {label: selectedHM.details.firstName + " " + selectedHM.details.lastName + " - " + selectedHM.details.uniqueId, value: selectedHM}}
-                                    onChange={(x) => setHM(x.value)}
-                                    options={props.householdMembers.map((x) => ({
+                                    onChange={(x) => {
+                                        if(x) {
+                                            setHM(x.value)
+                                        }else{
+                                            setHM(null)
+                                        }
+                                    }}
+                                    options={!selectedHH ? [] : props.householdMembers.map((x) => ({
                                         label: x.details.firstName + " " + x.details.lastName + " - " + x.details.uniqueId,
                                         value: x,
                                     }))}
@@ -263,9 +278,17 @@ const HomePage = (props) => {
                                 <Label for="form ">Select Form</Label>
                                 <Select
                                     required
+                                    isClearable
                                     isMulti={false}
                                     value={!selectedForm ? {} : {label:selectedForm.name, value:selectedForm}}
-                                    onChange={(x) => setSelectedForm(x.value)}
+                                    onChange={(x) => {
+                                        if(x){
+                                            setSelectedForm(x.value)
+                                        }else{
+                                            setSelectedForm(null);
+                                        }
+
+                                    }}
                                     options={formList.map((x) => ({
                                         label: x.name,
                                         value: x,
@@ -387,9 +410,19 @@ const HomePage = (props) => {
                              formDataId={encounter ? encounter.id : ""} encounterId={encounter ? encounter.encounterId : ""}
             />
             <NewCarePlan  modal={newCarePlanModal} toggle={toggleCarePlan} householdId={selectedHH ? selectedHH.id : ""} />
-            <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length}/>
-            <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length}/>
-            <NewHouseHold  modal={newHouseholdModal} toggle={toggleHousehold} reloadSearch={fetchHousehold} />
+            {newOvcModal ?
+                <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length} householdMember={selectedHM && selectedHM.householdMemberType == 2 ? selectedHM : null}/>
+                : ""
+            }
+
+            {newCaregiverModal ?
+                <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length} householdMember={selectedHM && selectedHM.householdMemberType == 1 ? selectedHM : null}/>
+                : ""
+            }
+
+            {newHouseholdModal ?
+            <NewHouseHold  modal={newHouseholdModal} toggle={toggleHousehold} reloadSearch={fetchHousehold} household={selectedHH} />
+               : ""}
         </>
     )
 }
