@@ -21,7 +21,7 @@ public class EncounterDTO {
     @NotBlank(message = "formCode is mandatory")
     private String formCode;
 
-    @NotNull(message = "householdMemberId is mandatory")
+    //@NotNull(message = "householdMemberId is mandatory") not mandatory
     private Long householdMemberId;
 
     @NotNull(message = "householdId is mandatory")
