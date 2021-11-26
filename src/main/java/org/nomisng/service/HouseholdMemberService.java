@@ -118,7 +118,8 @@ public class HouseholdMemberService {
                 .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
         householdMember.setArchived(UN_ARCHIVED);
-        return householdMemberRepository.save(householdMemberMapper.toHouseholdMember(householdMemberDTO));
+        householdMember.setId(id);
+        return householdMemberRepository.save(householdMember);
     }
 
     public void delete(Long id) {
