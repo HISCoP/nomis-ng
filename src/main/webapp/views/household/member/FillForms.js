@@ -99,18 +99,18 @@ const FillForm = (props) => {
             </CCardBody>
             </CCard>
         }
-        {showFormPage &&
-        <CModal show={showFormPage} onClose={() => setShowForm(false)} backdrop={true} size='lg'>
-            <CModalHeader closeButton>New Care Giver</CModalHeader>
-            <CModalBody>
-                <FormRenderer
-                    formCode={selectedForm}
-                    householdMemberId={props.member.id}
-                    onSuccess={onSuccess}
-                />
-            </CModalBody>
-        </CModal>
-        }
+        {/*{showFormPage &&*/}
+        {/*<CModal show={showFormPage} onClose={() => setShowForm(false)} backdrop={true} size='xl'>*/}
+        {/*    <CModalHeader closeButton>Fill Form </CModalHeader>*/}
+        {/*    <CModalBody>*/}
+        {/*        <FormRenderer*/}
+        {/*            formCode={selectedForm}*/}
+        {/*            householdMemberId={props.member.id}*/}
+        {/*            onSuccess={onSuccess}*/}
+        {/*        />*/}
+        {/*    </CModalBody>*/}
+        {/*</CModal>*/}
+        {/*}*/}
         {showFormPage &&
             <CCard>
             <CCardHeader>Fill Form

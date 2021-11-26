@@ -46,7 +46,8 @@ const HouseholdMember = (props) => {
             <MaterialTable
                 title="Household Member List"
                 columns={[
-                  { title: 'OVC ID', field: 'id' },
+                  { title: 'Unique ID', field: 'id' },
+                    { title: 'Member Type', field: 'type' },
                   { title: 'Date Assessed', field: 'date' },
                   { title: 'Name', field: 'name' },
                   {
@@ -63,8 +64,9 @@ const HouseholdMember = (props) => {
                 isLoading={loading}
                 data={props.houseMemberList.map((row) => ({
                   id: <span> <Link
-                      to={{pathname: "/household-member/home", state: row.id }}>{row.details.uniqueId}</Link></span>,
-                  date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : "",
+                      to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
+                  date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
+                    type: row.householdMemberType === 1 ? "Caregiver" : "VC",
                   name: row.details.firstName + " " + row.details.lastName,
                   age: calculateAge(row.details.dob),
                   action:

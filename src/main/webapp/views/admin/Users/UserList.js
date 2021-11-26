@@ -28,8 +28,9 @@ import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-// import AssignFacilityModal from "./AssignFacilityModal";
+//import AssignProjectModal from "./AssignProjectModal";
 import { forwardRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -214,16 +215,20 @@ const UserList = (props) => {
                       <span style={{ color: "#000" }}>Edit Roles </span>
                     </Button>
                   </MenuItem>
-                  <MenuItem style={{ color: "#000 !important" }}>
-                    <Button
-                        size="sm"
-                        color="link"
-                        onClick={() => toggleAssignModal(row)}
+                  <Link to ={{ 
+                                pathname: "/assign-project",  
+                                state: row,
+                                userDetail: row.id
+                              }} 
+                        style={{ cursor: "pointer", color: "blue", fontStyle: "bold"}}
                     >
+                  <MenuItem style={{ color: "#000 !important" }}>
+                    
                       <MdModeEdit size="15" />{" "}
-                      <span style={{ color: "#000" }}>Assign Facilities </span>
-                    </Button>
+                      <span style={{ color: "#000" }}>Assign Project </span>
+                   
                   </MenuItem>
+                  </Link>
                 </MenuList>
               </Menu>
               <Modal isOpen={modal} >
@@ -291,8 +296,10 @@ const UserList = (props) => {
           searchFieldAlignment: "left",
         }}
       />
-      {/* <AssignFacilityModal
-          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={currentUser}/> */}
+     {/* <AssignProjectModal
+          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={currentUser}
+
+     />  */}
     </div>
   );
 };

@@ -20,7 +20,7 @@ var options = {
         type: 'column'
     },
     title: {
-        text: 'TOtal OVC Enrollment For The Last 6months'
+        text: 'Total VC Enrollment For The Last 6months'
     },
     xAxis: {
         categories: ['Jan.', 'Feb.', 'March', 'April', 'May', 'June']

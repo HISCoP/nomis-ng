@@ -45,14 +45,14 @@ const HouseholdMember = (props) => {
                 <Icon name='users' />  Household Members
 
                 <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle2}> New Caregiver</CButton> {" "}
-                <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> New OVC</CButton>{" "}
+                <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> New VC</CButton>{" "}
            <hr />
                 </CCol>
             </CRow>
             <CRow>
             {!loading && props.houseMemberList !==null ? props.houseMemberList.map((member) => (
                 (
-                <CCol xs="12" sm="6" lg="4">
+                <CCol xs="12" sm="6" lg="4" key={member.id}>
                    <MemberCard  member={member} />
                 </CCol>
                 )
@@ -92,7 +92,7 @@ const MemberCard = (props) => {
         <>
         <CCard>
             <CCardBody className={'text-center'}>
-                <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "OVC" || ''}</b></p>
+                <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "VC" || ''}</b></p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home", state: props.member.id

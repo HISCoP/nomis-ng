@@ -5,7 +5,7 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchAll = (onSuccess , onError) => dispatch => {
     axios
-        .get(`${url}ips`)
+        .get(`${url}implementers`)
         .then(response => {
             dispatch({
                 type: ACTION_TYPES.FETCH_ALL_IP,

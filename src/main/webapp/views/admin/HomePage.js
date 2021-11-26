@@ -54,19 +54,42 @@ const HomePage = (props) => {
           active={activeItem === 'usersetup'}
           
         >
-         <Link color="inherit" to ={{ pathname: "user-setup-home", }}  >
+         <Link color="inherit" to ={{ pathname: "users", }}  >
             <People fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}>  User Setup </span>
         </Link>
         </Menu.Item>
-        {/* <Menu.Item
-          name='messages'
-          active={activeItem === 'usersetup'}>
-        <Link color="inherit" to ={{ pathname: "organisation-unit-home", }}  >
-            <AcUnitIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Organisation Unit </span>
+        <Menu.Item>
+         <Link color="inherit" to ={{ pathname: "program-setup-home", }}  >
+            <DomainIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Domain Setup </span>
         </Link>
-        </Menu.Item> */}
+
+        </Menu.Item>
+        <Menu.Item>
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>Organisation Unit</span>
+        <Dropdown   className={'float-right'} >  
+                
+        <Dropdown.Menu >
+            <Dropdown.Item icon='settings' text='Organisation Unit Setup' onClick={() =>subMenu("organisation-unit-home")}/>
+            <Dropdown.Item icon='settings' text='Donor Setup' onClick={() =>subMenu("donor")}/>
+            <Dropdown.Item icon='settings' text='Implementing Partner Setup' onClick={() =>subMenu("ip")}/>
+            <Dropdown.Item icon='settings' text='CBO Setup' onClick={() =>subMenu("cbo")}/>
+            
+            
+          </Dropdown.Menu>
+        </Dropdown>
+        </Menu.Item>
+        
+       
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "cbo-donor-ip", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  CBO Project  Setup  </span>
+        </Link>
+        </Menu.Item>
+        
         <Menu.Item
           name='messages'
           active={activeItem === 'usersetup'}
@@ -75,16 +98,6 @@ const HomePage = (props) => {
             <CropFreeIcon fontSize="small" className={'text-left'}/>
             <span className={'pl-2'}> Application Codeset </span>
             </Link>
-        </Menu.Item>
-        <Menu.Item
-          name='messages'
-          active={activeItem === 'usersetup'}
-        
-        >
-         <Link color="inherit" to ={{ pathname: "program-setup-home", }}  >
-            <DomainIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  Domain Setup </span>
-        </Link>
         </Menu.Item>
         <Menu.Item
           name='messages'
@@ -102,26 +115,6 @@ const HomePage = (props) => {
             <span className={'pl-2'}>  Report Builder  </span>
         </Link>
         </Menu.Item> 
-        <Menu.Item>
-        <Link color="inherit" to ={{ pathname: "cbo-donor-ip", }}  >
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>  CBO Account  Setup  </span>
-        </Link>
-        </Menu.Item>
-        <Menu.Item>
-            <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>Organisation Unit</span>
-        <Dropdown   className={'float-right'} >  
-                
-        <Dropdown.Menu >
-            <Dropdown.Item icon='settings' text='Organisation Unit Setup' onClick={() =>subMenu("organisation-unit-home")}/>
-            <Dropdown.Item icon='settings' text='CBO Setup' onClick={() =>subMenu("cbo")}/>
-            <Dropdown.Item icon='settings' text='Donor Setup' onClick={() =>subMenu("donor")}/>
-            <Dropdown.Item icon='settings' text='Implementing Partner Setup' onClick={() =>subMenu("ip")}/>
-          </Dropdown.Menu>
-        </Dropdown>
-        </Menu.Item>
-        
             </Menu>
 
                 </CCol>

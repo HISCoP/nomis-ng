@@ -14,6 +14,7 @@ const ServiceHistoryPage = (props) => {
     const [showServiceModal, setShowServiceModal] = useState(false);
     const [currentForm, setCurrentForm] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [provideServiceData, setProvideServiceData] = useState({serviceList:[], serviceDate: null, formDataId: 0, encounterId:0, type:"UPDATE"});
     const memberId = props.member.id;
 
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
@@ -39,13 +40,29 @@ const ServiceHistoryPage = (props) => {
         setShowFormModal(false);
     }
     const viewForm = (row) => {
-        console.log(row);
+        //check if it is service provision page (static html) else use formio view
+        if(row.formCode == "9ec328a9-1b3c-4043-98d0-84ea5f47de55"){
+            const formData = row.formData[0];
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id};
+            console.log(selectedService);
+            setProvideServiceData(selectedService);
+            toggleServiceModal();
+            return;
+        }
         setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
         setShowFormModal(true);
     }
 
     const editForm = (row) => {
-        console.log(row);
+        //check if it is service provision page (static html) else use formio update
+        if(row.formCode == "9ec328a9-1b3c-4043-98d0-84ea5f47de55"){
+            const formData = row.formData[0];
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"UPDATE", formDataId: formData.id, encounterId: formData.encounterId};
+            console.log(selectedService);
+            setProvideServiceData(selectedService);
+            toggleServiceModal();
+            return;
+        }
         setCurrentForm({ ...row, type: "EDIT", encounterId: row.id });
         setShowFormModal(true);
     }
@@ -92,7 +109,9 @@ const ServiceHistoryPage = (props) => {
                 />
                 </CCol>
             </CRow>
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} reloadSearch={fetchHouseholdServiceHistory}/>
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} reloadSearch={fetchHouseholdServiceHistory}
+                             serviceList={provideServiceData.serviceList} serviceDate={provideServiceData.serviceDate}
+                                formDataId={provideServiceData.formDataId} encounterId={provideServiceData.encounterId} type={provideServiceData.type}/>
                <FormRendererModal
                    householdMemberId={props.member.id}
                    showModal={showFormModal}

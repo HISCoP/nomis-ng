@@ -15,10 +15,14 @@ const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
 const UserSetupHomePage = React.lazy(() => import('./views/admin/Users/UserPage'));
 const ApplicationCodeSetupHomePage = React.lazy(() => import('./views/admin/ApplicationCodeset/ApplicationCodesetSearch'));
 const OrganisationUnitHomepage = React.lazy(() => import('./views/admin/OrganizationUnit/Index'));
+const ParentOrganizationUnit = React.lazy(() => import("./views/admin/OrganizationUnit/ParentOrganizationalUnit"));
+const ParentOrganizationUnitLevel = React.lazy(() => import("./views/admin/OrganizationUnit/ParentOrganizationalUnitLevel"));
 const ProgramSetupHomePage = React.lazy(() => import('./views/admin/DomainManager/DomainManager'));
 const DomainServices = React.lazy(() => import('./views/admin/DomainManager/DomainServices'));
 const UserRegistration = React.lazy(() => import('./views/admin/Users/UserRegistration'));
 const Roles = React.lazy(() => import('./views/admin/Roles/RolesPage'));
+//const roles = React.lazy(() => import("components/Roles/RolesPage"))
+const addRole = React.lazy(() => import("./views/admin/Roles/AddRole"))
 /*Reporting components*/
 const ReportBuilderPage = React.lazy(() => import('./views/admin/Reports/ReportHome'));
 const ReportTemplate = React.lazy(() => import("./views/admin/Reports/ReportTemplate"));
@@ -29,7 +33,8 @@ const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"
 const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
 const DonorIpManager = React.lazy(() => import("./views/admin/DonorIpManager/DonorIpManager"));
-const CboDonorIpManager = React.lazy(() => import("./views/admin/CboDonorIpManager/CboDonorIpManager"));
+const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
+const AssignProjectUser = React.lazy(() => import("./views/admin/Users/AssignUserProject"));
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: Dashboard },
@@ -43,22 +48,27 @@ const routes = [
   { path: '/edit-form', name: 'Edit Form', component: ViewForm },
   /* Administrative Link */
   { path: "/form-home", name: 'Form Builder', component: FormPage},
-  { path: "/user-setup-home", name: 'User Setup', component: UserSetupHomePage},
+  { path: "/users", name: 'User Setup', component: UserSetupHomePage},
   { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage},
   { path: "/program-setup-home", name: 'Domain Setup', component: ProgramSetupHomePage},
   { path: "/organisation-unit-home", name: 'Organisation Unit', component: OrganisationUnitHomepage},
+  { path: "/admin-parent-organization-unit", name: 'Organisation Unit', component: ParentOrganizationUnit},
+  { path: "/admin-parent-organization-unit-level", name: 'Organisation Unit', component: ParentOrganizationUnitLevel},
   { path: "/domain-service", name: 'Domain Services', component: DomainServices},
   { path: "/user-registration", name: 'User Registration', component: UserRegistration},
   { path: "/roles", name: 'Role', component: Roles},
+  { path: "/add-role", name: 'Role', component: addRole},
   { path: "/report-builder", name: 'Report ', component: ReportBuilderPage},
    { path: "/build-report", name: 'Build Report', component: ReportTemplate},
   { path: "/report", name: 'Report', component: ReportPage},
   { path: "/report-view", name: 'Report View', component: ReportView},
   { path: "/cbo", name: 'CBO ', component: CboManager} ,
-  { path: "/donor", name: 'Donor Manager', component: DonorManager} ,
+  { path: "/donor", name: 'Donor Setup', component: DonorManager} ,
   { path: "/ip", name: 'IP Manager', component: IpManager} ,
   { path: "/donor-ip", name: 'Donor-IP Manager', component: DonorIpManager} ,
-  { path: "/cbo-donor-ip", name: 'CBO-Donor-IP Manager', component: CboDonorIpManager} ,
+  { path: "/cbo-donor-ip", name: 'CBO Project Setup', component: CboDonorIpManager} ,
+  { path: "/assign-project", name: 'Assign Project User', component: AssignProjectUser} ,
+  
 ];
 
 export default routes;

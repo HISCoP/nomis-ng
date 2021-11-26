@@ -93,7 +93,7 @@ return (
                               <Link color="inherit" to={{pathname: "/admin"}} >
                                   Admin
                               </Link>
-                              <Link color="inherit" to={{pathname: "admin-organization-unit"}} >
+                              <Link color="inherit" to={{pathname: "organisation-unit-home"}} >
                                  Organisational Unit Level Setup
                               </Link>
                               <Typography color="textPrimary">{parentOrganisationUnitId.name} </Typography>
