@@ -182,13 +182,20 @@ public class HouseholdService {
         return household;
     }
 
-    public List<HouseholdMemberDTO> getHouseholdMembersByHouseholdId(Long id) {
+    public List<HouseholdMemberDTO> getHouseholdMembersByHouseholdId(Long id, Integer memberType) {
         Household household = getHousehold(id);
 
-        List<HouseholdMember> householdMembers = household.getHouseholdMembers().stream()
+        //return every member
+        if(memberType == null || memberType == 0) {
+            return householdMemberMapper.toHouseholdMemberDTOS(household.getHouseholdMembers().stream()
+                    .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
+                    .collect(Collectors.toList()));
+        }
+        //return specified memberType
+        return householdMemberMapper.toHouseholdMemberDTOS(household.getHouseholdMembers().stream()
+                .filter(householdMember -> householdMember.getHouseholdMemberType() == memberType)
                 .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
-                .collect(Collectors.toList());
-        return householdMemberMapper.toHouseholdMemberDTOS(householdMembers);
+                .collect(Collectors.toList()));
     }
 
     public List<HouseholdMigrationDTO> getHouseholdAddressesByHouseholdId(Long id) {
