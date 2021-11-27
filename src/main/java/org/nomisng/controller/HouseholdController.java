@@ -74,8 +74,9 @@ public class HouseholdController {
     }
 
     @GetMapping("/{id}/householdMembers")
-    public ResponseEntity<List<HouseholdMemberDTO>> getHouseholdMembersByHouseholdId(@PathVariable Long id) {
-        return ResponseEntity.ok(householdService.getHouseholdMembersByHouseholdId(id));
+    public ResponseEntity<List<HouseholdMemberDTO>> getHouseholdMembersByHouseholdId(@PathVariable Long id,
+                                                                                     @RequestParam(required = false, defaultValue = "0") Integer memberType) {
+        return ResponseEntity.ok(householdService.getHouseholdMembersByHouseholdId(id, memberType));
     }
 
 
