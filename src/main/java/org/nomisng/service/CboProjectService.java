@@ -101,12 +101,10 @@ public class CboProjectService {
                 .findAllByIdAndOrganisationUnitIn(id, cboProjectDTO.getOrganisationUnitIds());
 
         if(!cboProjectLocations.isEmpty()){
-            List<Long> orgUnitIds = cboProjectLocations.stream()
-                    .filter(cboProjectLocation -> cboProjectLocation.getArchived() == UN_ARCHIVED)
-                    .map(CboProjectLocation::getOrganisationUnitId)
-                    .collect(Collectors.toList());
-            throw new RecordExistException(CboProjectLocation.class, "Cbo Project Location", orgUnitIds.toString());
+            cboProjectLocationRepository.deleteAll(cboProjectLocations);
         }
+
+        cboProjectLocations.clear();
 
         CboProject cboProject = cboProjectRepository.save(cboProjectMapper.toCboProject(cboProjectDTO));
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
@@ -117,8 +115,19 @@ public class CboProjectService {
         return transformCboProjectObject(cboProject);
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+        CboProject cboProject = cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
+
+        List<CboProjectLocation> cboProjectLocation = cboProject.getCboProjectLocationsById();
+        if(!cboProject.getEncountersById().isEmpty() || !cboProject.getFormData().isEmpty() ||
+                !cboProject.getHouseholdMembersById().isEmpty() || !cboProject.getHouseholdMigrationsById().isEmpty() ||
+                !cboProject.getHouseholds().isEmpty()){
+            throw new RecordExistException(CboProject.class, "cboProject already in use",
+                    "check encounter or formData or householdMember or householdMigration or household");
+        }
+        cboProjectLocationRepository.deleteAll(cboProjectLocation);
+        cboProjectRepository.delete(cboProject);
     }
 
     private CboProject transformCboProjectObject(CboProject cboProject){

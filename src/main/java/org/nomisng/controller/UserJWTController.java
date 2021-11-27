@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 public class UserJWTController {
     private final UserJWTService userJWTService;
     private final UserService userService;
-    private static final long DEFAULT_CBO_PROJECT_ID = 0L;
 
 
     @PostMapping("/authenticate")

@@ -62,4 +62,10 @@ public class CboProjectController {
     public void switchCboProject(@PathVariable Long id) {
         cboProjectService.switchCboProject(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    public void delete(@RequestBody CboProjectDTO cboProjectDTO, @PathVariable Long id) {
+        cboProjectService.delete(id);
+    }
 }
