@@ -134,6 +134,11 @@ const AssignProjectUser = (props) => {
     e.preventDefault();
     assignProject['applicationUserId']= userId
     assignProject['cboProjectIds']=selectedProjects
+    console.log(selectedProjects)
+    if(selectedProjects ==""){
+      toast.error("Peoject can not be empty")
+      return;
+    }
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -206,14 +211,7 @@ const AssignProjectUser = (props) => {
                 )}
               </MatButton>
 
-              <MatButton
-                variant="contained"
-                className={classes.button}
-                startIcon={<CancelIcon />}
-                //onClick={resetForm}
-              >
-                <span style={{ textTransform: "capitalize" }}>Cancel</span>
-              </MatButton>
+             
             </CardContent>
           </Card>
         </Col>

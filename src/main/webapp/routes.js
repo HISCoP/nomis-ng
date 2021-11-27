@@ -8,7 +8,7 @@ const MemberSearch = React.lazy(() => import('./views/household/member/MemberSea
 const FormBuilder = React.lazy(() => import('./views/formBuilder/formBuilder'));
 const ViewForm = React.lazy(() => import('./views/formBuilder/ViewForm'));
 const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
-const DataVisualisation = React.lazy(() => import('./views/visualization/HomePage'));
+const DataVisualisation = React.lazy(() => import('./views/pages/unConstruction'));
 
 /* Admin */
 const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
@@ -34,7 +34,6 @@ const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorMa
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
 const DonorIpManager = React.lazy(() => import("./views/admin/DonorIpManager/DonorIpManager"));
 const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
-const AssignProjectUser = React.lazy(() => import("./views/admin/Users/AssignUserProject"));
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: Dashboard },
@@ -67,7 +66,8 @@ const routes = [
   { path: "/ip", name: 'IP Manager', component: IpManager} ,
   { path: "/donor-ip", name: 'Donor-IP Manager', component: DonorIpManager} ,
   { path: "/cbo-donor-ip", name: 'CBO Project Setup', component: CboDonorIpManager} ,
-  { path: "/assign-project", name: 'Assign Project User', component: AssignProjectUser} ,
+  { path: "/visualisation", name: 'Data Visualisation', component: DataVisualisation} ,
+
   
 ];
 
