@@ -16,6 +16,7 @@ import cboReducer from './cboReducer';
 import donorReducer from './donorReducer';
 import ipReducer from './ipReducer';
 import cboDonorIpReducer from './cboDonorIpReducer';
+import cboProjectReducer from './cboProjectReducer';
 
 export default combineReducers({
  
@@ -34,6 +35,8 @@ export default combineReducers({
   cboReducer: cboReducer,
   donorReducer: donorReducer,
   ipReducer: ipReducer,
-  cboDonorIpReducer: cboDonorIpReducer
+  cboDonorIpReducer: cboDonorIpReducer,
+  cboProjects : cboProjectReducer
+
 })
 

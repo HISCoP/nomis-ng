@@ -97,7 +97,7 @@ const CboList = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New CBO </span>
+                        <span style={{textTransform: 'capitalize'}}> New CBO </span>
                     </Button>
 
                 </div>

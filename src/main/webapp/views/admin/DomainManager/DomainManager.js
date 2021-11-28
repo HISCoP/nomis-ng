@@ -93,7 +93,7 @@ const DomainList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Domain Manager - Domain Area </Typography>
+                    <Typography color="textPrimary">Domain Setup - Domain Area </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -133,28 +133,25 @@ const DomainList = (props) => {
                                 Actions <span aria-hidden>▾</span>
                                 </MenuButton>
                                 <MenuList style={{ color: "#000 !important" }}>
-                                <Link to ={{ 
-                                        pathname: "/domain-service",  
-                                        state: row
-                                    }} 
+                                    <Link to ={{ 
+                                                pathname: "/domain-service",  
+                                                state: row
+                                             }} 
                                         style={{ cursor: "pointer", color: "blue", fontStyle: "bold"}}
                                     >
                                 <MenuItem style={{ color: "#000 !important" }} >
                                    
-                                    <VisibilityIcon size="15" />{" "}
-                                    <span style={{ color: "#000" }} >View  </span>
+                                    <span style={{ color: "#000" }} >View  Services</span>
                                     
                                 </MenuItem>
                                 </Link>
                                 <MenuItem style={{ color: "#000 !important" }} onClick={() => openNewDomainModal(row)}>
                                   
-                                    <MdModeEdit size="15" />{" "}
                                     <span style={{ color: "#000" }}>Edit  </span>
                                    
                                 </MenuItem>
                                 <MenuItem style={{ color: "#000 !important" }} onClick={() => deleteApplicationDomain(row)}>
                             
-                                    <MdDelete size="15" />{" "}
                                     <span style={{ color: "#000" }}>Delete </span>
                                  
                                 </MenuItem>

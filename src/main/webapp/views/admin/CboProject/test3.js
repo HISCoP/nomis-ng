@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
-import {  Modal, ModalHeader, ModalBody,Form,Row,Col,FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
+import {  Row,Col,FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
 import { connect } from 'react-redux'
 import {  CFormGroup } from '@coreui/react';
 import MatButton from '@material-ui/core/Button'
@@ -15,6 +15,9 @@ import { createIp, updateIp  } from "../../../actions/ip";
 import { Spinner } from 'reactstrap';
 import { url as baseUrl } from "../../../api";
 import { CModal, CModalHeader, CModalBody,CForm} from '@coreui/react'
+import { useSelector, useDispatch } from 'react-redux';
+import { createCboProject } from '../../../actions/cboProject'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -22,17 +25,13 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const options = [
-    { value: 'Kwali', label: 'Kwali' },
-    { value: 'Bwari', label: 'Bwari' },
-    { value: 'Amac', label: 'Amac' },
-  ];
+
 
 const NewDonor = (props) => {
+    let history = useHistory();
     const [loading, setLoading] = useState(false)
-    //const [showNewCbo, setShowNewCbo] = useState(false)
-    const defaultValues = { id:"",  name:"", description:"", code:"", donor: "",  };
-    const [formData, setFormData] = useState( defaultValues)
+    const cboProjectList = useSelector(state => state.cboProjects.cboProjectList);
+    const dispatch = useDispatch();
     //const [errors, setErrors] = useState({});
     const [donorList, setdonorList] = useState([]);
     const [ipList, setipList] = useState([]);
@@ -40,12 +39,19 @@ const NewDonor = (props) => {
     const classes = useStyles()
 
     const [selectedOption, setSelectedOption] = useState(null);
+
+    const [otherDetails, setOtherDetails] = useState({ stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""});
+    const [provinces, setProvinces] = useState([]);
+    const [lgaDetail, setLgaDetail] = useState();
+    const [stateDetail, setStateDetail] = useState();
+    const [states, setStates] = useState([]);
+
+    useEffect(() => {
+        //loadCboProjectList()
+    }, []); //componentDidMount
   
     useEffect(() => {
-        //for application CBO  edit, load form data
-        //props.loadCbo();
-        setFormData(props.formData ? props.formData : defaultValues);
-        //setShowNewCbo(false);
+
         async function getCharacters() {
             axios
               .get(`${baseUrl}donors`)
@@ -63,13 +69,14 @@ const NewDonor = (props) => {
               });
           }
           getCharacters();
-    },  [props.formData,  props.showModal]);
+          setStateByCountryId();
+    },  [  props.showModal]);
      /*  endpoint */
 
      useEffect(() => {
         async function getCharacters() {
             axios
-              .get(`${baseUrl}ips`)
+              .get(`${baseUrl}implementers`)
               .then((response) => {
                 //console.log(Object.entries(response.data));
                 setipList(
@@ -109,118 +116,121 @@ const NewDonor = (props) => {
     },  []);
      /*  endpoint */
 
-     useEffect(() => {
-        async function getCharacters() {
-            try {
-                const response = await axios(
-                    baseUrl+ "cbos"
-                );
-                const body = response.data;
-                setcboList(
-                    body.map(({ display, id }) => ({ label: display, value: id }))
-                );
-            } catch (error) {
+
+//Get States from selected country
+const  setStateByCountryId=() =>{
+    async function getStateByCountryId() {
+        const response = await axios.get(baseUrl + 'organisation-units/hierarchy/1/2')
+        const stateList = response.data;
+        console.log(stateList)
+        setStates(stateList);
+    }
+    getStateByCountryId();
+}
+
+//fetch province
+const getProvinces = e => {
+  setOtherDetails({ ...otherDetails, [e.target.name]: e.target.value });
+        const stateId = e.target.value;
+          if(stateId =="" || stateId==null){
+            setLgaDetail("")
+          }else{
+            async function getCharacters() {
+                const response = await axios.get(`${baseUrl}organisation-units/hierarchy/`+stateId+"/3");
+                const newStates = states.filter(state => state.id == stateId)
+                setStateDetail(newStates)
+                setOtherDetails({...otherDetails, stateId:stateId})
+                setProvinces(
+                    Object.entries(response.data).map(([key, value]) => ({
+                        label: value.name,
+                        value: value.id,
+                      }))
+                   // response.data
+                    
+                    );
+
             }
-        }
-        getCharacters();
-    }, []);
+            getCharacters();
+          }
+};
+const getlgaObj = e => {
+
+    const newlga = provinces.filter(lga => lga.id == e.target.value)
+    setLgaDetail(newlga)
+    setOtherDetails({...otherDetails, lgaId:e.target.value})
+}
 
     const handleInputChange = e => {
-        setFormData ({  [e.target.name]: e.target.value});
+        setOtherDetails ({...otherDetails,  [e.target.name]: e.target.value});
     }
     
+    const organisationUnitIds = []
     const createCboAccountSetup = e => {
         const orgunitlga= selectedOption.map(item => { 
             delete item['label'];
+            organisationUnitIds.push(item['value'])
             return item;
         })
+        //organisationUnitIds.push(parseInt(otherDetails['stateId']))
+        otherDetails['organisationUnitIds'] = organisationUnitIds
+        delete otherDetails['lgaId'];
+        delete otherDetails['stateId'];
         e.preventDefault()
-        console.log(orgunitlga);
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false)
+            history.push('/cbo-donor-ip')
+            props.toggleModal()
+            
+        }
+        const onError = () => {
+            setLoading(false)  
+            history.push('/cbo-donor-ip') 
+            props.toggleModal() 
+        }
+        
+        dispatch(createCboProject(otherDetails,onSuccess, onError));
+        
         return
  
     }
+    
 
 
     return (
 
         <div >
             <ToastContainer />
-            <CModal show={props.showModal} onClose={props.toggleModal} size="md">
+            <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
 
                 <CForm >
-                    <CModalHeader toggle={props.toggleModal}>NEW CBO-DONOR-IMPLEMENTING PARTNERS SETUP </CModalHeader>
+                    <CModalHeader toggle={props.toggleModal}>NEW CBO PROJECT SETUP </CModalHeader>
                     <CModalBody>
                         <Card >
                             <CardBody>
                                 <Row >
-                                <Col md={12}>
+                                <Col md={6}>
                                         <FormGroup>
-                                            <Label for="gender">Donors *</Label>
+                                            <Label >Project Name *</Label>
                                             <Input
-                                            type="select"
-                                            name="donor"
-                                            id="donor"
-                                            //value={defaultValues.donor}
-                                            //onChange={handleInputChange}
-                                            required
-                                            >
-                                            <option value=""> </option>
-                                            {donorList.map(({ label, value }) => (
-                                                <option key={value} value={value}>
-                                                {label}
-                                                </option>
-                                            ))}
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md={12}>
-                                        <FormGroup>
-                                            <Label for="gender">Implementing Partners *</Label>
-                                            <Input
-                                            type="select"
-                                            name="donor"
-                                            id="donor"
-                                            //value={defaultValues.donor}
+                                            type="text"
+                                            name="description"
+                                            id="description"
+                                            value={otherDetails.description}
                                             onChange={handleInputChange}
                                             required
-                                            >
-                                            <option value=""> </option>
-                                            {ipList.map(({ label, value }) => (
-                                                <option key={value} value={value}>
-                                                {label}
-                                                </option>
-                                            ))}
-                                            </Input>
+                                            />
+                                           
                                         </FormGroup>
                                     </Col>
-                                    <Col md={12}>
+                                <Col md={6}>
                                         <FormGroup>
-                                            <Label for="gender">CBO *</Label>
+                                            <Label >Donors *</Label>
                                             <Input
                                             type="select"
-                                            name="donor"
-                                            id="donor"
-                                            //value={defaultValues.donor}
-                                            onChange={handleInputChange}
-                                            required
-                                            >
-                                            <option value=""> </option>
-                                            {cboList.map(({ label, value }) => (
-                                                <option key={value} value={value}>
-                                                {label}
-                                                </option>
-                                            ))}
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md={12}>
-                                        <FormGroup>
-                                            <Label for="gender">State *</Label>
-                                            <Input
-                                            type="select"
-                                            name="donor"
-                                            id="donor"
-                                            //value={defaultValues.donor}
+                                            name="donorId"
+                                            id="donorId"
+                                            value={otherDetails.donorId}
                                             onChange={handleInputChange}
                                             required
                                             >
@@ -234,13 +244,75 @@ const NewDonor = (props) => {
                                         </FormGroup>
                                     </Col>
                                     
-                                    <Col md={12}>
+                                    <Col md={6}>
+                                        <FormGroup>
+                                            <Label >Implementing Partners *</Label>
+                                            <Input
+                                            type="select"
+                                            name="implementerId"
+                                            id="implementerId"
+                                            value={otherDetails.implementerId}
+                                            onChange={handleInputChange}
+                                            required
+                                            >
+                                            <option value=""> </option>
+                                            {ipList.map(({ label, value }) => (
+                                                <option key={value} value={value}>
+                                                {label}
+                                                </option>
+                                            ))}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormGroup>
+                                            <Label >CBO *</Label>
+                                            <Input
+                                            type="select"
+                                            name="cboId"
+                                            id="cboId"
+                                            value={otherDetails.cboId}
+                                            onChange={handleInputChange}
+                                            required
+                                            >
+                                            <option value=""> </option>
+                                            {cboList.map(({ label, value }) => (
+                                                <option key={value} value={value}>
+                                                {label}
+                                                </option>
+                                            ))}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormGroup>
+                                            <Label >State *</Label>
+                                            <Input
+                                                type="select"
+                                                name="state"
+                                                id="state"
+                                                value={otherDetails.state}
+                                                    onChange={getProvinces}
+                                                >
+                                                    <option >Please Select State</option>
+                                                    {states.map((row) => (
+                                                        <option key={row.id} value={row.id}>
+                                                            {row.name}
+                                                        </option>
+                                                    ))}
+                                                    
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    
+                                    <Col md={6}>
                                                 <CFormGroup>
-                                                    <Label for="maritalStatus">LGA</Label>
+                                                    <Label >LGA</Label>
                                                     <Select
                                                         defaultValue={selectedOption}
                                                         onChange={setSelectedOption}
-                                                        options={options}
+                                                        //value={otherDetails.lga}
+                                                        options={provinces}
                                                         isMulti="true"
                                                     />
                                                    

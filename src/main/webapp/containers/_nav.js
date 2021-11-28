@@ -37,12 +37,12 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Visualization',
-    to: '/report',
+    to: '/visualisation',
     icon: 'cilGraph',
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Admin',
+    name: 'Administration',
     to: '/admin',
     icon: 'cilJustifyCenter',
    }, 

@@ -36,7 +36,7 @@ const GeneralFormSearch = props => {
                                 startIcon={<AddIcon />}>
                                 <span style={{textTransform: 'capitalize'}}>New </span>
                                 &nbsp;&nbsp;
-                                <span style={{textTransform: 'lowercase'}}>Form </span>
+                                <span style={{textTransform: 'capitalize'}}>Form </span>
                             </Button>
                         </Link>
                         <br />

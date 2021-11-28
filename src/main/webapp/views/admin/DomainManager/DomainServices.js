@@ -14,7 +14,6 @@ import { fetchAllDomainServices, deleteDomainService } from "../../../actions/do
 import NewServices from './NewServices';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
-import { MdModeEdit, MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import SaveIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -133,13 +132,11 @@ const DomainServiceList = (props) => {
                                 <MenuList style={{ color: "#000 !important" }}>
                                 <MenuItem style={{ color: "#000 !important" }} onClick={() => openNewDomainModal(row)}>
                                   
-                                    <MdModeEdit size="15" />{" "}
                                     <span style={{ color: "#000" }}>Edit  </span>
                                    
                                 </MenuItem>
                                 <MenuItem style={{ color: "#000 !important" }} onClick={() => deleteApplicationDomain(row)}>
                             
-                                    <MdDelete size="15" />{" "}
                                     <span style={{ color: "#000" }}>Delete </span>
                                  
                                 </MenuItem>

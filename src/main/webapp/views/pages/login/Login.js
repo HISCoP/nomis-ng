@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import axios from "axios";
 import { useHistory  } from "react-router-dom";
 import {
   CButton,
@@ -14,12 +15,18 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
+  CFormSelect
 } from '@coreui/react';
 import { Alert} from 'reactstrap';
 import CIcon from '@coreui/icons-react';
 import { authentication } from "./../../../_services/authentication";
 import logo from './../../../assets/images/arms.jpg';
+import {
+ 
+  Input,
 
+} from "reactstrap";
+import { url as baseUrl } from "../../../api";
 
 
 
@@ -27,12 +34,6 @@ import logo from './../../../assets/images/arms.jpg';
 
 const Login = () => {
   let history = useHistory();
-
-  const process = e => {
-    e.preventDefault();
-    history.push("/dashboard")
-  
-  }
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState("");
@@ -42,6 +43,8 @@ const Login = () => {
   const [error, setError] = useState(false);
   const [errorStyle, setErrorStyle] = useState("")
   const [visible, setVisible] = useState(true);
+  const [project, setProject] = useState([]);
+  const [cboProjectId, setCboProjectId] = useState("");
 
   const onDismiss = () => setVisible(false);
 
@@ -52,15 +55,36 @@ const Login = () => {
       setIsButtonDisabled(true);
     }
   }, [username, password]);
+/* Get list of Role parameter from the endpoint */
+useEffect(() => {
+  async function getCharacters() {
+    axios
+      .get(`${baseUrl}cbo-projects/all`)
+      .then((response) => {
+         setProject(
+          Object.entries(response.data).map(([key, value]) => ({
+            label: value.description,
+            value: value.id,
+          }))
+          
+        );
+        
+      })
+      .catch((error) => {});
+  }
+  getCharacters();
+}, []);
 
   const handleLogin = () => {
+    
     setSubmittext("Login Please wait...")
     setIsButtonDisabled(false)
-    authentication.login(username, password, remember).then(
+    authentication.login(username, password, remember, cboProjectId).then(
       (user) => {
         setError(false);
         setHelperText("Login Successfully");
-        history.push("/dashboard")
+        //history.push("/dashboard")
+        history.push({pathname:'/dashboard', state:  cboProjectId  })
       },
       (error) => {
         setIsButtonDisabled(true)
@@ -68,11 +92,14 @@ const Login = () => {
         setError(true);
         setErrorStyle({border: "2px solid red"})
         setHelperText("Incorrect username or password");
-        console.log(errorStyle)
+
       }
     );
   };
-
+  const handleInputChange = e => {
+    setCboProjectId(e.target.value)
+  
+}
   const handleKeyPress = (e) => {
     if (e.keyCode === 13 || e.which === 13) {
       isButtonDisabled || handleLogin();
@@ -132,6 +159,32 @@ const Login = () => {
                         onKeyPress={(e) => handleKeyPress(e)}
 
                       />
+                      
+                    </CInputGroup>
+                    <CInputGroup className="mb-3">
+                      <CInputGroupPrepend>
+                        <CInputGroupText>
+                          <CIcon name="cil-user" />
+                        </CInputGroupText>
+                      </CInputGroupPrepend>
+
+                    <Input
+                      type="select"
+                      name="cboProjectId"
+                      id="cboProjectId"
+                      //value={values.role}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option >Select CBO Project</option>
+                      {project.map(({ label, value }) => (
+                        
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </Input>
+                 
                     </CInputGroup>
                     <CRow>
                       <CCol xs="12">
@@ -143,6 +196,7 @@ const Login = () => {
 
                       
                     </CRow>
+                   
                   </CForm>
                
                 </CCardBody>

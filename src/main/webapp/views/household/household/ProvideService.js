@@ -47,6 +47,7 @@ const ProvideService = (props) => {
         .get(`${url}ovc-services/0`)
         .then(response => {
           let services = response.data;
+          console.log(response.data)
           let domains = services.map(x => x.domainName);
           let distinctDomain = new Set(domains);
           let serviceArray = [];
