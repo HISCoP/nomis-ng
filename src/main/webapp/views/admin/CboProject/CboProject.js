@@ -13,6 +13,7 @@ import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
 import { fetchAll, deleteIp } from "../../../actions/ip";
 import NewCboProject from "./NewCboProject";
+import EditCboProject from "./EditCboProject";
 import ViewCboProject from './ViewCboProject'
 import EditIcon from "@material-ui/icons/Edit";
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
@@ -38,7 +39,10 @@ const IpListManager = (props) => {
     const [deleting, setDeleting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
+    const [showEditModal, setShowEditModal] = React.useState(false);
+    const toggleEditModal = () => setShowEditModal(!showEditModal)
     const [currentIp, setcurrentIp] = React.useState(null);
+    const [currentProject, setcurrentProject] = React.useState(null);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
     const [showCboProjectModal, setShowCboProjectModalModal] = React.useState(false);
@@ -62,13 +66,18 @@ const IpListManager = (props) => {
     }; //componentDidMount
 
     const openNewDomainModal = (row) => {
-        setcurrentIp(row);
+        setcurrentProject(row);
         toggleModal();
     }
 
     const openCboProjectDetailModal = (row) => {
         setCurrentCboProject(row);
         toggleCBoProjecteModal();
+    }
+
+    const openEditCboProjectDetailModal = (row) => {
+        setcurrentProject(row);
+        toggleEditModal();
     }
 
     const processDelete = (id) => {
@@ -164,7 +173,7 @@ const IpListManager = (props) => {
                                     
                                 </MenuItem>
                                 
-                                <MenuItem style={{ color: "#000 !important" }} >
+                                <MenuItem style={{ color: "#000 !important" }}  onClick={() =>openEditCboProjectDetailModal(row)}>
                                   
                                     <span style={{ color: "#000" }}>Edit  </span>
                                    
@@ -195,7 +204,8 @@ const IpListManager = (props) => {
                         }}
                 />
             </CardBody>
-            <NewCboProject toggleModal={toggleModal} showModal={showModal} loadIpList={props.ipList} formData={currentIp} loadIps={loadCboProjectList}/>
+            <EditCboProject toggleModal={toggleEditModal} showModal={showEditModal} loadIpList={props.ipList} formData={currentProject} loadIps={loadCboProjectList}/>
+            <NewCboProject toggleModal={toggleModal} showModal={showModal} loadIpList={props.ipList} formData={currentProject} loadIps={loadCboProjectList}/>
             <ViewCboProject toggleModal={toggleCBoProjecteModal} showModal={showCboProjectModal} currentCboProject={currentCboProject}  loadIps={loadCboProjectList}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >

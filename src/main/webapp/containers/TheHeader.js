@@ -89,7 +89,7 @@ const  getProjectName = (name) =>{
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <TheHeaderDropdownNotif  />
+        {/* <TheHeaderDropdownNotif  /> */}
         <TheHeaderDropdown projectName={getProjectName}/>
       </CHeaderNav>
 

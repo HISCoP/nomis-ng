@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { Spinner } from 'reactstrap';
-import { CModal, CModalHeader, CModalBody,CForm} from '@coreui/react'
+import { CModal, CModalHeader, CModalBody,CForm, CModalFooter, CButton} from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCboProjectLocation } from '../../../actions/cboProject'
 import { useHistory } from "react-router-dom";
@@ -68,23 +68,18 @@ const ViewCboProject = (props) => {
     
     const lgaStatus = e =>{
             if(e.Name !==null){
-                return  <Button variant="contained" endIcon={<DeleteIcon />} size="small" onClick={() =>RemoveItem(e)}>
+                return  <Button variant="contained"  size="small" >
                 {e.Name}
                 </Button>
             }else{
                 
             }
     }
-    
-    
 
 
     return (
-
         <div >
-            <ToastContainer />
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
-
                 <CForm >
                     <CModalHeader toggle={props.toggleModal}>CBO Project Detail </CModalHeader>
                     <CModalBody>
@@ -162,7 +157,13 @@ const ViewCboProject = (props) => {
                             </CardBody>
                         </Card>
                     </CModalBody>
-
+                    <CModalFooter>                  
+                        <CButton
+                            color="secondary"
+                            onClick={props.toggleModal}
+                        >Cancel
+                        </CButton>
+                    </CModalFooter>
                 </CForm>
             </CModal>
         </div>

@@ -31,12 +31,13 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const NewDonor = (props) => {
+const NewCboProject = (props) => {
     let history = useHistory();
     const [loading, setLoading] = useState(false)
     const cboProjectList = useSelector(state => state.cboProjects.cboProjectList);
+   // console.log(props.formData)
     const dispatch = useDispatch();
-    const display = { stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""}
+    const defaultValues = { stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""}
     //const [errors, setErrors] = useState({});
     const [donorList, setdonorList] = useState([]);
     const [ipList, setipList] = useState([]);
@@ -45,7 +46,7 @@ const NewDonor = (props) => {
 
     const [selectedOption, setSelectedOption] = useState(null);
     const [locationList, setLocationList] = useState({ stateName:"", lga:""})
-    const [otherDetails, setOtherDetails] = useState(display);
+    const [otherDetails, setOtherDetails] = useState(defaultValues);
     const [provinces, setProvinces] = useState([]);
     const [lgaDetail, setLgaDetail] = useState();
     const [stateDetail, setStateDetail] = useState();
@@ -54,8 +55,11 @@ const NewDonor = (props) => {
 
     useEffect(() => {
         //loadCboProjectList()
-    }, []); //componentDidMount
-  
+        setOtherDetails(props.formData ? props.formData : defaultValues);
+        
+    }, [props.formData]); //componentDidMount
+
+
     useEffect(() => {
 
         async function getCharacters() {
@@ -178,8 +182,7 @@ const getlgaObj = e => {
     
     var  locationListArray = []
     const addLocations = e => {
-        console.log('test')
-        //e.preventDefault()
+         //e.preventDefault()
         //Get the state selected
             
         setLocationList({...locationList,  lga:selectedOption })
@@ -188,6 +191,7 @@ const getlgaObj = e => {
         if(locationList['stateName'] !=='' && locationList['lga'] !==''){
         setLocationListArray2([...locationListArray2, ...[locationList]])
         setLocationList({stateName: "", lga:""})
+        console.log(locationListArray2)
         getProvinces()
 
         }
@@ -209,6 +213,7 @@ const getlgaObj = e => {
 
     const  RemoveItem = (e) => {
         const removeArr =locationListArray2.filter((element, index, array)  => index != e)
+        console.log(removeArr)
         setLocationListArray2(removeArr)
     }
     
@@ -233,13 +238,17 @@ const getlgaObj = e => {
         setLoading(true);
         const onSuccess = () => {
             setLoading(false)
+            setOtherDetails(defaultValues)  
+            setLocationListArray2([]) 
             history.push('/cbo-donor-ip')
             props.toggleModal() 
             props.loadIps() 
-            setOtherDetails(display)         
+                  
         }
         const onError = () => {
             setLoading(false)  
+            setOtherDetails(defaultValues)  
+            setLocationListArray2([])
             history.push('/cbo-donor-ip') 
             props.toggleModal() 
         }       
@@ -465,5 +474,5 @@ const getlgaObj = e => {
 
 
 
-export default connect(null, {createIp, updateIp})(NewDonor);
+export default connect(null, {createIp, updateIp})(NewCboProject);
 
