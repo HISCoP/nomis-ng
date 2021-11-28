@@ -15,10 +15,11 @@ import Forms from "./FillForms";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import {calculateAge} from "./../../../utils/calculateAge";
 import {fetchHouseHoldById} from "../../../actions/houseHold";
 import ProvideService from "../household/ProvideService";
+import ProvidePreventiveService from "./ProvidePreventiveService";
 
 const useStyles = makeStyles({
     root: {
@@ -38,14 +39,24 @@ const HomePage = (props) => {
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const [showServiceModal, setShowServiceModal] = useState(false);
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
+    const [showPreventiveServiceModal, setShowPreventiveServiceModal] = useState(false);
+    const togglePreventiveServiceModal = () => setShowPreventiveServiceModal(!showPreventiveServiceModal);
+
+    const dispatch = useDispatch();
+    const menu = useSelector(state => state.menu).minimize;
+
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
     const reloadPage = () => {
-        let item = activeItem;
         setActiveItem("");
         setActiveItem(activeItem);
     }
+
+    React.useEffect(() => {
+        //minimize side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: true });
+    },[]);
 
     React.useEffect(() => {
         setFetchingMember(true);
@@ -56,6 +67,7 @@ const HomePage = (props) => {
             setFetchingMember(false);
         };
         props.fetchHouseHoldMemberById(memberId, onSuccess, onError);
+
     }, [memberId]);
     React.useEffect(() => {
         setFetchingHousehold(true);
@@ -98,7 +110,18 @@ const HomePage = (props) => {
                             <p>Provide Service</p>
 
                         </Menu.Item>
+                        {props.member && props.member.householdMemberType === 2 &&
+                        <Menu.Item
+                            name='provide_preventive_services'
+                            active={activeItem === 'provide_preventive_services'}
+                            onClick={togglePreventiveServiceModal}
+                            className={'text-center'}
+                        >
+                            <DescriptionIcon fontSize="large" className={'text-center'}/>
+                            <p>Provide Preventive Service</p>
 
+                        </Menu.Item>
+                        }
                         <Menu.Item
                             name='forms'
                             active={activeItem === 'forms'}
@@ -165,6 +188,7 @@ const HomePage = (props) => {
                 </CCol>
             </CRow>
 
+            <ProvidePreventiveService modal={showPreventiveServiceModal} toggle={togglePreventiveServiceModal} memberId={props.member.id} householdId={householdId} reload={reloadPage}/>
             <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} householdId={householdId} reloadSearch={reloadPage} />
         </>
     )

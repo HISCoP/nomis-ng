@@ -85,8 +85,10 @@ const saveAssessment = (e) => {
     const assessment = {details: data,
         householdMemberDTO: { details: data.primaryCareGiver, householdMemberType: 1},
         assessment: data.assessment,
+        ward: data.ward,
         householdMigrationDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
-        uniqueId: data.uniqueId };
+        serialNumber: data.uniqueId,
+        uniqueId: data.code+data.uniqueId };
 
     console.log(assessment);
 
@@ -98,11 +100,11 @@ const saveAssessment = (e) => {
         const data = e.data;
         const assessment = {details: data,
             assessment: data.assessment,
+            ward: data.ward,
             householdMemberDTO: { details: data.primaryCareGiver, householdMemberType: 1},
-            householdAddressDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
-            uniqueId: data.uniqueId };
-        console.log(assessment);
-
+            householdMigrationDTOS: [{state: data.state, lga:data.lga, country:data.country, street :data.street, ward:data.ward, community:data.community, latitude: data.latitude, longitude:data.longitude}],
+            serialNumber: data.uniqueId,
+            uniqueId: data.code+data.uniqueId };
         editAssessment(assessment);
         //  props.togglestatus();
     };

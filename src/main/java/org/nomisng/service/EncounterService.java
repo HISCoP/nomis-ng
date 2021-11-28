@@ -97,6 +97,7 @@ public class EncounterService {
             formData.setCboProjectId(currentCboId);
             formData.setArchived(UN_ARCHIVED);
         });
+
         formDataRepository.saveAll(encounterDTO.getFormData());
         return encounter;
     }

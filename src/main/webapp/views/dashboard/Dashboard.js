@@ -16,12 +16,18 @@ import CIcon from '@coreui/icons-react'
 
 import MainChartExample from '../charts/MainChartExample.js'
 import Chart from './Chart'
+import {useDispatch} from "react-redux";
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    //show side-menu when this page loads
+    dispatch({type: 'MENU_MINIMIZE', payload: false });
+  },[]);
   return (
     <>
       <WidgetsDropdown />

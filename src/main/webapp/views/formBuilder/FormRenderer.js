@@ -185,7 +185,7 @@ const FormRenderer = (props) => {
         const encounterDate = submission.data["encounterDate"]
             ? submission.data["encounterDate"]
             : new Date();
-        const formatedDate = Moment(encounterDate);
+        const formatedDate = new Date(encounterDate);
 
         let data = {
             formData: [{data:submission.data}],
@@ -262,6 +262,7 @@ const FormRenderer = (props) => {
                             delete submission.data.submit;
                             delete submission.data.baseUrl;
                             delete submission.data.last;
+                            delete submission.data.checklist;
 
                             if (props.onSubmit) {
                                 return props.onSubmit(submission);

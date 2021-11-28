@@ -78,7 +78,7 @@ const Assessment = (props) => {
                         title="Assessment History"
                         isLoading={loading}
                         columns={[
-                            { title: 'Date Created', field: 'data.assessmentDate' },
+                            { title: 'Date Created', field: 'data.encounterDate' },
                             { title: 'Total Yes', field: 'data.totalYes' },
                             { title: 'Total No', field: 'data.totalNo' },
                             { title: 'Total N/A', field: 'data.totalNa' },

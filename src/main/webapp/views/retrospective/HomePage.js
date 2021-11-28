@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { CCol, CRow, CButton, CCard, CCardBody, CCardHeader,} from "@coreui/react";
-import {FormGroup, Input, Label} from "reactstrap";
+import {FormGroup,  Label} from "reactstrap";
 import Select from "react-select";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {fetchAllHouseHoldMembersByHouseholdId, fetchAllHouseHold} from "../../actions/houseHold";
 import axios from "axios";
 import {url} from "../../api";
 import * as CODES from "../../api/codes";
 import {toast, ToastContainer} from "react-toastify";
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import {calculateAge} from "../../utils/calculateAge";
 import { Link } from 'react-router-dom';
 import FormRenderer from "../formBuilder/FormRenderer";
@@ -20,7 +19,7 @@ import { DatePicker } from "react-widgets";
 import "react-widgets/dist/css/react-widgets.css";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import _ from "lodash";
+import NewCarePlan from "../household/household/NewCarePlan";
 //Dtate Picker package
 Moment.locale("en");
 momentLocalizer();
@@ -41,11 +40,17 @@ const HomePage = (props) => {
     const [newHouseholdModal, setShowHHModal] = React.useState(false);
     const [serviceDate, setServiceDate] = React.useState();
     const [encounter, setEncounter] = React.useState();
+    const [newCarePlanModal, setShowCarePlanModal] = React.useState(false);
     const toggleHousehold = () => setShowHHModal(!newHouseholdModal);
     const toggleOvc = () => setShowOvcModal(!newOvcModal);
     const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
-
+    const toggleCarePlan = () => setShowCarePlanModal(!newCarePlanModal);
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        //show side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: true });
+    },[]);
     useEffect(() => {
         fetchHousehold();
         fetchForms();
@@ -63,9 +68,12 @@ const HomePage = (props) => {
     }
 
     const onSelectHousehold = (x) => {
-        setHH(x.value);
         if(x){
+            setHH(x.value);
             fetchMembers(x.value.id);
+        } else {
+            setHH(null);
+            setHM(null);
         }
     }
 
@@ -134,6 +142,10 @@ const HomePage = (props) => {
             return;
         }
 
+        if(selectedForm.code === CODES.CARE_PLAN){
+            toggleCarePlan();
+            return;
+        }
         //check if it is a household member form
         if((selectedForm.code !== CODES.CARE_GIVER_ENROLMENT_FORM
             && selectedForm.code !== CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM
@@ -198,6 +210,9 @@ const HomePage = (props) => {
                     const fd = response.data[0].formData[0];
                     setEncounter(fd);
                     setSubmission( { data: fd.data});
+                } else {
+                    setEncounter(null);
+                    setSubmission(null);
                 }
                 setShowLoadingEncounter(false);
             }) .catch((error) => {
@@ -222,6 +237,7 @@ const HomePage = (props) => {
                                 <Label for="household">Search Household*</Label>
                                 <Select
                                     required
+                                    isClearable
                                     isLoading={hhLoading}
                                     isMulti={false}
                                     value={!selectedHH ? {} : {label: selectedHH.uniqueId, value: selectedHH}}
@@ -239,11 +255,18 @@ const HomePage = (props) => {
                                 <Label for="householdM">Search Household Member</Label>
                                 <Select
                                     required
+                                    isClearable
                                     isLoading={hmLoading}
                                     isMulti={false}
                                     value={!selectedHM ? {} : {label: selectedHM.details.firstName + " " + selectedHM.details.lastName + " - " + selectedHM.details.uniqueId, value: selectedHM}}
-                                    onChange={(x) => setHM(x.value)}
-                                    options={props.householdMembers.map((x) => ({
+                                    onChange={(x) => {
+                                        if(x) {
+                                            setHM(x.value)
+                                        }else{
+                                            setHM(null)
+                                        }
+                                    }}
+                                    options={!selectedHH ? [] : props.householdMembers.map((x) => ({
                                         label: x.details.firstName + " " + x.details.lastName + " - " + x.details.uniqueId,
                                         value: x,
                                     }))}
@@ -255,9 +278,17 @@ const HomePage = (props) => {
                                 <Label for="form ">Select Form</Label>
                                 <Select
                                     required
+                                    isClearable
                                     isMulti={false}
                                     value={!selectedForm ? {} : {label:selectedForm.name, value:selectedForm}}
-                                    onChange={(x) => setSelectedForm(x.value)}
+                                    onChange={(x) => {
+                                        if(x){
+                                            setSelectedForm(x.value)
+                                        }else{
+                                            setSelectedForm(null);
+                                        }
+
+                                    }}
                                     options={formList.map((x) => ({
                                         label: x.name,
                                         value: x,
@@ -375,13 +406,23 @@ const HomePage = (props) => {
             {/*Display form*/}
 
             <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={selectedHM ? selectedHM.id : ""} householdId={selectedHH ? selectedHH.id : ""}
-                             serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : ""}
+                             serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : Moment(serviceDate).format('YYYY-MM-DD')}
                              formDataId={encounter ? encounter.id : ""} encounterId={encounter ? encounter.encounterId : ""}
             />
+            <NewCarePlan  modal={newCarePlanModal} toggle={toggleCarePlan} householdId={selectedHH ? selectedHH.id : ""} />
+            {newOvcModal ?
+                <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length} householdMember={selectedHM && selectedHM.householdMemberType == 2 ? selectedHM : null}/>
+                : ""
+            }
 
-            <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)}/>
-            <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} />
-            <NewHouseHold  modal={newHouseholdModal} toggle={toggleHousehold} reloadSearch={fetchHousehold}/>
+            {newCaregiverModal ?
+                <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length} householdMember={selectedHM && selectedHM.householdMemberType == 1 ? selectedHM : null}/>
+                : ""
+            }
+
+            {newHouseholdModal ?
+            <NewHouseHold  modal={newHouseholdModal} toggle={toggleHousehold} reloadSearch={fetchHousehold} household={selectedHH} />
+               : ""}
         </>
     )
 }

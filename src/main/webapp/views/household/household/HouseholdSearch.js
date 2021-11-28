@@ -7,7 +7,7 @@ import {
   CButton,
   CRow
 } from '@coreui/react'
-import { connect } from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
@@ -21,6 +21,11 @@ import { fetchAllHouseHold, deleteHousehold } from "./../../../actions/houseHold
 
 const HouseHoldList = (props) => {
   const [modal, setModal] = useState(false);
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        //show side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: false });
+    },[]);
   const toggle = () => setModal(!modal);
     const toggleNew = () => {
         setCurrentHousehold(null);

@@ -15,10 +15,10 @@ const NewCarePlan = (props) => {
     const [loading, setLoading] = useState(false);
 
     React.useEffect( () => {
-        if(props.modal === true) {
-            fetchLastAssessment();
+        if(!props.lastAssessment && props.modal == true) {
+           fetchLastAssessment();
         }
-    },[props.modal]);
+    },[props.householdId, props.modal]);
   //  fetchLastAssessment();
   const onSuccess = () => {
     props.reloadSearch();
@@ -29,32 +29,21 @@ const NewCarePlan = (props) => {
     function fetchLastAssessment() {
       if(props.householdId) {
           setLoading(true);
-          const onSuccess = () => {
-              setLoading(false);
-          }
 
-          const onError = () => {
-              setLoading(false);
-              toast.error('Error: Could not fetch the last household assessment!');
-          }
           axios
               .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
               .then(response => {
-                  if (onSuccess) {
-                      onSuccess();
-                  }
                   if (response.data && response.data && response.data.length == 0) {
                       toast.info('There have been no assessment for this household! Go to the assessment tab to fill an assessment before you can fill a care plan.');
                       setChecklist(null);
                       return;
                   }
                   setChecklist(response.data[0].data);
-
+                  setLoading(false);
               })
               .catch(error => {
-                      if (onError) {
-                          onError();
-                      }
+                      setLoading(false);
+                      toast.error('Error: Could not fetch the last household assessment!');
                   }
               );
       }
@@ -67,12 +56,20 @@ const NewCarePlan = (props) => {
           <CModal show={props.modal} onClose={props.toggle} className={className} backdrop={true} size={"xl"}>
               <CModalHeader closeButton>New Care Plan</CModalHeader>
               <CModalBody>
-                  {checklist &&
+                  {!loading && props.lastAssessment &&
                   <FormRenderer
                       formCode={CODES.CARE_PLAN}
                       householdId={props.householdId}
                       onSuccess={onSuccess}
-                      submission={{ data: {checklist:checklist}}}
+                      submission={{data: {checklist: props.lastAssessment}}}
+                  />
+                  }
+                  {!loading && checklist &&
+                  <FormRenderer
+                      formCode={CODES.CARE_PLAN}
+                      householdId={props.householdId}
+                      onSuccess={onSuccess}
+                      submission={{data: {checklist: checklist}}}
                   />
                   }
               </CModalBody>

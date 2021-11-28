@@ -11,15 +11,20 @@ import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
-import { connect } from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import {calculateAge} from "./../../../utils/calculateAge";
+import NewOvc from "../household/NewOvc";
 
 
 const HouseholdMember = (props) => {
 
   const [loading, setLoading] = useState('')
-
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        //show side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: false });
+    },[]);
   useEffect(() => {
   setLoading('true');
       const onSuccess = () => {
@@ -82,7 +87,6 @@ const HouseholdMember = (props) => {
                                 </Link>
                                 
                               </MenuItem>
-                              <MenuItem >{" "}Edit</MenuItem>
                               {/*<MenuItem >{" "}Delete</MenuItem>*/}
                               </MenuList>
                           </Menu>

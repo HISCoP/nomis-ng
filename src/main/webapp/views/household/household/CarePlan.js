@@ -12,8 +12,13 @@ import FormRendererModal from "../../formBuilder/FormRendererModal";
 const CarePlan = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
+    const showNewCarePlan = () => {
+        fetchLastAssessment();
+    }
     const [loading, setLoading] = useState(false);
+    const [loadingAssessment, setLoadingAssessment]= useState(false);
     const [carePlanList, setCarePlanList] = useState([]);
+    const [lastAssessment, setLastAssessment] = useState();
     const [currentForm, setCurrentForm] = useState(false);
     const [showFormModal, setShowFormModal] = useState(false);
 
@@ -40,6 +45,7 @@ const CarePlan = (props) => {
         axios
             .get(`${url}households/${props.householdId}/${CODES.CARE_PLAN}/formData`)
             .then(response => {
+
                 setCarePlanList(response.data.map((x)=>({
                     data: x,
                     dateCreated: x.data && x.data.encounterDate ? x.data.encounterDate : null,
@@ -70,11 +76,38 @@ const CarePlan = (props) => {
         setShowFormModal(true);
     }
 
+     function fetchLastAssessment() {
+        if(loadingAssessment){
+            return;
+        }
+        if(props.householdId) {
+            setLoadingAssessment(true);
+             axios
+                .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
+                .then(response => {
+                    setLoadingAssessment(false);
+
+                    if (response.data && response.data.length == 0) {
+                        toast.info('There have been no assessment for this household! Go to the assessment tab to fill an assessment before you can fill a care plan.');
+                        setLastAssessment(null);
+                        return;
+                    }
+                    setLastAssessment(response.data[0].data);
+                    toggle();
+                })
+                .catch(error => {
+                    setLoadingAssessment(false);
+                        toast.error('Error: Could not fetch the last household assessment!');
+                    }
+                );
+        }
+    }
+
     return (
         <CCard>
             <CRow>
                 <CCol xs="12" className={"text-right p-4"}>
-                    <CButton color={"primary"} onClick={toggle}> New Care Plan</CButton>
+                    <CButton color={"primary"} onClick={showNewCarePlan}> New Care Plan</CButton>
                 </CCol>
             </CRow>
 
@@ -156,7 +189,7 @@ const CarePlan = (props) => {
                 //onError={onError}
                 options={{modalSize:"xl"}}
             />
-            <NewCarePlan  modal={modal} toggle={toggle} reloadSearch={fetchCarePlan} householdId={props.householdId}/>
+            <NewCarePlan  modal={modal} toggle={toggle} reloadSearch={fetchCarePlan} householdId={props.householdId} lastAssessment={lastAssessment}/>
         </CCard>
     )
 }
