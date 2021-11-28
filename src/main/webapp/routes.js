@@ -47,7 +47,7 @@ const routes = [
   { path: '/edit-form', name: 'Edit Form', component: ViewForm },
   /* Administrative Link */
   { path: "/form-home", name: 'Form Builder', component: FormPage},
-  { path: "/users", name: 'User Setup', component: UserSetupHomePage},
+  { path: "/users", name: 'User Management', component: UserSetupHomePage},
   { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage},
   { path: "/program-setup-home", name: 'Domain Setup', component: ProgramSetupHomePage},
   { path: "/organisation-unit-home", name: 'Organisation Unit', component: OrganisationUnitHomepage},
@@ -62,10 +62,10 @@ const routes = [
   { path: "/report", name: 'Report', component: ReportPage},
   { path: "/report-view", name: 'Report View', component: ReportView},
   { path: "/cbo", name: 'CBO ', component: CboManager} ,
-  { path: "/donor", name: 'Donor Setup', component: DonorManager} ,
-  { path: "/ip", name: 'IP Manager', component: IpManager} ,
-  { path: "/donor-ip", name: 'Donor-IP Manager', component: DonorIpManager} ,
-  { path: "/cbo-donor-ip", name: 'CBO Project Setup', component: CboDonorIpManager} ,
+  { path: "/donor", name: 'Donor ', component: DonorManager} ,
+  { path: "/ip", name: 'Implementing Partner ', component: IpManager} ,
+  { path: "/donor-ip", name: 'Donor-Implementing Partner ', component: DonorIpManager} ,
+  { path: "/cbo-donor-ip", name: 'CBO Project ', component: CboDonorIpManager} ,
   { path: "/visualisation", name: 'Data Visualisation', component: DataVisualisation} ,
 
   
