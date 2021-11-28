@@ -23,9 +23,8 @@ const TheContent = () => {
     <main className="c-main">
       <CContainer fluid>
         <Suspense fallback={loading}>
-        <Redirect from="/" to="/login" />
           <Switch>
-          <Redirect from="/" to="/login" />
+            
             {routes.map((route, idx) => {
               return route.component && (
                 <Route
@@ -40,7 +39,7 @@ const TheContent = () => {
                   )} />
               )
             })}
-            
+            <Redirect from="/" to="/login" />
           </Switch>
         </Suspense>
       </CContainer>
