@@ -41,10 +41,7 @@ const Dashboard = (props) => {
         </CCardBody>
        
       </CCard>
-     
-       
 
-     
     </>
   )
 }

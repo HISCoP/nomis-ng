@@ -73,7 +73,7 @@ const TheHeaderDropdown = (props) => {
 
   const logout = () => {
     history.push("/login");
-    authentication.logout();
+    //authentication.logout();
   }
 
   async function fetchMe() {

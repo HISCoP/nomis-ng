@@ -135,11 +135,11 @@ const DomainServiceList = (props) => {
                                     <span style={{ color: "#000" }}>Edit  </span>
                                    
                                 </MenuItem>
-                                <MenuItem style={{ color: "#000 !important" }} onClick={() => deleteApplicationDomain(row)}>
+                                {/* <MenuItem style={{ color: "#000 !important" }} onClick={() => deleteApplicationDomain(row)}>
                             
                                     <span style={{ color: "#000" }}>Delete </span>
                                  
-                                </MenuItem>
+                                </MenuItem> */}
                                 </MenuList>
                             </Menu>
                             </div>
