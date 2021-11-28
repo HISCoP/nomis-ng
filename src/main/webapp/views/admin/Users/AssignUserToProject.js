@@ -97,17 +97,11 @@ const AssignProjectUser = (props) => {
 
         <div >
             <ToastContainer />
-            <CModal show={props.showModal} onClose={props.toggleModal} size="lg" backdrop={false}
-                keyboard={false}
-                portal={false}
-                visible
-            >
+            <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
 
-                    <CModalHeader >Assign User to Project </CModalHeader>
+                    <CModalHeader toggle={props.toggleModal}>Assign User to Project </CModalHeader>
                     <CModalBody>
-                        <Card >
-                            <CardBody>
-                                <Row >
+                        
                                 <Form onSubmit={handleSubmit}>
                                     <Col xl={12} lg={12} md={12}>
                                     
@@ -162,9 +156,7 @@ const AssignProjectUser = (props) => {
                                     </Card>
                                     </Col>
                                 </Form>
-                                </Row>
-                            </CardBody>
-                        </Card>
+                              
                     </CModalBody>
             </CModal>
         </div>

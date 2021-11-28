@@ -38,15 +38,7 @@ const NewDomain = (props) => {
         setFormData ({ ...formData, [e.target.name]: e.target.value  });
     }
 
-    // const validate = () => {
-    //     let temp = { ...errors }
-    //     temp.name = formData.name ? "" : "Name is required"
-    //     setErrors({
-    //         ...temp
-    //     })
-    //     console.log(temp)
-    //     return Object.values(temp).every(x => x == "")
-    // }
+
 
     const createGlobalDomain = e => {
         e.preventDefault()

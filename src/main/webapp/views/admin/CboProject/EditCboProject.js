@@ -1,23 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
-import {  Row,Col,FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
+import {  Row,Col,FormGroup,Label,Input,Card,CardBody, Table} from 'reactstrap';
 import { connect } from 'react-redux'
 import {  CFormGroup } from '@coreui/react';
 import MatButton from '@material-ui/core/Button'
+import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import Select from "react-select";
-import { createIp, updateIp  } from "../../../actions/ip";
 import { Spinner } from 'reactstrap';
 import { url as baseUrl } from "../../../api";
 import { CModal, CModalHeader, CModalBody,CForm} from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
-import { createCboProject } from '../../../actions/cboProject'
+import { updateCboProject } from '../../../actions/cboProject'
 import { useHistory } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -27,11 +30,13 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const NewDonor = (props) => {
+const UpdateCboProject = (props) => {
     let history = useHistory();
     const [loading, setLoading] = useState(false)
     const cboProjectList = useSelector(state => state.cboProjects.cboProjectList);
+   
     const dispatch = useDispatch();
+    const defaultValues = { stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""}
     //const [errors, setErrors] = useState({});
     const [donorList, setdonorList] = useState([]);
     const [ipList, setipList] = useState([]);
@@ -39,17 +44,27 @@ const NewDonor = (props) => {
     const classes = useStyles()
 
     const [selectedOption, setSelectedOption] = useState(null);
-
-    const [otherDetails, setOtherDetails] = useState({ stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""});
+    const [locationList, setLocationList] = useState({ stateName:"", lga:""})
+    const [otherDetails, setOtherDetails] = useState(defaultValues);
     const [provinces, setProvinces] = useState([]);
     const [lgaDetail, setLgaDetail] = useState();
     const [stateDetail, setStateDetail] = useState();
     const [states, setStates] = useState([]);
+    const [organisationUnits, setOrganisationUnits] = useState()
+   const [locationListArray2, setLocationListArray2] = useState([])
 
     useEffect(() => {
         //loadCboProjectList()
-    }, []); //componentDidMount
-  
+        setOtherDetails(props.formData ? props.formData : defaultValues);
+        setOrganisationUnits(props.formData ? props.formData.organisationUnits : [])
+        const getLocationList= Object.entries(props.formData ? props.formData.organisationUnits : []).map(([key, value]) => ({
+            stateName: value.State,
+            lga: [{label: value.Name, value: value.id}],
+        }))
+        setLocationListArray2([...locationListArray2, ...getLocationList])
+        console.log(locationListArray2)
+    }, [props.formData]); //componentDidMount
+
     useEffect(() => {
 
         async function getCharacters() {
@@ -122,7 +137,7 @@ const  setStateByCountryId=() =>{
     async function getStateByCountryId() {
         const response = await axios.get(baseUrl + 'organisation-units/hierarchy/1/2')
         const stateList = response.data;
-        console.log(stateList)
+       // console.log(stateList)
         setStates(stateList);
     }
     getStateByCountryId();
@@ -130,8 +145,10 @@ const  setStateByCountryId=() =>{
 
 //fetch province
 const getProvinces = e => {
-  setOtherDetails({ ...otherDetails, [e.target.name]: e.target.value });
-        const stateId = e.target.value;
+    setSelectedOption(null)
+    const targetValue = e && e.target ? e.target : "" 
+  setOtherDetails({ ...otherDetails, [targetValue.name]: targetValue.value });
+        const stateId = targetValue.value ;
           if(stateId =="" || stateId==null){
             setLgaDetail("")
           }else{
@@ -148,48 +165,93 @@ const getProvinces = e => {
                    // response.data
                     
                     );
+                    //const newStates = states.filter(state => state.id == otherDetails['stateId'])
+                    const locationState = newStates[0].name
+                    setLocationList({...locationList, stateName: locationState}) 
+                    locationList['stateName']= locationState
 
             }
             getCharacters();
           }
 };
-const getlgaObj = e => {
 
-    const newlga = provinces.filter(lga => lga.id == e.target.value)
-    setLgaDetail(newlga)
-    setOtherDetails({...otherDetails, lgaId:e.target.value})
-}
 
     const handleInputChange = e => {
         setOtherDetails ({...otherDetails,  [e.target.name]: e.target.value});
     }
     
+    var  locationListArray = []
+    const addLocations = e => {
+         //e.preventDefault()
+        //Get the state selected
+        setLocationList({...locationList,  lga:selectedOption })      
+      //locationListArray2.push(locationList)
+        if(locationList['stateName'] !=='' && locationList['lga'] !==''){
+        setLocationListArray2([...locationListArray2, ...[locationList]])
+        setLocationList({stateName: "", lga:""})
+        console.log(locationListArray2)
+        getProvinces()
+
+        }
+       
+    }
+    function LgaList (selectedOption){
+        const  maxVal = []
+        if (selectedOption != null && selectedOption.length > 0) {
+          for(var i=0; i<selectedOption.length; i++){
+             
+                  if ( selectedOption[i].label!==null && selectedOption[i].label)
+                        //console.log(selectedOption[i])
+                            maxVal.push(selectedOption[i].label)
+              
+          }
+        return maxVal.toString();
+        }
+    }
+
+    const  RemoveItem = (e) => {
+        const removeArr =locationListArray2.filter((element, index, array)  => index != e)
+        console.log(removeArr)
+        setLocationListArray2(removeArr)
+    }
+    
     const organisationUnitIds = []
+
     const createCboAccountSetup = e => {
-        const orgunitlga= selectedOption.map(item => { 
-            delete item['label'];
-            organisationUnitIds.push(item['value'])
-            return item;
+        e.preventDefault()
+        
+        const orgunitlga= locationListArray2.map(item => { 
+            delete item['state'];
+            
+            item['lga'].map(itemLga => {
+                //console.log(itemLga['value'])
+            organisationUnitIds.push(itemLga['value'])
+
+            return itemLga;
+            })
         })
-        //organisationUnitIds.push(parseInt(otherDetails['stateId']))
         otherDetails['organisationUnitIds'] = organisationUnitIds
         delete otherDetails['lgaId'];
-        delete otherDetails['stateId'];
-        e.preventDefault()
+        delete otherDetails['stateId'];       
         setLoading(true);
+        console.log(otherDetails)
         const onSuccess = () => {
             setLoading(false)
+            setOtherDetails(defaultValues)  
+            setLocationListArray2([]) 
             history.push('/cbo-donor-ip')
-            props.toggleModal()
-            
+            props.toggleModal() 
+            props.loadIps() 
+                  
         }
         const onError = () => {
             setLoading(false)  
+            setOtherDetails(defaultValues)  
+            setLocationListArray2([])
             history.push('/cbo-donor-ip') 
             props.toggleModal() 
-        }
-        
-        dispatch(createCboProject(otherDetails,onSuccess, onError));
+        }       
+        dispatch(updateCboProject(props.formData.id, otherDetails,onSuccess, onError));
         
         return
  
@@ -284,7 +346,12 @@ const getlgaObj = e => {
                                             </Input>
                                         </FormGroup>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col md={12}>
+                                        <hr/>
+                                        <h4>Location</h4>
+                                    </Col>
+                                    
+                                    <Col md={5}>
                                         <FormGroup>
                                             <Label >State *</Label>
                                             <Input
@@ -305,20 +372,73 @@ const getlgaObj = e => {
                                         </FormGroup>
                                     </Col>
                                     
-                                    <Col md={6}>
+                                    <Col md={5}>
                                                 <CFormGroup>
                                                     <Label >LGA</Label>
                                                     <Select
-                                                        defaultValue={selectedOption}
+                                                        //defaultValue={selectedOption}
                                                         onChange={setSelectedOption}
                                                         //value={otherDetails.lga}
+                                                        value={selectedOption}
                                                         options={provinces}
                                                         isMulti="true"
+                                                        noOptionsMessage="true"
                                                     />
                                                    
                                                 </CFormGroup>
 
                                             </Col>
+                                    <Col md={2}>
+                                    <Button variant="contained"
+                                        color="primary"
+                                        //startIcon={<FaPlus />} 
+                                        style={{ marginTop:25}}
+                                        size="small"
+                                        onClick={addLocations}
+                                        >
+                                        <span style={{textTransform: 'capitalize'}}> Add</span>
+                                    </Button>
+                                    </Col>
+                                    <Col md={12}>
+                                    <div className={classes.demo}>
+                                                      
+                                                 
+                                                            
+                                                            {locationListArray2.length >0 
+                                                            ?
+                                                            <Table  striped responsive>
+                                                                <thead >
+                                                                    <tr>
+                                                                        <th>State</th>
+                                                                        <th>LGA</th>
+                                                                        <th ></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {locationListArray2.map((items, index) => (
+                                                                    <tr>
+                                                                        <th>{items.stateName}</th>
+                                                                        <th>{LgaList(items.lga)}</th>
+                                                                        
+                                                                        <th >
+                                                                            <IconButton aria-label="delete" size="small" color="error" onClick={() =>RemoveItem(index)}>
+                                                                                <DeleteIcon fontSize="inherit" />
+                                                                            </IconButton>
+                                                                            
+                                                                        </th>
+                                                                    </tr>
+                                                                    ) )}
+                                                                </tbody>
+                                                                </Table>
+                                                            
+                                                          
+                                                          
+                                                          : ""
+                                                          }
+                                                          
+                                                     
+                                                  </div>
+                                    </Col>
                                 </Row>
 
                                 <MatButton
@@ -353,5 +473,5 @@ const getlgaObj = e => {
 
 
 
-export default connect(null, {createIp, updateIp})(NewDonor);
+export default connect(null, { updateCboProject})(UpdateCboProject);
 

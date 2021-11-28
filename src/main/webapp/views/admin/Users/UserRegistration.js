@@ -228,17 +228,7 @@ const UserRegistration = (props) => {
                       required
                     />
                   </FormGroup>
-                  <FormGroup>
-                    <Label for="lastName">Last Name * </Label>
-                    <Input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      onChange={handleInputChange}
-                      value={values.lastName}
-                      required
-                    />
-                  </FormGroup>
+                 
                   <FormGroup>
                     <Label for="userName">Username *</Label>
                     <Input
@@ -247,6 +237,17 @@ const UserRegistration = (props) => {
                       id="userName"
                       onChange={handleInputChange}
                       value={values.userName}
+                      required
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="email">Email *</Label>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="email"
+                      onChange={handleInputChange}
+                      value={values.email}
                       required
                     />
                   </FormGroup>
@@ -288,6 +289,17 @@ const UserRegistration = (props) => {
                       ))}
                     </Input>
                   </FormGroup>   */}
+                  <FormGroup>
+                    <Label for="lastName">Last Name * </Label>
+                    <Input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      onChange={handleInputChange}
+                      value={values.lastName}
+                      required
+                    />
+                  </FormGroup>
                    <FormGroup>
                     <Label for="role">Role *</Label>
                     <Input
@@ -349,17 +361,7 @@ const UserRegistration = (props) => {
                       required
                     />
                   </FormGroup>
-                  <FormGroup>
-                    <Label for="email">Email *</Label>
-                    <Input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={handleInputChange}
-                      value={values.email}
-                      required
-                    />
-                  </FormGroup>
+                 
                   <FormGroup>
                     <Label for="confirm">Confirm Password *</Label>
                     <Input

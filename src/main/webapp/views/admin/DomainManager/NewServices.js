@@ -71,7 +71,7 @@ const getServices = () => {
     return (
 
         <div >
-            <ToastContainer />
+           
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
 
                 <Form onSubmit={createDomainService}>

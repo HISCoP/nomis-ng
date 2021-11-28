@@ -65,7 +65,7 @@ const NewDonor = (props) => {
     return (
 
         <div >
-            <ToastContainer />
+           
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createIpSetup}>

@@ -217,7 +217,7 @@ const TheHeaderDropdown = (props) => {
                   <Row >
                   <Col md={12}>
                     <Alert color="primary">
-                          You don't have access to this Project
+                          You don't have access to the selected Project
                     </Alert>
                     </Col>
                   <Col md={12}><h4>Please switch Project</h4></Col>
