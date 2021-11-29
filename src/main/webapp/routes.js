@@ -1,5 +1,5 @@
 import React from 'react';
-//const Login = React.lazy(() => import('./views/pages/login'));
+
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
 const houseHoldAssessment = React.lazy(() => import('./views/household/household/HouseholdSearch'));
 const HouseholdHomePage = React.lazy(() => import('./views/household/household/HouseholdHomePage'));
@@ -34,9 +34,10 @@ const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorMa
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
 const DonorIpManager = React.lazy(() => import("./views/admin/DonorIpManager/DonorIpManager"));
 const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
+const LoginPage = React.lazy(() => import("./views/pages/login/Login"));
 
 const routes = [
-  { path: '/', exact: true, name: 'Home', component: Dashboard },
+  { path: '/', exact: true, name: '', component: LoginPage },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/households', name: 'Households', component: houseHoldAssessment },
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage },

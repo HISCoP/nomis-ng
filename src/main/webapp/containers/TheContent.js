@@ -25,7 +25,6 @@ const TheContent = () => {
       <CContainer fluid>
         <Suspense fallback={loading}>
           <Switch>
-            
             {routes.map((route, idx) => {
               return route.component && (
                   route.isPrivate ?

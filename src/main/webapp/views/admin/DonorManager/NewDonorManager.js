@@ -38,7 +38,9 @@ const NewDonor = (props) => {
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
-    
+    const resetForm = () => {
+        setFormData(defaultValues)
+    }
 
     const createDonorSetup = e => {
         
@@ -48,6 +50,7 @@ const NewDonor = (props) => {
                 setLoading(false);
                 props.loadDonors();
                 props.toggleModal()
+                resetForm()
             }
             const onError = () => {
                 setLoading(false);
