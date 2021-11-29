@@ -83,7 +83,7 @@ const NewDomain = (props) => {
     return (
 
         <div >
-          
+          <ToastContainer autoClose={3000} hideProgressBar />
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createGlobalDomain}>
@@ -102,7 +102,7 @@ const NewDomain = (props) => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleNameInputChange}
-                                                required
+                                                
                                             />
                                              {errors.name !=="" ? (
                                                 <span className={classes.error}>{errors.name}</span>

@@ -89,7 +89,7 @@ const AddRole = (props) => {
           console.log(Object.entries(response.data));
           setPermissions(
             Object.entries(response.data).map(([key, value]) => ({
-              label: value.name,
+              label: value.description,
               value: value.name,
             }))
           );
@@ -197,14 +197,14 @@ const AddRole = (props) => {
                 )}
               </MatButton>
 
-              <MatButton
+              {/* <MatButton
                 variant="contained"
                 className={classes.button}
                 startIcon={<CancelIcon />}
                 onClick={resetForm}
               >
                 <span style={{ textTransform: "capitalize" }}>Cancel</span>
-              </MatButton>
+              </MatButton> */}
             </CardContent>
           </Card>
         </Col>

@@ -188,7 +188,7 @@ const UserRegistration = (props) => {
       <Title>
         <Link
               to ={{
-                pathname: "/admin",
+                pathname: "/users",
                 state: 'users'
               }}
         >
@@ -272,24 +272,7 @@ const UserRegistration = (props) => {
                   
                 </Col>
                 <Col md={6}>
-                  {/* <FormGroup>
-                    <Label for="role">Role *</Label>
-                    <Input
-                      type="select"
-                      name="role"
-                      id="role"
-                      value={values.role}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value=""> </option>
-                      {role.map(({ label, value }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>   */}
+                 
                   <FormGroup>
                     <Label for="lastName">Last Name * </Label>
                     <Input

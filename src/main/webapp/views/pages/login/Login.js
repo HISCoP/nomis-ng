@@ -204,6 +204,9 @@ useEffect(() => {
               <CCard  style={{ backgroundColor:'#0b795f' }} className="text-white py-5 d-md-down-none p-19">
                 <CCardBody className="text-center" style={{ backgroundColor:'#0b795f' }}>
                   <div>
+                  <span style={{marginRight:10, margingTop:150,}}>
+                    <img src={logo} alt="Nigeria Coat of Arms" style={{width: 50, height: 50, borderRadius: 400/ 2}}  className=" "/>
+                </span>
                     <h1 style={{color:'#fff'}}>NOMIS</h1>
                     <p> National OVC Management Information System  </p>
                     
@@ -212,9 +215,9 @@ useEffect(() => {
                     </Link>
                   </div>
                 </CCardBody>
-                <span style={{marginRight:10, margingTop:150, margingBottom:-650}}>
+                {/* <span style={{marginRight:10, margingTop:150, margingBottom:-650}}>
                     <img src={logo} alt="Nigeria Coat of Arms" style={{width: 50, height: 50, borderRadius: 400/ 2}}  className="float-right "/>
-                </span>
+                </span> */}
               </CCard>
             </CCardGroup>
           </CCol>

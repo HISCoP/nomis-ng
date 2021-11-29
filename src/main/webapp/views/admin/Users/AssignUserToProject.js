@@ -33,7 +33,6 @@ const AssignProjectUser = (props) => {
     let history = useHistory();
     const classes = useStyles();
     const user = props.user
-    console.log(user.applicationUserCboProjects)
     const currentUserName= user!== "" && user.userName? user.userName : "" ;
     const userId = user !==null &&  user.id ? user.id : ""
     const [saving, setSaving] = useState(false);
@@ -56,10 +55,9 @@ const AssignProjectUser = (props) => {
 
                 })
                 .catch((error) => {
-                    console.log(error);
+                    
                 });
         }
-        console.log(props.user);
         const y = props.user && props.user.applicationUserCboProjects
             ? props.user.applicationUserCboProjects.map((x) => (x.cboProjectId)) : [];
         setSelectedProjects(y)
@@ -68,15 +66,13 @@ const AssignProjectUser = (props) => {
     }, [props.user]);
    
     const onProjectSelect = (selectedValues) => {
-        setSelectedProjects(selectedValues);
-          console.log(selectedValues)  
+        setSelectedProjects(selectedValues); 
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         assignProject['applicationUserId']= userId
         assignProject['cboProjectIds']=selectedProjects
-        console.log(selectedProjects)
         if(selectedProjects ==""){
         toast.error("Peoject can not be empty")
         return;
