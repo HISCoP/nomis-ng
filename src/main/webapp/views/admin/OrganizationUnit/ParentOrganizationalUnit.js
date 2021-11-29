@@ -94,7 +94,7 @@ return (
                                   Admin
                               </Link>
                               <Link color="inherit" to={{pathname: "organisation-unit-home"}} >
-                                 Organisational Unit Level Setup
+                                 Organisational Unit 
                               </Link>
                               <Typography color="textPrimary">{parentOrganisationUnitId.name} </Typography>
                              </Breadcrumbs>
@@ -111,8 +111,9 @@ return (
                               title="Organisational Unit"
                               columns={[
                                 { title: 'Name', field: 'name' },
-                                { title: 'Org. Unit Level Name', field: 'ParentOrgUnitName' },
                                 { title: 'Parent Org. Unit name', field: 'ParentName' },
+                                { title: 'Org. Unit Level Name', field: 'ParentOrgUnitName' },
+                                
                                 { title: 'Description', field: 'description' },
                                 
                                 { title: 'Action', field: 'actions'},
@@ -120,8 +121,8 @@ return (
                               isLoading={loading}
                                 data={listOfAllParentOrgUnit.map((row) => ({
                                       name: row.name, 
-                                      ParentOrgUnitName: row && row.parentParentOrganisationUnitName ? row.parentParentOrganisationUnitName : "",  
                                       ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", 
+                                      ParentOrgUnitName: row && row.parentParentOrganisationUnitName ? row.parentParentOrganisationUnitName : "",              
                                       description: row. description,
                                     
                                     actions: 

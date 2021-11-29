@@ -182,45 +182,26 @@ export const deleteCboProject = (id, onSuccess , onError) => dispatch => {
         );
 };
 
-export const assignProjectToUser = (data, onSuccess , onError) => dispatch => {
+export const assignProjectToUser = (data, onSuccess, onError  ) => dispatch => {
     axios
         .post(`${url}application-user-cbo-project`, data)
         .then(response => {
-            dispatch({
-                type: ACTION_TYPES.ASSIGN_CBO_PROJECT,
-                payload: response.data
-            });
-            if(onSuccess){
-                onSuccess();
+            
                 toast.success("CBO Project Assign Successful!");
-            }
+                dispatch({
+                    type: ACTION_TYPES.ASSIGN_CBO_PROJECT,
+                    payload: response.data
+                });
+               
+                onSuccess()    
+                    
+                
+            
         })
         .catch(error => {
-            
-            if (error.response) {
-                let errorMessage = error.response.data.apierror.message;
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client received an error response (5xx, 4xx)
-              } else if (error.request) {
-                let errorMessage ='something went wrong. no response from the server';
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client never received a response, or request never left
-              } else {
-                let errorMessage = 'something went wrong';
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-              }
-           
-            }
-
+            toast.error("Something went wrong");
+            onError()
+        }
         );
 };
 

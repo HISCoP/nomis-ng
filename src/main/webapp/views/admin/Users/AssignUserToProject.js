@@ -80,7 +80,8 @@ const AssignProjectUser = (props) => {
         setSaving(true);
         const onSuccess = () => {
         setSaving(false);
-        props.history.push(`/users`)
+        props.toggleModal()
+        //props.history.push(`/users`)
         };
         const onError = () => {
         setSaving(false);
@@ -92,7 +93,7 @@ const AssignProjectUser = (props) => {
     return (
 
         <div >
-            <ToastContainer />
+            
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
 
                     <CModalHeader toggle={props.toggleModal}>Assign User to Project </CModalHeader>

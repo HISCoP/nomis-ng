@@ -78,7 +78,7 @@ let userId = 0;
 let currentUser = {};
 
 const UserList = (props) => {
-  console.log(props.usersList)
+
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
