@@ -42,7 +42,7 @@ const NewDomain = (props) => {
         
         return Object.values(temp).every((x) => x == "");
     };
-    console.log(errors)
+
     useEffect(() => {
         //for Domain Area edit, load form data
         if(props.currentDomain){
@@ -104,7 +104,7 @@ const NewDomain = (props) => {
                                                 onChange={handleNameInputChange}
                                                 required
                                             />
-                                             {errors.name !="" ? (
+                                             {errors.name !=="" ? (
                                                 <span className={classes.error}>{errors.name}</span>
                                             ) : "" }
                                         </FormGroup>

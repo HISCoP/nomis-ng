@@ -40,7 +40,7 @@ const DomainServiceList = (props) => {
 
     useEffect(() => {
             loadDomainsServices()
-    }, [domainDetails.id]); //componentDidMount
+    }, [props.location.state]); //componentDidMount
 
     const loadDomainsServices = () => {
         setLoading('true');

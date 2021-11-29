@@ -111,13 +111,13 @@ export const createDomainService = (formData, onSuccess , onError) => dispatch =
 
             if(response ){
                 onSuccess();
-
+                toast.success("Service created successfully!");
             }
         })
         .catch(error => {
                 if(onError){
                     onError();
-    
+                    toast.error("Something went wrong, please try again...");
                 }
             }
 

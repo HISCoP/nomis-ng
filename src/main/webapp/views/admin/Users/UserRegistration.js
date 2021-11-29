@@ -157,7 +157,7 @@ const UserRegistration = (props) => {
     setSaving(true);
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
-    values["roles"] = [values["role"] ='User'];
+    values["roles"] = [values["role"]];
 
     delete values["dateOfBirth"];
     delete values["phone"];
@@ -168,9 +168,9 @@ const UserRegistration = (props) => {
     const onSuccess = () => {
       setSaving(false);
       toast.success("Registration Successful");
-      setTimeout(() => {
-        props.history.push(`/user-setup-home`)
-    }, 1000) 
+      
+        props.history.push(`/users`)
+     
       resetForm();
     };
     const onError = () => {
@@ -178,6 +178,7 @@ const UserRegistration = (props) => {
       toast.error("Something went wrong");
       
     };
+    console.log(values)
     props.register(values, onSuccess, onError);
   };
 
