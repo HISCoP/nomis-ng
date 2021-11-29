@@ -46,16 +46,15 @@ public class CboProjectController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
+    @ResponseStatus(HttpStatus.CREATED) //201
     public ResponseEntity<CboProjectDTO> save(@Valid @RequestBody CboProjectDTO cboProjectDTO) {
         return ResponseEntity.ok(cboProjectService.save(cboProjectDTO));
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
-    public ResponseEntity<CboProject> update(@RequestBody CboProjectDTO cboProjectDTO, @PathVariable Long id) {
-        return ResponseEntity.ok(cboProjectService.update(id, cboProjectDTO));
+    @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    public void update(@Valid @RequestBody CboProjectDTO cboProjectDTO, @PathVariable Long id) {
+        cboProjectService.update(id, cboProjectDTO);
     }
 
     @PostMapping("/{id}")

@@ -36,21 +36,25 @@ public class CboProject {
     @Column(name = "archived")
     @JsonIgnore
     private Integer archived;
+
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "cbo_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Cbo cboByCboId;
+
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "donor_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Donor donorByDonorId;
+
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "implementer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Implementer implementerByImplementerId;
+
     @Transient
     @JsonIgnore
     private String cboName;
@@ -67,6 +71,7 @@ public class CboProject {
     /*@OneToMany(mappedBy = "cboProjectByCboId")
     @ToString.Exclude
     private List<User> usersById;*/
+
     @Transient
     @JsonIgnore
     private List organisationUnits;
