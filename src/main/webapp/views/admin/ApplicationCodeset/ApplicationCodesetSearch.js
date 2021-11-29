@@ -95,7 +95,7 @@ const ApplicationCodesetList = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Application Codeset </span>
+                        <span style={{textTransform: 'capitalize'}}> New Application Codeset </span>
                     </Button>
 
                 </div>

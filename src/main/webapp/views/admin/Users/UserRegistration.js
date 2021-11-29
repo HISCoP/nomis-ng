@@ -157,7 +157,7 @@ const UserRegistration = (props) => {
     setSaving(true);
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
-    values["roles"] = [values["role"] ='User'];
+    values["roles"] = [values["role"]];
 
     delete values["dateOfBirth"];
     delete values["phone"];
@@ -168,9 +168,9 @@ const UserRegistration = (props) => {
     const onSuccess = () => {
       setSaving(false);
       toast.success("Registration Successful");
-      setTimeout(() => {
-        props.history.push(`/user-setup-home`)
-    }, 1000) 
+      
+        props.history.push(`/users`)
+     
       resetForm();
     };
     const onError = () => {
@@ -178,6 +178,7 @@ const UserRegistration = (props) => {
       toast.error("Something went wrong");
       
     };
+    console.log(values)
     props.register(values, onSuccess, onError);
   };
 
@@ -187,7 +188,7 @@ const UserRegistration = (props) => {
       <Title>
         <Link
               to ={{
-                pathname: "/admin",
+                pathname: "/users",
                 state: 'users'
               }}
         >
@@ -271,24 +272,7 @@ const UserRegistration = (props) => {
                   
                 </Col>
                 <Col md={6}>
-                  {/* <FormGroup>
-                    <Label for="role">Role *</Label>
-                    <Input
-                      type="select"
-                      name="role"
-                      id="role"
-                      value={values.role}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value=""> </option>
-                      {role.map(({ label, value }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>   */}
+                 
                   <FormGroup>
                     <Label for="lastName">Last Name * </Label>
                     <Input
@@ -318,38 +302,7 @@ const UserRegistration = (props) => {
                       ))}
                     </Input>
                   </FormGroup>
-                  {/* <FormGroup>
-                    <Label for="gender">Gender *</Label>
-                    <Input
-                      type="select"
-                      name="gender"
-                      id="gender"
-                      value={values.gender}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value=""> </option>
-                      {gender.map(({ label, value }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup> */}
-                  {/*<FormGroup>*/}
-                  {/*  <Label>Date of Birth *</Label>*/}
-                  {/*  <DateTimePicker*/}
-                  {/*    time={false}*/}
-                  {/*    name="dateOfBirth"*/}
-                  {/*    value={values.dateOfBirth}*/}
-                  {/*    onChange={(value1) =>*/}
-                  {/*      setValues({ ...values, dateOfBirth: value1 })*/}
-                  {/*    }*/}
-                  {/*    defaultValue={new Date()}*/}
-                  {/*    max={new Date()}*/}
-                  {/*    required*/}
-                  {/*  />*/}
-                  {/*</FormGroup>*/}
+                  
                   <FormGroup>
                     <Label for="phoneNumber">Phone Number *</Label>
                     <Input

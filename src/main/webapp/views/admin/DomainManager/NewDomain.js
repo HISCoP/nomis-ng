@@ -42,7 +42,7 @@ const NewDomain = (props) => {
         
         return Object.values(temp).every((x) => x == "");
     };
-    console.log(errors)
+
     useEffect(() => {
         //for Domain Area edit, load form data
         if(props.currentDomain){
@@ -83,7 +83,7 @@ const NewDomain = (props) => {
     return (
 
         <div >
-          
+          <ToastContainer autoClose={3000} hideProgressBar />
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createGlobalDomain}>
@@ -102,9 +102,9 @@ const NewDomain = (props) => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleNameInputChange}
-                                                required
+                                                
                                             />
-                                             {errors.name !="" ? (
+                                             {errors.name !=="" ? (
                                                 <span className={classes.error}>{errors.name}</span>
                                             ) : "" }
                                         </FormGroup>

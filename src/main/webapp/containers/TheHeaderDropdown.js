@@ -220,7 +220,7 @@ const TheHeaderDropdown = (props) => {
                           You don't have access to the selected Project
                     </Alert>
                     </Col>
-                  <Col md={12}><h4>Please switch Project</h4></Col>
+                  <Col md={12}><h4>Please switch project</h4></Col>
                     <Col md={12}>
                       <FormGroup>
                         <Label>Select Project</Label>

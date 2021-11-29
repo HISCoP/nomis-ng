@@ -57,6 +57,7 @@ const NewCbo = (props) => {
     const createCbo = e => {
         
         e.preventDefault()
+        if (validate()) {
             setLoading(true);
             const onSuccess = () => {
                 setLoading(false);
@@ -72,7 +73,7 @@ const NewCbo = (props) => {
                 return
             }
             props.createCbosSetup(formData, onSuccess,onError)
-
+        }
     }
 
 
@@ -99,8 +100,11 @@ const NewCbo = (props) => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleInputChange}
-                                                required
+                                                
                                             />
+                                             {errors.name !=="" ? (
+                                                <span className={classes.error}>{errors.name}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
 
@@ -114,8 +118,11 @@ const NewCbo = (props) => {
                                                 placeholder=' '
                                                 value={formData.description}
                                                 onChange={handleInputChange}
-                                                required
+                                                
                                             />
+                                             {errors.description !=="" ? (
+                                                <span className={classes.error}>{errors.description}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
 

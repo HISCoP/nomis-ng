@@ -102,7 +102,7 @@ const DomainList = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Domain </span>
+                        <span style={{textTransform: 'capitalize'}}> New Domain </span>
                     </Button>
 
                 </div>
