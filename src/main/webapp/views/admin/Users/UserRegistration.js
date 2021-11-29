@@ -302,38 +302,7 @@ const UserRegistration = (props) => {
                       ))}
                     </Input>
                   </FormGroup>
-                  {/* <FormGroup>
-                    <Label for="gender">Gender *</Label>
-                    <Input
-                      type="select"
-                      name="gender"
-                      id="gender"
-                      value={values.gender}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value=""> </option>
-                      {gender.map(({ label, value }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup> */}
-                  {/*<FormGroup>*/}
-                  {/*  <Label>Date of Birth *</Label>*/}
-                  {/*  <DateTimePicker*/}
-                  {/*    time={false}*/}
-                  {/*    name="dateOfBirth"*/}
-                  {/*    value={values.dateOfBirth}*/}
-                  {/*    onChange={(value1) =>*/}
-                  {/*      setValues({ ...values, dateOfBirth: value1 })*/}
-                  {/*    }*/}
-                  {/*    defaultValue={new Date()}*/}
-                  {/*    max={new Date()}*/}
-                  {/*    required*/}
-                  {/*  />*/}
-                  {/*</FormGroup>*/}
+                  
                   <FormGroup>
                     <Label for="phoneNumber">Phone Number *</Label>
                     <Input
