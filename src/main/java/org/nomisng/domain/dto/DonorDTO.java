@@ -15,4 +15,6 @@ public class DonorDTO {
     private String description;
 
     private String code;
+
+    private int archived;
 }

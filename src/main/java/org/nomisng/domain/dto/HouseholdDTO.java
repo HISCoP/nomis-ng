@@ -35,4 +35,6 @@ public class HouseholdDTO {
     private Long wardId;
 
     private Long serialNumber;
+
+    private int archived;
 }

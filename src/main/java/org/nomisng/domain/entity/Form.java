@@ -56,7 +56,7 @@ public class Form extends JsonBEntity implements Serializable {
 
     @Basic
     @Column(name = "archived")
-    private Integer archived = 0;
+    private Integer archived;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)

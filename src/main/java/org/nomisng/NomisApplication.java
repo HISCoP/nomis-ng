@@ -34,9 +34,8 @@ import java.util.List;
 @AcrossApplication(
         modules = {
                 AcrossHibernateJpaModule.NAME,
-                AcrossWebModule.NAME, NomisBaseModule.NAME, BootstrapModule.NAME
-        },
-        modulePackageClasses = {BootstrapModule.class})
+                AcrossWebModule.NAME, NomisBaseModule.NAME //BootstrapModule.NAME
+        }/*,modulePackageClasses = {BootstrapModule.class}*/)
 @Slf4j
 @EnableSwagger2
 public class NomisApplication extends SpringBootServletInitializer {
@@ -47,7 +46,7 @@ public class NomisApplication extends SpringBootServletInitializer {
         SpringApplication.run(NomisApplication.class, args);
     }
 
-    /*@Bean
+    @Bean
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
@@ -55,7 +54,7 @@ public class NomisApplication extends SpringBootServletInitializer {
         propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
         propertySourcesPlaceholderConfigurer.setIgnoreResourceNotFound(true);
         return propertySourcesPlaceholderConfigurer;
-    }*/
+    }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

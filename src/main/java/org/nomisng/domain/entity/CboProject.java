@@ -34,7 +34,6 @@ public class CboProject {
     private String description;
     @Basic
     @Column(name = "archived")
-    @JsonIgnore
     private Integer archived;
 
     @ManyToOne

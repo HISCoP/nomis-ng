@@ -36,4 +36,6 @@ public class CboProjectDTO {
     private String description;
 
     private List organisationUnits;
+
+    private int archived;
 }
