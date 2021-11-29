@@ -7,6 +7,7 @@ import org.nomisng.domain.dto.OvcServiceDTO;
 import org.nomisng.domain.entity.Domain;
 import org.nomisng.domain.entity.OvcService;
 import org.nomisng.service.DomainService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,7 @@ public class DomainController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) //201
     public ResponseEntity<Domain> save(@Valid @RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.save(domainDTO));
     }
@@ -57,7 +59,8 @@ public class DomainController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(domainService.delete(id));
+    @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    public void delete(@PathVariable Long id) {
+        domainService.delete(id);
     }
 }

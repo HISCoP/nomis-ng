@@ -8,12 +8,12 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import { createWard, updateWard } from './../../../actions/applicationCodeset';
+import { createWard, updateWard } from '../actions/applicationCodeset';
 import { Spinner } from 'reactstrap';
 import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import axios from "axios";
-import {url as baseUrl} from "../../../api";
+import {url as baseUrl} from "../api";
 import Select from "react-select";
 
 const useStyles = makeStyles(theme => ({
@@ -108,8 +108,8 @@ const AssignFacilityModal = (props) => {
     }, [props.formData]);
 
     useEffect(() => {
-        const y = props.user && props.user.applicationUserOrganisationUnits
-            ? props.user.applicationUserOrganisationUnits.map((x) => (x.organisationUnitId)) : [];
+        const y = props.user && props.user.applicationUserCboProjects
+            ? props.user.applicationUserCboProjects.map((x) => (x.cboProjectId)) : [];
         setSelectedFacilities(y);
     }, [props.user]);
 
@@ -177,7 +177,7 @@ const AssignFacilityModal = (props) => {
 
         <div >
             <ToastContainer />
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
+            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg" backdrop={true}  zIndex={"9999"}>
 
                 <Form onSubmit={create}>
                     <ModalHeader toggle={props.toggleModal}> {props.formData && props.formData.id ? 'Reassign' : 'Assign'} user to a facility </ModalHeader>

@@ -28,8 +28,9 @@ import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-// import AssignFacilityModal from "./AssignFacilityModal";
+import AssignUserToProjectModal from "./AssignUserToProject";
 import { forwardRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -123,7 +124,7 @@ const UserList = (props) => {
   };
 
   const toggleAssignModal = (user) => {
-    console.log(user);
+
     currentUser = user;
     setAssignFacilityModal(!assignFacilityModal);
     console.log(assignFacilityModal);
@@ -214,6 +215,7 @@ const UserList = (props) => {
                       <span style={{ color: "#000" }}>Edit Roles </span>
                     </Button>
                   </MenuItem>
+                  
                   <MenuItem style={{ color: "#000 !important" }}>
                     <Button
                         size="sm"
@@ -221,7 +223,7 @@ const UserList = (props) => {
                         onClick={() => toggleAssignModal(row)}
                     >
                       <MdModeEdit size="15" />{" "}
-                      <span style={{ color: "#000" }}>Assign Facilities </span>
+                      <span style={{ color: "#000" }}>Assign Project </span>
                     </Button>
                   </MenuItem>
                 </MenuList>
@@ -291,8 +293,8 @@ const UserList = (props) => {
           searchFieldAlignment: "left",
         }}
       />
-      {/* <AssignFacilityModal
-          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={currentUser}/> */}
+     <AssignUserToProjectModal
+          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)}  user={currentUser}  /> 
     </div>
   );
 };

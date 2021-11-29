@@ -12,7 +12,7 @@
 	<groupId>org.nomis-ng</groupId>
 	<artifactId>nomis-ng</artifactId>
 	<version>0.0.1</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>nomis-ng</name>
 	<description>OVC Management Information System</description>
 

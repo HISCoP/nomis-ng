@@ -21,18 +21,16 @@ public class ApplicationUserCboProjectService {
     private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
 
 
+    //assign a cboProject to a user
     public List<ApplicationUserCboProject> save(ApplicationUserCboProjectDTO applicationUserCboProjectDTO) {
         List<ApplicationUserCboProject> applicationUserCboProjects = applicationUserCboProjectRepository
                 .findAllByApplicationUserIdAndCboProjectIdAndArchived(applicationUserCboProjectDTO.getApplicationUserId(),
-                UN_ARCHIVED,
-                applicationUserCboProjectDTO.getCboProjectIds());
+                UN_ARCHIVED, applicationUserCboProjectDTO.getCboProjectIds());
 
         if(!applicationUserCboProjects.isEmpty()){
-            throw new RecordExistException(ApplicationUserCboProject.class, "ApplicationUserCboProject",
-                    ""+ applicationUserCboProjects);
+            applicationUserCboProjectRepository.deleteAll(applicationUserCboProjects);
+            applicationUserCboProjects.clear();
         }
-
-        applicationUserCboProjects.clear();
 
         applicationUserCboProjectDTO.getCboProjectIds().forEach(cboProjectId ->{
             final ApplicationUserCboProject applicationUserCboProject = new ApplicationUserCboProject();

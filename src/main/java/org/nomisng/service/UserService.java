@@ -160,4 +160,11 @@ public class UserService {
                 .map(ApplicationUserCboProject::getCboProjectByCboProjectId)
                 .collect(Collectors.toList());
     }
+
+    public UserDTO getAccount(String userName) {
+        UserDTO userDTO =  this.getUserWithRoles()
+                .map(UserDTO::new)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, userName+"","" ));
+        return userDTO;
+    }
 }

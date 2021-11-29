@@ -16,7 +16,11 @@ import { Spinner } from 'reactstrap';
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1)
-    }
+    },
+    error: {
+        color: "#f85032",
+        fontSize: "12.8px",
+    },
 }))
 
 const NewDomain = (props) => {
@@ -24,8 +28,21 @@ const NewDomain = (props) => {
     const defaultValues = {name:""}
     const [formData, setFormData] = useState(defaultValues)
     const classes = useStyles()
-
-    
+    const [errors, setErrors] = useState({});
+    /*****  Validation */
+    const validate = () => {
+        let temp = { ...errors };
+        temp.name = formData.name
+            ? ""
+            : "Name is required";
+            
+        setErrors({
+            ...temp,
+        });
+        
+        return Object.values(temp).every((x) => x == "");
+    };
+    console.log(errors)
     useEffect(() => {
         //for Domain Area edit, load form data
         if(props.currentDomain){
@@ -38,23 +55,19 @@ const NewDomain = (props) => {
         setFormData ({ ...formData, [e.target.name]: e.target.value  });
     }
 
-    // const validate = () => {
-    //     let temp = { ...errors }
-    //     temp.name = formData.name ? "" : "Name is required"
-    //     setErrors({
-    //         ...temp
-    //     })
-    //     console.log(temp)
-    //     return Object.values(temp).every(x => x == "")
-    // }
+    const resetForm = () => {
+        setFormData(defaultValues)
+    }
 
     const createGlobalDomain = e => {
         e.preventDefault()
+        if (validate()) {
         setLoading(true);
         const onSuccess = () => {
             setLoading(false);
             props.loadDomains();
             props.toggleModal()
+            resetForm()
         }
         const onError = () => {
             setLoading(false);
@@ -65,12 +78,12 @@ const NewDomain = (props) => {
             return
         }
         props.createDomain(formData, onSuccess,onError)
-
+    }
     }
     return (
 
         <div >
-            <ToastContainer />
+          
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createGlobalDomain}>
@@ -91,7 +104,9 @@ const NewDomain = (props) => {
                                                 onChange={handleNameInputChange}
                                                 required
                                             />
-
+                                             {errors.name !="" ? (
+                                                <span className={classes.error}>{errors.name}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                     

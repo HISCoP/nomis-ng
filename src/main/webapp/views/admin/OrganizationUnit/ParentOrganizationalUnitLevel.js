@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom'
 import { TiArrowBack} from 'react-icons/ti';
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
-import Page from '../../Page'
 //import { Spinner } from 'reactstrap';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
@@ -72,14 +71,14 @@ console.log(props.location.state)
     
 
 return (
-    <Page >
+    <div >
       
         <Row>
             <Col>
               <h1>Organization Unit
               <Link 
                   to ={{ 
-                  pathname: "/admin-organization-unit"
+                  pathname: "/organisation-unit-home"
                   }} 
                 > 
                   <MatButton
@@ -167,7 +166,7 @@ return (
        <CreateParentOrgUnit modalstatus={modal2} togglestatus={toggleModal2}  />
 
        
-    </Page>
+    </div>
   )
   
 }

@@ -12,13 +12,18 @@ import { FaPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { connect } from "react-redux";
 import { fetchAll, deleteIp } from "../../../actions/ip";
-import NewDonorManager from "./NewCboDonorIpManager";
+import NewCboProject from "./NewCboProject";
+import EditCboProject from "./EditCboProject";
+import ViewCboProject from './ViewCboProject'
 import EditIcon from "@material-ui/icons/Edit";
-//import DeleteIcon from "@material-ui/icons/Delete";
+import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
 import { toast } from "react-toastify";
 import SaveIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
 import {makeStyles} from "@material-ui/core/styles";
+import { useSelector, useDispatch } from 'react-redux';
+import {  fetchAllCboProject } from '../../../actions/cboProject'
 
 
 const useStyles = makeStyles(theme => ({
@@ -28,19 +33,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const IpListManager = (props) => {
+    const cboProjectList = useSelector(state => state.cboProjects.cboProjectList);
+    const dispatch = useDispatch();
     const [loading, setLoading] = React.useState(true);
     const [deleting, setDeleting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const toggleModal = () => setShowModal(!showModal)
+    const [showEditModal, setShowEditModal] = React.useState(false);
+    const toggleEditModal = () => setShowEditModal(!showEditModal)
     const [currentIp, setcurrentIp] = React.useState(null);
+    const [currentProject, setcurrentProject] = React.useState(null);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
+    const [showCboProjectModal, setShowCboProjectModalModal] = React.useState(false);
+    const toggleCBoProjecteModal = () => setShowCboProjectModalModal(!showCboProjectModal)
+    const [currentCboProject, setCurrentCboProject] = React.useState(null);
     const classes = useStyles()
     useEffect(() => {
-        loadIpList()
+        loadCboProjectList()
     }, []); //componentDidMount
 
- const loadIpList = () => {
+ const loadCboProjectList = () => {
   
     setLoading('true');
         const onSuccess = () => {
@@ -49,12 +62,22 @@ const IpListManager = (props) => {
         const onError = () => {
             setLoading(false)     
         }
-            props.fetchAllDonors(onSuccess, onError);
+        dispatch(fetchAllCboProject(onSuccess, onError));
     }; //componentDidMount
 
     const openNewDomainModal = (row) => {
-        setcurrentIp(row);
+        setcurrentProject(row);
         toggleModal();
+    }
+
+    const openCboProjectDetailModal = (row) => {
+        setCurrentCboProject(row);
+        toggleCBoProjecteModal();
+    }
+
+    const openEditCboProjectDetailModal = (row) => {
+        setcurrentProject(row);
+        toggleEditModal();
     }
 
     const processDelete = (id) => {
@@ -62,7 +85,7 @@ const IpListManager = (props) => {
        const onSuccess = () => {
            setDeleting(false);
            toggleDeleteModal();
-           loadIpList();
+           loadCboProjectList();
        };
        const onError = () => {
            setDeleting(false);
@@ -87,7 +110,7 @@ const IpListManager = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">CBO-DONOR-IP</Typography>
+                    <Typography color="textPrimary">CBO Project Setup</Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
@@ -96,46 +119,73 @@ const IpListManager = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New CBO-Donor-IP </span>
+                        <span style={{textTransform: 'capitalize'}}> New CBO Project</span>
                     </Button>
 
                 </div>
                 <MaterialTable
-                    title="Find Cbo"
+                    title="Find Cbo Project"
                     columns={[
                     {
                         title: "ID",
                         field: "id",
                     },
                     {
-                        title: "Name",
-                        field: "name",
+                        title: "CBO Name",
+                        field: "cboName",
                     },
-                    { title: "Description", field: "description" },
-                    
+                    {
+                        title: "Donor Name",
+                        field: "donorName",
+                    },
+                    {
+                        title: "Implementer Name",
+                        field: "IpName",
+                    },
+                    { title: "Project", field: "description" },
+                    { title: "Action", field: "action" },
                 ]}
                 isLoading={loading}
-                data={props.ipList.map((row) => ({
+                data={cboProjectList.map((row) => ({
                     id:row.id,
-                    name: row.name,
+                    cboName: row.cboName,
                     description: row.description,
+                   // cboName: row.description,
+                    donorName: row.donorName,
+                    IpName: row.implementerName,
+                    action:( <div>
+                            <Menu>
+                                <MenuButton
+                                style={{
+                                    backgroundColor: "#3F51B5",
+                                    color: "#fff",
+                                    border: "2px solid #3F51B5",
+                                    borderRadius: "4px",
+                                }}
+                                >
+                                Actions <span aria-hidden>▾</span>
+                                </MenuButton>
+                                <MenuList style={{ color: "#000 !important" }}>
+                                
+                                <MenuItem style={{ color: "#000 !important" }} onClick={() =>openCboProjectDetailModal(row)}>
+                                   
+                                    <span style={{ color: "#000" }} >View  Detail</span>
+                                    
+                                </MenuItem>
+                                
+                                <MenuItem style={{ color: "#000 !important" }}  onClick={() =>openEditCboProjectDetailModal(row)}>
+                                  
+                                    <span style={{ color: "#000" }}>Edit  </span>
+                                   
+                                </MenuItem>
+                                
+                                </MenuList>
+                            </Menu>
+                            </div>
+                            )
 
                 }))}
-                actions= {[
-                    {
-                        icon: EditIcon,
-                        iconProps: {color: 'primary'},
-                        tooltip: 'Edit Donor',
-                        onClick: (event, row) => openDonor(row)
-                    },
-                    // {
-                    //     icon: DeleteIcon,
-                    //     iconProps: {color: 'primary'},
-                    //     tooltip: 'Delete Donor',
-                    //     onClick: (event, row) => deleteDonorDetail(row)
-                    // }
-                        ]}
-                    
+                
                         //overriding action menu with props.actions
                         components={props.actions}
                         options={{
@@ -154,7 +204,9 @@ const IpListManager = (props) => {
                         }}
                 />
             </CardBody>
-            <NewDonorManager toggleModal={toggleModal} showModal={showModal} loadIpList={props.ipList} formData={currentIp} loadIps={loadIpList}/>
+            <EditCboProject toggleModal={toggleEditModal} showModal={showEditModal} loadIpList={props.ipList} formData={currentProject} loadIps={loadCboProjectList}/>
+            <NewCboProject toggleModal={toggleModal} showModal={showModal} loadIpList={props.ipList} formData={currentProject} loadIps={loadCboProjectList}/>
+            <ViewCboProject toggleModal={toggleCBoProjecteModal} showModal={showCboProjectModal} currentCboProject={currentCboProject}  loadIps={loadCboProjectList}/>
             {/*Delete Modal for Application Codeset */}
             <Modal isOpen={showDeleteModal} toggle={toggleDeleteModal} >
                     <ModalHeader toggle={props.toggleDeleteModal}> Delete Ip - {currentIp && currentIp.name ? currentIp.name : ""} </ModalHeader>

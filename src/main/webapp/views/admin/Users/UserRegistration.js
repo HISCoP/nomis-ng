@@ -108,25 +108,23 @@ const UserRegistration = (props) => {
   }, []);
 
   /* Get list of Role parameter from the endpoint */
-  // useEffect(() => {
-  //   async function getCharacters() {
-  //     axios
-  //       .get(`${baseUrl}roles`)
-  //       .then((response) => {
-          
-  //         setRole(
-  //           Object.entries(response.data).map(([key, value]) => ({
-  //             label: value.name,
-  //             value: value.name,
-  //           }))
-  //         );
-  //       })
-  //       .catch((error) => {
-         
-  //       });
-  //   }
-  //   getCharacters();
-  // }, []);
+  useEffect(() => {
+    async function getCharacters() {
+      axios
+        .get(`${baseUrl}roles`)
+        .then((response) => {
+          console.log(response.data)
+          setRole(
+            Object.entries(response.data).map(([key, value]) => ({
+              label: value.name,
+              value: value.name,
+            }))
+          );
+        })
+        .catch((error) => {});
+    }
+    getCharacters();
+  }, []);
 
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
@@ -230,17 +228,7 @@ const UserRegistration = (props) => {
                       required
                     />
                   </FormGroup>
-                  <FormGroup>
-                    <Label for="lastName">Last Name * </Label>
-                    <Input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      onChange={handleInputChange}
-                      value={values.lastName}
-                      required
-                    />
-                  </FormGroup>
+                 
                   <FormGroup>
                     <Label for="userName">Username *</Label>
                     <Input
@@ -249,6 +237,17 @@ const UserRegistration = (props) => {
                       id="userName"
                       onChange={handleInputChange}
                       value={values.userName}
+                      required
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="email">Email *</Label>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="email"
+                      onChange={handleInputChange}
+                      value={values.email}
                       required
                     />
                   </FormGroup>
@@ -289,8 +288,19 @@ const UserRegistration = (props) => {
                         </option>
                       ))}
                     </Input>
-                  </FormGroup>  */}
-                  {/* <FormGroup>
+                  </FormGroup>   */}
+                  <FormGroup>
+                    <Label for="lastName">Last Name * </Label>
+                    <Input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      onChange={handleInputChange}
+                      value={values.lastName}
+                      required
+                    />
+                  </FormGroup>
+                   <FormGroup>
                     <Label for="role">Role *</Label>
                     <Input
                       type="select"
@@ -307,8 +317,8 @@ const UserRegistration = (props) => {
                         </option>
                       ))}
                     </Input>
-                  </FormGroup> */}
-                  <FormGroup>
+                  </FormGroup>
+                  {/* <FormGroup>
                     <Label for="gender">Gender *</Label>
                     <Input
                       type="select"
@@ -325,7 +335,7 @@ const UserRegistration = (props) => {
                         </option>
                       ))}
                     </Input>
-                  </FormGroup>
+                  </FormGroup> */}
                   {/*<FormGroup>*/}
                   {/*  <Label>Date of Birth *</Label>*/}
                   {/*  <DateTimePicker*/}
@@ -351,17 +361,7 @@ const UserRegistration = (props) => {
                       required
                     />
                   </FormGroup>
-                  <FormGroup>
-                    <Label for="email">Email *</Label>
-                    <Input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={handleInputChange}
-                      value={values.email}
-                      required
-                    />
-                  </FormGroup>
+                 
                   <FormGroup>
                     <Label for="confirm">Confirm Password *</Label>
                     <Input

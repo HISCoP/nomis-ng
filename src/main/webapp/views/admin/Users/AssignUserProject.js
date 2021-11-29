@@ -5,10 +5,9 @@ import {
   Col,
   Form,
   FormGroup,
-  Input,
   Label,
   Row,
-  Alert,
+
 } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
@@ -19,9 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
 import Title from "../components/Title/CardTitle";
-import { addRole } from "../../../actions/role";
+import { assignProjectToUser } from "../../../actions/cboProject";
 import { url as baseUrl } from "../../../api";
-import useForm from "../../Functions/UseForm";
 import { Spinner } from "reactstrap";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -70,67 +68,92 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddRole = (props) => {
-  const classes = useStyles();
-  const { values, setValues, handleInputChange, resetForm } = useForm({
-    name: "",
-    permissions: [],
-  });
-  const [permissions, setPermissions] = useState([]);
-  const [selectedPermissions, setselectedPermissions] = useState([]);
-  const [saving, setSaving] = useState(false);
-
-  /* Get list of Permissions from the server */
-  useEffect(() => {
-    async function getCharacters() {
-      axios
-        .get(`${baseUrl}permissions`)
-        .then((response) => {
-          console.log(Object.entries(response.data));
-          setPermissions(
-            Object.entries(response.data).map(([key, value]) => ({
-              label: value.name,
-              value: value.name,
-            }))
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+const AssignProjectUser = (props) => {
+    const classes = useStyles();
+    const userDetail = props.location && props.location.state ? props.location.state : null
+    if(userDetail ==null ){
+        props.history.push(`/users`)
     }
-    getCharacters();
-  }, []);
+    const currentUserName= userDetail!== "" && userDetail.userName? userDetail.userName : "" ;
+    const userId = userDetail !==null &&  userDetail.id ? userDetail.id : ""
+    const [saving, setSaving] = useState(false);
+    const [selectedProjects, setSelectedProjects] = useState([]);
 
-  const onPermissionSelect = (selectedValues) => {
-    setselectedPermissions(selectedValues);
-  };
+    const [projects, setProjects] = useState([]);
+    const [userProjects, setUserProjects] = useState([]);
+    const [assignProject, setAssignProject] = useState({applicationUserId: "", cboProjectIds : ""});
+
+  
+    /* Get list of Project from the server */ 
+    useEffect(() => {
+        async function getCharacters() {
+            axios
+                .get(`${baseUrl}cbo-projects/all`)
+                .then((response) => {
+                    setProjects(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        getCharacters();
+        setSelectedProjects(userDetail.applicationUserCboProjects.map((x) => (x.cboProjectId)))
+        
+    }, []);
+   
+
+    useEffect(() => {
+        async function getCharacters() {
+            axios
+                .get(`${baseUrl}cbo-projects/all`)
+                .then((response) => {
+                    setUserProjects(response.data);
+                    setProjects(Object.entries(response.data).map(([key, value]) => ({
+                      label: value.description,
+                      value: value.id,
+                    })))
+
+                    console.log(response.data)
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    
+        getCharacters();
+        
+    }, []);
+   
+    const onProjectSelect = (selectedValues) => {
+        setSelectedProjects(selectedValues);
+          console.log(selectedValues)  
+    };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let permissions = [];
-    selectedPermissions.map((p) => {
-      const permission = { name: null };
-      permission.name = p;
-      permissions.push(permission);
-    });
-    values["permissions"] = permissions;
+    assignProject['applicationUserId']= userId
+    assignProject['cboProjectIds']=selectedProjects
+    console.log(selectedProjects)
+    if(selectedProjects ==""){
+      toast.error("Peoject can not be empty")
+      return;
+    }
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
-      toast.success("Role Saved Successfully");
-      resetForm();
+      props.history.push(`/users`)
     };
     const onError = () => {
       setSaving(false);
-      toast.error("Something went wrong");
     };
-    props.addRole(values, onSuccess, onError);
+    props.assignProjectToUser(assignProject, onSuccess, onError);
   };
 
   return (
     <div>
       <Title>
-        <Link to="/roles">
+        <Link to="/users">
           <Button
             variant="contained"
             color="primary"
@@ -148,34 +171,25 @@ const AddRole = (props) => {
 
       <Form onSubmit={handleSubmit}>
         <Col xl={12} lg={12} md={12}>
-        <Alert color="primary">
-          All Information with Asterisks(*) are compulsory
-        </Alert>
+        
           <Card className={classes.cardBottom}>
             <CardContent>
-              <Title>Add Role</Title>
-              <br />
+              <Title>Assign User To Project </Title>
               <Row form>
-                <Col md={12}>
-                  <FormGroup>
-                    <Label for="name">Name *</Label>
-                    <Input
-                      type="text"
-                      name="name"
-                      id="name"
-                      value={values.name}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </FormGroup>
+                <Col md={12}>              
+                    <h6>User Name : <span>{ currentUserName  }</span></h6>
+                                  
                 </Col>
+                <br/>
+                <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions">Permissions</Label>
+                    <Label > <h6>CBO Project</h6></Label>
                     <DualListBox
-                      options={permissions}
-                      onChange={onPermissionSelect}
-                      selected={selectedPermissions}
+                      //options={unAssignProject}
+                      options={projects}
+                      onChange={onProjectSelect}
+                      selected={selectedProjects}
                     />
                   </FormGroup>
                 </Col>
@@ -197,14 +211,7 @@ const AddRole = (props) => {
                 )}
               </MatButton>
 
-              <MatButton
-                variant="contained"
-                className={classes.button}
-                startIcon={<CancelIcon />}
-                onClick={resetForm}
-              >
-                <span style={{ textTransform: "capitalize" }}>Cancel</span>
-              </MatButton>
+             
             </CardContent>
           </Card>
         </Col>
@@ -213,8 +220,5 @@ const AddRole = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  role: state.roles.role,
-});
 
-export default connect(mapStateToProps, { addRole })(AddRole);
+export default connect(null, { assignProjectToUser })(AssignProjectUser);

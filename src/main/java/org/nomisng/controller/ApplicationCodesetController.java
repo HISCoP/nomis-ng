@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nomisng.domain.dto.ApplicationCodesetDTO;
 import org.nomisng.domain.entity.ApplicationCodeset;
 import org.nomisng.service.ApplicationCodesetService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ public class ApplicationCodesetController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) //201
     public ResponseEntity<ApplicationCodeset> save(@Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.save(applicationCodesetDTO));
 
@@ -47,6 +49,7 @@ public class ApplicationCodesetController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) //204
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
         return ResponseEntity.ok(applicationCodesetService.delete(id));
     }

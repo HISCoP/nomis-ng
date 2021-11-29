@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { Card, CardContent } from "@material-ui/core";
-import { FaPlus, FaArrowLeft } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import {TiArrowBack } from "react-icons/ti";
 import { makeStyles } from "@material-ui/core/styles";
 import Title from "../components/Title/CardTitle";
 import RoleList from "./RolesList";
@@ -25,14 +26,14 @@ const RolePage = (props) => {
         <CardContent>
           <Title>
           <Link to ={{
-            pathname: "/admin",
+            pathname: "/users",
             state: 'users'
           }}>
           <Button
             variant="contained"
             color="primary"
             className=" float-right mr-1"
-            startIcon={<FaArrowLeft />}
+            startIcon={<TiArrowBack />}
           >
             <span style={{ textTransform: "capitalize" }}>Back </span>
           </Button>

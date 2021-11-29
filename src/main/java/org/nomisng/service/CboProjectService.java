@@ -9,14 +9,12 @@ import org.nomisng.domain.dto.CboProjectDTO;
 import org.nomisng.domain.entity.*;
 import org.nomisng.domain.mapper.CboProjectMapper;
 import org.nomisng.repository.*;
-import org.nomisng.util.Constants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,7 +55,7 @@ public class CboProjectService {
                     .orElseThrow(() -> new EntityNotFoundException(OrganisationUnit.class, "id", ""+organisationUnitId));
             Long organisationUnitLevelId = organisationUnit.getOrganisationUnitLevelByOrganisationUnitLevelId().getId();
 
-            //maybe a country
+            //not a lga
             if(organisationUnitLevelId != orgUnitLevelId ){
                 throw new IllegalTypeException(OrganisationUnitLevel.class, "Level", " must be province/lga");
             } else {
@@ -93,7 +91,7 @@ public class CboProjectService {
         return cboProject.getOrganisationUnits();
     }*/
 
-    public CboProject update(Long id, CboProjectDTO cboProjectDTO) {
+    public void update(Long id, CboProjectDTO cboProjectDTO) {
         cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
 
@@ -101,32 +99,43 @@ public class CboProjectService {
                 .findAllByIdAndOrganisationUnitIn(id, cboProjectDTO.getOrganisationUnitIds());
 
         if(!cboProjectLocations.isEmpty()){
-            List<Long> orgUnitIds = cboProjectLocations.stream()
-                    .filter(cboProjectLocation -> cboProjectLocation.getArchived() == UN_ARCHIVED)
-                    .map(CboProjectLocation::getOrganisationUnitId)
-                    .collect(Collectors.toList());
-            throw new RecordExistException(CboProjectLocation.class, "Cbo Project Location", orgUnitIds.toString());
+            cboProjectLocationRepository.deleteAll(cboProjectLocations);
         }
 
-        CboProject cboProject = cboProjectRepository.save(cboProjectMapper.toCboProject(cboProjectDTO));
+        cboProjectLocations.clear();
+
+        CboProject cboProject = cboProjectMapper.toCboProject(cboProjectDTO);
+        cboProject.setId(id);
+        cboProject.setArchived(UN_ARCHIVED);
+
+        cboProjectRepository.save(cboProject);
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
             cboProjectLocations.add(new CboProjectLocation(null, id, organisationUnitId, UN_ARCHIVED, null, null));
         });
-        cboProjectLocationRepository.saveAll(cboProjectLocations);
 
-        return transformCboProjectObject(cboProject);
+        cboProjectLocationRepository.saveAll(cboProjectLocations);
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+        CboProject cboProject = cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
+
+        List<CboProjectLocation> cboProjectLocation = cboProject.getCboProjectLocationsById();
+        if(!cboProject.getEncountersById().isEmpty() || !cboProject.getFormData().isEmpty() ||
+                !cboProject.getHouseholdMembersById().isEmpty() || !cboProject.getHouseholdMigrationsById().isEmpty() ||
+                !cboProject.getHouseholds().isEmpty()){
+            throw new RecordExistException(CboProject.class, "cboProject already in use",
+                    "check encounter or formData or householdMember or householdMigration or household");
+        }
+        cboProjectLocationRepository.deleteAll(cboProjectLocation);
+        cboProjectRepository.delete(cboProject);
     }
 
     private CboProject transformCboProjectObject(CboProject cboProject){
-        String cboName = cboProject.getCboByCboId().getName();
-        String donorName = cboProject.getDonorByDonorId().getName();
-        String implementerName = cboProject.getImplementerByImplementerId().getName();
+        String cboName = cboRepository.findById(cboProject.getCboId()).get().getName();
+        String donorName = donorRepository.findById(cboProject.getDonorId()).get().getName();
+        String implementerName = implementerRepository.findById(cboProject.getImplementerId()).get().getName();
         List<Object> orgObject = new ArrayList<>();
-
 
         cboProject.getCboProjectLocationsById().forEach(cboProjectLocation -> {
             if(cboProjectLocation.getArchived() == UN_ARCHIVED) {

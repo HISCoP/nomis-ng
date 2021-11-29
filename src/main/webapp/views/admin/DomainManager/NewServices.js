@@ -48,6 +48,9 @@ const getServices = () => {
         
     };
 
+    const resetForm = () => {
+        setFormData(defaultValues)
+    }
     const createDomainService = e => {
         e.preventDefault()
         setLoading(true);
@@ -55,6 +58,7 @@ const getServices = () => {
             setLoading(false);
             props.loadDomainsServices();
             props.toggleModal()
+            resetForm()
         }
         const onError = () => {
             setLoading(false);
@@ -71,7 +75,7 @@ const getServices = () => {
     return (
 
         <div >
-            <ToastContainer />
+           
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
 
                 <Form onSubmit={createDomainService}>
@@ -109,7 +113,7 @@ const getServices = () => {
                                         <option value=""> </option>
                                         <option value="1"> OVC</option>
                                         <option value="2"> Caregiver</option>
-                                        <option value="3"> Others</option>
+                                        <option value="3"> Both</option>
                                     </Input>
                                 </FormGroup>
                                 </Col>

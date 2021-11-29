@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CHeader,
@@ -11,17 +11,21 @@ import {
   CBreadcrumbRouter
 
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-
 // routes config
 import routes from '../routes'
-
 import { 
   TheHeaderDropdown,
   TheHeaderDropdownNotif,
 }  from './index'
+import { toast } from 'react-toastify';
+import axios from "axios";
+import { url as baseUrl } from "./../api";
+import { authentication } from "./../_services/authentication";
 
 const TheHeader = () => {
+  const currentUserCboProjectName = localStorage.getItem('currentUserCboProjectName') != null ? JSON.parse(localStorage.getItem('currentUserCboProjectName')) : null;
+  const [cboUserProject, setCboUserProject] = useState([])
+  const [projectName, setProjectName] =useState(null) 
   const dispatch = useDispatch()
   const sidebarShow = useSelector(state => state.sidebarShow)
 
@@ -34,6 +38,28 @@ const TheHeader = () => {
     const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
     dispatch({type: 'set', sidebarShow: val})
   }
+const  getProjectName = (name) =>{ 
+  setProjectName(name)
+  console.log(projectName)
+}
+    useEffect(() => {
+    async function getCharacters() {
+        axios
+          .get(`${baseUrl}account`)
+          .then((response) => {
+
+            setCboUserProject(response.data);
+            setProjectName(response.data.currentCboProjectDescription)
+            console.log(projectName)
+          })
+          .catch((error) => {
+            
+          });
+      }
+      getCharacters();
+},  []);
+ /*  endpoint */
+ 
 
   return (
     <CHeader withSubheader>
@@ -54,7 +80,8 @@ const TheHeader = () => {
       <CHeaderNav className="d-md-down-none mr-auto">
         <CHeaderNavItem className="px-3" >
           <CHeaderNavLink to="/dashboard">
-            Heart Foundation
+            
+            <h3 style={{color:"black"}}>{projectName && projectName !=null ? projectName : ""}</h3>
           
           </CHeaderNavLink>
         </CHeaderNavItem>
@@ -62,8 +89,8 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <TheHeaderDropdownNotif/>
-        <TheHeaderDropdown/>
+        {/* <TheHeaderDropdownNotif  /> */}
+        <TheHeaderDropdown projectName={getProjectName}/>
       </CHeaderNav>
 
       <CSubheader className="px-3 justify-content-between">

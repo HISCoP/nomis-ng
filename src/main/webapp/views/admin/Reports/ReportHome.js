@@ -34,7 +34,7 @@ const GeneralReportSearch = props => {
                                 startIcon={<AddIcon />}>
                                 <span style={{textTransform: 'capitalize'}}>New</span>
                                 &nbsp;&nbsp;
-                                <span style={{textTransform: 'lowercase'}}>Report</span>
+                                <span style={{textTransform: 'capitalize'}}>Report</span>
                             </Button>
                         </Link>
                         <br/>

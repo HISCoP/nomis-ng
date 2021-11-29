@@ -25,6 +25,7 @@ const NewCbo = (props) => {
     const [showNewCbo, setShowNewCbo] = useState(false)
     const defaultValues = { id:"",  name:"", description:"", code:""};
     const [formData, setFormData] = useState( defaultValues)
+    const [errors, setErrors] = useState({});
     //const [errors, setErrors] = useState({});
     const classes = useStyles()
   
@@ -38,7 +39,20 @@ const NewCbo = (props) => {
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
-    
+     /*****  Validation */
+     const validate = () => {
+        let temp = { ...errors };
+        temp.name = formData.name
+            ? ""
+            : "Name is required";
+            temp.description = formData.description
+            ? ""
+            : "Description is required";
+        setErrors({
+            ...temp,
+        });
+        return Object.values(temp).every((x) => x == "");
+    };
 
     const createCbo = e => {
         

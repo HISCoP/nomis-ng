@@ -73,13 +73,16 @@ public class DomainService {
         return domainRepository.save(domain);
     }
 
-    public Integer delete(Long id) {
+    public void delete(Long id) {
         Domain domain = domainRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", id +""));
 
+        List<OvcService> ovcServices = domain.getServicesById();
+        if(!ovcServices.isEmpty()){
+           throw new RecordExistException(OvcService.class, "ovcServices", "tied to domain");
+        }
         domain.setArchived(ARCHIVED);
         domainRepository.save(domain);
-        return domain.getArchived();
     }
 
     public List<OvcServiceDTO> getOvcServicesByDomainId(Long domainId){
