@@ -216,9 +216,10 @@ const getlgaObj = e => {
         console.log(removeArr)
         setLocationListArray2(removeArr)
     }
-    
+    const resetForm = () => {
+        setOtherDetails(defaultValues)
+    }
     const organisationUnitIds = []
-
     const createCboAccountSetup = e => {
         e.preventDefault()
         
@@ -243,6 +244,7 @@ const getlgaObj = e => {
             history.push('/cbo-donor-ip')
             props.toggleModal() 
             props.loadIps() 
+            resetForm()
                   
         }
         const onError = () => {

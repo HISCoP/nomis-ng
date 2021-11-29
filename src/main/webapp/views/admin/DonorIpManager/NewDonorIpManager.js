@@ -60,7 +60,9 @@ const NewDonor = (props) => {
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
-    
+    const resetForm = () => {
+        setFormData(defaultValues)
+    }
 
     const createIpSetup = e => {
         
@@ -70,6 +72,8 @@ const NewDonor = (props) => {
                 setLoading(false);
                 props.loadIps();
                 props.toggleModal()
+                resetForm()
+
             }
             const onError = () => {
                 setLoading(false);

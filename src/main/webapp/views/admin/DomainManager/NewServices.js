@@ -48,6 +48,9 @@ const getServices = () => {
         
     };
 
+    const resetForm = () => {
+        setFormData(defaultValues)
+    }
     const createDomainService = e => {
         e.preventDefault()
         setLoading(true);
@@ -55,6 +58,7 @@ const getServices = () => {
             setLoading(false);
             props.loadDomainsServices();
             props.toggleModal()
+            resetForm()
         }
         const onError = () => {
             setLoading(false);
