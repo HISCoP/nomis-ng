@@ -32,7 +32,13 @@ export const creatReport = (data, onSuccess, onError) => dispatch => {
 
 
 export const generateReport = (data, onSuccess, onError) => dispatch => {
-    const reportFormat = 'application/'+(data.reportFormat).toLowerCase();
+    let reportFormat = 'application/'+(data.reportFormat ? data.reportFormat : "pdf").toLowerCase();
+    if(reportFormat === 'application/excel'){
+        reportFormat = 'application/vnd.ms-excel';
+    }
+    if(reportFormat === 'application/csv'){
+        reportFormat = 'text/csv';
+    }
     axios
         .post(`${url}reports/generate`, data, {responseType: 'arraybuffer'})
         .then(response => {

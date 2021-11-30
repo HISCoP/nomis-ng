@@ -89,7 +89,6 @@ function ReportSearch(props) {
                 icons={tableIcons}
                     title="Find By Report Name"
                     columns={[
-                        {title: "Program Area", field: "programName"},
                         { title: "Report Name", field: "name" },
                         { title: "Report Description", field: "description" },
                         {title: "Action", field: "actions", filtering: false,},

@@ -2,15 +2,14 @@ import React, {useEffect, useState, useRef} from 'react';
 import { connect } from 'react-redux';
 import {Card} from '@material-ui/core';
 import {FormBuilder } from 'react-formio';
-import {fetchService} from '../../actions/formBuilder'
-import {update} from '../../actions/report'
+import {update} from '../../../actions/report'
 import {FormGroup, Input, Label, Col, Row, Form, CardBody} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {toast, ToastContainer} from 'react-toastify';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
-import {url} from '../../api';
+import {url} from '../../../api';
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 
@@ -158,7 +157,6 @@ const mapStateToProps = (state = {  reportList:[], form:{}}) => {
     }}
 
 const mapActionsToProps = ({
-    fetchService: fetchService,
     update: update,
     // fetchAll:fetchAll
 })

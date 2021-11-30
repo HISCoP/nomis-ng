@@ -1,7 +1,9 @@
 import React, {useState} from "react";
-import { CCol, CRow, CWidgetIcon, CCard,
+import {
+    CCol, CRow, CWidgetIcon, CCard,
     CCardBody,
-    CCardHeader,} from "@coreui/react";
+    CCardHeader, CButton,
+} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { Icon, Label} from 'semantic-ui-react'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -14,7 +16,7 @@ import {connect} from "react-redux";
 import {calculateAge} from "./../../../utils/calculateAge";
 import axios from "axios";
 import {url} from "../../../api";
-import {toast} from "react-toastify";
+import { Link } from 'react-router-dom';
 import * as CODES from "../../../api/codes";
 
 
@@ -189,7 +191,11 @@ const MidDashboardStats = (props) => {
             <CRow>
                 <CCol xs="12" sm="12" lg="12">
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
-                        <CCardHeader> <Icon name='home'/> Household Information</CCardHeader>
+                        <CCardHeader> <Icon name='home'/> Household Information
+                            <Link title="Go to household dashboard" to={{pathname: "/household/home", state: props.household.id }} className="float-right"> <CButton
+                                color="info"
+                                className="float-right">Go to Current Household </CButton></Link>
+                        </CCardHeader>
                         <CCardBody>
                             {props.fetchingHousehold &&
                             <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
@@ -208,7 +214,11 @@ const MidDashboardStats = (props) => {
             <CRow>
                 <CCol xs="12" sm="6" lg="6">
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
-                        <CCardHeader> <Icon name='home'/> Household Information</CCardHeader>
+                        <CCardHeader> <Icon name='home'/> Household Information
+                        <Link title="Go to household dashboard" to={{pathname: "/household/home", state: props.household.id }} className="float-right"> <CButton
+                            color="info"
+                            className="float-right">Go to Current Household </CButton></Link>
+                    </CCardHeader>
                         <CCardBody>
                             {props.fetchingHousehold &&
                             <LinearProgress color="primary" thickness={5} className={"mb-2"}/>

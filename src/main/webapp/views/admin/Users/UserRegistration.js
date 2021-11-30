@@ -169,7 +169,7 @@ const UserRegistration = (props) => {
       setSaving(false);
       toast.success("Registration Successful");
       setTimeout(() => {
-        props.history.push(`/user-setup-home`)
+        props.history.push(`/users`)
     }, 1000) 
       resetForm();
     };

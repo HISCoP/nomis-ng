@@ -51,8 +51,8 @@ server:
 spring:
     datasource:
         username: postgres
-        password: emeka
-        url: jdbc:postgresql://localhost:5432/nomis_debbie_24_11_21
+        password: postgres
+        url: jdbc:postgresql://localhost:5432/nomis_24_11
         driver-class-name: org.postgresql.Driver
         hibernate:
             event.merge.enty_copy_observer: allow
