@@ -84,32 +84,24 @@ public class CboProjectService {
        return cboProjectMapper.toCboProjectDTO(transformCboProjectObject(cboProject));
     }
 
-    /*public List<OrganisationUnit> getOrganisationUnitByCboProjectId() {
-        Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
-        CboProject cboProject = cboProjectRepository.findByIdAndArchived(cboProjectId, constant.UN_ARCHIVED)
-                .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "cboProjectId", cboProjectId+""));
-        return cboProject.getOrganisationUnits();
-    }*/
-
     public void update(Long id, CboProjectDTO cboProjectDTO) {
         cboProjectRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(CboProject.class, "Id", id+""));
 
-        List<CboProjectLocation> cboProjectLocations = cboProjectLocationRepository
-                .findAllByIdAndOrganisationUnitIn(id, cboProjectDTO.getOrganisationUnitIds());
-
-        if(!cboProjectLocations.isEmpty()){
-            cboProjectLocationRepository.deleteAll(cboProjectLocations);
-        }
-
-        cboProjectLocations.clear();
+        List<CboProjectLocation> cboProjectLocations = new ArrayList<>();
 
         CboProject cboProject = cboProjectMapper.toCboProject(cboProjectDTO);
         cboProject.setId(id);
         cboProject.setArchived(UN_ARCHIVED);
 
         cboProjectRepository.save(cboProject);
+        cboProjectLocationRepository.deleteByCboProjectId(id);
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
+            organisationUnitRepository.findByIdAndArchived(organisationUnitId, UN_ARCHIVED).ifPresent(organisationUnit -> {
+                        if (organisationUnit.getOrganisationUnitLevelId() != LGA_ORG_UNIT_LEVEL_ID) {
+                            throw new IllegalTypeException(OrganisationUnitLevel.class, "organisationUnitLevel", " not LGA");
+                        }
+                    });
             cboProjectLocations.add(new CboProjectLocation(null, id, organisationUnitId, UN_ARCHIVED, null, null));
         });
 

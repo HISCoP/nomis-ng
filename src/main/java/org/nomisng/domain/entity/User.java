@@ -107,5 +107,8 @@ public class User {
     @OneToMany(mappedBy = "applicationUserByApplicationUserId")
     @JsonIgnore
     @ToString.Exclude
-    public List<ApplicationUserCboProject> applicationUserCboProjectsById;
+    private List<ApplicationUserCboProject> applicationUserCboProjectsById;
+
+    @OneToMany(mappedBy = "applicationUserByUserId")
+    private List<ApplicationUserRole> applicationUserRolesById;
 }

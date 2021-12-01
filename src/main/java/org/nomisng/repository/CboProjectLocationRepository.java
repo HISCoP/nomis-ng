@@ -21,8 +21,12 @@ public interface CboProjectLocationRepository extends JpaRepository<CboProjectLo
     @Query(value = "SELECT * FROM cbo_project_location WHERE cbo_project_id = ?1", nativeQuery = true)
     List<CboProjectLocation> findAllById(Long cboProjectId);
 
-    List<CboProjectLocation> findAllByArchived(int archived);
+    List<CboProjectLocation> findAllByArchivedOrderByIdDesc(int archived);
 
     Optional<CboProjectLocation> findByIdAndArchived(Long id, int archived);
+
+    List<CboProjectLocation> findAllByCboProjectIdOrderByIdDesc(Long cboProjectId);
+
+    void deleteByCboProjectId(Long cboProjectId);
 }
 

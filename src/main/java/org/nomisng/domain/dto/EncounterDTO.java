@@ -40,6 +40,4 @@ public class EncounterDTO {
     private String otherNames;
 
     private Long cboProjectId;
-
-    private int archived;
 }

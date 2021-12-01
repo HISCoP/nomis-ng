@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nomisng.controller.vm.ManagedUserVM;
 import org.nomisng.domain.dto.UserDTO;
 import org.nomisng.domain.entity.CboProject;
+import org.nomisng.domain.entity.Role;
 import org.nomisng.domain.entity.User;
 import org.nomisng.service.UserService;
 import org.nomisng.util.PaginationUtil;
@@ -17,7 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +51,15 @@ public class UserController {
     @GetMapping("/{id}/cbo-projects")
     public ResponseEntity<List<CboProject>> getCboProjectByUserId(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getCboProjectByUserId(id));
+    }
+
+    @GetMapping("/{id}/roles")
+    public ResponseEntity<List<Role>> getRolesByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getRolesByUserId(id));
+    }
+
+    @PutMapping("/{id}/roles")
+    public ResponseEntity<Set<Role>> updateRoles(@PathVariable Long id, @Valid @RequestBody List<Role> roles) throws Exception {
+        return ResponseEntity.ok(userService.updateRoles(id, roles));
     }
 }
