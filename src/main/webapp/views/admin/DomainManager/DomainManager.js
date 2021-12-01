@@ -93,7 +93,7 @@ const DomainList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Domain Setup - Domain Area </Typography>
+                    <Typography color="textPrimary">Domain List - Domain Area </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>

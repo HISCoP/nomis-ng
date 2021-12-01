@@ -105,10 +105,11 @@ const UserList = (props) => {
       axios
         .get(`${baseUrl}roles`)
         .then((response) => {
+         
           setRoles(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
-              value: value.name,
+              value: value.id,
             }))
           );
         })
@@ -136,13 +137,16 @@ const UserList = (props) => {
     setModal(!modal);
     if (!modal) {
       axios
-        .get(`${baseUrl}users/${id}`)
+        .get(`${baseUrl}users/${id}/roles`)
         .then((response) => {
-          setselectedRoles(
-            Object.entries(response.data.roles).map(
-              ([key, value]) => value
-            )
-          );
+          
+          const y = response && response.data
+            ? response.data.map((x) => (x.id)) : [];
+            console.log(y)
+
+          setselectedRoles(y)
+         
+          console.log(selectedRoles)
         })
         .catch((error) => {
           console.log(error);
@@ -154,8 +158,8 @@ const UserList = (props) => {
     e.preventDefault();
     let roles = [];
     selectedRoles.map((p) => {
-      const role = { name: null };
-      role.name = p;
+      const role = { id: null };
+      role.id = p;
       roles.push(role);
     });
     values = roles;
@@ -228,53 +232,7 @@ const UserList = (props) => {
                   </MenuItem>
                 </MenuList>
               </Menu>
-              <Modal isOpen={modal} >
-                <Form onSubmit={handleEdit}>
-                  <ModalHeader>Edit Roles</ModalHeader>
-                  <ModalBody>
-                    <FormGroup>
-                      <Label for="roles">Roles</Label>
-                      <DualListBox
-                          canFilter
-                        options={roles}
-                        onChange={onRoleSelect}
-                        selected={selectedRoles}
-                      />
-                    </FormGroup>
-                  </ModalBody>
-                  <ModalFooter>
-                    <MatButton
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      startIcon={<SaveIcon />}
-                      disabled={saving}
-                      onClick={() => toggleEditRoles(userId)}
-                    >
-                      {!saving ? (
-                        <span style={{ textTransform: "capitalize" }}>
-                          Save
-                        </span>
-                      ) : (
-                        <span style={{ textTransform: "capitalize" }}>
-                          Saving...
-                        </span>
-                      )}
-                    </MatButton>
-                    <MatButton
-                      variant="contained"
-                      className={classes.button}
-                      startIcon={<CancelIcon />}
-                      onClick={() => toggleEditRoles(userId)}
-                    >
-                      <span style={{ textTransform: "capitalize" }}>
-                        Cancel
-                      </span>
-                    </MatButton>
-                  </ModalFooter>
-                </Form>
-              </Modal>
+              
             </div>
 
           ),
@@ -295,6 +253,58 @@ const UserList = (props) => {
       />
      <AssignUserToProjectModal
           showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)}  user={currentUser}  /> 
+   
+        <Modal isOpen={modal}  size="lg">
+                <Form onSubmit={handleEdit}>
+                  <ModalHeader>Edit Roles</ModalHeader>
+                  <ModalBody>
+                    <FormGroup>
+                      <Label for="roles">Roles</Label>
+                      <DualListBox
+                          canFilter
+                        options={roles}
+                        onChange={onRoleSelect}
+                        selected={selectedRoles}
+                      />
+                    </FormGroup>
+
+                    <MatButton
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      
+                      className=" float-left mr-1"
+                      startIcon={<SaveIcon />}
+                      disabled={saving}
+                      onClick={() => toggleEditRoles(userId)}
+                    >
+                      {!saving ? (
+                        <span style={{ textTransform: "capitalize" }}>
+                          Save
+                        </span>
+                      ) : (
+                        <span style={{ textTransform: "capitalize" }}>
+                          Saving...
+                        </span>
+                      )}
+                    </MatButton>
+                    {"    "}
+                    <MatButton
+                      variant="contained"
+                      className=" float-left mr-1"
+                      startIcon={<CancelIcon />}
+                      onClick={() => toggleEditRoles(userId)}
+                    >
+                      <span style={{ textTransform: "capitalize" }}>
+                        Cancel
+                      </span>
+                    </MatButton>
+                  <br/><br/>
+                  </ModalBody>
+                
+                   
+                </Form>
+              </Modal>
     </div>
   );
 };

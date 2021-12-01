@@ -26,6 +26,13 @@ const UserPage = (props) => {
     <div>
       <Card className={classes.cardBottom}>
         <CardContent>
+        <Breadcrumbs aria-label="breadcrumb">
+                <Link color="inherit" to={{pathname: "/admin"}} >
+                    Admin
+                </Link>
+                <Typography color="textPrimary">User List </Typography>
+            </Breadcrumbs>
+            <br/>
           <Title>
           <Link to="/roles">
               <Button
@@ -50,13 +57,7 @@ const UserPage = (props) => {
             <br />
           </Title>
           <br />
-          <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" to={{pathname: "/admin"}} >
-                    Admin
-                </Link>
-                <Typography color="textPrimary">User Setup </Typography>
-            </Breadcrumbs>
-            <br/>
+          
           <UserList />
         </CardContent>
       </Card>

@@ -32,6 +32,8 @@ import { TiArrowBack } from "react-icons/ti";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Typography from "@material-ui/core/Typography";
 
 Moment.locale("en");
 momentLocalizer();
@@ -185,6 +187,18 @@ const UserRegistration = (props) => {
   return (
     <div>
     <ToastContainer autoClose={3000} hideProgressBar />
+    <Card className={classes.cardBottom}>
+        <CardContent>
+        <Breadcrumbs aria-label="breadcrumb">
+                <Link color="inherit" to={{pathname: "/admin"}} >
+                    Admin
+                </Link>
+                <Link color="inherit" to={{pathname: "/users"}} >
+                    User List
+                </Link>
+                <Typography color="textPrimary">User Registration </Typography>
+            </Breadcrumbs>
+            <br/>
       <Title>
         <Link
               to ={{
@@ -359,6 +373,8 @@ const UserRegistration = (props) => {
           </Card>
         </Col>
       </Form>
+      </CardContent>
+      </Card>
     </div>
   );
 };

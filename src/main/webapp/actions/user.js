@@ -67,36 +67,19 @@ export const fetchUsers = (onSuccess, onError) => (dispatch) => {
       onSuccess();
     })
     .catch((error) => {
-      if (error.response) {
-        let errorMessage = error.response.data.apierror.message;              
+                     
         if(onError){
             onError();
-            toast.error(errorMessage);
-        }
-        // client received an error response (5xx, 4xx)
-      } else if (error.request) {
-        let errorMessage ='something went wrong. no response from the server';                
-        if(onError){
-            onError();
-            toast.error(errorMessage);
-        }
-        // client never received a response, or request never left
-      } else {
-        let errorMessage = 'something went wrong';
-        // anything else               
-        if(onError){
-            onError();
-            toast.error(errorMessage);
+            
         }
       }
-    }
       );
 };
 
 
 export const updateUserRole = (id, data, onSuccess, onError) => (dispatch) => {
   axios
-    .post(`${baseUrl}users/${id}/roles`, data)
+    .put(`${baseUrl}users/${id}/roles`, data)
     .then((response) => {
       try {
         dispatch({
@@ -110,26 +93,11 @@ export const updateUserRole = (id, data, onSuccess, onError) => (dispatch) => {
       }
     })
     .catch((error) => {
-      if (error.response) {
-        let errorMessage = error.response.data.apierror.message;              
+     
+      if (error.response) {               
         if(onError){
             onError();
-            toast.error(errorMessage);
-        }
-        // client received an error response (5xx, 4xx)
-      } else if (error.request) {
-        let errorMessage ='something went wrong. no response from the server';                
-        if(onError){
-            onError();
-            toast.error(errorMessage);
-        }
-        // client never received a response, or request never left
-      } else {
-        let errorMessage = 'something went wrong';
-        // anything else               
-        if(onError){
-            onError();
-            toast.error(errorMessage);
+            
         }
       }
     }
@@ -150,26 +118,10 @@ export const fetchMe = (onSuccess, onError) => (dispatch) => {
             });
         })
         .catch((error) => {
-          if (error.response) {
-            let errorMessage = error.response.data.apierror.message;              
+          if (error.response) {               
             if(onError){
                 onError();
-                toast.error(errorMessage);
-            }
-            // client received an error response (5xx, 4xx)
-          } else if (error.request) {
-            let errorMessage ='something went wrong. no response from the server';                
-            if(onError){
-                onError();
-                toast.error(errorMessage);
-            }
-            // client never received a response, or request never left
-          } else {
-            let errorMessage = 'something went wrong';
-            // anything else               
-            if(onError){
-                onError();
-                toast.error(errorMessage);
+                toast.error('Something went wrong! Please try again ');
             }
           }
         }
