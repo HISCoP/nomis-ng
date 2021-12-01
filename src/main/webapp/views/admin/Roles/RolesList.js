@@ -228,9 +228,9 @@ const RoleList = (props) => {
         }}
       />
 
-      <Modal isOpen={modal} backdrop={true} size={"lg"}>
+      <Modal isOpen={modal} backdrop={true} size={"lg"} >
         <Form onSubmit={handleEdit}>
-          <ModalHeader>Edit Permissions</ModalHeader>
+          <ModalHeader >Edit Permissions</ModalHeader>
           <ModalBody>
             <FormGroup>
               <Label for="permissions">Permissions</Label>
@@ -241,8 +241,6 @@ const RoleList = (props) => {
                 selected={selectedPermissions}
               />
             </FormGroup>
-          </ModalBody>
-          <ModalFooter>
             <MatButton
               type="submit"
               variant="contained"
@@ -266,6 +264,9 @@ const RoleList = (props) => {
             >
               <span style={{ textTransform: "capitalize" }}>Cancel</span>
             </MatButton>
+          </ModalBody>
+          <ModalFooter>
+           
           </ModalFooter>
         </Form>
       </Modal>

@@ -96,7 +96,7 @@ const getServices = () => {
 
         <div >
            
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
+            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createDomainService}>
                     <ModalHeader toggle={props.toggleModal}>New Service </ModalHeader>
