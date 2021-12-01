@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const GenerateReport = props => {
-    const [submission, setSubmission] = React.useState({ data: { authHeader: authHeader(), baseUrl: url }});
+    const [submission, setSubmission] = React.useState({ data: { authHeader: authHeader().Authorization, baseUrl: url }});
     const datanew = {
         reportId: "",
         parameters: "",
@@ -53,22 +53,22 @@ const GenerateReport = props => {
     //
     //       }, [])
 
-    // useEffect(() => {
-    //     async function fetchById() {
-    //         axios
-    //             .get(`${url}reports/${row.id}/`)
-    //             .then(response => {
-    //                 setform2(response.data);
-    //                 console.log(response.data)
-    //                 setLoading(false);
-    //             })
-    //             .catch(error => {
-    //                 toast.error('Could not load form resource, please contact admin.')
-    //                 setLoading(false);
-    //             })
-    //     }
-    //     fetchById();
-    // }, []);
+    useEffect(() => {
+             async function fetchById() {
+                axios
+                    .get(`${url}reports/${row.id}/`)
+                    .then(response => {
+                        setform2(response.data);
+                        console.log(response.data)
+                        setLoading(false);
+                    })
+                    .catch(error => {
+                        toast.error('Could not load form resource, please contact admin.')
+                        setLoading(false);
+                    })
+            }
+            fetchById();
+        }, []);
 
     const submitForm = (submission) => {
        const onError = () => {
@@ -82,7 +82,9 @@ const GenerateReport = props => {
         let formattedData = [];
         _.forOwn(data, function(value, key) {
             if(key !== "submit") {
+                console.log(key)
                 if(key == "reportFormat") {
+
                     newdata2['reportFormat']=value;
                 }
                 formattedData.push({name: key, value: value})
@@ -90,6 +92,7 @@ const GenerateReport = props => {
         } );
         newdata2['reportId']=form2.id;
         newdata2['parameters']=data ;
+        //newdata2['reportFormat']="pdf";
         setDownLoading(true);
         props.generateReport(newdata2, onSuccess, onError);
         return;
@@ -115,7 +118,7 @@ const GenerateReport = props => {
                 } */}
                 <Card>
                     <CardBody>
-                    {/* { form2 ?
+                     { form2 ?
                         <Form form={form2.resourceObject}
                               submission={submission}
                               options={options}
@@ -123,7 +126,7 @@ const GenerateReport = props => {
                             return submitForm(submission);
                         }} />
                         : ""
-                    } */}
+                    }
                     </CardBody>
                 </Card>
                 </CardBody>

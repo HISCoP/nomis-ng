@@ -143,20 +143,20 @@ const HomePage = (props) => {
                             <p>Form History</p>
 
                         </Menu.Item>
-                        <Menu.Item
-                            name='household'
-                            active={activeItem === 'household'}
-                            className={'text-center'}
-                            onClick={()=>{}}
-                        >
-                            <Link color="inherit" to ={{
-                                pathname: "/household/home",
-                                state:householdId
-                            }}  >
-                                <HomeIcon fontSize="large" className={'text-center'}/>
-                                <p>Household</p>
-                            </Link>
-                        </Menu.Item>
+                        {/*<Menu.Item*/}
+                        {/*    name='household'*/}
+                        {/*    active={activeItem === 'household'}*/}
+                        {/*    className={'text-center'}*/}
+                        {/*    onClick={()=>{}}*/}
+                        {/*>*/}
+                        {/*    <Link color="inherit" to ={{*/}
+                        {/*        pathname: "/household/home",*/}
+                        {/*        state:householdId*/}
+                        {/*    }}  >*/}
+                        {/*        <HomeIcon fontSize="large" className={'text-center'}/>*/}
+                        {/*        <p>Household</p>*/}
+                        {/*    </Link>*/}
+                        {/*</Menu.Item>*/}
                         
                         
                     </Menu>
