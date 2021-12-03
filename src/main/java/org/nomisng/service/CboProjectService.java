@@ -57,7 +57,8 @@ public class CboProjectService {
 
             //not a lga
             if(organisationUnitLevelId != orgUnitLevelId ){
-                throw new IllegalTypeException(OrganisationUnitLevel.class, "Level", " must be province/lga");
+                throw new IllegalTypeException(OrganisationUnitLevel.class, organisationUnitId + " Level",
+                        " must be province/lga");
             } else {
                 organisationUnitIds.add(organisationUnitId);
             }
@@ -99,7 +100,8 @@ public class CboProjectService {
         cboProjectDTO.getOrganisationUnitIds().forEach(organisationUnitId ->{
             organisationUnitRepository.findByIdAndArchived(organisationUnitId, UN_ARCHIVED).ifPresent(organisationUnit -> {
                         if (organisationUnit.getOrganisationUnitLevelId() != LGA_ORG_UNIT_LEVEL_ID) {
-                            throw new IllegalTypeException(OrganisationUnitLevel.class, "organisationUnitLevel", " not LGA");
+                            throw new IllegalTypeException(OrganisationUnitLevel.class,
+                                    organisationUnitId + " level", " must be province/lga");
                         }
                     });
             cboProjectLocations.add(new CboProjectLocation(null, id, organisationUnitId, UN_ARCHIVED, null, null));
@@ -144,7 +146,6 @@ public class CboProjectService {
 
 
         cboProject.setOrganisationUnits(orgObject);
-
         cboProject.setCboName(cboName);
         cboProject.setDonorName(donorName);
         cboProject.setImplementerName(implementerName);
@@ -176,7 +177,7 @@ public class CboProjectService {
         List<CboProject> cboProjectList = new ArrayList<>();
 
         page.getContent().forEach(cboProject -> {
-            cboProjectList.add(transformCboProjectObject(cboProject));
+            cboProjectList.add(this.transformCboProjectObject(cboProject));
         });
         return cboProjectMapper.toCboProjectDTOS(cboProjectList);
     }
