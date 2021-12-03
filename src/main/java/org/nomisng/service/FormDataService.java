@@ -18,27 +18,15 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 @Slf4j
 @RequiredArgsConstructor
 public class FormDataService {
-
     private final FormDataRepository formDataRepository;
     private final FormDataMapper formDataMapper;
     private final UserService userService;
-
-    /*public FormData save(FormData formData) {
-        Optional<FormData> formDataOptional = formDataRepository.findByIdAndArchived(formData.getId(), UN_ARCHIVED);
-        if(formDataOptional.isPresent())throw new RecordExistException(FormData.class, "Id", formData.getId() +"");
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
-        formData.setOrganisationalUnitId(organisationUnitId);
-
-        return formDataRepository.save(formData);
-    }*/
 
     public FormData update(Long id, FormDataDTO formDataDTO) {
         formDataRepository.findByIdAndCboProjectIdAndArchived(id,
                 userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(FormData.class, "Id", id +""));
-        //Long organisationUnitId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         FormData formData = formDataMapper.toFormData(formDataDTO);
-        //formData.setOrganisationUnitId(organisationUnitId);
         formData.setId(id);
         formData.setArchived(UN_ARCHIVED);
         formData.setCboProjectId(userService.getUserWithRoles().get().getCurrentCboProjectId());
@@ -61,7 +49,7 @@ public class FormDataService {
         FormData formData = formDataRepository.findByIdAndCboProjectIdAndArchived(id,
                 userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(FormData.class, "Id", id +""));
-        formData.setArchived(UN_ARCHIVED);
+        formData.setArchived(ARCHIVED);
         formDataRepository.save(formData);
     }
 }
