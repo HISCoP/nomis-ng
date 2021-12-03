@@ -57,21 +57,6 @@ export const createDomain = (formData, onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
-            if (error.response) {
-                let errorMessage = error.response.data.apierror.message;              
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client received an error response (5xx, 4xx)
-              } else if (error.request) {
-                let errorMessage ='something went wrong. no response from the server';                
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client never received a response, or request never left
-              } else {
                 let errorMessage = 'something went wrong';
                 // anything else               
                 if(onError){
@@ -79,7 +64,7 @@ export const createDomain = (formData, onSuccess , onError) => dispatch => {
                     toast.error(errorMessage);
                 }
               }
-            }
+            
         );
 };
 
@@ -169,21 +154,7 @@ export const createDomainService = (formData, onSuccess , onError) => dispatch =
             }
         })
         .catch(error => {
-            if (error.response) {
-                let errorMessage = error.response.data.apierror.message;              
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client received an error response (5xx, 4xx)
-              } else if (error.request) {
-                let errorMessage ='something went wrong. no response from the server';                
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client never received a response, or request never left
-              } else {
+            
                 let errorMessage = 'something went wrong';
                 // anything else               
                 if(onError){
@@ -191,7 +162,7 @@ export const createDomainService = (formData, onSuccess , onError) => dispatch =
                     toast.error(errorMessage);
                 }
               }
-            }
+            
         );
 };
 
@@ -205,21 +176,7 @@ export const updateDomainService = (id, formData, onSuccess , onError) => dispat
             }
         })
         .catch(error => {
-            if (error.response) {
-                let errorMessage = error.response.data.apierror.message;              
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client received an error response (5xx, 4xx)
-              } else if (error.request) {
-                let errorMessage ='something went wrong. no response from the server';                
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client never received a response, or request never left
-              } else {
+               
                 let errorMessage = 'something went wrong';
                 // anything else               
                 if(onError){
@@ -227,7 +184,8 @@ export const updateDomainService = (id, formData, onSuccess , onError) => dispat
                     toast.error(errorMessage);
                 }
               }
-            }
+              
+            
         );
 };
 
@@ -241,21 +199,7 @@ export const deleteDomainService = (id, onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
-            if (error.response) {
-                let errorMessage = error.response.data.apierror.message;              
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client received an error response (5xx, 4xx)
-              } else if (error.request) {
-                let errorMessage ='something went wrong. no response from the server';                
-                if(onError){
-                    onError();
-                    toast.error(errorMessage);
-                }
-                // client never received a response, or request never left
-              } else {
+            
                 let errorMessage = 'something went wrong';
                 // anything else               
                 if(onError){
@@ -263,6 +207,6 @@ export const deleteDomainService = (id, onSuccess , onError) => dispatch => {
                     toast.error(errorMessage);
                 }
               }
-            }
+            
         );
 };

@@ -143,11 +143,11 @@ return (
                                                             <MdDelete size="15" color="blue" />{" "}<span style={{color: '#000'}}>Delete </span>
                                                                                 
                                               </MenuItem> 
-                                              <MenuItem  style={{ color:"#000 !important"}}  onClick={() => createParentOrgUnit( row)}>                      
+                                              {/* <MenuItem  style={{ color:"#000 !important"}}  onClick={() => createParentOrgUnit( row)}>                      
                                                       
                                                       <FaPlusCircle size="15" color="blue" />{" "}<span style={{color: '#000'}}>Add Org. Unit Identifier </span>
                                                 
-                                              </MenuItem>     
+                                              </MenuItem>      */}
                                               </MenuList>
                                         </Menu>
                                   </div>        
