@@ -176,6 +176,8 @@ const UserList = (props) => {
     props.updateUserRole(userId, values, onSuccess, onError);
   };
 
+  console.log(props.usersList)
+
   return (
     <div>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -185,15 +187,16 @@ const UserList = (props) => {
         columns={[
           { title: "Name", field: "name" },
           { title: "Username", field: "userName", filtering: false },
-          { title: "Gender", field: "gender", filtering: false },
+          // { title: "Gender", field: "gender", filtering: false },
           { title: "Roles", field: "roles", filtering: false },
           { title: "", field: "actions", filtering: false },
         ]}
         isLoading={loading}
         data={props.usersList.map((row) => ({
+          
           name: row.firstName + " " + row.lastName,
           userName: row.userName,
-          gender: row.gender,
+          //gender: row.gender,
           roles: row.roles.toString(),
           actions: (
             <div>
