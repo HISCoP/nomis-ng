@@ -5,13 +5,17 @@ import {
   Switch
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
+import { Spinner } from 'reactstrap';
 
 // routes config
 import routes from '../routes'
+import {PrivateRoute} from "../PrivateRoute";
   
 const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
+  <div className="pt-10 text-center">
+    <div className="sk-spinner sk-spinner-pulse">
+    <Spinner style={{ width: '3rem', height: '3rem' }} />
+    </div>
   </div>
 )
 
@@ -23,6 +27,9 @@ const TheContent = () => {
           <Switch>
             {routes.map((route, idx) => {
               return route.component && (
+                  route.isPrivate ?
+                      <PrivateRoute key={idx} exact path={route.path} name={route.name} component={route.component}  />
+                    :
                 <Route
                   key={idx}
                   path={route.path}
@@ -35,7 +42,7 @@ const TheContent = () => {
                   )} />
               )
             })}
-            <Redirect from="/" to="/dashboard" />
+            <Redirect from="/" to="/login" />
           </Switch>
         </Suspense>
       </CContainer>

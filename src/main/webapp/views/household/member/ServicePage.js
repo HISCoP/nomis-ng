@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { CCol, CRow, CButton, CAlert, CLink} from "@coreui/react";
 import ServiceHistoryPage from "../widgets/ServiceHistoryPage";
 import MaterialTable from 'material-table';
 import { Tab } from 'semantic-ui-react'
+import ProvideService from './ProvideService';
 
 const ServiceHomePage = () => {
-
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
     const [index, setIndex] = React.useState(0);
     const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
@@ -29,6 +31,8 @@ const ServicePage = (props) => {
     const handleButtonClick = () => setOpen(!open)
     const handleConfirm = () => setOpen(false)
     const handleCancel = () => setOpen(false)
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
 
     return (
         <>
@@ -43,8 +47,8 @@ const ServicePage = (props) => {
                 </CAlert>
                 </CCol>
                 <CCol xs="12">
-                    <CButton color={"primary"} className={"float-right mr-1 mb-1"}> Provide Service</CButton> {" "}
-                    <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "}
+                    <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={toggle}> Provide Service</CButton> {" "}
+                    {/* <CButton color={"primary"} className={"float-right mr-1 mb-1"} onClick={handleButtonClick}> onSubmit</CButton> {" "} */}
                 </CCol>
                 <hr />
             </CRow>
@@ -53,6 +57,11 @@ const ServicePage = (props) => {
                         <ServiceHistoryPage isHistory={false} memberId={12} />
                     </CCol>
             </CRow>
+            {modal ?
+                <ProvideService  modal={modal} toggle={toggle}/>
+                :
+                ""
+            }
             </>
     );
 }
@@ -87,6 +96,7 @@ const PendingForms = () => {
                     />
                 </CCol>
             </CRow>
+        
         </>
     );
 }

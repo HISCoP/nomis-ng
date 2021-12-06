@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   CCard,
   CCardBody,
@@ -11,8 +11,33 @@ import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
+import {connect, useDispatch} from "react-redux";
+import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
+import {calculateAge} from "./../../../utils/calculateAge";
+import NewOvc from "../household/NewOvc";
 
-const Tables = () => {
+
+const HouseholdMember = (props) => {
+
+  const [loading, setLoading] = useState('')
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        //show side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: false });
+    },[]);
+  useEffect(() => {
+  setLoading('true');
+      const onSuccess = () => {
+          setLoading(false)
+      }
+      const onError = () => {
+          setLoading(false)     
+      }
+          props.fetchAllMember(onSuccess, onError);
+  }, []); //componentDidMount
+
+
+
   return (
     <>
       
@@ -26,12 +51,13 @@ const Tables = () => {
             <MaterialTable
                 title="Household Member List"
                 columns={[
+                  { title: 'Unique ID', field: 'id' },
+                    { title: 'Member Type', field: 'type' },
+                  { title: 'Date Assessed', field: 'date' },
                   { title: 'Name', field: 'name' },
-                  { title: 'Address', field: 'surname' },
-                  { title: 'Date', field: 'birthYear', type: 'numeric' },
                   {
-                    title: 'State',
-                    field: 'birthCity',
+                    title: 'Age',
+                    field: 'age',
                     
                   },
                   {
@@ -40,8 +66,14 @@ const Tables = () => {
                     
                   },
                 ]}
-                data={[
-                  { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63, 
+                isLoading={loading}
+                data={props.houseMemberList.map((row) => ({
+                  id: <span> <Link
+                      to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
+                  date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
+                    type: row.householdMemberType === 1 ? "Caregiver" : "VC",
+                  name: row.details.firstName + " " + row.details.lastName,
+                  age: (row.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(row.details.dob),
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
@@ -50,32 +82,17 @@ const Tables = () => {
                               <MenuList style={{hover:"#eee"}}>
                               <MenuItem >
                                 <Link
-                                      to={{pathname: "/household-member/home"}}>
+                                      to={{pathname: "/household-member/home" , state:row.id, householdId:row.householdId}}>
                                       View Dashboard
                                 </Link>
                                 
                               </MenuItem>
-
+                              {/*<MenuItem >{" "}Delete</MenuItem>*/}
                               </MenuList>
                           </Menu>
                   
-                  },
-                  { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34, 
-                  action:<Menu>
-                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                              Action <span aria-hidden>▾</span>
-                            </MenuButton>
-                              <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >{" "}View</MenuItem>
-                              <MenuItem >{" "}Second View</MenuItem>
-                              <MenuItem >{" "}Third View</MenuItem>
-                              <MenuItem >{" "}Edit</MenuItem>
-                              <MenuItem >{" "}Delete</MenuItem>
-                              </MenuList>
-                          </Menu>
-                
-                },
-                ]}        
+                }))}              
+                    
                 options={{
                   search: true
                 }}
@@ -88,4 +105,13 @@ const Tables = () => {
   )
 }
 
-export default Tables
+const mapStateToProps = state => {
+  return {
+      houseMemberList: state.houseHoldMember.members
+  };
+};
+const mapActionToProps = {
+  fetchAllMember: fetchAllHouseHoldMember
+};
+
+export default connect(mapStateToProps, mapActionToProps)(HouseholdMember);

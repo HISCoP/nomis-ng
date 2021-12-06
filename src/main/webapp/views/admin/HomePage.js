@@ -1,156 +1,123 @@
 import React, {createRef, useState} from 'react';
 import {Header, Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
-import {CCol, CRow, CTabContent,
-    CTabPane, } from "@coreui/react";
+import {CCol, CRow, CTabContent, CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import DescriptionIcon from '@material-ui/icons/Description';
-import FolderIcon from '@material-ui/icons/Folder';
+import ListIcon from '@material-ui/icons/List';
+import DnsIcon from '@material-ui/icons/Dns';
 import People from '@material-ui/icons/People';
-
+import AcUnitIcon from '@material-ui/icons/AcUnit';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DomainIcon from '@material-ui/icons/Domain';
 import Dashboard from './Dashboard'
 import ServicePage from "./ServicePage";
 import SettingsIcon from '@material-ui/icons/Settings';
 
-
-
-const HomePage = () => {
+const HomePage = (props) => {
     let contextRef = createRef()
     const [activeItem, setActiveItem] = React.useState('dashboard');
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
-    const openHouseHoldPage = () => {
-        window.location.href = "/household/home";
+    const subMenu = (path) => {
+        if(path=='organisation-unit-home'){
+            props.history.push(`/organisation-unit-home`);
+        }else if(path=='ip'){
+            props.history.push(`/ip`);
+        }else if(path=='cbo'){
+            props.history.push(`/cbo`);
+        }
+        else if(path=='donor'){
+            props.history.push(`/donor`);
+        }
+        
     }
 
-   const [state, setState ]=useState({}) 
-
-   
-    
     return (
         <>
             <CRow>
-
                 <CCol sm="3" lg="3">
                     {/*className={'bg-success'}*/}
-             <Menu vertical fluid inverted style={{backgroundColor:'#021f54'}}>
-                {/* <Menu.Item header className={'p-4'}>
-                    <InfoSection/>
-                </Menu.Item> */}
-                {/* <Menu.Item
-                    name='dashboard'
-                    active={activeItem === 'dashboard'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
+             <Menu vertical fluid inverted style={{backgroundColor:'#096150'}}>
 
-                    <DashboardIcon fontSize="large" className={'text-center'}/>
-                    <p>Dashboard</p>
-                </Menu.Item> */}
-
-                {/* <Menu.Item
-                    name='services'
-                    active={activeItem === 'services'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
-                  <People fontSize="large" className={'text-center'}/>
-                       <p>Users</p>
-
-                </Menu.Item>
-
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <DescriptionIcon fontSize="large" className={'text-center'}/>
-                    <p>Form Builder</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='household'
-                    active={activeItem === 'household'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                    <Link color="inherit" to ={{
-                        pathname: "/household/home",
-                    }}  >
-                    <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Report Builder</p>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item
-                    name='more'
-                    active={activeItem === 'more'}
-                    className={'text-center'}
-                    onClick={()=>{}}
-                >
-                   <SettingsIcon fontSize="large" className={'text-center'}/><br />
-                    <span>Setting</span>
-                <Dropdown>
-                    <Dropdown.Menu>
-                        <Dropdown.Item icon='edit' text='Edit Profile' />
-                        <Dropdown.Item icon='globe' text='Choose Language' />
-                        <Dropdown.Item icon='settings' text='Account Settings' />
-                    </Dropdown.Menu>
-                </Dropdown>
-                </Menu.Item> */}
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
-          onClick={handleItemClick}
-        >
+          active={activeItem === 'dashboard'}
+          onClick={handleItemClick}>
+
        <DashboardIcon className={'text-left'}/>
                   <span className={'pl-2'}>  Dashboard </span>
         </Menu.Item>
         <Menu.Item
           name='messages'
-          active={activeItem === 'messages'}
-          onClick={handleItemClick}
+          active={activeItem === 'usersetup'}
+          
         >
-        <People fontSize="small" className={'text-left'}/>
-        <span className={'pl-2'}>  User Setup </span>
-        </Menu.Item>
-        <Menu.Item
-          name='messages'
-          active={activeItem === 'messages'}
-          onClick={handleItemClick}
-        >
-         <DescriptionIcon fontSize="small" className={'text-left'}/>
-         <span className={'pl-2'}>  Form Builder </span>
+         <Link color="inherit" to ={{ pathname: "users", }}  >
+            <People fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  User Setup </span>
+        </Link>
         </Menu.Item>
         <Menu.Item>
-        <FolderIcon fontSize="small" className={'text-left'}/>
-        <span className={'pl-2'}>  Report Builder  </span>
+         <Link color="inherit" to ={{ pathname: "program-setup-home", }}  >
+            <DomainIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Domain Setup </span>
+        </Link>
+
         </Menu.Item>
-
-
         <Menu.Item>
             <SettingsIcon fontSize="small" className={'text-left'}/>
-            <span className={'pl-2'}>Setting</span>
+            <span className={'pl-2'}>Organisation Unit</span>
         <Dropdown   className={'float-right'} >  
                 
         <Dropdown.Menu >
-            <Dropdown.Item icon='edit' text='OVS' />
-            <Dropdown.Item icon='globe' text='Application Code Setup' />
-            <Dropdown.Item icon='settings' text='Facilities Setup' />
+            <Dropdown.Item icon='settings' text='Organisation Unit Setup' onClick={() =>subMenu("organisation-unit-home")}/>
+            <Dropdown.Item icon='settings' text='Donor Setup' onClick={() =>subMenu("donor")}/>
+            <Dropdown.Item icon='settings' text='Implementing Partner Setup' onClick={() =>subMenu("ip")}/>
+            <Dropdown.Item icon='settings' text='CBO Setup' onClick={() =>subMenu("cbo")}/>
+            
+            
           </Dropdown.Menu>
         </Dropdown>
         </Menu.Item>
+        
+       
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "cbo-donor-ip", }}  >
+            <SettingsIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  CBO Project  Setup  </span>
+        </Link>
+        </Menu.Item>
+        
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'usersetup'}
+        >
+        <Link color="inherit" to ={{ pathname: "application-codeset-home", }}  >
+            <CropFreeIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}> Application Codeset </span>
+            </Link>
+        </Menu.Item>
+        <Menu.Item
+          name='messages'
+          active={activeItem === 'formbuilder'}
+          onClick={()=>{}}>
+            <Link color="inherit" to ={{pathname: "form-home",}}  >
+                <DnsIcon fontSize="small" className={'text-left'}/>
+                <span className={'pl-2'}>  Form Builder </span>
+            </Link>
 
+        </Menu.Item>
+        <Menu.Item>
+        <Link color="inherit" to ={{ pathname: "report-builder", }}  >
+            <ListIcon fontSize="small" className={'text-left'}/>
+            <span className={'pl-2'}>  Report Builder  </span>
+        </Link>
+        </Menu.Item> 
             </Menu>
 
                 </CCol>
-
-
                 <CCol sm="9" lg="9">
                     <CTabContent>
                         <CTabPane active={activeItem === 'dashboard'} >

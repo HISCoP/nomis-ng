@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {
   CCard,
   CCardBody,
@@ -7,16 +7,63 @@ import {
   CButton,
   CRow
 } from '@coreui/react'
-
+import {connect, useDispatch} from "react-redux";
 import MaterialTable from 'material-table';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import { Link } from 'react-router-dom';
+import NewHouseHoldAssessment from './NewHouseHoldAssessment';
+import { ToastContainer, toast } from "react-toastify";
 
-const Tables = () => {
+import NewHouseHold from './NewHouseHold';
+import { fetchAllHouseHold, deleteHousehold } from "./../../../actions/houseHold";
+
+
+const HouseHoldList = (props) => {
+  const [modal, setModal] = useState(false);
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        //show side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: false });
+    },[]);
+  const toggle = () => setModal(!modal);
+    const toggleNew = () => {
+        setCurrentHousehold(null);
+        setModal(!modal);
+    };
+    const toggleUpdate = (hh) => {
+        setCurrentHousehold(hh);
+        setModal(!modal);
+    };
+  const [loading, setLoading] = useState(true);
+  const [currentHousehold, setCurrentHousehold] = useState(null);
+
+  useEffect(() => {
+    performSearch();
+  }, []); //componentDidMount
+
+    const performSearch = () => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false)
+        }
+        const onError = () => {
+            setLoading(false)
+        }
+        props.fetchAllHouseHold(onSuccess, onError);
+    }
+
+    const onDelete = row => {
+        const onSuccess = () =>{
+            toast.success("Household deleted successfully");
+            props.fetchAllHouseHold();
+        }
+        if (window.confirm(`Are you sure to delete this record? ${row.uniqueId}`))
+            props.deleteHousehold(row.id, onSuccess, () => toast.error("An error occurred, household not deleted successfully"));
+    }
   return (
     <>
-      
+      <ToastContainer />
         <CRow>
         <CCol>
           <CCard>
@@ -26,7 +73,8 @@ const Tables = () => {
               <CButton 
                   color="primary" 
                   className="float-right"
-                >New Household Assessment</CButton>
+                  onClick={toggleNew}
+                >New Household </CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable
@@ -34,10 +82,10 @@ const Tables = () => {
                 columns={[
                   { title: 'Unique ID', field: 'id' },
                   { title: 'Date Assessed', field: 'date' },
-                  { title: 'Total OVC', field: 'ovc', type: 'numeric' },
+                  { title: 'Total VC', field: 'ovc'},
                   {
-                    title: 'Status',
-                    field: 'staus',
+                    title: 'Address',
+                    field: 'address',
                     
                   },
                   {
@@ -46,48 +94,32 @@ const Tables = () => {
                     
                   },
                 ]}
-                data={[
-                  { id: '7892', date: 'Baran', ovc: 7, status: 'Vulnerable', 
+                data={props.houseHoldList.map((row) => ({
+                  id: <span> <Link
+                      to={{pathname: "/household/home", state: row.id }}>{row.uniqueId}</Link></span>,
+                  date: row.details && row.details.assessmentDate ? row.details.assessmentDate : "",
+                  ovc: row.details &&  row.details.noOfChildren != null ?  row.details.noOfChildren : 0,
+                  address: row.details && row.details.street ? row.details.street : null,
                   action:
-                  <Menu>
-                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                              Action <span aria-hidden>▾</span>
-                            </MenuButton>
-                              <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >
-                                <Link
-                                      to={{pathname: "/household/home"}}>
-                                      View Dashboard
-                                </Link>
-                                
-                              </MenuItem>                            
-                              <MenuItem >{" "}Edit</MenuItem>
-                              <MenuItem >{" "}Delete</MenuItem>
-                              </MenuList>
+                          <Menu>
+                            <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                                Action <span aria-hidden>▾</span>
+                              </MenuButton>
+                                <MenuList style={{hover:"#eee"}}>
+                                <MenuItem >
+                                  <Link
+                                        to={{pathname: "/household/home", state: row.id }}>
+                                        View Dashboard
+                                  </Link>
+                                  
+                                </MenuItem>                            
+                                <MenuItem onClick={() => toggleUpdate(row)}>{" "}Edit</MenuItem>
+                                <MenuItem onClick={() => onDelete(row)} >{" "}Delete</MenuItem>
+                                </MenuList>
                           </Menu>
-                  
-                  },
-                  { id: '4758', date: 'Baran', ovc: 7, status: 'Not Vulnerable', 
-                  action:
-                  <Menu>
-                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                              Action <span aria-hidden>▾</span>
-                            </MenuButton>
-                              <MenuList style={{hover:"#eee"}}>
-                              <MenuItem >
-                                <Link
-                                      to={{pathname: "/household/home"}}>
-                                      View Dashboard
-                                </Link>
-                                
-                              </MenuItem>                            
-                              <MenuItem >{" "}Edit</MenuItem>
-                              <MenuItem >{" "}Delete</MenuItem>
-                              </MenuList>
-                          </Menu>
-                  
-                  },
-                ]}        
+                 
+                 
+                }))}       
                 options={{
                   search: true
                 }}
@@ -96,8 +128,28 @@ const Tables = () => {
           </CCard>
         </CCol>
       </CRow>
+      {modal ?
+        <NewHouseHold  modal={modal} toggle={toggle} reloadSearch={performSearch} household={currentHousehold}/>
+        :
+        ""
+      }
+      
     </>
+    
   )
+  
 }
 
-export default Tables
+
+const mapStateToProps = state => {
+  return {
+      houseHoldList: state.houseHold.houseHoldList
+  };
+};
+const mapActionToProps = {
+  fetchAllHouseHold: fetchAllHouseHold,
+    deleteHousehold: deleteHousehold
+};
+
+export default connect(mapStateToProps, mapActionToProps)(HouseHoldList);
+

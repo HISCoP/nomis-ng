@@ -4,20 +4,23 @@ import { CCol, CRow, CWidgetIcon, CCard,
     CCardHeader,} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { Icon, Label} from 'semantic-ui-react'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ChildCareIcon from '@material-ui/icons/ChildCare';
-import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import RoomServiceIcon from '@material-ui/icons/RoomService';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 //import ServiceHistoryPage from './../Widgets/ServiceHistoryPage';
 
 const Dashboard = () => {
 
+    
+
     return (
         <>
               <TopDashboardStats />
-              <MidDashboardStats />
+              {/* <MidDashboardStats /> */}
             <CRow>
                 <CCol xs="12" >
-              <RecentServiceOffered />
+              {/* <RecentServiceOffered /> */}
                 </CCol>
             {/* <CCol xs="12" >
                <ServiceHistoryPage />
@@ -34,36 +37,23 @@ const TopDashboardStats = (props) => {
     return (
         <CRow>
             <CCol xs="12" sm="6" lg="4">
-                <CWidgetIcon text="HIV Status" header="Negative"  color="success" iconPadding={false}>
-                    <FavoriteBorderIcon />
+                <CWidgetIcon text="Total Users" header="100"  color="facebook" iconPadding={false}>
+                    <PeopleAltIcon />
                 </CWidgetIcon>
             </CCol>
-            {isCareGiver ?
+           
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Viral Load" header="1000 copies/ml" color="success" iconPadding={false}>
-                        <CIcon width={24} name="cil-graph"/>
+                    <CWidgetIcon text="Total Services" header="50" color="linkedin" iconPadding={false}>
+                        <RoomServiceIcon />
                     </CWidgetIcon>
-                </CCol> :
+                </CCol> 
+          
                 <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Weight" header="50 kg" color="success"  iconPadding={false}>
-                        <CIcon width={24} name="cil-graph"/>
-                    </CWidgetIcon>
-                </CCol>
-            }
-            {isCareGiver ?
-                <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="Children" header="2" color="success" iconPadding={false}>
-                        <ChildCareIcon/>
+                    <CWidgetIcon text="Total Programmes" header="22" color="twitter" iconPadding={false}>
+                        <AutorenewIcon />
                     </CWidgetIcon>
                 </CCol>
-                :
-
-                <CCol xs="12" sm="6" lg="4">
-                    <CWidgetIcon text="BMI" header="6 - Underweight" color="success" iconPadding={false}>
-                        <AccessibilityNewIcon/>
-                    </CWidgetIcon>
-                </CCol>
-            }
+              
         </CRow>
     );
 }

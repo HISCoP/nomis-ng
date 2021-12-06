@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { CCard,
     CCardBody,
     CLink,
@@ -6,83 +6,159 @@ import { CCard,
 import CIcon from "@coreui/icons-react";
 import {Button, List} from 'semantic-ui-react'
 import MaterialTable from 'material-table';
+import {fetchAllHouseHoldServiceHistory} from "../../../actions/houseHold";
+import {fetchAllHouseHoldMemberServiceHistory} from "../../../actions/houseHoldMember";
+import {connect} from "react-redux";
+import moment from "moment";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {toast} from "react-toastify";
+import FormRendererModal from "../../formBuilder/FormRendererModal";
+import ProvideService from "../household/ProvideService";
+import {HOUSEHOLD_MEMBER_SERVICE_PROVISION} from "../../../api/codes";
 
 const ServiceHistoryPage = (props) => {
     //should be able to fetch by either houseHoldId or memberId
-    const houseHoldId = props.houseHoldId;
+    const [loading, setLoading] = useState(false);
+    const houseHoldId = props.householdId;
     const memberId = props.memberId;
     const isBoolean = (variable) => typeof variable === "boolean";
     const isHistory = isBoolean(props.isHistory) ? props.isHistory : true;
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [currentForm, setCurrentForm] = useState(false);
+    const [showServiceModal, setShowServiceModal] = useState(false);
+    const [provideServiceData, setProvideServiceData] = useState({serviceList:[], serviceDate: null, formDataId: 0, encounterId:0, type:"VIEW"});
+    const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
+
+    React.useEffect(() => {
+        if(!memberId) {
+            fetchHouseholdServiceHistory(houseHoldId);
+        } else {
+            fetchAllHouseHoldMemberServiceHistory(memberId);
+        }
+
+    }, [houseHoldId, memberId]);
+
+    const fetchHouseholdServiceHistory = (houseHoldId) => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+        const onError = () => {
+            setLoading(false);
+        }
+        props.fetchAllHouseHoldServiceHistory(houseHoldId, onSuccess, onError);
+    }
+
+    const fetchAllHouseHoldMemberServiceHistory = (memberId) => {
+        setLoading(true);
+        const onSuccess = () => {
+            setLoading(false);
+        }
+        const onError = () => {
+            setLoading(false);
+        }
+        props.fetchAllHouseHoldMemberServiceHistory(memberId, onSuccess, onError);
+    }
+
+    const viewForm = (row) => {
+        //check if it is service provision page (static html) else use formio view
+        if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
+            const formData = row.formData[0];
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id};
+            console.log(selectedService);
+            setProvideServiceData(selectedService);
+            toggleServiceModal();
+            return;
+        }
+
+        setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
+        setShowFormModal(true);
+    }
+
 
     if(isHistory) {
+
     return (
+        <>
      <CCard>
                     <CCardHeader>Recent Service Forms
 
                     </CCardHeader>
                     <CCardBody>
-                    <List divided verticalAlign='middle'>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Household Vunerabilty Assessment - Ada Kindu</List.Content>
-                            <List.Description>29/10/2020 15:09 PM </List.Description>
-                        </List.Item>
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Caregiver Form - Amos Kindu</List.Content>
-                            <List.Description>29/10/2020 15:09 PM </List.Description>
-                        </List.Item>
+                        {memberId ?
+                            <List divided verticalAlign='middle'>
+                                {!loading && props.memberServiceHistory.length <= 0 &&
+                                <List.Item>
+                                    <List.Content>There are no services for this household member</List.Content>
+                                </List.Item>
+                                }
 
-                        <List.Item>
-                            <List.Content floated='right'>
-                                <Button>View</Button>
-                            </List.Content>
-                            <List.Content>Household Followup Assessment - Amos Kindu</List.Content>
-                            <List.Description>29/10/2020 15:09 PM </List.Description>
-                        </List.Item>
-                    </List>
+                                {loading &&
+                                <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                                }
+                                {props.memberServiceHistory.map(service =>
+                                    <List.Item>
+                                        <List.Content floated='right'>
+                                            <Button onClick={() => viewForm(service)}>View</Button>
+                                        </List.Content>
+                                        <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - '+service.firstName+' '+service.lastName) : ''}</List.Content>
+                                        <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
+                                    </List.Item>
+                                )
+                                }
+                            </List>
+                            :
+                            <List divided verticalAlign='middle'>
+                                {!loading && props.householdServiceHistory.length <= 0 &&
+                                <List.Item>
+                                    <List.Content>There are no services in this household</List.Content>
+                                </List.Item>
+                                }
+
+                                {loading &&
+                                <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
+                                }
+                                {props.householdServiceHistory.map(service =>
+                                    <List.Item>
+                                        <List.Content floated='right'>
+                                            <Button onClick={() => viewForm(service)}>View</Button>
+                                        </List.Content>
+                                        <List.Content>{service.formName} {memberId ? '' : service.firstName !== null ? (' - ' + service.firstName + ' ' + service.lastName) : ''}</List.Content>
+                                        <List.Description>{service.dateEncounter ? moment(service.dateEncounter).format('LLL') : ''} </List.Description>
+                                    </List.Item>
+                                )
+                                }
+                            </List>
+                        }
                     </CCardBody>
                 </CCard>
+            <FormRendererModal
+                showModal={showFormModal}
+                setShowModal={setShowFormModal}
+                currentForm={currentForm}
+                //onSuccess={onSuccess}
+                //onError={onError}
+                options={{modalSize:"xl"}}
+            />
+
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal}  householdId={props.householdId} reloadSearch={fetchHouseholdServiceHistory}
+                             serviceList={provideServiceData.serviceList} serviceDate={provideServiceData.serviceDate}
+                             formDataId={provideServiceData.formDataId} encounterId={provideServiceData.encounterId} type={provideServiceData.type}/>
+
+        </>
     );
     }
-
-    return (
-
- <MaterialTable
-                title="Services Form History"
-                columns={[
-                    { title: 'Form Name', field: 'name' },
-                    { title: 'Date', field: 'date' },
-                      { title: 'Name', field: 'surname', hidden: memberId ? true:false },
-                ]}
-                data={[
-                    { name: 'Household Vunerabilty Assessment', surname: 'Ama Kindu', date: '12/11/2020 08:35 AM', birthCity: 63 },
-                    { name: 'Household Followup Assessment', surname: 'Nisa Baran', date: '12/11/2020 08:35 AM', birthCity: 34 },
-                ]}
-                actions={[
-                    {
-                        icon: 'edit',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name)
-                    },
-                    rowData => ({
-                        icon: 'visibility',
-                        tooltip: 'View Form',
-                        onClick: (event, rowData) => alert("You want to delete " + rowData.name)
-
-                    })
-                ]}
-                options={{
-                    actionsColumnIndex: -1,
-                    padding: 'dense',
-                    header: false
-                }}
-            />
-                        );
 }
 
-export default ServiceHistoryPage;
+const mapStateToProps = state => {
+    return {
+        householdServiceHistory: state.houseHold.householdServiceHistory,
+        memberServiceHistory: state.houseHoldMember.serviceHistory
+    };
+};
+const mapActionToProps = {
+    fetchAllHouseHoldServiceHistory: fetchAllHouseHoldServiceHistory,
+    fetchAllHouseHoldMemberServiceHistory: fetchAllHouseHoldMemberServiceHistory
+};
+
+export default connect(mapStateToProps, mapActionToProps)(ServiceHistoryPage);

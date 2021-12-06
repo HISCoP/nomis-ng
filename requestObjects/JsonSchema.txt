@@ -1,0 +1,61 @@
+POST - /api/register - registerAccount
+{
+  "email": "string",
+  "firstName": "string",
+  "gender": "string",
+  "lastName": "string",
+  "password": "string",
+  "phoneNumber": "string",
+  "userName": "string",
+  "roles": [
+    "role name"
+  ]
+}
+
+POST - /api/household-members - save
+{
+  "details": {
+    "dateOfEnrolment": "2021-08-19T00:00:00+01:00",
+    "lastName": "string",
+    "firstName": "string",
+    "sex": {
+      "id": 1,
+      "codesetGroup": "string",
+      "language": "string",
+      "display": "string",
+      "version": "string",
+      "code": "string"
+    },
+    "dob": "string",
+    "mobilePhoneNumber": "string",
+    "occupation": "string",
+    "address": "string",
+    "hivStatus": {},
+    "enrolledOnART": "string",
+    "artEnrolmentDate": "string",
+    "hivTestDate": "string",
+    "facilityName": "string",
+    "artUniqueId": "string"
+  },
+  "householdMemberType": 0,
+  "householdId": 0
+}
+
+POST - /api/ovc-services - save
+{
+  "domainId": 0,
+  "name": "string",
+  "serviceType": 0
+}
+
+POST - /api/encounters - save
+{
+  "dateEncounter": "2021-08-26T21:07:24.103Z",
+  "formCode": "string",
+  "formData": [
+    {
+      "data": {},
+    }
+  ],
+  "householdMemberId": 0,
+}

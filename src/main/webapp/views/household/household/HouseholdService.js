@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import { CCol, CRow} from "@coreui/react";
-import ServiceHistoryPage from '../widgets/ServiceHistoryPage';
+import ServiceHistoryPage from './ServiceHistoryPage';
 import DescriptionIcon from '@material-ui/icons/Description';
 
-const HouseholdService = () => {
+
+const HouseholdService = (props) => {
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
+
     return (
         <>
             <CRow>
@@ -14,9 +18,10 @@ const HouseholdService = () => {
             </CRow>
             <CRow>
                     <CCol xs="12" >
-                        <ServiceHistoryPage isHistory={false} />
+                        <ServiceHistoryPage householdId={props.householdId} />
                     </CCol>
             </CRow>
+           
             </>
     );
 }
