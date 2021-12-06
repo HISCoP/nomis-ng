@@ -73,7 +73,7 @@ const HouseholdMember = (props) => {
                   date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
                     type: row.householdMemberType === 1 ? "Caregiver" : "VC",
                   name: row.details.firstName + " " + row.details.lastName,
-                  age: calculateAge(row.details.dob),
+                  age: (row.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(row.details.dob),
                   action:
                   <Menu>
                           <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>

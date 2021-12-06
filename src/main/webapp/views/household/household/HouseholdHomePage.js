@@ -156,16 +156,20 @@ const HouseHoldInfo = (props) => {
                     {props.household && props.household.details ?
                         <>
                     <span>Household ID: <small> {props.household ? props.household.uniqueId : 'Nil'} </small></span><br/>
-                    <span>Address: <small>{props.household.details ? props.household.details.street : 'Nil'} </small>
-                        <AddIcon titleAccess="Change household address" fontSize="inherit" className={'text-center'}/>
-                    {" "}<VisibilityIcon titleAccess="View Full Address" fontSize="inherit" className={'text-center'}/>
+                            <span>Address: <small>{props.household.details ? props.household.details.street : 'Nil'} </small> <br />
+                    State: <small>{props.household.details.state ? props.household.details.state.name : "" }</small> {' '}
+                                LGA: <small>{props.household.details.lga ? props.household.details.lga.name : "" }</small> <br />
+                                Ward: <small>{props.household.details.ward ? props.household.details.ward.name : "" }</small> {' '}
+                                Community: <small>{props.household.details.community || "" }</small>
+                    {/*    <AddIcon titleAccess="Change household address" fontSize="inherit" className={'text-center'}/>*/}
+                    {/*{" "}<VisibilityIcon titleAccess="View Full Address" fontSize="inherit" className={'text-center'}/>*/}
                     </span><br/>
-                    <span>Date Of Assessment: <small>{props.household.details.assessmentDate || 'Nil'}</small> </span><br/>
+                    <span>Date Of Assessment: <small>{props.household.details.assessmentDate || 'Nil'}</small> </span><br/><br/>
                     <span>Primary Caregiver Name: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.lastName + ' ' + props.household.details.primaryCareGiver.firstName: 'Nil' } </small></span><br/>
                     <span>Phone: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.mobilePhoneNumber : 'Nil' }</small></span><br/>
                     <span>Sex: <small>{props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.sex && props.household.details.primaryCareGiver.sex.display ? props.household.details.primaryCareGiver.sex.display : (props.household.details.primaryCareGiver.sex === 2 ? "Male" : "Female") }</small></span><br/>
                             {props.household.details.primaryCareGiver && props.household.details.primaryCareGiver.dob ?
-                    <span>Age: <small>{calculateAge(  props.household.details.primaryCareGiver.dob)} | {props.household.details.primaryCareGiver.dob}</small></span> :
+                    <span>Age: <small>{props.household.details.primaryCareGiver.dateOfBirthType === 'estimated' ? '~' : ''} {calculateAge(  props.household.details.primaryCareGiver.dob)}  | {props.household.details.primaryCareGiver.dob}</small></span> :
                                 <span>Age: <small>Nil</small></span>
                             }<br/>
                     <span>Marital Status: <small>{props.household.details.primaryCareGiver ? props.household.details.primaryCareGiver.maritalStatus.display : 'Nil' }</small></span><br/>

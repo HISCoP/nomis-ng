@@ -211,7 +211,7 @@ const InfoSection = (props) => {
                     <span>Phone: <small>{props.member ? props.member.mobilePhoneNumber : 'Nil'}</small></span><br/>
                     <span>Sex: <small>{props.member && props.member.sex && props.member.sex.display ? props.member.sex.display : (props.member.sex === 2 ? "Male" : "Female")}</small></span> {'  '}
                         {props.member.dob ?
-                    <span>Age:  <small>{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
+                    <span>Age:  <small>{props.member.dateOfBirthType === 'estimated' ? '~' : ''}{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
                         <span>Age: <small>Nil</small></span>
                         }<br/>
                     <span>Date Of Assessment: <small>{props.member ? props.member.dateOfEnrolment : 'Nil'}</small> </span><br/><br/>

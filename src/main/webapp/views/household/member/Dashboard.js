@@ -232,13 +232,17 @@ const MidDashboardStats = (props) => {
                 </CCol>
                 <CCol xs="12" sm="6" lg="6">
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
-                        <CCardHeader> <Icon name='user'/> Caregiver Information</CCardHeader>
+                        <CCardHeader> <Icon name='user'/> Caregiver Information
+                            <Link title="Go to caregiver dashboard" to={{pathname: "/household-member/home", state: caregiverId, householdId:props.household.id  }} className="float-right"> <CButton
+                                color="info"
+                                className="float-right">Go to Caregiver's Page </CButton></Link>
+                        </CCardHeader>
                         <CCardBody>
                             {fetchingMember &&
                             <LinearProgress color="primary" thickness={5} className={"mb-2"}/>
                             }
                             <span>Caregiver Name: <small>{caregiver && caregiver.details ? caregiver.details.firstName + ' ' + caregiver.details.lastName : 'Nil'}</small></span><br/>
-                            <span>Age: <small>{caregiver && caregiver.details && caregiver.details.dob ? calculateAge(caregiver.details.dob) : 'Nil'}</small></span><br/>
+                            <span>Age: <small>{caregiver && caregiver.details && caregiver.details.dob ? (caregiver.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(caregiver.details.dob) : 'Nil'}</small></span><br/>
                             <span>Sex: <small>{caregiver && caregiver.details && caregiver.details.sex ? caregiver.details.sex.display : 'Nil'}</small> </span><br/>
                             <span>Phone Number: <small>{caregiver && caregiver.details ? caregiver.details.mobilePhoneNumber : 'Nil'} </small></span><br/>
                         </CCardBody>
