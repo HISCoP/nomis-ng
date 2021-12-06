@@ -111,9 +111,9 @@ return (
                               title="Organisational Unit"
                               columns={[
                                 { title: 'Name', field: 'name' },
-                                { title: 'Parent Org. Unit name', field: 'ParentName' },
+                               
                                 { title: 'Org. Unit Level Name', field: 'ParentOrgUnitName' },
-                                
+                                { title: 'Parent Org. Unit name', field: 'ParentName' },
                                 { title: 'Description', field: 'description' },
                                 
                                 { title: 'Action', field: 'actions'},
@@ -121,8 +121,8 @@ return (
                               isLoading={loading}
                                 data={listOfAllParentOrgUnit.map((row) => ({
                                       name: row.name, 
-                                      ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", 
                                       ParentOrgUnitName: row && row.parentParentOrganisationUnitName ? row.parentParentOrganisationUnitName : "",              
+                                      ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", 
                                       description: row. description,
                                     
                                     actions: 

@@ -81,6 +81,7 @@ const AssignProjectUser = (props) => {
         const onSuccess = () => {
         setSaving(false);
         props.toggleModal()
+        props.loadUsers();
         //props.userlist()
         //props.history.push(`/users`)
         };

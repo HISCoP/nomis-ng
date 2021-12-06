@@ -87,6 +87,10 @@ const RoleList = (props) => {
   
 
   useEffect(() => {
+    fetchAllRoles()
+  }, []);
+
+  async function fetchAllRoles() {
     const onSuccess = () => {
       setLoading(false);
     };
@@ -94,8 +98,7 @@ const RoleList = (props) => {
       setLoading(false);
     };
     props.fetchAllRoles(onSuccess, onError);
-  }, []);
-
+  }
   /* Get list of Permissions from the server */
   useEffect(() => {
     async function getCharacters() {
@@ -110,7 +113,6 @@ const RoleList = (props) => {
           );
         })
         .catch((error) => {
-          console.log(error);
         });
     }
     getCharacters();
@@ -123,6 +125,7 @@ const RoleList = (props) => {
   const onDelete = (id) => {
     if (window.confirm(`Are you sure to delete this role? ${id}`))
       props.deleteRole(id);
+      fetchAllRoles()
   };
 
   const toggleEditPermissions = (id) => {
@@ -155,6 +158,7 @@ const RoleList = (props) => {
       setSaving(false);
       toast.success("Role Updated Successfully");
       resetForm();
+      fetchAllRoles()
     };
     const onError = () => {
       setSaving(false);
@@ -162,22 +166,23 @@ const RoleList = (props) => {
     };
     props.updateRole(roleId, values, onSuccess, onError);
   };
+  console.log(props.rolesList)
 
   return (
     <div>
-      <ToastContainer autoClose={3000} hideProgressBar />
+     
       <MaterialTable
       icons={tableIcons}
         title="Role List"
         columns={[
           { title: "Name", field: "name" },
-          { title: "Last Updated", field: "dateModified", filtering: false },
+          //{ title: "Last Updated", field: "dateModified", filtering: false },
           { title: "", field: "actions", filtering: false },
         ]}
         isLoading={loading}
         data={props.rolesList.map((row) => ({
           name: row.name,
-          roleName: row.dateModified,
+          //roleName: row.dateModified,
           actions: (
             <div>
               <Menu>

@@ -43,11 +43,17 @@ const NewDomain = (props) => {
         return Object.values(temp).every((x) => x == "");
     };
 
+const closeModal = ()=>{
+    resetForm()
+    props.toggleModal()
+}
+
     useEffect(() => {
         //for Domain Area edit, load form data
         if(props.currentDomain){
             setFormData({...formData, name:props.currentDomain.name });
         }
+        //props.currenDomain=null
     },  [props.currentDomain,  props.showModal]);
 
     const handleNameInputChange = e => {
@@ -75,19 +81,22 @@ const NewDomain = (props) => {
         }
         if(props.currentDomain){
             props.updateDomain(props.currentDomain.id, formData, onSuccess, onError)
+            resetForm()
             return
         }
         props.createDomain(formData, onSuccess,onError)
     }
     }
+
+
     return (
 
         <div >
-          <ToastContainer autoClose={3000} hideProgressBar />
+         
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createGlobalDomain}>
-                    <ModalHeader toggle={props.toggleModal}>New Domain </ModalHeader>
+                    <ModalHeader >New Domain </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
@@ -124,7 +133,7 @@ const NewDomain = (props) => {
                                 <MatButton
                                     variant='contained'
                                     color='default'
-                                    onClick={props.toggleModal}
+                                    onClick={closeModal}
                                     startIcon={<CancelIcon />}>
                                     Cancel
                                 </MatButton>

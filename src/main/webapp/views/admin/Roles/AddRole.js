@@ -121,6 +121,7 @@ const AddRole = (props) => {
       setSaving(false);
       toast.success("Role Saved Successfully");
       resetForm();
+      props.history.push(`/roles`) 
     };
     const onError = () => {
       setSaving(false);
@@ -132,10 +133,6 @@ const AddRole = (props) => {
   return (
     <div>
  
-     
-      <ToastContainer autoClose={3000} hideProgressBar />
-      
-
       <Form onSubmit={handleSubmit}>
         <Col xl={12} lg={12} md={12}>
         

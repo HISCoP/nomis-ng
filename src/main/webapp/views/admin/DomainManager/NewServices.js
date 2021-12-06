@@ -75,12 +75,15 @@ const getServices = () => {
         if (validate()) {
         setLoading(true);
         const onSuccess = () => {
+
             setLoading(false);
-            props.loadDomainsServices();
             props.toggleModal()
             resetForm()
+            props.loadDomainsServices();
+            
         }
         const onError = () => {
+            props.toggleModal()
             setLoading(false);
                        
         }
@@ -89,6 +92,7 @@ const getServices = () => {
             return
         }
         formData.domainId= props.domainDetails.id
+        console.log(formData)
         props.createDomainService(formData, onSuccess,onError)
         }
     }

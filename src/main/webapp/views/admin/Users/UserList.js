@@ -90,6 +90,11 @@ const UserList = (props) => {
   let { values, setValues, handleInputChange, resetForm } = useForm({});
 
   useEffect(() => {
+    fetchUsers()
+  }, []);
+
+  //Load User from the server 
+  async function fetchUsers() {
     const onSuccess = () => {
       setLoading(false);
     };
@@ -97,8 +102,7 @@ const UserList = (props) => {
       setLoading(false);
     };
     props.fetchAllUsers(onSuccess, onError);
-  }, []);
-
+  }
   /* Get list of Roles from the server */
   useEffect(() => {
     async function getCharacters() {
@@ -168,6 +172,7 @@ const UserList = (props) => {
       setSaving(false);
       toast.success("User roles Updated Successfully");
       resetForm();
+      fetchUsers()
     };
     const onError = () => {
       setSaving(false);
@@ -176,18 +181,16 @@ const UserList = (props) => {
     props.updateUserRole(userId, values, onSuccess, onError);
   };
 
-  console.log(props.usersList)
 
   return (
     <div>
-      <ToastContainer autoClose={3000} hideProgressBar />
       <MaterialTable
       icons={tableIcons}
         title="User List"
         columns={[
           { title: "Name", field: "name" },
           { title: "Username", field: "userName", filtering: false },
-          // { title: "Gender", field: "gender", filtering: false },
+          { title: "Assigned Project ", field: "assignProject", filtering: false },
           { title: "Roles", field: "roles", filtering: false },
           { title: "", field: "actions", filtering: false },
         ]}
@@ -196,7 +199,7 @@ const UserList = (props) => {
           
           name: row.firstName + " " + row.lastName,
           userName: row.userName,
-          //gender: row.gender,
+          assignProject: row.applicationUserCboProjects.length > 1 ? row.applicationUserCboProjects.length : 0,
           roles: row.roles.toString(),
           actions: (
             <div>
@@ -255,7 +258,7 @@ const UserList = (props) => {
         }}
       />
      <AssignUserToProjectModal
-          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)}  user={currentUser}  /> 
+          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)}  user={currentUser} loadUsers={fetchUsers} /> 
    
         <Modal isOpen={modal}  size="lg">
                 <Form onSubmit={handleEdit}>

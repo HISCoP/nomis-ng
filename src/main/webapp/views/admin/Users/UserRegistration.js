@@ -168,25 +168,21 @@ const UserRegistration = (props) => {
     delete values["role"];
     
     const onSuccess = () => {
-      setSaving(false);
-      toast.success("Registration Successful");
-      
-        props.history.push(`/users`)
-     
+      setSaving(false); 
+        props.history.push(`/users`)    
       resetForm();
+      toast.success("Registration Successful");
     };
     const onError = () => {
       setSaving(false);
-      toast.error("Something went wrong");
-      
+      toast.error("Something went wrong");    
     };
-    console.log(values)
     props.register(values, onSuccess, onError);
   };
 
   return (
     <div>
-    <ToastContainer autoClose={3000} hideProgressBar />
+   
     <Card className={classes.cardBottom}>
         <CardContent>
         <Breadcrumbs aria-label="breadcrumb">
