@@ -88,7 +88,7 @@ const CboList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">CBO  </Typography>
+                    <Typography color="textPrimary">CBO List </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>

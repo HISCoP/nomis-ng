@@ -6,7 +6,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from "@material-ui/core/styles";
 import Title from "../../views/Title/CardTitle";
 import FormHomePage from "./FormHomePage";
-
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -24,6 +25,13 @@ const GeneralFormSearch = props => {
         <div>
             <Card className={classes.cardBottom}>
                 <CardContent>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <Link color="inherit" to={{pathname: "/admin"}} >
+                        Admin
+                    </Link>
+                    <Typography color="textPrimary">Form Builder</Typography>
+                </Breadcrumbs>
+                
                     <Title>
 
                             <Link color="inherit" to ={{

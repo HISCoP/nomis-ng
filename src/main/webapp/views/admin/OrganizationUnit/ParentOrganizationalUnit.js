@@ -94,7 +94,7 @@ return (
                                   Admin
                               </Link>
                               <Link color="inherit" to={{pathname: "organisation-unit-home"}} >
-                                 Organisational Unit Level Setup
+                                 Organisational Unit 
                               </Link>
                               <Typography color="textPrimary">{parentOrganisationUnitId.name} </Typography>
                              </Breadcrumbs>
@@ -111,6 +111,7 @@ return (
                               title="Organisational Unit"
                               columns={[
                                 { title: 'Name', field: 'name' },
+                               
                                 { title: 'Org. Unit Level Name', field: 'ParentOrgUnitName' },
                                 { title: 'Parent Org. Unit name', field: 'ParentName' },
                                 { title: 'Description', field: 'description' },
@@ -120,7 +121,7 @@ return (
                               isLoading={loading}
                                 data={listOfAllParentOrgUnit.map((row) => ({
                                       name: row.name, 
-                                      ParentOrgUnitName: row && row.parentParentOrganisationUnitName ? row.parentParentOrganisationUnitName : "",  
+                                      ParentOrgUnitName: row && row.parentParentOrganisationUnitName ? row.parentParentOrganisationUnitName : "",              
                                       ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", 
                                       description: row. description,
                                     
@@ -142,11 +143,11 @@ return (
                                                             <MdDelete size="15" color="blue" />{" "}<span style={{color: '#000'}}>Delete </span>
                                                                                 
                                               </MenuItem> 
-                                              <MenuItem  style={{ color:"#000 !important"}}  onClick={() => createParentOrgUnit( row)}>                      
+                                              {/* <MenuItem  style={{ color:"#000 !important"}}  onClick={() => createParentOrgUnit( row)}>                      
                                                       
                                                       <FaPlusCircle size="15" color="blue" />{" "}<span style={{color: '#000'}}>Add Org. Unit Identifier </span>
                                                 
-                                              </MenuItem>     
+                                              </MenuItem>      */}
                                               </MenuList>
                                         </Menu>
                                   </div>        

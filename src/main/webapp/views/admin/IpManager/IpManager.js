@@ -95,7 +95,7 @@ const IpListManager = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Implementing Partner </span>
+                        <span style={{textTransform: 'capitalize'}}> New Implementing Partner </span>
                     </Button>
 
                 </div>

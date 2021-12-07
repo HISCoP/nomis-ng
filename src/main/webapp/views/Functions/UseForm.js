@@ -11,6 +11,7 @@ const useForm = (initialFieldValues) => {
             ...values,
             ...fieldValue
         })
+        //console.log(values)
 
     }
 

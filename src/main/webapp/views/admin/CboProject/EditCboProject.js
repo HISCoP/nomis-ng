@@ -51,7 +51,8 @@ const UpdateCboProject = (props) => {
     const [stateDetail, setStateDetail] = useState();
     const [states, setStates] = useState([]);
     const [organisationUnits, setOrganisationUnits] = useState()
-   const [locationListArray2, setLocationListArray2] = useState([])
+    const [locationListArray2, setLocationListArray2] = useState([])
+    const [cboProjectLocation, setCboProjectLocation] = useState({ id: "", organisationUnitId: "", cboProjectId: "", archived:""});
 
     useEffect(() => {
         //loadCboProjectList()
@@ -62,7 +63,7 @@ const UpdateCboProject = (props) => {
             lga: [{label: value.Name, value: value.id}],
         }))
         setLocationListArray2([...locationListArray2, ...getLocationList])
-        console.log(locationListArray2)
+
     }, [props.formData]); //componentDidMount
 
     useEffect(() => {
@@ -208,23 +209,19 @@ const getProvinces = e => {
         return maxVal.toString();
         }
     }
-
-    const  RemoveItem = (e) => {
+    const  RemoveItem = (e, items) => {
         const removeArr =locationListArray2.filter((element, index, array)  => index != e)
-        console.log(removeArr)
         setLocationListArray2(removeArr)
+        
     }
     
     const organisationUnitIds = []
-
     const createCboAccountSetup = e => {
         e.preventDefault()
-        
         const orgunitlga= locationListArray2.map(item => { 
-            delete item['state'];
-            
+            delete item['stateName'];            
             item['lga'].map(itemLga => {
-                //console.log(itemLga['value'])
+                console.log(itemLga['value'])
             organisationUnitIds.push(itemLga['value'])
 
             return itemLga;
@@ -234,29 +231,34 @@ const getProvinces = e => {
         delete otherDetails['lgaId'];
         delete otherDetails['stateId'];       
         setLoading(true);
-        console.log(otherDetails)
         const onSuccess = () => {
-            setLoading(false)
-            setOtherDetails(defaultValues)  
-            setLocationListArray2([]) 
+            setLoading(false)           
+
             history.push('/cbo-donor-ip')
             props.toggleModal() 
             props.loadIps() 
+            setLocationListArray2([]) 
+            setOtherDetails(defaultValues)  
                   
         }
         const onError = () => {
             setLoading(false)  
-            setOtherDetails(defaultValues)  
-            setLocationListArray2([])
             history.push('/cbo-donor-ip') 
             props.toggleModal() 
+            setLocationListArray2([])
+            setOtherDetails(defaultValues)  
         }       
-        dispatch(updateCboProject(props.formData.id, otherDetails,onSuccess, onError));
-        
-        return
- 
+        dispatch(updateCboProject(props.formData.id, otherDetails,onSuccess, onError));       
+        return 
     }
-    
+
+    //Function to close Edit Modal 
+    const closeModal = () => {
+        props.toggleModal()
+        setLocationListArray2([])
+        setOtherDetails(defaultValues) 
+    }
+
 
 
     return (
@@ -266,7 +268,7 @@ const getProvinces = e => {
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
 
                 <CForm >
-                    <CModalHeader toggle={props.toggleModal}>NEW CBO PROJECT SETUP </CModalHeader>
+                    <CModalHeader toggle={props.toggleModal}>EDIT CBO PROJECT SETUP </CModalHeader>
                     <CModalBody>
                         <Card >
                             <CardBody>
@@ -421,7 +423,7 @@ const getProvinces = e => {
                                                                         <th>{LgaList(items.lga)}</th>
                                                                         
                                                                         <th >
-                                                                            <IconButton aria-label="delete" size="small" color="error" onClick={() =>RemoveItem(index)}>
+                                                                            <IconButton aria-label="delete" size="small" color="error" onClick={() =>RemoveItem(index, items)}>
                                                                                 <DeleteIcon fontSize="inherit" />
                                                                             </IconButton>
                                                                             
@@ -457,7 +459,7 @@ const getProvinces = e => {
                                 <MatButton
                                     variant='contained'
                                     color='default'
-                                    onClick={props.toggleModal}
+                                    onClick={closeModal}
                                     startIcon={<CancelIcon />}>
                                     Cancel
                                 </MatButton>

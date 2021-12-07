@@ -95,7 +95,7 @@ const DonorListManager = (props) => {
                             startIcon={<FaPlus />}
                             onClick={() => openNewDomainModal(null)}
                             >
-                        <span style={{textTransform: 'capitalize'}}>Add New Donor </span>
+                        <span style={{textTransform: 'capitalize'}}> New Donor </span>
                     </Button>
 
                 </div>

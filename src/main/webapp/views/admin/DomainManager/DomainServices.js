@@ -40,7 +40,7 @@ const DomainServiceList = (props) => {
 
     useEffect(() => {
             loadDomainsServices()
-    }, [domainDetails.id]); //componentDidMount
+    }, [props.location.state]); //componentDidMount
 
     const loadDomainsServices = () => {
         setLoading('true');
@@ -89,7 +89,10 @@ const DomainServiceList = (props) => {
                     <Link color="inherit" to={{pathname: "/admin"}} >
                         Admin
                     </Link>
-                    <Typography color="textPrimary">Domain - {domainDetails.name} </Typography>
+                    <Link color="inherit" to={{pathname: "/program-setup-home"}} >
+                        Domains
+                    </Link>
+                    <Typography color="textPrimary">Service - {domainDetails.name} </Typography>
                 </Breadcrumbs>
                 <br/>
                 <div className={"d-flex justify-content-end pb-2"}>

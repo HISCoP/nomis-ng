@@ -16,10 +16,30 @@ export const fetchAll = (onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
+            if (error.response) {
+                let errorMessage = error.response.data.apierror.message;              
                 if(onError){
                     onError();
+                    toast.error(errorMessage);
                 }
+                // client received an error response (5xx, 4xx)
+              } else if (error.request) {
+                let errorMessage ='something went wrong. no response from the server';                
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+                // client never received a response, or request never left
+              } else {
+                let errorMessage = 'something went wrong';
+                // anything else               
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+              }
             }
+
 
         );
 };
@@ -34,10 +54,28 @@ export const createDonor = (data, onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
+            if (error.response) {
+                let errorMessage = error.response.data.apierror.message;              
                 if(onError){
                     onError();
-                    toast.error("Something went wrong...");
+                    toast.error(errorMessage);
                 }
+                // client received an error response (5xx, 4xx)
+              } else if (error.request) {
+                let errorMessage ='something went wrong. no response from the server';                
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+                // client never received a response, or request never left
+              } else {
+                let errorMessage = 'something went wrong';
+                // anything else               
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+              }
             }
 
         );
@@ -53,10 +91,28 @@ export const updateDonor = (id, data, onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
+            if (error.response) {
+                let errorMessage = error.response.data.apierror.message;              
                 if(onError){
                     onError();
-                    toast.error("Something went wrong...");
+                    toast.error(errorMessage);
                 }
+                // client received an error response (5xx, 4xx)
+              } else if (error.request) {
+                let errorMessage ='something went wrong. no response from the server';                
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+                // client never received a response, or request never left
+              } else {
+                let errorMessage = 'something went wrong';
+                // anything else               
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+              }
             }
 
         );
@@ -72,10 +128,28 @@ export const deleteDonor = (id, onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
+            if (error.response) {
+                let errorMessage = error.response.data.apierror.message;              
                 if(onError){
                     onError();
-                    toast.error("Something went wrong...");
+                    toast.error(errorMessage);
                 }
+                // client received an error response (5xx, 4xx)
+              } else if (error.request) {
+                let errorMessage ='something went wrong. no response from the server';                
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+                // client never received a response, or request never left
+              } else {
+                let errorMessage = 'something went wrong';
+                // anything else               
+                if(onError){
+                    onError();
+                    toast.error(errorMessage);
+                }
+              }
             }
 
         );
