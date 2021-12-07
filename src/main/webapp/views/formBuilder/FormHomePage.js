@@ -67,7 +67,7 @@ function FormSearch(props) {
     return (
         <React.Fragment>
             <div>
-                <ToastContainer autoClose={3000} hideProgressBar />
+               
                 <MaterialTable
                     title="Find By Form Name"
                     columns={[

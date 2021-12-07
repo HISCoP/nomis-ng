@@ -82,8 +82,7 @@ const AssignProjectUser = (props) => {
         setSaving(false);
         props.toggleModal()
         props.loadUsers();
-        //props.userlist()
-        //props.history.push(`/users`)
+
         };
         const onError = () => {
         setSaving(false);
