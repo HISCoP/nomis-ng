@@ -184,14 +184,14 @@ const getlgaObj = e => {
     const addLocations = e => {
          //e.preventDefault()
         //Get the state selected
-            
+          
         setLocationList({...locationList,  lga:selectedOption })
-        
+        console.log(locationList) 
       //locationListArray2.push(locationList)
         if(locationList['stateName'] !=='' && locationList['lga'] !==''){
         setLocationListArray2([...locationListArray2, ...[locationList]])
         setLocationList({stateName: "", lga:""})
-        console.log(locationListArray2)
+        
         getProvinces()
 
         }
