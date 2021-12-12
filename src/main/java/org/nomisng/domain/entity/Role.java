@@ -1,7 +1,10 @@
 package org.nomisng.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,7 +30,6 @@ public class Role extends Audit {
     @Setter
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Permission> permission;
-
 
     @Override
     public int hashCode() {
@@ -59,4 +61,9 @@ public class Role extends Audit {
                 ", permissions=" + permission +
                 '}';
     }
+
+    @OneToMany(mappedBy = "roleByRoleId")
+    @ToString.Exclude
+    @JsonIgnore
+    public List<ApplicationUserRole> applicationUserRolesById;
 }

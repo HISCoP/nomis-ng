@@ -82,11 +82,10 @@ const GenerateReport = props => {
         let formattedData = [];
         _.forOwn(data, function(value, key) {
             if(key !== "submit") {
-                console.log(key)
                 if(key == "reportFormat") {
-
                     newdata2['reportFormat']=value;
                 }
+
                 formattedData.push({name: key, value: value})
             }
         } );

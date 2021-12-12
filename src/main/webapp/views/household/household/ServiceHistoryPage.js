@@ -5,6 +5,8 @@ import { fetchAllHouseHoldServiceHistory } from "./../../../actions/houseHold";
 import moment from "moment";
 import FormRendererModal from "../../formBuilder/FormRendererModal";
 import {toast} from "react-toastify";
+import{HOUSEHOLD_MEMBER_SERVICE_PROVISION} from "../../../api/codes";
+import ProvideService from "./ProvideService";
 
 const ServiceHistoryPage = (props) => {
 
@@ -12,6 +14,9 @@ const ServiceHistoryPage = (props) => {
     const householdId = props.householdId;
     const [showFormModal, setShowFormModal] = useState(false);
     const [currentForm, setCurrentForm] = useState(false);
+    const [showServiceModal, setShowServiceModal] = useState(false);
+    const [provideServiceData, setProvideServiceData] = useState({serviceList:[], serviceDate: null, formDataId: 0, encounterId:0, type:"UPDATE"});
+    const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
 
     useEffect(() => {
         fetchHouseholdServiceHistory(householdId);
@@ -34,13 +39,29 @@ const ServiceHistoryPage = (props) => {
         setShowFormModal(false);
     }
     const viewForm = (row) => {
-        console.log(row);
+        //check if it is service provision page (static html) else use formio view
+        if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
+            const formData = row.formData[0];
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id, memberId: row.householdMemberId};
+            console.log(selectedService);
+            setProvideServiceData(selectedService);
+            toggleServiceModal();
+            return;
+        }
         setCurrentForm({ ...row, type: "VIEW", encounterId: row.id });
         setShowFormModal(true);
     }
 
     const editForm = (row) => {
-        console.log(row);
+        //check if it is service provision page (static html) else use formio update
+        if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
+            const formData = row.formData[0];
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"UPDATE", formDataId: formData.id, encounterId: formData.encounterId, memberId: row.householdMemberId};
+            console.log(selectedService);
+            setProvideServiceData(selectedService);
+            toggleServiceModal();
+            return;
+        }
         setCurrentForm({ ...row, type: "EDIT", encounterId: row.id });
         setShowFormModal(true);
     }
@@ -80,6 +101,9 @@ const ServiceHistoryPage = (props) => {
                     header: true
                 }}
             />
+    <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={provideServiceData.memberId} householdId={props.householdId} reloadSearch={fetchHouseholdServiceHistory}
+                     serviceList={provideServiceData.serviceList} serviceDate={provideServiceData.serviceDate}
+                     formDataId={provideServiceData.formDataId} encounterId={provideServiceData.encounterId} type={provideServiceData.type}/>
 
     <FormRendererModal
         showModal={showFormModal}

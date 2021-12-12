@@ -20,10 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -35,6 +32,8 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+
+    private final ApplicationUserRoleRepository applicationUserRoleRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -48,21 +47,21 @@ public class UserService {
 
 
     @Transactional
-    public Optional<User> getUserWithAuthoritiesByUsername(String userName){
+    public Optional<User> getUserWithAuthoritiesByUsername(String userName) {
         return userRepository.findOneWithRoleByUserName(userName);
     }
 
     @Transactional(readOnly = true)
-    public  Optional<User> getUserWithRoles(){
-           return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName);
+    public Optional<User> getUserWithRoles() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName);
     }
 
-    public User registerUser(UserDTO userDTO, String password, Boolean updateUser){
+    public User registerUser(UserDTO userDTO, String password, Boolean updateUser) {
         Optional<User> optionalUser = userRepository.findOneByUserName(userDTO.getUserName().toLowerCase());
         User newUser = new User();
-        if(updateUser){
-        }else {
-            optionalUser.ifPresent(existingUser-> {
+        if (updateUser) {
+        } else {
+            optionalUser.ifPresent(existingUser -> {
                         throw new RecordExistException(User.class, "Record exist", userDTO.getUserName().toLowerCase() + "");
                     }
             );
@@ -85,7 +84,7 @@ public class UserService {
                     .filter(name -> RolesConstants.USER.equals(name.getName()))
                     .findAny()
                     .orElse(null);
-            if(role !=null)
+            if (role != null)
                 roles.add(role);
             newUser.setRole(roles);
         } else {
@@ -104,7 +103,7 @@ public class UserService {
 
     public User update(Long id, User user) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if(!optionalUser.isPresent())throw new EntityNotFoundException(User.class, "Id", id +"");
+        if (!optionalUser.isPresent()) throw new EntityNotFoundException(User.class, "Id", id + "");
         user.setId(id);
         return userRepository.save(user);
     }
@@ -112,9 +111,9 @@ public class UserService {
     private HashSet<Role> getRolesFromStringSet(Set<String> roles) {
         HashSet roleSet = new HashSet<>();
         Role roleToAdd = new Role();
-        for(String r : roles){
+        for (String r : roles) {
             // add roles by either id or name
-            if(null != r) {
+            if (null != r) {
                 roleToAdd = roleRepository.findByName(r).get();
                 if (null == roleToAdd && NumberUtils.isParsable(r))
                     roleToAdd = roleRepository.findById(Long.valueOf(r)).get();
@@ -128,7 +127,7 @@ public class UserService {
     }
 
     @Transactional
-    public List<UserDTO> getAllUserByRole(Long roleId){
+    public List<UserDTO> getAllUserByRole(Long roleId) {
         HashSet<Role> roles = new HashSet<>();
         Optional<Role> role = roleRepository.findById(roleId);
         roles.add(role.get());
@@ -136,19 +135,19 @@ public class UserService {
         return userMapper.usersToUserDTOs(userRepository.findAllByRoleIn(roles));
     }
 
-    public UserDTO changeOrganisationUnit(Long cboProjectId, UserDTO userDTO){
+    public UserDTO changeOrganisationUnit(Long cboProjectId, UserDTO userDTO) {
         Optional<User> optionalUser = userRepository.findById(userDTO.getId());
 
         boolean found = false;
         for (ApplicationUserCboProject applicationUserCboProject : userDTO.getApplicationUserCboProjects()) {
             Long projectId = applicationUserCboProject.getCboProjectId();
-            if(cboProjectId.longValue() == projectId.longValue()){
+            if (cboProjectId.longValue() == projectId.longValue()) {
                 found = true;
                 break;
             }
         }
-        if(!found){
-            throw new EntityNotFoundException(OrganisationUnit.class, "Id", cboProjectId +"");
+        if (!found) {
+            throw new EntityNotFoundException(OrganisationUnit.class, "Id", cboProjectId + "");
         }
         User user = optionalUser.get();
         user.setCurrentCboProjectId(cboProjectId);
@@ -156,15 +155,45 @@ public class UserService {
     }
 
     public List<CboProject> getCboProjectByUserId(Long userId) {
-        return applicationUserCboProjectRepository.findAllByApplicationUserId(userId).stream()
+        return applicationUserCboProjectRepository.findAllByApplicationUserIdOrderByIdAsc(userId).stream()
                 .map(ApplicationUserCboProject::getCboProjectByCboProjectId)
                 .collect(Collectors.toList());
     }
 
     public UserDTO getAccount(String userName) {
-        UserDTO userDTO =  this.getUserWithRoles()
+        UserDTO userDTO = this.getUserWithRoles()
                 .map(UserDTO::new)
-                .orElseThrow(() -> new EntityNotFoundException(User.class, userName+"","" ));
+                .orElseThrow(() -> new EntityNotFoundException(User.class, userName + "", ""));
         return userDTO;
+    }
+
+    public List<Role> getRolesByUserId(Long id) {
+        List<Role> roles = new ArrayList<>();
+        applicationUserRoleRepository.findAllByUserId(id).forEach(applicationUserRole -> {
+            roles.add(applicationUserRole.getRoleByRoleId());
+        });
+
+        return roles;
+    }
+
+    public Set<Role> updateRoles(Long id, List<Role> roles) {
+            User user = userRepository.findById(id).get();
+            HashSet rolesSet = new HashSet<>();
+            Role roleToAdd = new Role();
+            for (Role r : roles) {
+                // add roles by either id or name
+                if (r.getName() != null) {
+                    roleToAdd = roleRepository.findByName(r.getName()).get();
+                } else if (r.getId() != null) {
+                    roleToAdd = roleRepository.findById(r.getId()).get();
+                } else {
+                    ResponseEntity.badRequest();
+                    return null;
+                }
+                rolesSet.add(roleToAdd);
+            }
+            user.setRole(rolesSet);
+            this.update(id, user);
+            return user.getRole();
     }
 }

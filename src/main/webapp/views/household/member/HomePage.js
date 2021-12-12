@@ -110,18 +110,18 @@ const HomePage = (props) => {
                             <p>Provide Service</p>
 
                         </Menu.Item>
-                        {props.member && props.member.householdMemberType === 2 &&
-                        <Menu.Item
-                            name='provide_preventive_services'
-                            active={activeItem === 'provide_preventive_services'}
-                            onClick={togglePreventiveServiceModal}
-                            className={'text-center'}
-                        >
-                            <DescriptionIcon fontSize="large" className={'text-center'}/>
-                            <p>Provide Preventive Service</p>
+                        {/*{props.member && props.member.householdMemberType === 2 &&*/}
+                        {/*<Menu.Item*/}
+                        {/*    name='provide_preventive_services'*/}
+                        {/*    active={activeItem === 'provide_preventive_services'}*/}
+                        {/*    onClick={togglePreventiveServiceModal}*/}
+                        {/*    className={'text-center'}*/}
+                        {/*>*/}
+                        {/*    <DescriptionIcon fontSize="large" className={'text-center'}/>*/}
+                        {/*    <p>Provide Preventive Service</p>*/}
 
-                        </Menu.Item>
-                        }
+                        {/*</Menu.Item>*/}
+                        {/*}*/}
                         <Menu.Item
                             name='forms'
                             active={activeItem === 'forms'}
@@ -130,7 +130,7 @@ const HomePage = (props) => {
                         >
                            
                                 <FolderIcon fontSize="large" className={'text-center'}/>
-                                <p>Other Forms</p>
+                                <p>Other Service Forms</p>
                           
                         </Menu.Item>
                         <Menu.Item
@@ -140,7 +140,7 @@ const HomePage = (props) => {
                             className={'text-center'}
                         >
                             <ListIcon fontSize="large" className={'text-center'}/>
-                            <p>Form History</p>
+                            <p>Service Form History</p>
 
                         </Menu.Item>
                         {/*<Menu.Item*/}
@@ -189,7 +189,7 @@ const HomePage = (props) => {
             </CRow>
 
             <ProvidePreventiveService modal={showPreventiveServiceModal} toggle={togglePreventiveServiceModal} memberId={props.member.id} householdId={householdId} reload={reloadPage}/>
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} householdId={householdId} reloadSearch={reloadPage} />
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} memberType={props.member.householdMemberType} householdId={householdId} reloadSearch={reloadPage} />
         </>
     )
 }

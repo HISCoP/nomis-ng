@@ -31,13 +31,9 @@ public class EncounterDTO {
 
     private String formName;
 
-    private Long organisationUnitId;
-
     private String firstName;
 
     private String lastName;
 
     private String otherNames;
-
-    private Long cboProjectId;
 }

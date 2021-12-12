@@ -144,7 +144,7 @@ function ReportSearch(props) {
                             color: "#000",
                         },
                         searchFieldStyle: {
-                            width : '300%',
+                            width : '200%',
                             margingLeft: '250px',
                         },
                         filtering: true,

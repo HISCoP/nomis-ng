@@ -35,7 +35,7 @@ public class DomainService {
 
 
     public List getAllDomains() {
-        return domainRepository.findAllByArchived(UN_ARCHIVED);
+        return domainRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED);
     }
 
     public Domain save(DomainDTO domainDTO) {

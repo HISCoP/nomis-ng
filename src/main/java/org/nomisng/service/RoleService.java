@@ -18,6 +18,8 @@ import javax.persistence.PersistenceContext;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
@@ -38,6 +40,7 @@ public class RoleService {
         try{
             Role role = new Role();
             role.setName(roleDTO.getName());
+            role.setCode(UUID.randomUUID().toString());
             HashSet<Permission> permissions = getPermissions(roleDTO.getPermissions());
             role.setPermission(permissions);
             return roleRepository.save(role);

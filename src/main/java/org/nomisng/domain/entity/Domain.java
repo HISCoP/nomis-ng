@@ -29,7 +29,7 @@ public class Domain extends Audit {
     private String code;
 
     @Basic
-    @Column(name = "archived", updatable = false)
+    @Column(name = "archived")
     private int archived;
 
     @OneToMany(mappedBy = "domainByDomainId")

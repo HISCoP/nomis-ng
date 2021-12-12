@@ -26,4 +26,6 @@ public class FormDataDTO {
 
     @NotNull(message = "data is mandatory")
     private Object data;
+
+    private int archived;
 }

@@ -14,6 +14,10 @@ import { Spinner } from 'reactstrap';
 
 
 const useStyles = makeStyles(theme => ({
+    error: {
+        color: "#f85032",
+        fontSize: "12.8px",
+    },
     button: {
         margin: theme.spacing(1)
     }
@@ -25,7 +29,22 @@ const NewDomainService = (props) => {
     const [formData, setFormData] = useState(defaultValues)
     const classes = useStyles()
     //domainDetails
-
+    const [errors, setErrors] = useState({});
+    /*****  Validation */
+    const validate = () => {
+        let temp = { ...errors };
+        temp.name = formData.name
+            ? ""
+            : "Name is required";
+            temp.serviceType = formData.serviceType
+            ? ""
+            : "Service Type is required";    
+        setErrors({
+            ...temp,
+        });
+        
+        return Object.values(temp).every((x) => x == "");
+    };
     useEffect(() => {
         getServices()
         //for Domain Area edit, load form data
@@ -53,14 +72,18 @@ const getServices = () => {
     }
     const createDomainService = e => {
         e.preventDefault()
+        if (validate()) {
         setLoading(true);
         const onSuccess = () => {
+
             setLoading(false);
-            props.loadDomainsServices();
             props.toggleModal()
             resetForm()
+            props.loadDomainsServices();
+            
         }
         const onError = () => {
+            props.toggleModal()
             setLoading(false);
                        
         }
@@ -69,14 +92,15 @@ const getServices = () => {
             return
         }
         formData.domainId= props.domainDetails.id
+        console.log(formData)
         props.createDomainService(formData, onSuccess,onError)
-
+        }
     }
     return (
 
         <div >
            
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="md">
+            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
 
                 <Form onSubmit={createDomainService}>
                     <ModalHeader toggle={props.toggleModal}>New Service </ModalHeader>
@@ -94,9 +118,11 @@ const getServices = () => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleNameInputChange}
-                                                required
+                                                
                                             />
-
+                                            {errors.name !=="" ? (
+                                                <span className={classes.error}>{errors.name}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                     <Col md={12}>
@@ -111,10 +137,14 @@ const getServices = () => {
                                         required
                                         >
                                         <option value=""> </option>
-                                        <option value="1"> OVC</option>
+                                        
+                                        <option value="1"> VC</option>
                                         <option value="2"> Caregiver</option>
                                         <option value="3"> Both</option>
                                     </Input>
+                                         {errors.serviceType !=="" ? (
+                                            <span className={classes.error}>{errors.serviceType}</span>
+                                            ) : "" }
                                 </FormGroup>
                                 </Col>
                                 </Row>

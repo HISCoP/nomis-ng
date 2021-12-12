@@ -16,4 +16,6 @@ public class CboDTO {
     private String description;
 
     private String code;
+
+    private int archived;
 }

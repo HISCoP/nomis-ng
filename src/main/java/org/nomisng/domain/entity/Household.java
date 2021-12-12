@@ -23,7 +23,7 @@ import java.util.List;
 @Table(name = "household")
 public class Household extends JsonBEntity implements Serializable {
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -121,9 +121,4 @@ public class Household extends JsonBEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
     private CboProject cboProjectByCboProjectId;
-
-    @OneToMany(mappedBy = "householdByHouseholdId")
-    @ToString.Exclude
-    @JsonIgnore
-    public List<HouseholdUniqueIdCboProjectHistory> householdUniqueIdCboProjectHistoriesById;
 }

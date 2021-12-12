@@ -30,6 +30,8 @@ import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Typography from "@material-ui/core/Typography";
 
 Moment.locale("en");
 momentLocalizer();
@@ -89,7 +91,7 @@ const AddRole = (props) => {
           console.log(Object.entries(response.data));
           setPermissions(
             Object.entries(response.data).map(([key, value]) => ({
-              label: value.name,
+              label: value.description,
               value: value.name,
             }))
           );
@@ -119,6 +121,7 @@ const AddRole = (props) => {
       setSaving(false);
       toast.success("Role Saved Successfully");
       resetForm();
+      props.history.push(`/roles`) 
     };
     const onError = () => {
       setSaving(false);
@@ -129,32 +132,41 @@ const AddRole = (props) => {
 
   return (
     <div>
-      <Title>
-        <Link to="/roles">
-          <Button
-            variant="contained"
-            color="primary"
-            className=" float-right mr-1"
-            startIcon={<TiArrowBack />}
-          >
-            <span style={{ textTransform: "capitalize" }}>Back </span>
-          </Button>
-        </Link>
-        <br />
-      </Title>
-      <br />
-      <ToastContainer autoClose={3000} hideProgressBar />
-      
-
+ 
       <Form onSubmit={handleSubmit}>
         <Col xl={12} lg={12} md={12}>
-        <Alert color="primary">
-          All Information with Asterisks(*) are compulsory
-        </Alert>
+        
           <Card className={classes.cardBottom}>
             <CardContent>
+            <Breadcrumbs aria-label="breadcrumb">
+                <Link color="inherit" to={{pathname: "/admin"}} >
+                    Admin
+                </Link>
+                <Link color="inherit" to={{pathname: "/roles"}} >
+                    Role List
+                </Link>
+                <Typography color="textPrimary">Add Role </Typography>
+            </Breadcrumbs>
+            <br/>
+            <Title>
+              <Link to="/roles">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className=" float-right mr-1"
+                  startIcon={<TiArrowBack />}
+                >
+                  <span style={{ textTransform: "capitalize" }}>Back </span>
+                </Button>
+              </Link>
+              
+            </Title>
+            <br />
               <Title>Add Role</Title>
               <br />
+              <Alert color="primary">
+                All Information with Asterisks(*) are compulsory
+              </Alert>
               <Row form>
                 <Col md={12}>
                   <FormGroup>
@@ -197,14 +209,14 @@ const AddRole = (props) => {
                 )}
               </MatButton>
 
-              <MatButton
+              {/* <MatButton
                 variant="contained"
                 className={classes.button}
                 startIcon={<CancelIcon />}
                 onClick={resetForm}
               >
                 <span style={{ textTransform: "capitalize" }}>Cancel</span>
-              </MatButton>
+              </MatButton> */}
             </CardContent>
           </Card>
         </Col>

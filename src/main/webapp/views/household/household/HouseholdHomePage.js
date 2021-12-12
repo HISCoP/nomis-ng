@@ -8,7 +8,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import GroupIcon from '@material-ui/icons/Group';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
-import AddIcon from '@material-ui/icons/AddCircle';
+import ListIcon from '@material-ui/icons/List';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import HouseholdDashboard from './HouseholdDashboard'
 import HouseholdMember from "./HouseholdMember";
@@ -84,26 +84,26 @@ const HouseholdHomePage = (props) => {
                     <GroupIcon fontSize="large" className={'text-center'}/>
                     <p>Members</p>
                 </Menu.Item>
-
-                <Menu.Item
-                    name='services'
-                    active={activeItem === 'services'}
-                    onClick={handleItemClick}
-                    className={'text-center'}
-                >
-                  <DescriptionIcon fontSize="large" className={'text-center'}/>
-                       <p>Services</p>
-
-                </Menu.Item>
                 <Menu.Item
                     name='careplan'
                     active={activeItem === 'careplan'}
                     onClick={handleItemClick}
                     className={'text-center'}
                 >
-                    <FolderIcon fontSize="large" className={'text-center'}/>
-                    <p>Assessments & Care Plans</p>
+                    <ListIcon fontSize="large" className={'text-center'}/>
+                    <p> Care Plan & Assessment Check List</p>
                 </Menu.Item>
+                <Menu.Item
+                    name='services'
+                    active={activeItem === 'services'}
+                    onClick={handleItemClick}
+                    className={'text-center'}
+                >
+                    <FolderIcon fontSize="large" className={'text-center'}/>
+                       <p>Service Form History </p>
+
+                </Menu.Item>
+
             </Menu>
                 </CCol>
 

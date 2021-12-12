@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface DomainRepository extends JpaRepository<Domain, Long>, JpaSpecificationExecutor {
-    List findAllByArchived(int archived);
+    List findAllByArchivedOrderByIdDesc(int archived);
 
     Optional<Domain> findByNameAndArchived(String name, int archived);
 

@@ -7,11 +7,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;*/
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.OrganisationUnitDTO;
-import org.nomisng.domain.entity.HouseholdMigration;
 import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.domain.entity.OrganisationUnitHierarchy;
 import org.nomisng.domain.mapper.OrganisationUnitMapper;
-import org.nomisng.repository.HouseholdMigrationRepository;
 import org.nomisng.repository.HouseholdRepository;
 import org.nomisng.repository.OrganisationUnitHierarchyRepository;
 import org.nomisng.repository.OrganisationUnitRepository;
@@ -113,7 +111,7 @@ public class OrganisationUnitService {
             orgUnitName = "%"+orgUnitName+"%";
             return organisationUnitRepository.findAllByOrganisationByLevelAndName(organisationUnitLevelId, orgUnitName, pageable);
         }
-        return organisationUnitRepository.findAllByOrganisationUnitLevelId(organisationUnitLevelId, pageable);
+        return organisationUnitRepository.findAllByOrganisationUnitLevelIdOrderByIdDesc(organisationUnitLevelId, pageable);
     }
 
     public List<OrganisationUnit> getOrganisationUnitByOrganisationUnitLevelIdPageContent(Page<OrganisationUnit> page) {
@@ -161,7 +159,7 @@ public class OrganisationUnitService {
             return organisationUnitRepository.findAllByOrganisationByLevelAndName(organisationUnitLevelId, orgUnitName, pageable);
         }
 
-        return organisationUnitRepository.findAllByOrganisationUnitLevelId(organisationUnitLevelId, pageable);
+        return organisationUnitRepository.findAllByOrganisationUnitLevelIdOrderByIdDesc(organisationUnitLevelId, pageable);
     }
 
     /*public List getAll(){

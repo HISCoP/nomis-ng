@@ -11,11 +11,9 @@ import org.springframework.context.annotation.Profile;
 @AcrossApplication(
         modules = {
                 AcrossWebModule.NAME,
-                AcrossHibernateJpaModule.NAME,
-                BootstrapModule.NAME
+                AcrossHibernateJpaModule.NAME//BootstrapModule.NAME
         }
 )
-@Profile("!test")
 public class NomisBaseModule extends AcrossModule {
     public static final String NAME = "NomisBaseModule";
 

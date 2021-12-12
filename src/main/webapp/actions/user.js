@@ -1,7 +1,7 @@
 import axios from "axios";
 import { url as baseUrl } from "../api";
 import * as ACTION_TYPES from "./types";
-
+import { toast } from "react-toastify";
 /**
  * @Actions
  *  User Operations
@@ -27,14 +27,30 @@ export const register = (data, onSuccess, onError) => (dispatch) => {
       }
     })
     .catch((error) => {
-      dispatch({
-        type: ACTION_TYPES.REGISTER_FAILURE,
-        payload: "Something went wrong, please try again",
-      });
-      onError();
-      
-      console.log(error);
-    });
+      if (error.response) {
+        let errorMessage = error.response.data.apierror.message;              
+        if(onError){
+            onError();
+            toast.error(errorMessage);
+        }
+        // client received an error response (5xx, 4xx)
+      } else if (error.request) {
+        let errorMessage ='something went wrong. no response from the server';                
+        if(onError){
+            onError();
+            toast.error(errorMessage);
+        }
+        // client never received a response, or request never left
+      } else {
+        let errorMessage = 'something went wrong';
+        // anything else               
+        if(onError){
+            onError();
+            toast.error(errorMessage);
+        }
+      }
+    }
+      );
 };
 
 export const fetchUsers = (onSuccess, onError) => (dispatch) => {
@@ -51,21 +67,19 @@ export const fetchUsers = (onSuccess, onError) => (dispatch) => {
       onSuccess();
     })
     .catch((error) => {
-      if (onError) {
-        onError();
+                     
+        if(onError){
+            onError();
+            
+        }
       }
-      dispatch({
-        type: ACTION_TYPES.USER_ROLE_UPDATE,
-        payload: "Something went wrong, please try again",
-      });
-      onError();
-    });
+      );
 };
 
 
 export const updateUserRole = (id, data, onSuccess, onError) => (dispatch) => {
   axios
-    .post(`${baseUrl}users/${id}/roles`, data)
+    .put(`${baseUrl}users/${id}/roles`, data)
     .then((response) => {
       try {
         dispatch({
@@ -79,12 +93,16 @@ export const updateUserRole = (id, data, onSuccess, onError) => (dispatch) => {
       }
     })
     .catch((error) => {
-      dispatch({
-        type: ACTION_TYPES.USERS_ERROR,
-        payload: "Something went wrong, please try again",
-      });
-      console.log(error);
-    });
+     
+      if (error.response) {               
+        if(onError){
+            onError();
+            
+        }
+      }
+    }
+     
+      );
 };
 
 export const fetchMe = (onSuccess, onError) => (dispatch) => {
@@ -100,12 +118,13 @@ export const fetchMe = (onSuccess, onError) => (dispatch) => {
             });
         })
         .catch((error) => {
-            if (onError) {
+          if (error.response) {               
+            if(onError){
                 onError();
+                toast.error('Something went wrong! Please try again ');
             }
-            dispatch({
-                type: ACTION_TYPES.FETCH_ME,
-                payload: null,
-            });
-        });
+          }
+        }
+
+        );
 };

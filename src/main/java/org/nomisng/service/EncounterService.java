@@ -46,13 +46,15 @@ public class EncounterService {
     public List<EncounterDTO> getAllEncounters() {
         Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
         List<Encounter> encounters = encounterRepository.findAllByCboProjectIdAndArchived(userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED);
+        List<Encounter> encounterList = new ArrayList<>();
         encounters.forEach(singleEncounter -> {
             //filtering by user permission
             if (!accessRight.grantAccessForm(singleEncounter.getFormCode(), permissions)) {
                 return;
             }
+            encounterList.add(this.addFirstNameAndLastNameAndFormNameToEncounter(singleEncounter));
         });
-        return encounterMapper.toEncounterDTOS(encounters);
+        return encounterMapper.toEncounterDTOS(encounterList);
     }
 
     public EncounterDTO getEncounterById(Long id) {
@@ -69,7 +71,7 @@ public class EncounterService {
 
     public Encounter update(Long id, EncounterDTO encounterDTO) {
         accessRight.grantAccessByAccessType(encounterDTO.getFormCode(),
-                Encounter.class, WRITE, checkForEncounterAndGetPermission());
+                Encounter.class, WRITE, this.checkForEncounterAndGetPermission());
 
         encounterRepository.findByIdAndCboProjectIdAndArchived(id, userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
@@ -107,9 +109,9 @@ public class EncounterService {
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
 
         accessRight.grantAccessByAccessType(encounter.getFormCode(),
-                Encounter.class, DELETE, checkForEncounterAndGetPermission());
+                Encounter.class, DELETE, this.checkForEncounterAndGetPermission());
 
-        encounter.setArchived(UN_ARCHIVED);
+        encounter.setArchived(ARCHIVED);
         encounterRepository.save(encounter);
     }
 
@@ -118,19 +120,19 @@ public class EncounterService {
         Encounter encounter = encounterRepository.findByIdAndCboProjectIdAndArchived(encounterId, userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",encounterId+"" ));
         accessRight.grantAccessByAccessType(encounter.getFormCode(),
-                Encounter.class, READ, checkForEncounterAndGetPermission());
+                Encounter.class, READ, this.checkForEncounterAndGetPermission());
         return formDataMapper.toFormDataDTOS(encounter.getFormData());
     }
 
     public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCode(Long householdMemberId, String formCode, Pageable pageable) {
-        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, this.checkForEncounterAndGetPermission());
         return encounterRepository.findAllByHouseholdMemberIdAndFormCodeAndCboProjectIdAndArchivedOrderByIdDesc(householdMemberId, formCode,
                 userService.getUserWithRoles().get().getCurrentCboProjectId(),
                 UN_ARCHIVED, pageable);
     }
 
     public Page<Encounter> getEncountersByHouseholdIdAndFormCode(Long householdId, String formCode, Pageable pageable) {
-        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, this.checkForEncounterAndGetPermission());
 
         Long currentCboId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         return encounterRepository.findAllByHouseholdIdAndFormCodeAndCboProjectIdAndArchivedOrderByIdDesc(householdId, formCode,
@@ -172,9 +174,9 @@ public class EncounterService {
     }
 
     public Page<Encounter> getEncounterByHouseholdIdAndFormCodeAndDateEncounter(Long householdId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
-        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, this.checkForEncounterAndGetPermission());
 
-        HashMap<String, LocalDate> localDateHashMap = getDates(dateFrom, dateTo);
+        HashMap<String, LocalDate> localDateHashMap = this.getDates(dateFrom, dateTo);
         LocalDate localDateFrom = localDateHashMap.get("dateFrom");
         LocalDate localDateTo = localDateHashMap.get("dateTo");
         Long currentCboId = userService.getUserWithRoles().get().getCurrentCboProjectId();
@@ -184,9 +186,9 @@ public class EncounterService {
     }
 
     public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCodeAndDateEncounter(Long householdMemberId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
-        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, this.checkForEncounterAndGetPermission());
 
-        HashMap<String, LocalDate> localDateHashMap = getDates(dateFrom, dateTo);
+        HashMap<String, LocalDate> localDateHashMap = this.getDates(dateFrom, dateTo);
         LocalDate localDateFrom = localDateHashMap.get("dateFrom");
         LocalDate localDateTo = localDateHashMap.get("dateTo");
 

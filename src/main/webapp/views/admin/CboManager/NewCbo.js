@@ -11,6 +11,7 @@ import "react-widgets/dist/css/react-widgets.css";
 //import Select from "react-select/creatable";
 import { createCbosSetup, updateCbo  } from "./../../../actions/cbos";
 import { Spinner } from 'reactstrap';
+import { TextArea } from 'semantic-ui-react';
 
 
 
@@ -57,6 +58,7 @@ const NewCbo = (props) => {
     const createCbo = e => {
         
         e.preventDefault()
+        if (validate()) {
             setLoading(true);
             const onSuccess = () => {
                 setLoading(false);
@@ -72,7 +74,7 @@ const NewCbo = (props) => {
                 return
             }
             props.createCbosSetup(formData, onSuccess,onError)
-
+        }
     }
 
 
@@ -99,23 +101,46 @@ const NewCbo = (props) => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleInputChange}
-                                                required
+                                                
                                             />
+                                             {errors.name !=="" ? (
+                                                <span className={classes.error}>{errors.name}</span>
+                                            ) : "" }
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md={12}>
+                                        <FormGroup>
+                                            <Label>CBO Code</Label>
+                                            <Input
+                                                type='text'
+                                                name='code'
+                                                id='code'
+                                                placeholder=' '
+                                                value={formData.code}
+                                                onChange={handleInputChange}
+                                                
+                                            />
+                                             {errors.code !=="" ? (
+                                                <span className={classes.error}>{errors.code}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
 
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label>Description</Label>
+                                            <Label>Description (Address/Phone Number/Email)</Label>
                                             <Input
-                                                type='text'
+                                                type='textarea'
                                                 name='description'
                                                 id='description'
                                                 placeholder=' '
                                                 value={formData.description}
                                                 onChange={handleInputChange}
-                                                required
+                                                
                                             />
+                                             {errors.description !=="" ? (
+                                                <span className={classes.error}>{errors.description}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
 

@@ -28,7 +28,6 @@ public class OrganisationUnitLevel implements Serializable {
     private String description;
     @Basic
     @Column(name = "archived")
-    @JsonIgnore
     private Integer archived;
     @Basic
     @Column(name = "status")

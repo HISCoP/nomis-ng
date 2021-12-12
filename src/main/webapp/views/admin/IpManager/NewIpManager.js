@@ -15,6 +15,10 @@ import { Spinner } from 'reactstrap';
 
 
 const useStyles = makeStyles(theme => ({
+    error: {
+        color: "#f85032",
+        fontSize: "12.8px",
+    },
     button: {
         margin: theme.spacing(1)
     }
@@ -27,7 +31,22 @@ const NewDonor = (props) => {
     const [formData, setFormData] = useState( defaultValues)
     //const [errors, setErrors] = useState({});
     const classes = useStyles()
-  
+    const [errors, setErrors] = useState({});
+    /*****  Validation */
+    const validate = () => {
+       let temp = { ...errors };
+       temp.name = formData.name
+           ? ""
+           : "Name is required";
+           temp.description = formData.description
+           ? ""
+           : "Description  is required";    
+       setErrors({
+           ...temp,
+       });
+       
+       return Object.values(temp).every((x) => x == "");
+   };
     useEffect(() => {
         //for application CBO  edit, load form data
         //props.loadCbo();
@@ -45,6 +64,7 @@ const NewDonor = (props) => {
     const createIpSetup = e => {
         
         e.preventDefault()
+        if (validate()) {
             setLoading(true);
             const onSuccess = () => {
                 setLoading(false);
@@ -61,7 +81,7 @@ const NewDonor = (props) => {
                 return
             }
             props.createIp(formData, onSuccess,onError)
-
+        }
     }
 
 
@@ -90,12 +110,15 @@ const NewDonor = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
+                                            {errors.name !=="" ? (
+                                                <span className={classes.error}>{errors.name}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
 
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label>Description</Label>
+                                            <Label>Description  (Address/Phone Number/Email)</Label>
                                             <Input
                                                 type='text'
                                                 name='description'
@@ -105,6 +128,9 @@ const NewDonor = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
+                                            {errors.description !=="" ? (
+                                                <span className={classes.error}>{errors.description}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
 
