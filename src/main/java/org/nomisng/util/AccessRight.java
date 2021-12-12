@@ -16,7 +16,7 @@ public class AccessRight {
     private final UserService userService;
 
     public void grantAccess(String formCode, Class clz, Set<String> permissions){
-        if(permissions.contains("form_all") || permissions.contains(formCode+"_write") || permissions.contains(formCode+"_read") ||
+        if(permissions.contains("permission_all") || permissions.contains(formCode+"_write") || permissions.contains(formCode+"_read") ||
                 permissions.contains(formCode+"_delete")){
             return;
         }
@@ -25,7 +25,7 @@ public class AccessRight {
 
     //No need to throw an exception
     public Boolean grantAccessForm(String formCode, Set<String> permissions){
-        if(permissions.contains("form_all") || permissions.contains(formCode+"_write") || permissions.contains(formCode+"_read") ||
+        if(permissions.contains("permission_all") || permissions.contains(formCode+"_write") || permissions.contains(formCode+"_read") ||
                 permissions.contains(formCode+"_delete")){
             return true;
         }
@@ -34,7 +34,7 @@ public class AccessRight {
 
     public void grantAccessByAccessType(String formCode, Class clz, String accessType, Set<String> permissions){
         accessType = accessType.toLowerCase();
-        if (permissions.contains("form_all")) {
+        if (permissions.contains("permission_all")) {
             return;
         } else if (permissions.contains(formCode + "_" + accessType)) {
             return;
@@ -46,7 +46,7 @@ public class AccessRight {
         throw new AccessDeniedException(clz, "formCode",formCode+", "+accessType);
     }
 
-    public Set<String> getAllPermission(){
+    public Set<String> getAllPermissionForCurrentUser(){
         Set<String> permissions = new HashSet<>();
         userService.getUserWithRoles().get().getRole().forEach(roles1 ->{
             permissions.addAll(roles1.getPermission().stream().map(Permission::getName).collect(Collectors.toSet()));

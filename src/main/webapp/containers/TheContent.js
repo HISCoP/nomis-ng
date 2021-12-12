@@ -9,6 +9,7 @@ import { Spinner } from 'reactstrap';
 
 // routes config
 import routes from '../routes'
+import {PrivateRoute} from "../PrivateRoute";
   
 const loading = (
   <div className="pt-10 text-center">
@@ -26,6 +27,9 @@ const TheContent = () => {
           <Switch>
             {routes.map((route, idx) => {
               return route.component && (
+                  route.isPrivate ?
+                      <PrivateRoute key={idx} exact path={route.path} name={route.name} component={route.component}  />
+                    :
                 <Route
                   key={idx}
                   path={route.path}

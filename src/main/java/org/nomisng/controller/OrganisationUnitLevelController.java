@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,14 +20,13 @@ public class OrganisationUnitLevelController {
     private final OrganisationUnitLevelService organisationUnitLevelService;
 
     @PostMapping
-    public ResponseEntity<OrganisationUnitLevelDTO> save(@RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO) {
+    public ResponseEntity<OrganisationUnitLevelDTO> save(@Valid @RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO) {
         return ResponseEntity.ok(organisationUnitLevelService.save(organisationUnitLevelDTO));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<OrganisationUnitLevelDTO> update(@PathVariable Long id, @RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO){
+    public ResponseEntity<OrganisationUnitLevelDTO> update(@PathVariable Long id, @Valid @RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO){
         return ResponseEntity.ok(organisationUnitLevelService.update(id, organisationUnitLevelDTO));
-
     }
 
     @GetMapping

@@ -3,26 +3,30 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.FormDataDTO;
 import org.nomisng.domain.entity.Encounter;
 import org.nomisng.domain.entity.FormData;
-import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.HouseholdMember;
 import org.nomisng.domain.mapper.EncounterMapper;
 import org.nomisng.domain.mapper.FormDataMapper;
 import org.nomisng.repository.EncounterRepository;
 import org.nomisng.repository.FormDataRepository;
-import org.nomisng.util.Constants;
+import org.nomisng.util.AccessRight;
 import org.nomisng.util.JsonUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.nomisng.util.Constants.ArchiveStatus.*;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @org.springframework.stereotype.Service
 @Transactional
@@ -33,20 +37,43 @@ public class EncounterService {
     private final FormDataRepository formDataRepository;
     private final EncounterMapper encounterMapper;
     private final FormDataMapper formDataMapper;
-    private final Long organisationUnitId = 1L;
+    private final AccessRight accessRight;
+    private final UserService userService;
+    private static final String WRITE = "write";
+    private static final String DELETE = "delete";
+    private static final String READ = "read";
 
     public List<EncounterDTO> getAllEncounters() {
-        return encounterMapper.toEncounterDTOS(encounterRepository.findAllByArchived(UN_ARCHIVED));
+        Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
+        List<Encounter> encounters = encounterRepository.findAllByCboProjectIdAndArchived(userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED);
+        encounters.forEach(singleEncounter -> {
+            //filtering by user permission
+            if (!accessRight.grantAccessForm(singleEncounter.getFormCode(), permissions)) {
+                return;
+            }
+        });
+        return encounterMapper.toEncounterDTOS(encounters);
     }
 
     public EncounterDTO getEncounterById(Long id) {
-        Encounter encounter =  encounterRepository.findByIdAndArchived(id, UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
+        Encounter encounter =  encounterRepository.findByIdAndCboProjectIdAndArchived
+                (id, userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
+
+        //Grant access
+        accessRight.grantAccess(encounter.getFormCode(), Encounter.class,
+                accessRight.getAllPermissionForCurrentUser());
+
         return encounterMapper.toEncounterDTO(encounter);
     }
 
     public Encounter update(Long id, EncounterDTO encounterDTO) {
-        encounterRepository.findByIdAndArchived(id, UN_ARCHIVED)
+        accessRight.grantAccessByAccessType(encounterDTO.getFormCode(),
+                Encounter.class, WRITE, checkForEncounterAndGetPermission());
+
+        encounterRepository.findByIdAndCboProjectIdAndArchived(id, userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
+
         Encounter encounter = encounterMapper.toEncounter(encounterDTO);
         encounter.setId(id);
         encounter.setArchived(UN_ARCHIVED);
@@ -54,39 +81,60 @@ public class EncounterService {
     }
 
     public Encounter save(EncounterDTO encounterDTO) {
+        Long currentCboId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+        //Grant access by access type = WRITE
+        accessRight.grantAccessByAccessType(encounterDTO.getFormCode(), Encounter.class, WRITE,
+                accessRight.getAllPermissionForCurrentUser());
+
         Encounter encounter = encounterMapper.toEncounter(encounterDTO);
-        //encounter.setOrganisationUnitId(organisationUnitId);
+        encounter.setCboProjectId(currentCboId);
+        encounter.setArchived(UN_ARCHIVED);
         encounter = encounterRepository.save(encounter);
         final Long finalEncounterId = encounter.getId();
 
         encounterDTO.getFormData().forEach(formData -> {
             formData.setEncounterId(finalEncounterId);
-            //formData.setOrganisationUnitId(organisationUnitId);
+            formData.setCboProjectId(currentCboId);
+            formData.setArchived(UN_ARCHIVED);
         });
+
         formDataRepository.saveAll(encounterDTO.getFormData());
         return encounter;
     }
 
     public void delete(Long id) {
-        Encounter encounter = encounterRepository.findByIdAndArchived(id, UN_ARCHIVED)
+        Encounter encounter = encounterRepository.findByIdAndCboProjectIdAndArchived(id, userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",id+"" ));
+
+        accessRight.grantAccessByAccessType(encounter.getFormCode(),
+                Encounter.class, DELETE, checkForEncounterAndGetPermission());
+
         encounter.setArchived(UN_ARCHIVED);
         encounterRepository.save(encounter);
     }
 
 
     public List<FormDataDTO> getFormDataByEncounterId(Long encounterId) {
-        Encounter encounter = encounterRepository.findById(encounterId)
+        Encounter encounter = encounterRepository.findByIdAndCboProjectIdAndArchived(encounterId, userService.getUserWithRoles().get().getCurrentCboProjectId(), UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Encounter.class, "Id",encounterId+"" ));
+        accessRight.grantAccessByAccessType(encounter.getFormCode(),
+                Encounter.class, READ, checkForEncounterAndGetPermission());
         return formDataMapper.toFormDataDTOS(encounter.getFormData());
     }
 
     public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCode(Long householdMemberId, String formCode, Pageable pageable) {
-        return encounterRepository.findAllByHouseholdMemberIdAndFormCodeAndArchivedOrderByIdDesc(householdMemberId, formCode, UN_ARCHIVED, pageable);
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+        return encounterRepository.findAllByHouseholdMemberIdAndFormCodeAndCboProjectIdAndArchivedOrderByIdDesc(householdMemberId, formCode,
+                userService.getUserWithRoles().get().getCurrentCboProjectId(),
+                UN_ARCHIVED, pageable);
     }
 
     public Page<Encounter> getEncountersByHouseholdIdAndFormCode(Long householdId, String formCode, Pageable pageable) {
-        return encounterRepository.findAllByHouseholdIdAndFormCodeAndArchivedOrderByIdDesc(householdId, formCode, UN_ARCHIVED, pageable);
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+
+        Long currentCboId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+        return encounterRepository.findAllByHouseholdIdAndFormCodeAndCboProjectIdAndArchivedOrderByIdDesc(householdId, formCode,
+                currentCboId, UN_ARCHIVED, pageable);
     }
 
     public List<EncounterDTO> getEncounterDTOFromPage(Page<Encounter> encounterPage){
@@ -107,6 +155,7 @@ public class EncounterService {
     protected Encounter addFirstNameAndLastNameAndFormNameToEncounter(Encounter encounter){
         encounter.setFormName(encounter.getFormByFormCode().getName());
         if(encounter.getHouseholdMemberByHouseholdMemberId() != null) {
+            //TODO: throwing error sort it out
             HouseholdMember householdMember = encounter.getHouseholdMemberByHouseholdMemberId();
             String firstName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "firstName").replaceAll("^\"+|\"+$", "");
             String lastName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName").replaceAll("^\"+|\"+$", "");
@@ -116,5 +165,53 @@ public class EncounterService {
             encounter.setLastName(lastName);
         }
         return encounter;
+    }
+
+    private Set<String> checkForEncounterAndGetPermission(){
+        return accessRight.getAllPermissionForCurrentUser();
+    }
+
+    public Page<Encounter> getEncounterByHouseholdIdAndFormCodeAndDateEncounter(Long householdId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+
+        HashMap<String, LocalDate> localDateHashMap = getDates(dateFrom, dateTo);
+        LocalDate localDateFrom = localDateHashMap.get("dateFrom");
+        LocalDate localDateTo = localDateHashMap.get("dateTo");
+        Long currentCboId = userService.getUserWithRoles().get().getCurrentCboProjectId();
+
+        return encounterRepository.findAllByHouseholdIdAndFormCodeAndArchivedAndCboProjectIdAndDateEncounterOrderByIdDesc(
+                householdId, formCode, UN_ARCHIVED, currentCboId, localDateTo, localDateFrom, pageable);
+    }
+
+    public Page<Encounter> getEncountersByHouseholdMemberIdAndFormCodeAndDateEncounter(Long householdMemberId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
+        accessRight.grantAccessByAccessType(formCode, Encounter.class, READ, checkForEncounterAndGetPermission());
+
+        HashMap<String, LocalDate> localDateHashMap = getDates(dateFrom, dateTo);
+        LocalDate localDateFrom = localDateHashMap.get("dateFrom");
+        LocalDate localDateTo = localDateHashMap.get("dateTo");
+
+        return encounterRepository.findAllByHouseholdMemberIdAndFormCodeAndArchivedAndCboProjectIdAndDateEncounterOrderByIdDesc(
+                householdMemberId, formCode, UN_ARCHIVED, userService.getUserWithRoles().get().getCurrentCboProjectId(),
+                localDateTo, localDateFrom, pageable);
+    }
+
+    private HashMap<String, LocalDate> getDates(String dateFrom, String dateTo){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        HashMap<String, LocalDate> localDateHashMap = new HashMap<>();
+
+        LocalDate localDateFrom = LocalDate.now();
+        LocalDate localDateTo;
+
+        if(!StringUtils.isBlank(dateFrom) && !dateFrom.equalsIgnoreCase("*")) {
+            localDateFrom = LocalDate.parse(dateFrom, formatter);
+        }
+        if(!StringUtils.isBlank(dateTo) && !dateTo.equalsIgnoreCase("*")) {
+            localDateTo = LocalDate.parse(dateTo, formatter);
+        } else {
+            localDateTo = localDateFrom;
+        }
+        localDateHashMap.put("dateFrom", localDateFrom);
+        localDateHashMap.put("dateTo", localDateTo);
+        return localDateHashMap;
     }
 }

@@ -7,9 +7,11 @@ import org.nomisng.domain.dto.OvcServiceDTO;
 import org.nomisng.domain.entity.Domain;
 import org.nomisng.domain.entity.OvcService;
 import org.nomisng.service.DomainService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -26,7 +28,7 @@ public class DomainController {
     }
 
     @GetMapping("/domainCode")
-    public ResponseEntity<DomainDTO> getDomainByFormCode(@RequestParam String domainCode) {
+    public ResponseEntity<DomainDTO> getDomainByDomainCode(@RequestParam String domainCode) {
             return ResponseEntity.ok(domainService.getDomainByDomainCode(domainCode));
     }
 
@@ -46,17 +48,19 @@ public class DomainController {
     }
 
     @PostMapping
-    public ResponseEntity<Domain> save(@RequestBody DomainDTO domainDTO) {
+    @ResponseStatus(HttpStatus.CREATED) //201
+    public ResponseEntity<Domain> save(@Valid @RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.save(domainDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Domain> update(@PathVariable Long id, @RequestBody DomainDTO domainDTO) {
+    public ResponseEntity<Domain> update(@PathVariable Long id, @Valid @RequestBody DomainDTO domainDTO) {
         return ResponseEntity.ok(domainService.update(id, domainDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(domainService.delete(id));
+    @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    public void delete(@PathVariable Long id) {
+        domainService.delete(id);
     }
 }

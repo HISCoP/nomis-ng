@@ -35,7 +35,7 @@ const FillForm = (props) => {
         axios
             .get(`${url}forms`)
             .then(response => {
-                setFormList(response.data.filter(x => (x.code !== CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM && x.code !== CODES.CARE_GIVER_ENROLMENT_FORM && x.code !== CODES.CARE_PLAN && x.code !== CODES.HOUSEHOLD_ASSESSMENT && x.code !== CODES.Caregiver_Household_Service && x.code !== "6b8e6617-7182-40d0-9e8c-d6f33e9f4325" && x.code !== "cc07a3a6-286e-4c1e-a2ce-08a429b42d0d" && x.code !== "ca9332ef-b60b-42ac-b879-a67ebf27649d")))
+                setFormList(response.data.filter(x => (x.code !== CODES.VULNERABLE_CHILDREN_ENROLMENT_FORM && x.code !== CODES.CARE_GIVER_ENROLMENT_FORM && x.code !== CODES.CARE_PLAN && x.code !== CODES.HOUSEHOLD_ASSESSMENT && x.code !== CODES.HOUSEHOLD_MEMBER_SERVICE_PROVISION && x.code !== "6b8e6617-7182-40d0-9e8c-d6f33e9f4325" && x.code !== "cc07a3a6-286e-4c1e-a2ce-08a429b42d0d" && x.code !== "ca9332ef-b60b-42ac-b879-a67ebf27649d"  && x.code !== CODES.PREVENTIVE_SERVICE_FORM )))
                 if(onSuccess){
                     onSuccess();
                 }
@@ -119,7 +119,9 @@ const FillForm = (props) => {
             <CCardBody>
             <FormRenderer
             formCode={selectedForm}
+            showHeader
             householdMemberId={props.member.id}
+            householdId={props.householdId}
             onSuccess={onSuccess}
             />
             </CCardBody>

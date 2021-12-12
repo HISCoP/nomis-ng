@@ -67,6 +67,10 @@ public class OvcServiceService {
     public void delete(Long id) {
         OvcService ovcService = ovcServiceRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(OvcService.class, "OvcService Id", id + ""));
+        Domain domain = ovcService.getDomainByDomainId();
+        if(domain != null){
+            throw new RecordExistException(Domain.class, "Domain" + domain.getName(), "tied to ovcServices");
+        }
         ovcService.setArchived(ARCHIVED);
         ovcServiceRepository.save(ovcService);
     }

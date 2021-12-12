@@ -14,12 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitLevelService {
-    public static final int UN_ARCHIVED = 0;
     private final OrganisationUnitLevelRepository organisationUnitLevelRepository;
     private final OrganisationUnitLevelMapper organisationUnitLevelMapper;
 

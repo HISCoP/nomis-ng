@@ -31,6 +31,7 @@ public class DomainService {
     private final DomainRepository domainRepository;
     private final DomainMapper domainMapper;
     private final OvcServiceMapper ovcServiceMapper;
+    private final static Integer BOTH = 3;
 
 
     public List getAllDomains() {
@@ -72,13 +73,16 @@ public class DomainService {
         return domainRepository.save(domain);
     }
 
-    public Integer delete(Long id) {
+    public void delete(Long id) {
         Domain domain = domainRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", id +""));
 
+        List<OvcService> ovcServices = domain.getServicesById();
+        if(!ovcServices.isEmpty()){
+           throw new RecordExistException(OvcService.class, "ovcServices", "tied to domain");
+        }
         domain.setArchived(ARCHIVED);
         domainRepository.save(domain);
-        return domain.getArchived();
     }
 
     public List<OvcServiceDTO> getOvcServicesByDomainId(Long domainId){
@@ -98,7 +102,7 @@ public class DomainService {
 
         List<OvcService> ovcServices = domain.getServicesById().stream()
                 .filter(ovcService -> ovcService.getArchived()!= null && ovcService.getArchived()== UN_ARCHIVED &&
-                        (ovcService.getServiceType() != null && ovcService.getServiceType() == serviceType))
+                        (ovcService.getServiceType() != null && ovcService.getServiceType() == serviceType || ovcService.getServiceType() == BOTH))
                 .sorted(Comparator.comparing(OvcService::getId).reversed())
                 .map(ovcService -> {ovcService.setDomainName(domain.getName()); return ovcService;}) //setting domain name of an ovcService
                 .collect(Collectors.toList());

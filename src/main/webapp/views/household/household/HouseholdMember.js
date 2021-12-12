@@ -53,7 +53,7 @@ const HouseholdMember = (props) => {
             {!loading && props.houseMemberList !==null ? props.houseMemberList.map((member) => (
                 (
                 <CCol xs="12" sm="6" lg="4" key={member.id}>
-                   <MemberCard  member={member} />
+                   <MemberCard  member={member} householdId={houseHoldId} />
                 </CCol>
                 )
             )
@@ -70,8 +70,8 @@ const HouseholdMember = (props) => {
             :
             ""
             }
-            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers}/>
-            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers}/>
+            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.length} />
+            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.length}/>
             
             </>
     );
@@ -95,16 +95,15 @@ const MemberCard = (props) => {
                 <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "VC" || ''}</b></p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
                 <Link color="inherit" to ={{
-                    pathname: "/household-member/home", state: props.member.id
-                }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName }</span></Link><br/>
-                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {calculateAge(props.member.details.dob)} </span>
+                    pathname: "/household-member/home", state: props.member.id, householdId:props.householdId }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName } <br /> {props.member.uniqueId}</span></Link><br/>
+                <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {props.member.details.dateOfBirthType === 'estimated' ? '~' : ''} {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>
             <CCardFooter>
                 <CButton color="primary" block onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton>
             </CCardFooter>
         </CCard>
-        <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId}/>
+        <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} householdId={props.householdId}/>
     </>
     );
 }

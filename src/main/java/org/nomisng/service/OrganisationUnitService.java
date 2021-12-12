@@ -2,41 +2,45 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+/*import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;*/
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.OrganisationUnitDTO;
+import org.nomisng.domain.entity.HouseholdMigration;
 import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.domain.entity.OrganisationUnitHierarchy;
 import org.nomisng.domain.mapper.OrganisationUnitMapper;
+import org.nomisng.repository.HouseholdMigrationRepository;
+import org.nomisng.repository.HouseholdRepository;
 import org.nomisng.repository.OrganisationUnitHierarchyRepository;
 import org.nomisng.repository.OrganisationUnitRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/*import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;*/
-/*
-import org.lamisplus.modules.base.domain.dto.OrganisationUnitExtraction;
-*/
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitService {
-    private static final int UNARCHIVED = 0;
-    private static final int ARCHIVED = 1;
     private static final Long FIRST_ORG_LEVEL = 1L;
+    public static final long WARD_LEVEL = 4L;
     private final OrganisationUnitRepository organisationUnitRepository;
+    private final HouseholdRepository householdRepository;
     private final OrganisationUnitMapper organisationUnitMapper;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
+    private final HouseholdService householdService;
 
     public OrganisationUnit save(OrganisationUnitDTO organisationUnitDTO) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UN_ARCHIVED);
         if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnit.class, "Name", organisationUnitDTO.getName() +"");
         final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
 
@@ -63,7 +67,7 @@ public class OrganisationUnitService {
 
     //TODO: work on this
     public OrganisationUnit update(Long id, OrganisationUnitDTO organisationUnitDTO) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if(!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
         final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
 
@@ -71,32 +75,32 @@ public class OrganisationUnitService {
         return organisationUnitRepository.save(organisationUnit);
     }
 
-    /*public Integer delete(Long id) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UNARCHIVED);
+    public Integer delete(Long id) {
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if (!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
         organizationOptional.get().setArchived(ARCHIVED);
         return organizationOptional.get().getArchived();
-    }*/
+    }
 
     public OrganisationUnit getOrganizationUnit(Long id){
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UNARCHIVED);
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if (!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
         return organizationOptional.get();
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitId(Long id) {
-        return  organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived(id, UNARCHIVED);
+        return  organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived(id, UN_ARCHIVED);
     }
 
     public List<OrganisationUnit> getAllOrganizationUnit() {
-        return organisationUnitRepository.findAllByArchivedOrderByIdAsc(UNARCHIVED);
+        return organisationUnitRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(Long parentOrgUnitId, Long orgUnitLevelId) {
-        OrganisationUnit parentOrganisationUnit = organisationUnitRepository.findByIdAndArchived(parentOrgUnitId, UNARCHIVED).orElseThrow(
+        OrganisationUnit parentOrganisationUnit = organisationUnitRepository.findByIdAndArchived(parentOrgUnitId, UN_ARCHIVED).orElseThrow(
                 () -> new EntityNotFoundException(OrganisationUnit.class, "Parent OrganisationUnit", "invalid"));
 
-            List<OrganisationUnit> organisationUnits = new ArrayList<>();
+        List<OrganisationUnit> organisationUnits = new ArrayList<>();
         organisationUnitRepository.findAllByParentOrganisationUnitIdAndOrganisationUnitLevelId(parentOrgUnitId, orgUnitLevelId).forEach(organisationUnit -> {
             organisationUnit.setParentOrganisationUnitName(parentOrganisationUnit.getName());
             organisationUnits.add(organisationUnit);
@@ -104,9 +108,17 @@ public class OrganisationUnitService {
         return organisationUnits;
     }
 
-    public List<OrganisationUnit> getOrganisationUnitByOrganisationUnitLevelId(Long id) {
+    public Page<OrganisationUnit> getOrganisationUnitByOrganisationUnitLevelId(Long organisationUnitLevelId, String orgUnitName, Pageable pageable) {
+        if(orgUnitName != null && !orgUnitName.equalsIgnoreCase("*")){
+            orgUnitName = "%"+orgUnitName+"%";
+            return organisationUnitRepository.findAllByOrganisationByLevelAndName(organisationUnitLevelId, orgUnitName, pageable);
+        }
+        return organisationUnitRepository.findAllByOrganisationUnitLevelId(organisationUnitLevelId, pageable);
+    }
+
+    public List<OrganisationUnit> getOrganisationUnitByOrganisationUnitLevelIdPageContent(Page<OrganisationUnit> page) {
         List<OrganisationUnit> organisationUnits = new ArrayList<>();
-        organisationUnitRepository.findAllByOrganisationUnitLevelId(id).forEach(organisationUnit -> {
+        page.getContent().forEach(organisationUnit -> {
             Long orgUnitId = organisationUnit.getParentOrganisationUnitId();
             /*for(int i=0; i<2; i++) {
                 Optional<OrganisationUnit> optionalOrganisationUnit = organisationUnitRepository.findByIdAndArchived(orgUnitId, UNARCHIVED);
@@ -121,39 +133,35 @@ public class OrganisationUnitService {
             }*/
             organisationUnits.add(findOrganisationUnits(organisationUnit, orgUnitId));
         });
-
         return organisationUnits;
     }
 
-    public List<OrganisationUnitDTO> getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(Long parent_org_unit_id, Long org_unit_level_id) {
-        List<OrganisationUnitHierarchy> organisationUnitHierarchies = organisationUnitHierarchyRepository.findAllByParentOrganisationUnitIdAndOrganisationUnitLevelId(parent_org_unit_id, org_unit_level_id);
+
+        public Page<OrganisationUnitHierarchy> getOrganisationUnitHierarchies(Long parent_org_unit_id, Long org_unit_level_id, Pageable pageable){
+        return organisationUnitHierarchyRepository.findAllByParentOrganisationUnitIdAndOrganisationUnitLevelId(parent_org_unit_id, org_unit_level_id, pageable);
+    }
+
+    public List<OrganisationUnitDTO> getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(Page<OrganisationUnitHierarchy> organisationUnitHierarchies) {
         List<OrganisationUnitDTO> organisationUnitDTOS = new ArrayList<>();
         organisationUnitHierarchies.forEach(organisationUnitHierarchy -> {
             OrganisationUnit organisationUnit = organisationUnitHierarchy.getOrganisationUnitByOrganisationUnitId();
-            final OrganisationUnitDTO organisationUnitDTO = organisationUnitMapper.toOrganisationUnitDTO(organisationUnit);
             Long orgUnitId = organisationUnit.getParentOrganisationUnitId();
-            /*for(int i=0; i<2; i++) {
-                Optional<OrganisationUnit> optionalOrganisationUnit = organisationUnitRepository.findByIdAndArchived(orgUnitId, UNARCHIVED);
-                if(optionalOrganisationUnit.isPresent()){
-                    if(organisationUnitDTO.getParentOrganisationUnitName() == null) {
-                    organisationUnitDTO.setParentOrganisationUnitName(optionalOrganisationUnit.get().getName());
-                    }else if(organisationUnitDTO.getParentParentOrganisationUnitName() == null) {
-                    organisationUnitDTO.setParentParentOrganisationUnitName(optionalOrganisationUnit.get().getName());
-                }
-                    orgUnitId = optionalOrganisationUnit.get().getParentOrganisationUnitId();
-              }
-            }*/
+
+            if(organisationUnit.getOrganisationUnitLevelId() == WARD_LEVEL){
+                organisationUnit.setHouseholdMaxCount(householdService.getMaxHouseholdIdByWardId(organisationUnit.getId()));
+            }
             organisationUnitDTOS.add(organisationUnitMapper.toOrganisationUnitDTO(findOrganisationUnits(organisationUnit, orgUnitId)));
         });
         return organisationUnitDTOS;
     }
 
-    public List<OrganisationUnit> getAllOrganisationUnitByOrganisationUnitLevelId(Long organisationUnitLevelId) {
-        List<Long> levels = new ArrayList<>();
-        for(Long i = FIRST_ORG_LEVEL; i < organisationUnitLevelId; i++){
-            levels.add(i);
+    public Page<OrganisationUnit> getAllOrganisationUnitByOrganisationUnitLevelId(Long organisationUnitLevelId, String orgUnitName, Pageable pageable) {
+        if(orgUnitName != null && !orgUnitName.equalsIgnoreCase("*")){
+            orgUnitName = "%"+orgUnitName;
+            return organisationUnitRepository.findAllByOrganisationByLevelAndName(organisationUnitLevelId, orgUnitName, pageable);
         }
-        return organisationUnitRepository.findAllByOrganisationUnitLevelIdIn(levels);
+
+        return organisationUnitRepository.findAllByOrganisationUnitLevelId(organisationUnitLevelId, pageable);
     }
 
     /*public List getAll(){
@@ -239,7 +247,7 @@ public class OrganisationUnitService {
 
     private OrganisationUnit findOrganisationUnits(OrganisationUnit organisationUnit, Long orgUnitId){
         for(int i=0; i<2; i++) {
-            Optional<OrganisationUnit> optionalOrganisationUnit = organisationUnitRepository.findByIdAndArchived(orgUnitId, UNARCHIVED);
+            Optional<OrganisationUnit> optionalOrganisationUnit = organisationUnitRepository.findByIdAndArchived(orgUnitId, UN_ARCHIVED);
             if(optionalOrganisationUnit.isPresent()){
                 if(organisationUnit.getParentOrganisationUnitName() == null) {
                     organisationUnit.setParentOrganisationUnitName(optionalOrganisationUnit.get().getName());

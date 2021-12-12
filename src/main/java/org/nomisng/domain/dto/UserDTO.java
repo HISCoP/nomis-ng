@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.nomisng.domain.entity.ApplicationUserOrganisationUnit;
+import org.nomisng.domain.entity.ApplicationUserCboProject;
 import org.nomisng.domain.entity.Permission;
 import org.nomisng.domain.entity.Role;
 import org.nomisng.domain.entity.User;
@@ -29,10 +29,11 @@ public class UserDTO {
     private String phoneNumber;
     private String gender;
     private LocalDate dateOfBirth;
-    private Long currentOrganisationUnitId;
+    private Long currentCboProjectId;
+    private Long cboProjectId;
     @ToString.Exclude
-    private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits;
-    private String currentOrganisationUnitName;
+    private List<ApplicationUserCboProject> applicationUserCboProjects;
+    private String currentCboProjectDescription;
 
 
 
@@ -49,9 +50,9 @@ public class UserDTO {
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.gender = user.getGender();
-        this.currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
-        this.applicationUserOrganisationUnits = user.getApplicationUserOrganisationUnits();
-        currentOrganisationUnitName = user.getOrganisationUnitByCurrentOrganisationUnitId() != null ? user.getOrganisationUnitByCurrentOrganisationUnitId().getName() : null;
+        this.currentCboProjectId = user.getCurrentCboProjectId();
+        this.applicationUserCboProjects = user.getApplicationUserCboProjects();
+        this.currentCboProjectDescription = user.getCboProjectByCurrentCboProjectId() != null ? user.getCboProjectByCurrentCboProjectId().getDescription() : null;
     }
 
 
@@ -65,7 +66,8 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", gender='" + gender + '\'' +
-                ", currentOrganisationUnitId='" + currentOrganisationUnitId + '\'' +
+                ", currentCboProjectId='" + currentCboProjectId + '\'' +
+                ", cboProjectId='" + cboProjectId + '\'' +
                 ", roles=" + roles + '\'' +
                 ", permissions=" + permissions + '\'' +
                 '}';

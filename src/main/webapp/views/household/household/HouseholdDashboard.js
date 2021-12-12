@@ -31,22 +31,22 @@ const HouseholdDashboard = (props) => {
     return (
         <>
                 <CRow>
-                    <CCol xs="12" sm="6" lg="3">
-                <CWidgetIcon text="Total VC" header={props.household && props.household.details && props.household.details.noOfChildren ? props.household.details.noOfChildren : ''}  color="success" iconPadding={false}>
+                    <CCol xs="12" sm="6" lg="4">
+                <CWidgetIcon text="Total Enrolled VC" header={props.houseMemberList ? props.houseMemberList.filter(x => x.householdMemberType === 2).length : ''}  color="success" iconPadding={false}>
                     <CIcon width={24} name="cil-people"/>
                 </CWidgetIcon>
                     </CCol>
-                    <CCol xs="12" sm="6" lg="3">
-                        <CWidgetIcon text="Total Services" header={props.householdServiceHistory.length} color="success"  iconPadding={false}>
-                            <CIcon width={24} name="cil-notes"/>
-                        </CWidgetIcon>
-                    </CCol>
-                    <CCol xs="12" sm="6" lg="3">
+                    {/*<CCol xs="12" sm="6" lg="3">*/}
+                    {/*    <CWidgetIcon text="Total Services" header={props.householdServiceHistory.length} color="success"  iconPadding={false}>*/}
+                    {/*        <CIcon width={24} name="cil-notes"/>*/}
+                    {/*    </CWidgetIcon>*/}
+                    {/*</CCol>*/}
+                    <CCol xs="12" sm="6" lg="4">
                         <CWidgetIcon text="Total HIV Positive" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
                         </CCol>
-                    <CCol xs="12" sm="6" lg="3">
+                    <CCol xs="12" sm="6" lg="4">
                         <CWidgetIcon text="Total Virally Suppressed" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
@@ -71,7 +71,7 @@ const HouseholdDashboard = (props) => {
                                         <List.Item>
                                             <List.Content floated='right'>
                                                 <Link color="inherit" to={{
-                                                    pathname: "/household-member/home", state: member.id
+                                                    pathname: "/household-member/home", state: member.id, householdId:props.household.id
                                                 }}> <Button> View</Button> </Link>
                                             </List.Content>
                                             <List.Content>{member.details.firstName + " " + member.details.lastName} - {member.details.sex && member.details.sex.display ? member.details.sex.display : "Nil"} </List.Content>

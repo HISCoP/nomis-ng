@@ -14,7 +14,7 @@ import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.ReportDetailDTO;
 import org.nomisng.domain.dto.ReportInfoDTO;
-import org.nomisng.domain.entity.ApplicationUserOrganisationUnit;
+import org.nomisng.domain.entity.ApplicationUserCboProject;
 import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.domain.entity.ReportInfo;
 import org.nomisng.domain.entity.User;
@@ -109,7 +109,7 @@ public class BirtReportService implements ApplicationContextAware, DisposableBea
         Optional<User> optionalUser = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName);
         if(optionalUser.isPresent()){
             user = optionalUser.get();
-            List <Long> orgUnits = user.getApplicationUserOrganisationUnits().stream().map(ApplicationUserOrganisationUnit::getOrganisationUnitId).collect(Collectors.toList());
+            List <Long> orgUnits = user.getApplicationUserCboProjects().stream().map(ApplicationUserCboProject::getCboProjectId).collect(Collectors.toList());
             if(params.get("facilityId") != null){
                 if(!orgUnits.contains(Long.valueOf(params.get("facilityId").toString()))){
                     throw new EntityNotFoundException(OrganisationUnit.class,"FacilityId","Organisation Unit not valid");
@@ -125,7 +125,7 @@ public class BirtReportService implements ApplicationContextAware, DisposableBea
                 });
                 params.put("facilityIds", StringUtils.join(facilityIds, ","));
             } else {
-                params.put("facilityId", user.getCurrentOrganisationUnitId());
+                params.put("facilityId", user.getCurrentCboProjectId());
             }
         }
 

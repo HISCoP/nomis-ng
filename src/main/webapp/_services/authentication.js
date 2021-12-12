@@ -55,22 +55,22 @@ function login(username, password, remember, cboProjectId) {
 }
 
 function logout(props) {
-    
-    axios.post(`${url}users/logOut`)
-        
-        .then(response => {
-           
-            console.log(response)
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('currentUser_Permissions');
-            localStorage.removeItem('currentUserCboProjectName');
-            localStorage.removeItem('selectedProjectAtLogin');
-            currentUserSubject.next(null);
-
-        })
-        .catch((error) => {
-           
-        });;
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser_Permissions');
+    localStorage.removeItem('currentUserCboProjectName');
+    localStorage.removeItem('selectedProjectAtLogin');
+    currentUserSubject.next(null);
+    // axios.post(`${url}users/logOut`)
+    //
+    //     .then(response => {
+    //
+    //         console.log(response)
+    //
+    //
+    //     })
+    //     .catch((error) => {
+    //
+    //     });;
              // remove user from local storage to log user out
            
       

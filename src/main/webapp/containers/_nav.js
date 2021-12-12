@@ -24,6 +24,12 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Retrospective',
+    to: '/retrospective',
+    icon: 'cilList',
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Reports',
     to: '/report',
     icon: 'cilList',

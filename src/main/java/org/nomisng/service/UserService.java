@@ -5,18 +5,12 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.UserDTO;
-import org.nomisng.domain.entity.ApplicationUserOrganisationUnit;
-import org.nomisng.domain.entity.OrganisationUnit;
-import org.nomisng.domain.entity.Role;
-import org.nomisng.domain.entity.User;
+import org.nomisng.domain.entity.*;
 import org.nomisng.domain.mapper.UserMapper;
-import org.nomisng.repository.OrganisationUnitRepository;
-import org.nomisng.repository.RoleRepository;
-import org.nomisng.repository.UserRepository;
+import org.nomisng.repository.*;
 import org.nomisng.security.RolesConstants;
 //import org.nomisng.security.SecurityUtils;
 import org.nomisng.security.SecurityUtils;
-import org.nomisng.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -30,8 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -49,10 +42,9 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    private final OrganisationUnitRepository organisationUnitRepository;
+    private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
 
-    private Long currentOrganisationUnit = 0L;
-
+    private final CboProjectRepository cboProjectRepository;
 
 
     @Transactional
@@ -75,16 +67,17 @@ public class UserService {
                     }
             );
         }
+        Long cboProjectId = getUserWithRoles().get().getCurrentCboProjectId();
 
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setUserName(userDTO.getUserName());
         newUser.setEmail(userDTO.getEmail());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
-        newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
+        newUser.setCurrentCboProjectId(cboProjectId);
 
         if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
             Set<Role> roles = new HashSet<>();
@@ -143,30 +136,35 @@ public class UserService {
         return userMapper.usersToUserDTOs(userRepository.findAllByRoleIn(roles));
     }
 
-    public UserDTO changeOrganisationUnit(Long organisationUnitId, UserDTO userDTO){
+    public UserDTO changeOrganisationUnit(Long cboProjectId, UserDTO userDTO){
         Optional<User> optionalUser = userRepository.findById(userDTO.getId());
 
         boolean found = false;
-        for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : userDTO.getApplicationUserOrganisationUnits()) {
-            Long orgUnitId = applicationUserOrganisationUnit.getOrganisationUnitId();
-            if(organisationUnitId.longValue() == orgUnitId.longValue()){
+        for (ApplicationUserCboProject applicationUserCboProject : userDTO.getApplicationUserCboProjects()) {
+            Long projectId = applicationUserCboProject.getCboProjectId();
+            if(cboProjectId.longValue() == projectId.longValue()){
                 found = true;
                 break;
             }
         }
         if(!found){
-            throw new EntityNotFoundException(OrganisationUnit.class, "Id", organisationUnitId +"");
+            throw new EntityNotFoundException(OrganisationUnit.class, "Id", cboProjectId +"");
         }
         User user = optionalUser.get();
-        user.setCurrentOrganisationUnitId(organisationUnitId);
+        user.setCurrentCboProjectId(cboProjectId);
         return userMapper.userToUserDTO(userRepository.save(user));
     }
-}
 
-class UsernameAlreadyUsedException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+    public List<CboProject> getCboProjectByUserId(Long userId) {
+        return applicationUserCboProjectRepository.findAllByApplicationUserId(userId).stream()
+                .map(ApplicationUserCboProject::getCboProjectByCboProjectId)
+                .collect(Collectors.toList());
+    }
 
-    public UsernameAlreadyUsedException() {
-        super("Login name already used!");
+    public UserDTO getAccount(String userName) {
+        UserDTO userDTO =  this.getUserWithRoles()
+                .map(UserDTO::new)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, userName+"","" ));
+        return userDTO;
     }
 }

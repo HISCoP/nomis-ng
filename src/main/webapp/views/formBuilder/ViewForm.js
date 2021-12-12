@@ -239,7 +239,7 @@ const Update = props => {
                                         ref={form => myform = form}
                                         submission={{
                                             data: {
-                                                authHeader: authHeader(),
+                                                authHeader: authHeader().Authorization,
                                                 baseUrl: url,
                                                 household: props.household
                                             }

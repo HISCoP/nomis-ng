@@ -7,15 +7,19 @@ import { Link } from 'react-router-dom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderIcon from '@material-ui/icons/Folder';
+import HomeIcon from '@material-ui/icons/Home';
+import ListIcon from '@material-ui/icons/List';
 import Dashboard from './Dashboard'
 import ServiceHomePage from "./ServiceHistoryPage";
 import Forms from "./FillForms";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {fetchHouseHoldMemberById} from "../../../actions/houseHoldMember";
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import {calculateAge} from "./../../../utils/calculateAge";
 import {fetchHouseHoldById} from "../../../actions/houseHold";
+import ProvideService from "../household/ProvideService";
+import ProvidePreventiveService from "./ProvidePreventiveService";
 
 const useStyles = makeStyles({
     root: {
@@ -33,9 +37,26 @@ const HomePage = (props) => {
     const [fetchingMember, setFetchingMember] = useState(true);
     const [fetchingHousehold, setFetchingHousehold] = useState(true);
     const [activeItem, setActiveItem] = React.useState('dashboard');
+    const [showServiceModal, setShowServiceModal] = useState(false);
+    const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
+    const [showPreventiveServiceModal, setShowPreventiveServiceModal] = useState(false);
+    const togglePreventiveServiceModal = () => setShowPreventiveServiceModal(!showPreventiveServiceModal);
+
+    const dispatch = useDispatch();
+    const menu = useSelector(state => state.menu).minimize;
+
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
     }
+    const reloadPage = () => {
+        setActiveItem("");
+        setActiveItem(activeItem);
+    }
+
+    React.useEffect(() => {
+        //minimize side-menu when this page loads
+        dispatch({type: 'MENU_MINIMIZE', payload: true });
+    },[]);
 
     React.useEffect(() => {
         setFetchingMember(true);
@@ -46,6 +67,7 @@ const HomePage = (props) => {
             setFetchingMember(false);
         };
         props.fetchHouseHoldMemberById(memberId, onSuccess, onError);
+
     }, [memberId]);
     React.useEffect(() => {
         setFetchingHousehold(true);
@@ -78,17 +100,28 @@ const HomePage = (props) => {
                             <DashboardIcon fontSize="large" className={'text-center'}/>
                             <p>Dashboard</p>
                         </Menu.Item>
-
                         <Menu.Item
-                            name='services'
-                            active={activeItem === 'services'}
-                            onClick={handleItemClick}
+                            name='provide_services'
+                            active={activeItem === 'provide_services'}
+                            onClick={toggleServiceModal}
                             className={'text-center'}
                         >
                             <DescriptionIcon fontSize="large" className={'text-center'}/>
-                            <p>Services</p>
+                            <p>Provide Service</p>
 
                         </Menu.Item>
+                        {props.member && props.member.householdMemberType === 2 &&
+                        <Menu.Item
+                            name='provide_preventive_services'
+                            active={activeItem === 'provide_preventive_services'}
+                            onClick={togglePreventiveServiceModal}
+                            className={'text-center'}
+                        >
+                            <DescriptionIcon fontSize="large" className={'text-center'}/>
+                            <p>Provide Preventive Service</p>
+
+                        </Menu.Item>
+                        }
                         <Menu.Item
                             name='forms'
                             active={activeItem === 'forms'}
@@ -101,19 +134,29 @@ const HomePage = (props) => {
                           
                         </Menu.Item>
                         <Menu.Item
-                            name='household'
-                            active={activeItem === 'household'}
+                            name='services'
+                            active={activeItem === 'services'}
+                            onClick={handleItemClick}
                             className={'text-center'}
-                            onClick={()=>{}}
                         >
-                            <Link color="inherit" to ={{
-                                pathname: "/household/home",
-                                state:householdId
-                            }}  >
-                                <FolderIcon fontSize="large" className={'text-center'}/>
-                                <p>Household</p>
-                            </Link>
+                            <ListIcon fontSize="large" className={'text-center'}/>
+                            <p>Form History</p>
+
                         </Menu.Item>
+                        {/*<Menu.Item*/}
+                        {/*    name='household'*/}
+                        {/*    active={activeItem === 'household'}*/}
+                        {/*    className={'text-center'}*/}
+                        {/*    onClick={()=>{}}*/}
+                        {/*>*/}
+                        {/*    <Link color="inherit" to ={{*/}
+                        {/*        pathname: "/household/home",*/}
+                        {/*        state:householdId*/}
+                        {/*    }}  >*/}
+                        {/*        <HomeIcon fontSize="large" className={'text-center'}/>*/}
+                        {/*        <p>Household</p>*/}
+                        {/*    </Link>*/}
+                        {/*</Menu.Item>*/}
                         
                         
                     </Menu>
@@ -131,12 +174,12 @@ const HomePage = (props) => {
                         </CTabPane>
                         <CTabPane active={activeItem === 'services'} >
                             {activeItem === "services" &&
-                            <ServiceHomePage member={props.member} />
+                            <ServiceHomePage member={props.member} householdId={householdId}/>
                             }
                         </CTabPane>
                         <CTabPane active={activeItem === 'forms'} >
                             {activeItem === "forms" &&
-                            <Forms member={props.member} />
+                            <Forms member={props.member} householdId={householdId}/>
                             }
                         </CTabPane>
 
@@ -144,6 +187,9 @@ const HomePage = (props) => {
 
                 </CCol>
             </CRow>
+
+            <ProvidePreventiveService modal={showPreventiveServiceModal} toggle={togglePreventiveServiceModal} memberId={props.member.id} householdId={householdId} reload={reloadPage}/>
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} householdId={householdId} reloadSearch={reloadPage} />
         </>
     )
 }
@@ -165,10 +211,10 @@ const InfoSection = (props) => {
                     <span>Phone: <small>{props.member ? props.member.mobilePhoneNumber : 'Nil'}</small></span><br/>
                     <span>Sex: <small>{props.member && props.member.sex && props.member.sex.display ? props.member.sex.display : (props.member.sex === 2 ? "Male" : "Female")}</small></span> {'  '}
                         {props.member.dob ?
-                    <span>Age:  <small>{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
+                    <span>Age:  <small>{props.member.dateOfBirthType === 'estimated' ? '~' : ''}{calculateAge(  props.member.dob)} | {props.member.dob}</small></span> :
                         <span>Age: <small>Nil</small></span>
                         }<br/>
-                    <span>Date Of Assessment: <small>{props.member ? props.member.dateAssessment : 'Nil'}</small> </span><br/><br/>
+                    <span>Date Of Assessment: <small>{props.member ? props.member.dateOfEnrolment : 'Nil'}</small> </span><br/><br/>
 
                     {/*<span>State: <small>{props.member ? props.member.state : ""}</small></span><br/>*/}
                     {/*<span>LGA: <small>-</small></span><br/>*/}

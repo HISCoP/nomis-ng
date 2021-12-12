@@ -11,6 +11,7 @@ import org.nomisng.domain.entity.Household;
 import org.nomisng.util.converter.LocalDateConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -20,9 +21,13 @@ public class HouseholdMemberDTO {
 
     private Long id;
 
+    @NotNull(message = "householdId is mandatory")
     private Long householdId;
 
+    @NotNull(message = "householdMemberType is mandatory")
     private Integer householdMemberType;
+
+    private String uniqueId;
 
     private Object details;
 }

@@ -12,8 +12,13 @@ import FormRendererModal from "../../formBuilder/FormRendererModal";
 const CarePlan = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
+    const showNewCarePlan = () => {
+        fetchLastAssessment();
+    }
     const [loading, setLoading] = useState(false);
+    const [loadingAssessment, setLoadingAssessment]= useState(false);
     const [carePlanList, setCarePlanList] = useState([]);
+    const [lastAssessment, setLastAssessment] = useState();
     const [currentForm, setCurrentForm] = useState(false);
     const [showFormModal, setShowFormModal] = useState(false);
 
@@ -40,6 +45,7 @@ const CarePlan = (props) => {
         axios
             .get(`${url}households/${props.householdId}/${CODES.CARE_PLAN}/formData`)
             .then(response => {
+
                 setCarePlanList(response.data.map((x)=>({
                     data: x,
                     dateCreated: x.data && x.data.encounterDate ? x.data.encounterDate : null,
@@ -70,11 +76,38 @@ const CarePlan = (props) => {
         setShowFormModal(true);
     }
 
+     function fetchLastAssessment() {
+        if(loadingAssessment){
+            return;
+        }
+        if(props.householdId) {
+            setLoadingAssessment(true);
+             axios
+                .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
+                .then(response => {
+                    setLoadingAssessment(false);
+
+                    if (response.data && response.data.length == 0) {
+                        toast.info('There have been no assessment for this household! Go to the assessment tab to fill an assessment before you can fill a care plan.');
+                        setLastAssessment(null);
+                        return;
+                    }
+                    setLastAssessment(response.data[0].data);
+                    toggle();
+                })
+                .catch(error => {
+                    setLoadingAssessment(false);
+                        toast.error('Error: Could not fetch the last household assessment!');
+                    }
+                );
+        }
+    }
+
     return (
-        <>
+        <CCard>
             <CRow>
-                <CCol xs="12" className={"pb-3"}>
-                    <CButton color={"primary"} className="float-right" onClick={toggle}> New Care Plan</CButton>
+                <CCol xs="12" className={"text-right p-4"}>
+                    <CButton color={"primary"} onClick={showNewCarePlan}> New Care Plan</CButton>
                 </CCol>
             </CRow>
 
@@ -111,6 +144,7 @@ const CarePlan = (props) => {
                     />
                 </CCol>
             </CRow>
+            {carePlanList.length > 0 &&
             <CRow>
                 <CCol xs="12">
                     <CCard>
@@ -120,17 +154,17 @@ const CarePlan = (props) => {
                                     {
                                         label: 'Pending',
                                         backgroundColor: '#f87979',
-                                        data: carePlanList.map(x=>x.pending)
+                                        data: carePlanList.map(x => x.pending)
                                     },
                                     {
                                         label: 'In Progress',
                                         backgroundColor: '#f8a121',
-                                        data: carePlanList.map(x=>x.inProgress)
+                                        data: carePlanList.map(x => x.inProgress)
                                     },
                                     {
                                         label: 'Completed',
                                         backgroundColor: '#01f83a',
-                                        data: carePlanList.map(x=>x.completed)
+                                        data: carePlanList.map(x => x.completed)
                                     }
                                 ]}
                                 labels="services"
@@ -146,6 +180,7 @@ const CarePlan = (props) => {
                     </CCard>
                 </CCol>
             </CRow>
+            }
             <FormRendererModal
                 showModal={showFormModal}
                 setShowModal={setShowFormModal}
@@ -154,8 +189,8 @@ const CarePlan = (props) => {
                 //onError={onError}
                 options={{modalSize:"xl"}}
             />
-            <NewCarePlan  modal={modal} toggle={toggle} reloadSearch={fetchCarePlan} householdId={props.householdId}/>
-        </>
+            <NewCarePlan  modal={modal} toggle={toggle} reloadSearch={fetchCarePlan} householdId={props.householdId} lastAssessment={lastAssessment}/>
+        </CCard>
     )
 }
 

@@ -137,9 +137,9 @@ const getServices = () => {
                                         required
                                         >
                                         <option value=""> </option>
-                                        <option value="1"> OVC</option>
-                                        <option value="2"> Caregiver</option>
-                                        <option value="3"> Both</option>
+                                        <option value="0"> Caregiver</option>
+                                        <option value="1"> VC</option>
+                                        <option value="2"> Both</option>
                                     </Input>
                                          {errors.serviceType !=="" ? (
                                             <span className={classes.error}>{errors.serviceType}</span>

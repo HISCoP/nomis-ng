@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,12 +21,12 @@ public class OvcServiceController {
     private final OvcServiceService ovcServiceService;
 
     @PostMapping
-    public ResponseEntity<OvcService> save(@RequestBody OvcServiceDTO ovcServiceDTO) {
+    public ResponseEntity<OvcService> save(@Valid @RequestBody OvcServiceDTO ovcServiceDTO) {
         return ResponseEntity.ok(ovcServiceService.save(ovcServiceDTO));
     }
 
     @PutMapping("/{id}")
-    public OvcService update(@PathVariable Long id, @RequestBody OvcServiceDTO ovcServiceDTO) {
+    public OvcService update(@PathVariable Long id, @Valid @RequestBody OvcServiceDTO ovcServiceDTO) {
         return ovcServiceService.update(id, ovcServiceDTO);
     }
 
@@ -41,16 +42,13 @@ public class OvcServiceController {
 
     @GetMapping("{serviceType}")
     public ResponseEntity<List<OvcServiceDTO>> getAllOvcServices(@PathVariable(value = "serviceType", required = false) Integer serviceType) {
-        if(serviceType != 0){
-            return ResponseEntity.ok(ovcServiceService.getOvcServiceByServiceType(serviceType));
-        }
+        if(serviceType != 0)return ResponseEntity.ok(ovcServiceService.getOvcServiceByServiceType(serviceType));
+
         return ResponseEntity.ok(ovcServiceService.getAllOvcServices());
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long id) {
-        ovcServiceService.delete(id);
-    }
+    public void delete(@PathVariable Long id) { ovcServiceService.delete(id); }
 
 }

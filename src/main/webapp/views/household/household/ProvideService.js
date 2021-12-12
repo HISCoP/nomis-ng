@@ -14,34 +14,27 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import moment from "moment";
 import {formRendererService} from "../../../_services/form-renderer";
-
+import { DatePicker } from "react-widgets";
+import "react-widgets/dist/css/react-widgets.css";
+import Moment from "moment";
+import momentLocalizer from "react-widgets-moment";
+//Dtate Picker package
+Moment.locale("en");
+momentLocalizer();
 const ProvideService = (props) => {
   const formData = {};
   const [fetchingServices, setFetchingServices] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
   const [serviceList, setServiceList] = React.useState([]);
   const [selectedServices, setSelectedService] = React.useState([]);
-  const [serviceDate, setServiceDate] = React.useState(moment().format('YYYY-MM-DD'));
-
-  const {   
-    className
-  } = props;
-
-
-  const currentForm = {
-     code: CODES.Caregiver_Household_Service,
-    formName: "Household Assessment",
-    options:{
-        hideHeader: true
-    },
-  };
+  const [serviceDate, setServiceDate] = React.useState(new Date());
 
   React.useEffect(() => {
 
       if(props.modal) {
           fetchServices();
           setSelectedService(props.serviceList ? props.serviceList : []);
-          setServiceDate(props.serviceDate ? props.serviceDate : moment().format('YYYY-MM-DD'));
+          setServiceDate(props.serviceDate ? new Date(props.serviceDate) : new Date());
           setFetchingServices(false);
           setSaving(false);
       }
@@ -76,13 +69,11 @@ const ProvideService = (props) => {
   }
 
   const onChange = (values) => {
-      console.log(values);
     setSelectedService(values);
   }
 
   const setDate = (e) => {
-      setServiceDate(e.target.value);
-      console.log(e.target.value);
+      setServiceDate(e ? Moment(e).format('YYYY-MM-DD') : null);
   }
 
   const save = () => {
@@ -100,15 +91,15 @@ const ProvideService = (props) => {
       const services = selectedServices.map(x => x.options);
       let merged = [].concat.apply([], services);
       const data = {
-          serviceDate: serviceDate,
+          serviceDate: Moment(serviceDate).format('YYYY-MM-DD'),
           serviceOffered: merged
       }
-      formData['dateEncounter'] = moment(serviceDate);
-      formData['formCode'] = CODES.Caregiver_Household_Service;
+      formData['dateEncounter'] = new Date(serviceDate);
+      formData['formCode'] = CODES.HOUSEHOLD_MEMBER_SERVICE_PROVISION;
       formData['formData'] = [{data: data}] ;
       formData['archived'] = 0 ;
       formData['householdMemberId'] = props.memberId;
-
+      formData['householdId'] = props.householdId;
 
       const onSuccess = () => {
           setSaving(false);
@@ -164,7 +155,7 @@ const ProvideService = (props) => {
   return (
     <div>
 <ToastContainer />
-      <Modal isOpen={props.modal} toggle={props.toggle} className={className} backdrop={"static"} size='xl'>
+      <Modal isOpen={props.modal} toggle={props.toggle} backdrop={"static"} size='xl'>
         <ModalHeader toggle={props.toggle}> Service Form</ModalHeader>
         <ModalBody>
 
@@ -176,13 +167,23 @@ const ProvideService = (props) => {
               <Col md={6}>
                   <FormGroup>
                   <Label >Service Date</Label>
-                  <Input type={"date"} onChange={setDate} value={serviceDate}/>
+                      <DatePicker
+                          name="serviceDate"
+                          id="serviceDate"
+                          defaultValue={serviceDate}
+                          max={new Date()}
+                          required
+                          disabled={props.type && props.type === "VIEW" ? true : false}
+                          onChange={setDate}
+                      />
+                  {/*<Input type={"date"} onChange={setDate} value={serviceDate} max={new Date()}/>*/}
                   </FormGroup>
               </Col>
               <Col md={12}>
                   <DualListBox options={serviceList} onChange={onChange}
                                selected={selectedServices} canFilter
                                lang={lang}
+                     disabled={props.type && props.type === "VIEW" ? true : false}
                                simpleValue={false} showHeaderLabels={true}/>
 
               </Col>

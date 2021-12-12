@@ -9,6 +9,7 @@ const FormBuilder = React.lazy(() => import('./views/formBuilder/formBuilder'));
 const ViewForm = React.lazy(() => import('./views/formBuilder/ViewForm'));
 const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
 const DataVisualisation = React.lazy(() => import('./views/pages/unConstruction'));
+const RetrospectivePage = React.lazy(() => import('./views/retrospective/HomePage'));
 
 /* Admin */
 const AdminHomePage = React.lazy(() => import('./views/admin/HomePage'));
@@ -21,31 +22,30 @@ const ProgramSetupHomePage = React.lazy(() => import('./views/admin/DomainManage
 const DomainServices = React.lazy(() => import('./views/admin/DomainManager/DomainServices'));
 const UserRegistration = React.lazy(() => import('./views/admin/Users/UserRegistration'));
 const Roles = React.lazy(() => import('./views/admin/Roles/RolesPage'));
-//const roles = React.lazy(() => import("components/Roles/RolesPage"))
 const addRole = React.lazy(() => import("./views/admin/Roles/AddRole"))
 /*Reporting components*/
 const ReportBuilderPage = React.lazy(() => import('./views/admin/Reports/ReportHome'));
 const ReportTemplate = React.lazy(() => import("./views/admin/Reports/ReportTemplate"));
 const ReportPage = React.lazy(() => import("./views/admin//Reports/ReportingPage"));
-// const JasperTemplateUpdate = React.lazy(() => import("./views/admin/Reports/JasperTemplateUpdate"));
+ const JasperTemplateUpdate = React.lazy(() => import("./views/admin/Reports/JasperTemplateUpdate"));
 const ReportView = React.lazy(() => import("./views/admin/Reports/ReportView"));
 const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"));
 const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
-//const DonorIpManager = React.lazy(() => import("./views/admin/DonorIpManager/DonorIpManager"));
 const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
 const LoginPage = React.lazy(() => import("./views/pages/login/Login"));
 
 const routes = [
-  { path: '/', exact: true, name: '', component: LoginPage },
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/households', name: 'Households', component: houseHoldAssessment },
-  { path: '/household/home', name: 'Household Home', component: HouseholdHomePage },
-  { path: '/household-member/home', name: 'Household Member', component: HouseholdMemberHomePage },
-  { path: '/admin', name: 'Admin Dashboard', component: AdminHomePage },
-  { path: '/household-members', name: 'Household Members', component: MemberSearch },
-  { path: '/form-builder', name: 'Form Builder', component: FormBuilder },
-  { path: '/edit-form', name: 'Edit Form', component: ViewForm },
+  { path: '/', exact: true, name: 'Home', component: LoginPage , isPrivate: true},
+  { path: '/dashboard', name: 'Dashboard', component: Dashboard, isPrivate: true },
+  { path: '/households', name: 'Households', component: houseHoldAssessment , isPrivate: true},
+  { path: '/household/home', name: 'Household Home', component: HouseholdHomePage , isPrivate: true},
+  { path: '/household-member/home', name: 'Household Member', component: HouseholdMemberHomePage , isPrivate: true},
+  { path: '/admin', name: 'Admin Dashboard', component: AdminHomePage , isPrivate: true},
+  { path: '/household-members', name: 'Household Members', component: MemberSearch, isPrivate: true },
+  { path: '/form-builder', name: 'Form Builder', component: FormBuilder, isPrivate: true },
+  { path: '/edit-form', name: 'Edit Form', component: ViewForm, isPrivate: true },
+  { path: '/retrospective', name: 'Retrospective', component: RetrospectivePage, isPrivate: true},
   /* Administrative Link */
   { path: "/form-home", name: 'Form Builder', component: FormPage},
   { path: "/users", name: 'User Management', component: UserSetupHomePage},
@@ -60,6 +60,8 @@ const routes = [
   { path: "/add-role", name: 'Role', component: addRole},
   { path: "/report-builder", name: 'Report ', component: ReportBuilderPage},
    { path: "/build-report", name: 'Build Report', component: ReportTemplate},
+  { path: "/template-update", name: 'Build Report', component: JasperTemplateUpdate},
+
   { path: "/report", name: 'Report', component: ReportPage},
   { path: "/report-view", name: 'Report View', component: ReportView},
   { path: "/cbo", name: 'CBO ', component: CboManager} ,

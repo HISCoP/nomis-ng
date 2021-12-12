@@ -14,13 +14,16 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
 public class FormDataDTO {
     private Long id;
 
+    @NotNull(message = "encounterId is mandatory")
     private Long encounterId;
 
+    @NotNull(message = "data is mandatory")
     private Object data;
 }

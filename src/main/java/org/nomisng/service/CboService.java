@@ -3,6 +3,7 @@ package org.nomisng.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.CboDTO;
 import org.nomisng.domain.entity.Cbo;
 import org.nomisng.domain.mapper.CboMapper;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @Transactional
@@ -21,11 +25,20 @@ public class CboService {
     private final CboMapper cboMapper;
 
     public List getAllCbos() {
-        return cboMapper.toCboDTOS(cboRepository.findAll());
+        return cboMapper.toCboDTOS(cboRepository.findAllByArchived(UN_ARCHIVED));
     }
 
     public Cbo save(CboDTO cboDTO) {
-        return cboRepository.save(cboMapper.toCbo(cboDTO));
+        cboRepository.findByNameAndArchived(cboDTO.getName(), UN_ARCHIVED).ifPresent(cbo -> {
+            throw new RecordExistException(Cbo.class, "Name", ""+cboDTO.getName());
+        });
+        //Temporary, will be replace with cbo code
+        if(cboDTO.getCode() == null){
+            cboDTO.setCode(UUID.randomUUID().toString());
+        }
+        Cbo cbo = cboMapper.toCbo(cboDTO);
+        cbo.setArchived(UN_ARCHIVED);
+        return cboRepository.save(cbo);
     }
 
     public CboDTO getCbo(Long id) {
@@ -42,7 +55,7 @@ public class CboService {
         return cboRepository.save(cboMapper.toCbo(cboDTO));
     }
 
-    public Integer delete(Long id) {
-        return null;
+    public void delete(Long id) {
+
     }
 }

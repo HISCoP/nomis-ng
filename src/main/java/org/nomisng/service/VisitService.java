@@ -3,10 +3,7 @@ package org.nomisng.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
-import org.nomisng.controller.apierror.RecordExistException;
-import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.dto.VisitDTO;
-import org.nomisng.domain.entity.Form;
 import org.nomisng.domain.entity.Visit;
 import org.nomisng.domain.mapper.VisitMapper;
 import org.nomisng.repository.VisitRepository;
@@ -14,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -47,7 +42,5 @@ public class VisitService {
         return visitRepository.save(visitMapper.toVisit(visitDTO));
     }
 
-    public Integer delete(Long id) {
-        return null;
-    }
+    public void delete(Long id) { }
 }
