@@ -269,7 +269,6 @@ const getProvinces = e => {
     return (
 
         <div >
-            <ToastContainer />
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
 
                 <CForm >

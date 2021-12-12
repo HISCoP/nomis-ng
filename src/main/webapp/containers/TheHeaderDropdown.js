@@ -41,6 +41,7 @@ const TheHeaderDropdown = (props) => {
   const [isNotificationConfirmed, setIsNotificationConfirmed] = useState(false);
   const [isOpenUserCardPopover, setIsOpenUserCardPopover] = useState(false);
   const [user, setUser] = useState(null);
+  const [showLogOut, setShowLogOut] = useState(false);
   const [modal, setModal] = useState(false); 
   const [modalSwitch, setModalSwitch] = useState(false);
   const [assignFacilityModal, setAssignFacilityModal] = useState(false);
@@ -82,6 +83,7 @@ const TheHeaderDropdown = (props) => {
           .get(`${baseUrl}account`)
           .then((response) => {
             setUser(response.data);
+            setShowLogOut(true)
             localStorage.removeItem('currentUserCboProjectName');
             // set user permissions in local storage for easy retrieval, when user logs out it will be removed from the local storage
             localStorage.setItem('currentUser_Permission', JSON.stringify(response.data.permissions));
@@ -112,6 +114,7 @@ const TheHeaderDropdown = (props) => {
           fetchMe();         
           toggleAssignFacilityModal();
           toast.success('Project switched successfully!');
+          window.location.reload();
         }) .catch((error) => {
           toast.error('An error occurred, could not switch facilty.');
         });
@@ -124,7 +127,7 @@ const TheHeaderDropdown = (props) => {
           toast.success('Project switched successfully!');
           fetchMe();         
           toggleSwitchProjectAtLoginModal(); 
-          
+          window.location.reload();
         }) .catch((error) => {
          toast.error('An error occurred, could not switch facilty.');
         });
@@ -237,6 +240,19 @@ const TheHeaderDropdown = (props) => {
                     </Col>
                   </Row>
                   
+                  {user && user.applicationUserCboProjects.length < 0 ?
+                    (
+                        <MatButton
+                            variant='contained'
+                            color='secondary'
+                            onClick={logout}
+                            //startIcon={<CancelIcon />}
+                        >
+                          Logout
+                        </MatButton>
+                    )
+                    : ""
+                  }
                 </CardBody>
               </Card>
             </ModalBody>

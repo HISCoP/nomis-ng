@@ -180,9 +180,10 @@ const Create = props => {
                                     fetchServices(domainCode, e.target.value);
                                 }}>
                                     <option></option>
-                                    <option value="0">Care Giver</option>
+                                    
                                     <option value="1">VC</option></Input>
-                                    <option value="2"> Both</option>
+                                    <option value="2">Care Giver</option>
+                                    <option value="3"> Both</option>
                             </FormGroup></Col>
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Service</Label>
