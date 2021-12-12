@@ -132,7 +132,6 @@ public class HouseholdService {
         household = householdRepository.save(household);
 
         HouseholdMember householdMember = null;
-
         if(householdDTO.getHouseholdMigrationDTOS() != null) {
             if(firstTime && householdDTO.getHouseholdMigrationDTOS().size() > 1){
                 throw new IllegalTypeException(HouseholdMigration.class, "HouseholdMigration", "should not be > 1 for registration");
@@ -163,9 +162,7 @@ public class HouseholdService {
             EncounterDTO encounterDTO = new EncounterDTO();
             encounterDTO.setDateEncounter(LocalDateTime.now());
             encounterDTO.setFormCode(HH_ASSESSMENT_FORM_CODE);
-            //encounterDTO.setHouseholdMemberId(householdMember.getId()); don't save the memberId
             encounterDTO.setHouseholdId(household.getId());
-            encounterDTO.setCboProjectId(currentCboProjectId);
 
             //FormData for assessment
             FormData formData = new FormData();

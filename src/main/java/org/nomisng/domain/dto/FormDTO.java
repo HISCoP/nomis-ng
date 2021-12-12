@@ -24,4 +24,6 @@ public class FormDTO {
 
     @NotBlank(message = "version is mandatory")
     private String version;
+
+    private int archived;
 }

@@ -44,7 +44,6 @@ public class FormData extends JsonBEntity {
 
     @Basic
     @Column(name = "archived")
-    @JsonIgnore
     private int archived;
 
     @CreatedBy

@@ -24,8 +24,8 @@ public class ApplicationUserCboProjectService {
     //assign a cboProject to a user
     public List<ApplicationUserCboProject> save(ApplicationUserCboProjectDTO applicationUserCboProjectDTO) {
         List<ApplicationUserCboProject> applicationUserCboProjects = applicationUserCboProjectRepository
-                .findAllByApplicationUserIdAndCboProjectIdAndArchived(applicationUserCboProjectDTO.getApplicationUserId(),
-                UN_ARCHIVED, applicationUserCboProjectDTO.getCboProjectIds());
+                .findAllByApplicationUserIdAndArchivedOrderByIdAsc(applicationUserCboProjectDTO.getApplicationUserId(),
+                UN_ARCHIVED);
 
         if(!applicationUserCboProjects.isEmpty()){
             applicationUserCboProjectRepository.deleteAll(applicationUserCboProjects);

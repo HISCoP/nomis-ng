@@ -41,7 +41,6 @@ public class ReportInfo extends JsonBEntity implements Serializable {
 
     @Basic
     @Column(name = "archived")
-    @JsonIgnore
     private Integer archived = 0;
 
     @Type(type = "jsonb")

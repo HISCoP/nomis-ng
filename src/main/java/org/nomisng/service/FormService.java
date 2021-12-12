@@ -38,7 +38,6 @@ public class FormService {
     public List getAllForms() {
         List<Form> forms = formRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
         Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
-
         return getForms(forms, permissions);
     }
 
@@ -51,9 +50,7 @@ public class FormService {
             throw new RecordExistException(Form.class, "Name", form.getName());
         });
         Form form = formMapper.toForm(formDTO);
-
         form.setArchived(UN_ARCHIVED);
-        form.setCreatedBy(userService.getUserWithRoles().get().getUserName());
 
         String read = UNDERSCORE + READ;
         String write = UNDERSCORE + WRITE;
@@ -75,7 +72,6 @@ public class FormService {
                 .orElseThrow(() -> new EntityNotFoundException(Form.class, "Id", id+""));
 
         Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
-
         accessRight.grantAccess(form.getCode(), FormService.class, permissions);
 
         FormDTO formDTO = formMapper.toFormDTO(form);

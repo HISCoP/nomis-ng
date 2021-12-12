@@ -51,13 +51,6 @@ public class ApplicationCodesetService {
         return applicationCodesetMapper.toApplicationCodesetDTOList(applicationCodesetList);
     }
 
-    /*public ApplicationCodesetDTO getApplicationCodesetById(Long id){
-        ApplicationCodeset applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, Constants.ArchiveStatus.UN_ARCHIVED)
-                .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));
-
-        return  applicationCodesetMapper.toApplicationCodesetDTO(applicationCodeset);
-    }*/
-
     public ApplicationCodeset update(Long id, ApplicationCodesetDTO applicationCodesetDTO){
         applicationCodesetRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeset.class,"Display:",id+""));

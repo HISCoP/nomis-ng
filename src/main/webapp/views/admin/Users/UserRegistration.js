@@ -168,8 +168,10 @@ const UserRegistration = (props) => {
     delete values["role"];
     
     const onSuccess = () => {
-      setSaving(false); 
-        props.history.push(`/users`)    
+      setSaving(false);
+      
+        props.history.push(`/users`)
+     
       resetForm();
       toast.success("Registration Successful");
     };

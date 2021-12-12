@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
+import org.nomisng.security.SecurityUtils;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -46,23 +47,19 @@ public class Form extends JsonBEntity implements Serializable {
     @Column(name = "resource_path")
     private String resourcePath;
 
-    /*@Basic
-    @Column(name = "form_type")
-    private String formType;*/
-
     @Basic
     @Column(name = "version")
     private String version;
 
     @Basic
     @Column(name = "archived")
-    private Integer archived = 0;
+    private Integer archived;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     @JsonIgnore
     @ToString.Exclude
-    private String createdBy = "guest@nomisng.org";
+    private String createdBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @CreatedDate
     @Column(name = "date_created", nullable = false, updatable = false)
@@ -74,7 +71,7 @@ public class Form extends JsonBEntity implements Serializable {
     @Column(name = "modified_by")
     @JsonIgnore
     @ToString.Exclude
-    private String modifiedBy = "guest@nomisng.org";
+    private String modifiedBy = SecurityUtils.getCurrentUserLogin().orElse(null);
 
     @LastModifiedDate
     @Column(name = "date_modified")
