@@ -23,7 +23,7 @@ import java.util.List;
 @Table(name = "household")
 public class Household extends JsonBEntity implements Serializable {
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

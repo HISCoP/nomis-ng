@@ -132,7 +132,6 @@ public class HouseholdService {
         household = householdRepository.save(household);
 
         HouseholdMember householdMember = null;
-
         if(householdDTO.getHouseholdMigrationDTOS() != null) {
             if(firstTime && householdDTO.getHouseholdMigrationDTOS().size() > 1){
                 throw new IllegalTypeException(HouseholdMigration.class, "HouseholdMigration", "should not be > 1 for registration");
