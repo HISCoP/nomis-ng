@@ -45,7 +45,7 @@ const Assessment = (props) => {
 
         const onError = () => {
             setLoading(false);
-            toast.error('Error: Could not fetch household assessments!');
+            toast.error('Error: Could not fetch  Careplan Achievement Checklist !');
         }
         axios
             .get(`${url}households/${props.householdId}/${CODES.HOUSEHOLD_ASSESSMENT}/formData`)
@@ -68,14 +68,14 @@ const Assessment = (props) => {
         <CCard>
             <CRow >
                 <CCol xs="12" className={"text-right p-4"}>
-                    <CButton color={"primary"}  onClick={toggle} > New Assessment</CButton>
+                    <CButton color={"primary"}  onClick={toggle} > New  Careplan Achievement Checklist</CButton>
                 </CCol>
             </CRow>
 
             <CRow>
                 <CCol xs={"12"}>
                     <MaterialTable
-                        title="Assessment History"
+                        title=" Careplan Achievement Checklist History"
                         isLoading={loading}
                         columns={[
                             { title: 'Date Created', field: 'data.encounterDate' },

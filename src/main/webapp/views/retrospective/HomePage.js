@@ -405,18 +405,18 @@ const HomePage = (props) => {
             }
             {/*Display form*/}
 
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={selectedHM ? selectedHM.id : ""} householdId={selectedHH ? selectedHH.id : ""}
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={selectedHM ? selectedHM.id : ""} memberType={selectedHM ? selectedHM.householdMemberType : ""} householdId={selectedHH ? selectedHH.id : ""}
                              serviceList={submission ? submission.data.serviceOffered : []} serviceDate={submission ? submission.data.serviceDate : Moment(serviceDate).format('YYYY-MM-DD')}
                              formDataId={encounter ? encounter.id : ""} encounterId={encounter ? encounter.encounterId : ""}
             />
             <NewCarePlan  modal={newCarePlanModal} toggle={toggleCarePlan} householdId={selectedHH ? selectedHH.id : ""} />
             {newOvcModal ?
-                <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length} householdMember={selectedHM && selectedHM.householdMemberType == 2 ? selectedHM : null}/>
+                <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.filter(x=>x.householdMemberType===2).length} householdMember={selectedHM && selectedHM.householdMemberType == 2 ? selectedHM : null}/>
                 : ""
             }
 
             {newCaregiverModal ?
-                <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.length} householdMember={selectedHM && selectedHM.householdMemberType == 1 ? selectedHM : null}/>
+                <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={selectedHH ? selectedHH.id : ""} reload={() => fetchMembers(selectedHH.id)} totalMembers={props.householdMembers.filter(x=>x.householdMemberType===1).length} householdMember={selectedHM && selectedHM.householdMemberType == 1 ? selectedHM : null}/>
                 : ""
             }
 

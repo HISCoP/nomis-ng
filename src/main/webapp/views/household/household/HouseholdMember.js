@@ -70,8 +70,8 @@ const HouseholdMember = (props) => {
             :
             ""
             }
-            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.length} />
-            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.length}/>
+            <NewOvc  modal={modal} toggle={toggle} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.filter(x=>x.householdMemberType===2).length} />
+            <NewCareGiver  modal={modal2} toggle={toggle2} householdId={props.houseHoldId} reload={fetchMembers} totalMembers={props.houseMemberList.filter(x=>x.householdMemberType===1).length}/>
             
             </>
     );
@@ -103,7 +103,7 @@ const MemberCard = (props) => {
                 <CButton color="primary" block onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton>
             </CCardFooter>
         </CCard>
-        <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} householdId={props.householdId}/>
+        <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} memberType={props.member.householdMemberType} householdId={props.householdId}/>
     </>
     );
 }

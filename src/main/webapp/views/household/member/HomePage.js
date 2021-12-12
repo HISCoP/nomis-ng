@@ -189,7 +189,7 @@ const HomePage = (props) => {
             </CRow>
 
             <ProvidePreventiveService modal={showPreventiveServiceModal} toggle={togglePreventiveServiceModal} memberId={props.member.id} householdId={householdId} reload={reloadPage}/>
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} householdId={householdId} reloadSearch={reloadPage} />
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={props.member.id} memberType={props.member.householdMemberType} householdId={householdId} reloadSearch={reloadPage} />
         </>
     )
 }

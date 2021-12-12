@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Label, FormGroup, Input} from 'reactstrap';
 import {CButton} from "@coreui/react";
 import * as CODES from './../../../api/codes';
@@ -25,10 +25,12 @@ const ProvideService = (props) => {
   const formData = {};
   const [fetchingServices, setFetchingServices] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [serviceList, setServiceList] = React.useState([]);
   const [selectedServices, setSelectedService] = React.useState([]);
   const [serviceDate, setServiceDate] = React.useState(new Date());
-
+    const [formDataId, setFormDataId] = useState(props.formDataId);
+    const [encounterId, setEncounterId] = React.useState(props.encounterId);
   React.useEffect(() => {
 
       if(props.modal) {
@@ -37,6 +39,10 @@ const ProvideService = (props) => {
           setServiceDate(props.serviceDate ? new Date(props.serviceDate) : new Date());
           setFetchingServices(false);
           setSaving(false);
+          fetchEncounterByEncounterDate(serviceDate).then(x=> {
+                 // setServiceDate(dt);
+              }
+          );
       }
   },[props.modal]);
 
@@ -44,7 +50,7 @@ const ProvideService = (props) => {
   const fetchServices = () => {
     setFetchingServices(true);
     axios
-        .get(`${url}ovc-services/0`)
+        .get(`${url}ovc-services/${props.memberType ? props.memberType : 0}`)
         .then(response => {
           let services = response.data;
           console.log(response.data)
@@ -73,8 +79,40 @@ const ProvideService = (props) => {
   }
 
   const setDate = (e) => {
-      setServiceDate(e ? Moment(e).format('YYYY-MM-DD') : null);
+      const dt = e ? Moment(e).format('YYYY-MM-DD') : null;
+      fetchEncounterByEncounterDate(dt).then(x=> {
+              setServiceDate(dt);
+          }
+      );
   }
+
+    async function fetchEncounterByEncounterDate(date){
+      if(date != null) {
+          const encounterDate = Moment(date).format('YYYY-MM-DD');
+          setLoading(true);
+
+          await axios.get(`${url}household-members/${props.memberId}/${CODES.HOUSEHOLD_MEMBER_SERVICE_PROVISION}/encounters?page=0&size=1&dateFrom=${encounterDate}&dateTo=${encounterDate}`, {})
+              .then(response => {
+                  //get encounter form data and store it in submission object
+                  if (response.data && response.data.length > 0) {
+                      const fd = response.data[0].formData[0];
+                      setEncounterId(fd.encounterId);
+                      setFormDataId(fd.id);
+                      setSelectedService(fd.data.serviceOffered)
+                  } else {
+                      setEncounterId(null);
+                      setFormDataId(null);
+                      setSelectedService([]);
+                  }
+                  setLoading(false);
+              }).catch((error) => {
+                  toast.error("Error loading encounter, something went wrong");
+                  setLoading(false);
+              });
+
+      }
+
+    }
 
   const save = () => {
       if(selectedServices.length <= 0){
@@ -113,11 +151,11 @@ const ProvideService = (props) => {
           setSaving(false);
           toast.error('An error occurred, service(s) not saved successfully');
       };
-      if(props.formDataId){
+      if(formDataId){
           const body = {
               data: data,
-              encounterId: props.encounterId,
-              id: props.formDataId
+              encounterId: encounterId,
+              id: formDataId
           }
           updateService(body, onSuccess, onError);
           return;
@@ -126,7 +164,7 @@ const ProvideService = (props) => {
   }
 
   const updateService = (data, onSuccess, onError) => {
-      formRendererService.updateFormData(props.formDataId, data)
+      formRendererService.updateFormData(formDataId, data)
           .then((response) => {
               onSuccess();
           })
@@ -166,7 +204,7 @@ const ProvideService = (props) => {
           <Row>
               <Col md={6}>
                   <FormGroup>
-                  <Label >Service Date</Label>
+                  <Label >Service Date {loading?' (fetching service by date...)':''}</Label>
                       <DatePicker
                           name="serviceDate"
                           id="serviceDate"
