@@ -329,7 +329,7 @@ const HomePage = (props) => {
                         <CCol md={4}>
                             <Link title="Go to dashboard" to={{pathname: "/household/home", state: selectedHH.id }}> <b>Household ID: </b> {selectedHH ? selectedHH.uniqueId : 'Nil'}</Link> <br/>
                             <b>Address: </b>{selectedHH.details ? selectedHH.details.street : 'Nil'} <br/>
-                            <b>Date Of Assessment: </b>{selectedHH.details.assessmentDate || 'Nil'}<br/>
+                            <b>Date Of Assessment: </b>{selectedHH.details.assessmentDate ? Moment(selectedHH.details.assessmentDate).format('DD-MM-YYYY') : 'Nil'}<br/>
                         </CCol>
                         <CCol md={4}>
                             <b>Primary Caregiver
@@ -340,7 +340,7 @@ const HomePage = (props) => {
                         </CCol>
                         <CCol md={4}>
                             {selectedHH.details.primaryCareGiver && selectedHH.details.primaryCareGiver.dob ?
-                                <span>  <b>Age: </b>{calculateAge(selectedHH.details.primaryCareGiver.dob)} | {selectedHH.details.primaryCareGiver.dob} </span> :
+                                <span>  <b>Age: </b>{calculateAge(selectedHH.details.primaryCareGiver.dob)} | {Moment(selectedHH.details.primaryCareGiver.dob).format('DD-MM-YYYY')} </span> :
                                 <span>  <b>Age: </b>Nil</span>
                             }<br/>
                             <b>Marital
@@ -367,10 +367,10 @@ const HomePage = (props) => {
                         <CCol md={4}>
                             <b>Sex: </b>{selectedHM.details.sex && selectedHM.details.sex.display ? selectedHM.details.sex.display : ""}<br/>
                             {selectedHM.details.dob ?
-                                <span> <b>Age:  </b>{calculateAge(  selectedHM.details.dob)} | {selectedHM.details.dob}</span> :
+                                <span> <b>Age:  </b>{calculateAge(  selectedHM.details.dob)} | {Moment(selectedHM.details.dob).format('DD-MM-YYYY')}</span> :
                                 <span><b>Age: </b>Nil</span>
                             }<br/>
-                            <b>Date Of Assessment: </b> <span>{selectedHM.details.dateOfEnrolment || 'Nil'}</span>
+                            <b>Date Of Assessment: </b> <span>{selectedHM.details.dateOfEnrolment ? Moment(selectedHM.details.dateOfEnrolment).format('DD-MM-YYYY') : 'Nil'}</span>
                         </CCol>
                         {/*<CCol md={4}>*/}
                         {/*    <CButton color={"info"} variant="outline"  onClick={()=>{}}>Provide Service </CButton>*/}
