@@ -199,7 +199,7 @@ const UserList = (props) => {
           
           name: row.firstName + " " + row.lastName,
           userName: row.userName,
-          assignProject: row.applicationUserCboProjects.length > 1 ? row.applicationUserCboProjects.length : 0,
+          assignProject: row.applicationUserCboProjects.length >0 ? row.applicationUserCboProjects.length : 0,
           roles: row.roles.toString(),
           actions: (
             <div>

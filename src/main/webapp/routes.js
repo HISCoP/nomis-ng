@@ -22,7 +22,6 @@ const ProgramSetupHomePage = React.lazy(() => import('./views/admin/DomainManage
 const DomainServices = React.lazy(() => import('./views/admin/DomainManager/DomainServices'));
 const UserRegistration = React.lazy(() => import('./views/admin/Users/UserRegistration'));
 const Roles = React.lazy(() => import('./views/admin/Roles/RolesPage'));
-//const roles = React.lazy(() => import("components/Roles/RolesPage"))
 const addRole = React.lazy(() => import("./views/admin/Roles/AddRole"))
 /*Reporting components*/
 const ReportBuilderPage = React.lazy(() => import('./views/admin/Reports/ReportHome'));
@@ -33,12 +32,11 @@ const ReportView = React.lazy(() => import("./views/admin/Reports/ReportView"));
 const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"));
 const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
-//const DonorIpManager = React.lazy(() => import("./views/admin/DonorIpManager/DonorIpManager"));
 const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
 const LoginPage = React.lazy(() => import("./views/pages/login/Login"));
 
 const routes = [
-  { path: '/', exact: true, name: '', component: Dashboard , isPrivate: true},
+  { path: '/', exact: true, name: 'Home', component: LoginPage , isPrivate: true},
   { path: '/dashboard', name: 'Dashboard', component: Dashboard, isPrivate: true },
   { path: '/households', name: 'Households', component: houseHoldAssessment , isPrivate: true},
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage , isPrivate: true},

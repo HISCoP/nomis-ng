@@ -137,7 +137,8 @@ const getServices = () => {
                                         required
                                         >
                                         <option value=""> </option>
-                                        <option value="1"> OVC</option>
+                                        
+                                        <option value="1"> VC</option>
                                         <option value="2"> Caregiver</option>
                                         <option value="3"> Both</option>
                                     </Input>

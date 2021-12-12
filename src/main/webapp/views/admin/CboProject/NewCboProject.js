@@ -43,7 +43,7 @@ const NewCboProject = (props) => {
     const [ipList, setipList] = useState([]);
     const [cboList, setcboList] = useState([]);
     const classes = useStyles()
-
+    const [errors, setErrors] = useState({});
     const [selectedOption, setSelectedOption] = useState(null);
     const [locationList, setLocationList] = useState({ stateName:"", lga:""})
     const [otherDetails, setOtherDetails] = useState(defaultValues);
@@ -179,19 +179,19 @@ const getlgaObj = e => {
     const handleInputChange = e => {
         setOtherDetails ({...otherDetails,  [e.target.name]: e.target.value});
     }
-    
+
+
     var  locationListArray = []
     const addLocations = e => {
          //e.preventDefault()
         //Get the state selected
-            
+
         setLocationList({...locationList,  lga:selectedOption })
-        
-      //locationListArray2.push(locationList)
+        console.log(locationList) 
+         //locationListArray2.push(locationList)
         if(locationList['stateName'] !=='' && locationList['lga'] !==''){
         setLocationListArray2([...locationListArray2, ...[locationList]])
-        setLocationList({stateName: "", lga:""})
-        console.log(locationListArray2)
+        //setLocationList({stateName: "", lga:""})       
         getProvinces()
 
         }
@@ -213,16 +213,17 @@ const getlgaObj = e => {
 
     const  RemoveItem = (e) => {
         const removeArr =locationListArray2.filter((element, index, array)  => index != e)
-        console.log(removeArr)
         setLocationListArray2(removeArr)
     }
     const resetForm = () => {
         setOtherDetails(defaultValues)
     }
     const organisationUnitIds = []
+
     const createCboAccountSetup = e => {
         e.preventDefault()
-        
+
+        if(locationListArray2.length >0){
         const orgunitlga= locationListArray2.map(item => { 
             delete item['state'];
             
@@ -254,20 +255,25 @@ const getlgaObj = e => {
             history.push('/cbo-donor-ip') 
             props.toggleModal() 
         }       
-        dispatch(createCboProject(otherDetails,onSuccess, onError));
-        
+        dispatch(createCboProject(otherDetails,onSuccess, onError));       
         return
+
+    }else{
+        toast.error("Location can't be empty")
+    }
  
     }
     
-
+    const closeModal = ()=>{
+        resetForm()
+        props.toggleModal()
+        setLocationList({stateName: "", lga:""})  
+    }
 
     return (
 
         <div >
-            <ToastContainer />
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
-
                 <CForm >
                     <CModalHeader toggle={props.toggleModal}>NEW CBO PROJECT SETUP </CModalHeader>
                     <CModalBody>
@@ -460,7 +466,7 @@ const getlgaObj = e => {
                                 <MatButton
                                     variant='contained'
                                     color='default'
-                                    onClick={props.toggleModal}
+                                    onClick={closeModal}
                                     startIcon={<CancelIcon />}>
                                     Cancel
                                 </MatButton>

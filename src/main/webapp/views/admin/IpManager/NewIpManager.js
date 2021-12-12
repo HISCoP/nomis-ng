@@ -118,7 +118,7 @@ const NewDonor = (props) => {
 
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label>Description</Label>
+                                            <Label>Description  (Address/Phone Number/Email)</Label>
                                             <Input
                                                 type='text'
                                                 name='description'

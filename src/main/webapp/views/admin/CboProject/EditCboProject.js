@@ -218,6 +218,7 @@ const getProvinces = e => {
     const organisationUnitIds = []
     const createCboAccountSetup = e => {
         e.preventDefault()
+        if(locationListArray2.length >0){
         const orgunitlga= locationListArray2.map(item => { 
             delete item['stateName'];            
             item['lga'].map(itemLga => {
@@ -250,6 +251,10 @@ const getProvinces = e => {
         }       
         dispatch(updateCboProject(props.formData.id, otherDetails,onSuccess, onError));       
         return 
+     }else{
+        toast.error("Location can't be empty")
+     }
+
     }
 
     //Function to close Edit Modal 
@@ -264,7 +269,6 @@ const getProvinces = e => {
     return (
 
         <div >
-            <ToastContainer />
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
 
                 <CForm >
