@@ -1,5 +1,5 @@
 import React, {createRef, useState} from 'react';
-import {Header, Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
+import { Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent, CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
@@ -99,7 +99,7 @@ const HomePage = (props) => {
             <span className={'pl-2'}> Application Codeset </span>
             </Link>
         </Menu.Item>
-        <Menu.Item
+        {/* <Menu.Item
           name='messages'
           active={activeItem === 'formbuilder'}
           onClick={()=>{}}>
@@ -108,7 +108,7 @@ const HomePage = (props) => {
                 <span className={'pl-2'}>  Form Builder </span>
             </Link>
 
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item>
         <Link color="inherit" to ={{ pathname: "report-builder", }}  >
             <ListIcon fontSize="small" className={'text-left'}/>

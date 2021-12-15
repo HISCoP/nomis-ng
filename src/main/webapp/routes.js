@@ -5,9 +5,9 @@ const houseHoldAssessment = React.lazy(() => import('./views/household/household
 const HouseholdHomePage = React.lazy(() => import('./views/household/household/HouseholdHomePage'));
 const HouseholdMemberHomePage = React.lazy(() => import('./views/household/member/HomePage'));
 const MemberSearch = React.lazy(() => import('./views/household/member/MemberSearch'));
-const FormBuilder = React.lazy(() => import('./views/formBuilder/formBuilder'));
-const ViewForm = React.lazy(() => import('./views/formBuilder/ViewForm'));
-const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
+// const FormBuilder = React.lazy(() => import('./views/formBuilder/formBuilder'));
+// const ViewForm = React.lazy(() => import('./views/formBuilder/ViewForm'));
+// const FormPage = React.lazy(() => import('./views/formBuilder/FormPage'));
 const DataVisualisation = React.lazy(() => import('./views/pages/unConstruction'));
 const RetrospectivePage = React.lazy(() => import('./views/retrospective/HomePage'));
 
@@ -41,13 +41,13 @@ const routes = [
   { path: '/households', name: 'Households', component: houseHoldAssessment , isPrivate: true},
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage , isPrivate: true},
   { path: '/household-member/home', name: 'Household Member', component: HouseholdMemberHomePage , isPrivate: true},
-  { path: '/admin', name: 'Admin Dashboard', component: AdminHomePage , isPrivate: true},
+  { path: '/administration', name: 'Admin Dashboard', component: AdminHomePage , isPrivate: true},
   { path: '/household-members', name: 'Household Members', component: MemberSearch, isPrivate: true },
-  { path: '/form-builder', name: 'Form Builder', component: FormBuilder, isPrivate: true },
-  { path: '/edit-form', name: 'Edit Form', component: ViewForm, isPrivate: true },
+  // { path: '/form-builder', name: 'Form Builder', component: FormBuilder, isPrivate: true },
+  // { path: '/edit-form', name: 'Edit Form', component: ViewForm, isPrivate: true },
   { path: '/retrospective', name: 'Retrospective', component: RetrospectivePage, isPrivate: true},
   /* Administrative Link */
-  { path: "/form-home", name: 'Form Builder', component: FormPage},
+  // { path: "/form-home", name: 'Form Builder', component: FormPage},
   { path: "/users", name: 'User Management', component: UserSetupHomePage},
   { path: "/application-codeset-home", name: 'Application Codeset', component: ApplicationCodeSetupHomePage},
   { path: "/program-setup-home", name: 'Domain Setup', component: ProgramSetupHomePage},
