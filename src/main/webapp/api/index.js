@@ -1,7 +1,7 @@
 
 //Online Server
-export const url =  'http://localhost:8080/api/';
-//export const url =  'http://nomis-ng.org:8080/demo/api/';
+//export const url =  'http://localhost:8080/api/';
+export const url =  'http://nomis-ng.org:8080/demo/api/';
 //Local Server
 //export const url =  '/api/';
 
