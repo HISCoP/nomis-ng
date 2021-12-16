@@ -46,11 +46,11 @@ const HomePage = (props) => {
     const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
     const toggleCarePlan = () => setShowCarePlanModal(!newCarePlanModal);
-    const dispatch = useDispatch();
-    React.useEffect(() => {
-        //show side-menu when this page loads
-        dispatch({type: 'MENU_MINIMIZE', payload: true });
-    },[]);
+    // const dispatch = useDispatch();
+    // React.useEffect(() => {
+    //     //show side-menu when this page loads
+    //     dispatch({type: 'MENU_MINIMIZE', payload: true });
+    // },[]);
     useEffect(() => {
         fetchHousehold();
         fetchForms();
@@ -273,6 +273,21 @@ const HomePage = (props) => {
                                 />
                             </FormGroup>
                         </CCol>
+
+                        <CCol md={6}>
+                            <FormGroup>
+                                <Label >Service Date</Label>
+                                <DatePicker
+                                    name="serviceDate"
+                                    id="serviceDate"
+                                    defaultValue={serviceDate}
+                                    max={new Date()}
+                                    required
+                                    onChange={setDate}
+                                />
+                            </FormGroup>
+                        </CCol>
+
                         <CCol md={6}>
                             <FormGroup>
                                 <Label for="form ">Select Form</Label>
@@ -293,19 +308,6 @@ const HomePage = (props) => {
                                         label: x.name,
                                         value: x,
                                     }))}
-                                />
-                            </FormGroup>
-                        </CCol>
-                        <CCol md={6}>
-                            <FormGroup>
-                                <Label >Service Date</Label>
-                                <DatePicker
-                                    name="serviceDate"
-                                    id="serviceDate"
-                                    defaultValue={serviceDate}
-                                    max={new Date()}
-                                    required
-                                    onChange={setDate}
                                 />
                             </FormGroup>
                         </CCol>
