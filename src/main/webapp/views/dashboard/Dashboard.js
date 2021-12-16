@@ -33,8 +33,7 @@ const Dashboard = (props) => {
       <CCard>
         <CCardBody>
           <CRow>
-           
-           
+      
           </CRow>
          
           <Chart />

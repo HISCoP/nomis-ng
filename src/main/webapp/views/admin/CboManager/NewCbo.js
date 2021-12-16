@@ -118,7 +118,8 @@ const NewCbo = (props) => {
                                                 placeholder=' '
                                                 value={formData.code}
                                                 onChange={handleInputChange}
-                                                
+                                                maxlength="3"
+                                                style={{textTransform: "upperCase" }} 
                                             />
                                              {errors.code !=="" ? (
                                                 <span className={classes.error}>{errors.code}</span>

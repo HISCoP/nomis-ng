@@ -36,7 +36,7 @@ const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboP
 const LoginPage = React.lazy(() => import("./views/pages/login/Login"));
 
 const routes = [
-  { path: '/', exact: true, name: 'Home', component: LoginPage , isPrivate: true},
+  { path: '/', exact: true, name: '', component: LoginPage , isPrivate: true},
   { path: '/dashboard', name: 'Dashboard', component: Dashboard, isPrivate: true },
   { path: '/households', name: 'Households', component: houseHoldAssessment , isPrivate: true},
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage , isPrivate: true},

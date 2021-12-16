@@ -108,7 +108,7 @@ const NewDonor = (props) => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleInputChange}
-                                                
+                                                style={{textTransform: "upperCase" }} 
                                             />
                                             {errors.name !=="" ? (
                                                 <span className={classes.error}>{errors.name}</span>

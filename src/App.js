@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter , Route, Switch } from 'react-router-dom';
+import { HashRouter , Route, Switch } from 'react-router-dom';
 import './main/webapp/scss/style.scss';
 import { Spinner } from 'reactstrap';
 
@@ -23,7 +23,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter >
+      <HashRouter >
           <React.Suspense fallback={loading}>
             <Switch>
               <Route exact path="/" name="Login Page" render={props => <Login {...props}/>} />            
@@ -31,7 +31,7 @@ class App extends Component {
               <Route path="/" name="Home" render={props => <TheLayout {...props}/>} />
             </Switch>
           </React.Suspense>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }

@@ -181,9 +181,10 @@ const Create = props => {
                                 }}>
                                     <option></option>
                                     
-                                    <option value="1">VC</option></Input>
+                                    <option value="1">VC</option>
                                     <option value="2">Care Giver</option>
                                     <option value="3"> Both</option>
+                                </Input>
                             </FormGroup></Col>
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Service</Label>

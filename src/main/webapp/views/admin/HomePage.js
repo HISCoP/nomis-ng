@@ -99,7 +99,7 @@ const HomePage = (props) => {
             <span className={'pl-2'}> Application Codeset </span>
             </Link>
         </Menu.Item>
-        {/* <Menu.Item
+        <Menu.Item
           name='messages'
           active={activeItem === 'formbuilder'}
           onClick={()=>{}}>
@@ -108,7 +108,7 @@ const HomePage = (props) => {
                 <span className={'pl-2'}>  Form Builder </span>
             </Link>
 
-        </Menu.Item> */}
+        </Menu.Item>
         <Menu.Item>
         <Link color="inherit" to ={{ pathname: "report-builder", }}  >
             <ListIcon fontSize="small" className={'text-left'}/>
