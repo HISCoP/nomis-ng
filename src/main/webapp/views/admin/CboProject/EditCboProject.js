@@ -12,58 +12,65 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import Select from "react-select";
+import { updateCboProject } from "../../../actions/cboProject";
 import { Spinner } from 'reactstrap';
 import { url as baseUrl } from "../../../api";
 import { CModal, CModalHeader, CModalBody,CForm} from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
-import { updateCboProject } from '../../../actions/cboProject'
 import { useHistory } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-
+import List from "@material-ui/core/List";
 
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1)
-    }
+    },
+    error: {
+        color: "#f85032",
+        fontSize: "12.8px",
+    },
 }))
 
 
 
-const UpdateCboProject = (props) => {
+const NewCboProject = (props) => {
     let history = useHistory();
     const [loading, setLoading] = useState(false)
     const cboProjectList = useSelector(state => state.cboProjects.cboProjectList);
-   
+   // console.log(props.formData)
     const dispatch = useDispatch();
     const defaultValues = { stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""}
+    const defaultLocationValues = { state: "", lga:""}
     //const [errors, setErrors] = useState({});
     const [donorList, setdonorList] = useState([]);
     const [ipList, setipList] = useState([]);
     const [cboList, setcboList] = useState([]);
     const classes = useStyles()
-
+    const [errors, setErrors] = useState({});
     const [selectedOption, setSelectedOption] = useState(null);
     const [locationList, setLocationList] = useState({ stateName:"", lga:""})
     const [otherDetails, setOtherDetails] = useState(defaultValues);
+    const [locationDetails, setLocationDetails] = useState(defaultLocationValues);
+    const [relativesLocation, setRelativesLocation] = useState([]);
     const [provinces, setProvinces] = useState([]);
+    const [stateList, setStateList] = useState();
     const [lgaDetail, setLgaDetail] = useState();
     const [stateDetail, setStateDetail] = useState();
     const [states, setStates] = useState([]);
-    const [organisationUnits, setOrganisationUnits] = useState()
     const [locationListArray2, setLocationListArray2] = useState([])
-    const [cboProjectLocation, setCboProjectLocation] = useState({ id: "", organisationUnitId: "", cboProjectId: "", archived:""});
+    const [organisationUnits, setOrganisationUnits] = useState()
 
     useEffect(() => {
         //loadCboProjectList()
         setOtherDetails(props.formData ? props.formData : defaultValues);
         setOrganisationUnits(props.formData ? props.formData.organisationUnits : [])
-        const getLocationList= Object.entries(props.formData ? props.formData.organisationUnits : []).map(([key, value]) => ({
-            stateName: value.State,
+        const getLocationList= Object.entries(props.formData ? props.formData && props.formData.organisationUnits : []).map(([key, value]) => ({
+            state: value.State,
             lga: [{label: value.Name, value: value.id}],
         }))
-        setLocationListArray2([...locationListArray2, ...getLocationList])
-
+        setRelativesLocation(getLocationList)
+        
     }, [props.formData]); //componentDidMount
 
     useEffect(() => {
@@ -72,7 +79,6 @@ const UpdateCboProject = (props) => {
             axios
               .get(`${baseUrl}donors`)
               .then((response) => {
-                //console.log(Object.entries(response.data));
                 setdonorList(
                   Object.entries(response.data).map(([key, value]) => ({
                     label: value.name,
@@ -94,7 +100,6 @@ const UpdateCboProject = (props) => {
             axios
               .get(`${baseUrl}implementers`)
               .then((response) => {
-                //console.log(Object.entries(response.data));
                 setipList(
                   Object.entries(response.data).map(([key, value]) => ({
                     label: value.name,
@@ -116,7 +121,6 @@ const UpdateCboProject = (props) => {
             axios
               .get(`${baseUrl}cbos`)
               .then((response) => {
-                //console.log(Object.entries(response.data));
                 setcboList(
                   Object.entries(response.data).map(([key, value]) => ({
                     label: value.name,
@@ -138,89 +142,84 @@ const  setStateByCountryId=() =>{
     async function getStateByCountryId() {
         const response = await axios.get(baseUrl + 'organisation-units/hierarchy/1/2')
         const stateList = response.data;
-       // console.log(stateList)
         setStates(stateList);
     }
     getStateByCountryId();
 }
-
-//fetch province
-const getProvinces = e => {
-    setSelectedOption(null)
-    const targetValue = e && e.target ? e.target : "" 
-  setOtherDetails({ ...otherDetails, [targetValue.name]: targetValue.value });
-        const stateId = targetValue.value ;
-          if(stateId =="" || stateId==null){
-            setLgaDetail("")
-          }else{
-            async function getCharacters() {
-                const response = await axios.get(`${baseUrl}organisation-units/hierarchy/`+stateId+"/3");
-                const newStates = states.filter(state => state.id == stateId)
-                setStateDetail(newStates)
-                setOtherDetails({...otherDetails, stateId:stateId})
-                setProvinces(
-                    Object.entries(response.data).map(([key, value]) => ({
-                        label: value.name,
-                        value: value.id,
-                      }))
-                   // response.data
-                    
-                    );
-                    //const newStates = states.filter(state => state.id == otherDetails['stateId'])
-                    const locationState = newStates[0].name
-                    setLocationList({...locationList, stateName: locationState}) 
-                    locationList['stateName']= locationState
-
-            }
-            getCharacters();
-          }
-};
-
-
     const handleInputChange = e => {
         setOtherDetails ({...otherDetails,  [e.target.name]: e.target.value});
     }
-    
-    var  locationListArray = []
-    const addLocations = e => {
-         //e.preventDefault()
-        //Get the state selected
-        setLocationList({...locationList,  lga:selectedOption })      
-      //locationListArray2.push(locationList)
-        if(locationList['stateName'] !=='' && locationList['lga'] !==''){
-        setLocationListArray2([...locationListArray2, ...[locationList]])
-        setLocationList({stateName: "", lga:""})
-        console.log(locationListArray2)
-        getProvinces()
-
+    const handleInputChange2 = e => {
+        setLocationDetails ({...locationDetails,  [e.target.name]: e.target.value});
+        const stateId = e.target.value ;
+        async function getCharacters() {
+            const response = await axios.get(`${baseUrl}organisation-units/hierarchy/`+stateId+"/3");
+            setProvinces(
+                Object.entries(response.data).map(([key, value]) => ({
+                    label: value.name,
+                    value: value.id,
+                  }))
+               // response.data
+                
+                );
         }
-       
-    }
-    function LgaList (selectedOption){
-        const  maxVal = []
-        if (selectedOption != null && selectedOption.length > 0) {
-          for(var i=0; i<selectedOption.length; i++){
-             
-                  if ( selectedOption[i].label!==null && selectedOption[i].label)
-                        //console.log(selectedOption[i])
-                            maxVal.push(selectedOption[i].label)
-              
-          }
-        return maxVal.toString();
-        }
-    }
-    const  RemoveItem = (e, items) => {
-        const removeArr =locationListArray2.filter((element, index, array)  => index != e)
-        setLocationListArray2(removeArr)
+        getCharacters();
         
     }
+
     
+    const addLocations2 = e => { 
+            if(locationDetails.state !="" && selectedOption && selectedOption.length > 0){
+                const newStates = states.filter(state => state.id == locationDetails.state)  
+                locationDetails['state']= newStates[0].name
+                locationDetails['lga']= selectedOption
+                const allRelativesLocation = [...relativesLocation, locationDetails];
+                setRelativesLocation(allRelativesLocation);
+                setSelectedOption(null)
+            }else{
+                toast.error("Location can not be empty")
+            }
+        
+   }
+
+    /* Remove Relative Location function **/
+    const removeRelativeLocation = index => {       
+        relativesLocation.splice(index, 1);
+        setRelativesLocation([...relativesLocation]);
+       
+    };
+    const resetForm = () => {
+        setOtherDetails(defaultValues)
+        setRelativesLocation({state: "", lga:""})  
+    }
+     /*****  Validation */
+     const validate = () => {
+        let temp = { ...errors };
+            temp.donorId = otherDetails.donorId
+            ? ""
+            : "Donor is required";
+            temp.description = otherDetails.description
+            ? ""
+            : "Project Name is required";
+            temp.cboId = otherDetails.cboId
+            ? ""
+            : "CBO is required";
+            temp.implementerId = otherDetails.implementerId
+            ? ""
+            : "Implementing Partner is required";
+        setErrors({
+            ...temp,
+        });
+        return Object.values(temp).every((x) => x == "");
+    };
     const organisationUnitIds = []
     const createCboAccountSetup = e => {
         e.preventDefault()
-        if(locationListArray2.length >0){
-        const orgunitlga= locationListArray2.map(item => { 
-            delete item['stateName'];            
+
+        if(relativesLocation.length >0 && validate()){
+        const orgunitlga= relativesLocation.map(item => { 
+            delete item['state'];
+            
             item['lga'].map(itemLga => {
                 console.log(itemLga['value'])
             organisationUnitIds.push(itemLga['value'])
@@ -233,46 +232,47 @@ const getProvinces = e => {
         delete otherDetails['stateId'];       
         setLoading(true);
         const onSuccess = () => {
-            setLoading(false)           
-
+            setLoading(false)
+            setOtherDetails(defaultValues)  
+            setLocationListArray2([]) 
             history.push('/cbo-donor-ip')
             props.toggleModal() 
             props.loadIps() 
-            setLocationListArray2([]) 
-            setOtherDetails(defaultValues)  
+            resetForm()
                   
         }
         const onError = () => {
             setLoading(false)  
+            setOtherDetails(defaultValues)  
+            setLocationListArray2([])
             history.push('/cbo-donor-ip') 
             props.toggleModal() 
-            setLocationListArray2([])
-            setOtherDetails(defaultValues)  
         }       
         dispatch(updateCboProject(props.formData.id, otherDetails,onSuccess, onError));       
-        return 
-     }else{
+        return
+
+    }else if(!validate()){
+
+    }else{
         toast.error("Location can't be empty")
-     }
-
     }
-
-    //Function to close Edit Modal 
-    const closeModal = () => {
+ 
+    }
+    
+    const closeModal = ()=>{
+        resetForm()
         props.toggleModal()
-        setLocationListArray2([])
-        setOtherDetails(defaultValues) 
+        setRelativesLocation(defaultLocationValues) 
+        setErrors({}) 
     }
-
-
 
     return (
 
         <div >
+        <ToastContainer />
             <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
-
                 <CForm >
-                    <CModalHeader toggle={props.toggleModal}>EDIT CBO PROJECT SETUP </CModalHeader>
+                    <CModalHeader toggle={props.toggleModal}>NEW CBO PROJECT SETUP </CModalHeader>
                     <CModalBody>
                         <Card >
                             <CardBody>
@@ -288,7 +288,9 @@ const getProvinces = e => {
                                             onChange={handleInputChange}
                                             required
                                             />
-                                           
+                                           {errors.description !=="" ? (
+                                                <span className={classes.error}>{errors.description}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                 <Col md={6}>
@@ -309,6 +311,9 @@ const getProvinces = e => {
                                                 </option>
                                             ))}
                                             </Input>
+                                            {errors.donorId !=="" ? (
+                                                <span className={classes.error}>{errors.donorId}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                     
@@ -330,6 +335,9 @@ const getProvinces = e => {
                                                 </option>
                                             ))}
                                             </Input>
+                                            {errors.implementerId !=="" ? (
+                                                <span className={classes.error}>{errors.implementerId}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                     <Col md={6}>
@@ -350,6 +358,9 @@ const getProvinces = e => {
                                                 </option>
                                             ))}
                                             </Input>
+                                            {errors.cboId !=="" ? (
+                                                <span className={classes.error}>{errors.cboId}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                     <Col md={12}>
@@ -359,13 +370,14 @@ const getProvinces = e => {
                                     
                                     <Col md={5}>
                                         <FormGroup>
-                                            <Label >State *</Label>
+                                            <Label >State*</Label>
                                             <Input
-                                                type="select"
-                                                name="state"
-                                                id="state"
-                                                value={otherDetails.state}
-                                                    onChange={getProvinces}
+                                            type="select"
+                                            name="state"
+                                            id="state"
+                                            value={locationDetails.state}
+                                            onChange={handleInputChange2}
+                                            required
                                                 >
                                                     <option >Please Select State</option>
                                                     {states.map((row) => (
@@ -373,78 +385,72 @@ const getProvinces = e => {
                                                             {row.name}
                                                         </option>
                                                     ))}
-                                                    
                                             </Input>
+                                            {errors.state !=="" ? (
+                                                <span className={classes.error}>{errors.state}</span>
+                                            ) : "" }
                                         </FormGroup>
                                     </Col>
                                     
                                     <Col md={5}>
                                                 <CFormGroup>
-                                                    <Label >LGA</Label>
+                                                    <Label >LGA </Label>
                                                     <Select
-                                                        //defaultValue={selectedOption}
                                                         onChange={setSelectedOption}
-                                                        //value={otherDetails.lga}
                                                         value={selectedOption}
                                                         options={provinces}
                                                         isMulti="true"
                                                         noOptionsMessage="true"
                                                     />
-                                                   
+                                                    {errors.lga !=="" ? (
+                                                    <span className={classes.error}>{errors.lga}</span>
+                                                ) : "" }
                                                 </CFormGroup>
 
-                                            </Col>
+                                    </Col>
+                                    
                                     <Col md={2}>
                                     <Button variant="contained"
                                         color="primary"
                                         //startIcon={<FaPlus />} 
                                         style={{ marginTop:25}}
                                         size="small"
-                                        onClick={addLocations}
+                                        onClick={addLocations2}
                                         >
-                                        <span style={{textTransform: 'capitalize'}}> Add</span>
+                                        <span style={{textTransform: 'capitalize'}}> Add </span>
                                     </Button>
                                     </Col>
                                     <Col md={12}>
-                                    <div className={classes.demo}>
-                                                      
-                                                 
-                                                            
-                                                            {locationListArray2.length >0 
-                                                            ?
-                                                            <Table  striped responsive>
-                                                                <thead >
-                                                                    <tr>
-                                                                        <th>State</th>
-                                                                        <th>LGA</th>
-                                                                        <th ></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                {locationListArray2.map((items, index) => (
-                                                                    <tr>
-                                                                        <th>{items.stateName}</th>
-                                                                        <th>{LgaList(items.lga)}</th>
-                                                                        
-                                                                        <th >
-                                                                            <IconButton aria-label="delete" size="small" color="error" onClick={() =>RemoveItem(index, items)}>
-                                                                                <DeleteIcon fontSize="inherit" />
-                                                                            </IconButton>
-                                                                            
-                                                                        </th>
-                                                                    </tr>
-                                                                    ) )}
-                                                                </tbody>
-                                                                </Table>
-                                                            
-                                                          
-                                                          
-                                                          : ""
-                                                          }
-                                                          
-                                                     
+                                                  <div className={classes.demo}>
+                                                  {relativesLocation.length >0 
+                                                    ?
+                                                      <List>
+                                                      <Table  striped responsive>
+                                                            <thead >
+                                                                <tr>
+                                                                    <th>State</th>
+                                                                    <th>LGA</th>
+                                                                    <th ></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {relativesLocation.map((relative, index) => (
+
+                                                                <RelativeList
+                                                                    key={index}
+                                                                    index={index}
+                                                                    relative={relative}
+                                                                    removeRelativeLocation={removeRelativeLocation}
+                                                                />
+                                                          ))}
+                                                          </tbody>
+                                                        </Table>
+                                                      </List>
+                                                     :
+                                                     ""
+                                                  }               
                                                   </div>
-                                    </Col>
+                                            </Col>
                                 </Row>
 
                                 <MatButton
@@ -477,7 +483,39 @@ const getProvinces = e => {
     );
 }
 
+function RelativeList({
+    relative,
+    index,
+    removeRelativeLocation,
+  }) {
+    function LgaList (selectedOption){
+        const  maxVal = []
+        if (selectedOption != null && selectedOption.length > 0) {
+          for(var i=0; i<selectedOption.length; i++){
+             
+                  if ( selectedOption[i].label!==null && selectedOption[i].label)
+                        //console.log(selectedOption[i])
+                            maxVal.push(selectedOption[i].label)
+              
+          }
+        return maxVal.toString();
+        }
+    }
+    return (
+            <tr>
+                <th>{relative.state}</th>
+                <th>{LgaList(relative.lga)}</th>
+                
+                <th >
+                    <IconButton aria-label="delete" size="small" color="error" onClick={() =>removeRelativeLocation(index)}>
+                        <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+                    
+                </th>
+            </tr> 
+    );
+  }
 
 
-export default connect(null, { updateCboProject})(UpdateCboProject);
+export default connect(null, {updateCboProject})(NewCboProject);
 
