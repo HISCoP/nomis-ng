@@ -43,7 +43,7 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Administration',
-    to: '/administration',
+    to: '/admin',
     icon: 'cilJustifyCenter',
    }, 
 

@@ -109,6 +109,7 @@ const NewDonor = (props) => {
                                                 value={formData.name}
                                                 onChange={handleInputChange}
                                                 required
+                                                //style={{textTransform: "upperCase" }} 
                                             />
                                             {errors.name !=="" ? (
                                                 <span className={classes.error}>{errors.name}</span>

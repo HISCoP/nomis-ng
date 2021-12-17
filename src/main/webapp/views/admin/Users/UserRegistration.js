@@ -72,6 +72,10 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+  error: {
+    color: "#f85032",
+    fontSize: "12.8px",
+},
 }));
 
 const UserRegistration = (props) => {
