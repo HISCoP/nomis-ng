@@ -6,6 +6,7 @@ import org.nomisng.domain.dto.UserDTO;
 import org.nomisng.domain.entity.CboProject;
 import org.nomisng.domain.entity.Role;
 import org.nomisng.domain.entity.User;
+import org.nomisng.repository.UserRepository;
 import org.nomisng.service.UserService;
 import org.nomisng.util.PaginationUtil;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,8 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
+
+    private final UserRepository userRepository;
 
     @GetMapping("/account")
     public UserDTO getAccount(Principal principal){
@@ -67,5 +70,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id) {
         userService.delete(id);
+        userRepository.deleteById(id);
     }
 }

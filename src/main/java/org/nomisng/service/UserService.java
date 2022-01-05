@@ -2,6 +2,7 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.nomisng.controller.apierror.AccessDeniedException;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.UserDTO;
@@ -11,8 +12,8 @@ import org.nomisng.repository.*;
 import org.nomisng.security.RolesConstants;
 //import org.nomisng.security.SecurityUtils;
 import org.nomisng.security.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.nomisng.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,6 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
-
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
-
     private final UserRepository userRepository;
 
     private final ApplicationUserRoleRepository applicationUserRoleRepository;
@@ -43,12 +41,10 @@ public class UserService {
 
     private final ApplicationUserCboProjectRepository applicationUserCboProjectRepository;
 
-    private final CboProjectRepository cboProjectRepository;
-
 
     @Transactional
     public Optional<User> getUserWithAuthoritiesByUsername(String userName) {
-        return userRepository.findOneWithRoleByUserName(userName);
+        return userRepository.findOneWithRoleByUserNameAndArchived(userName, UN_ARCHIVED);
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +53,7 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password, Boolean updateUser) {
-        Optional<User> optionalUser = userRepository.findOneByUserName(userDTO.getUserName().toLowerCase());
+        Optional<User> optionalUser = userRepository.findOneByUserNameAndArchived(userDTO.getUserName().toLowerCase(), UN_ARCHIVED);
         User newUser = new User();
         if (updateUser) {
         } else {
@@ -98,11 +94,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserDTO::new);
+        return userRepository.findAllByArchived(UN_ARCHIVED, pageable).map(UserDTO::new);
     }
 
     public User update(Long id, User user) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<User> optionalUser = userRepository.findByIdAndArchived(id, UN_ARCHIVED);
         if (!optionalUser.isPresent()) throw new EntityNotFoundException(User.class, "Id", id + "");
         user.setId(id);
         return userRepository.save(user);
@@ -132,10 +128,13 @@ public class UserService {
         Optional<Role> role = roleRepository.findById(roleId);
         roles.add(role.get());
 
-        return userMapper.usersToUserDTOs(userRepository.findAllByRoleIn(roles));
+        return userMapper.usersToUserDTOs(userRepository.findAllByRoleIn(roles).stream()
+                .filter(user -> (user.getArchived() == UN_ARCHIVED))
+                .collect(Collectors.toList()));
+
     }
 
-    public UserDTO changeOrganisationUnit(Long cboProjectId, UserDTO userDTO) {
+    /*public UserDTO changeOrganisationUnit(Long cboProjectId, UserDTO userDTO) {
         Optional<User> optionalUser = userRepository.findById(userDTO.getId());
 
         boolean found = false;
@@ -152,7 +151,7 @@ public class UserService {
         User user = optionalUser.get();
         user.setCurrentCboProjectId(cboProjectId);
         return userMapper.userToUserDTO(userRepository.save(user));
-    }
+    }*/
 
     public List<CboProject> getCboProjectByUserId(Long userId) {
         return applicationUserCboProjectRepository.findAllByApplicationUserIdOrderByIdAsc(userId).stream()
@@ -177,7 +176,7 @@ public class UserService {
     }
 
     public Set<Role> updateRoles(Long id, List<Role> roles) {
-            User user = userRepository.findById(id).get();
+            User user = userRepository.findByIdAndArchived(id, UN_ARCHIVED).get();
             HashSet rolesSet = new HashSet<>();
             Role roleToAdd = new Role();
             for (Role r : roles) {
@@ -198,8 +197,26 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        applicationUserRoleRepository.deleteByUserId(id);
-        applicationUserCboProjectRepository.deleteByApplicationUserId(id);
-        userRepository.deleteById(id);
+        Set<String> permissions = new HashSet<>();
+        this.getUserWithRoles().get().getRole().forEach(roles1 ->{
+            permissions.addAll(roles1.getPermission().stream().map(Permission::getName).collect(Collectors.toSet()));
+        });
+
+        if(permissions.contains("user_delete") || permissions.contains("permission_all")) {
+            List<ApplicationUserRole> applicationUserRoles = applicationUserRoleRepository.findAllByUserId(id);
+            applicationUserRoleRepository.deleteAll(applicationUserRoles);
+
+
+            List<ApplicationUserCboProject> applicationUserCboProjects = applicationUserCboProjectRepository.findAllByApplicationUserIdOrderByIdAsc(id);
+            if (!applicationUserCboProjects.isEmpty()) {
+                applicationUserCboProjectRepository.deleteAll(applicationUserCboProjects);
+            }
+
+            User user = userRepository.getOne(id);
+            user.setArchived(ARCHIVED);
+            userRepository.save(user);
+        } else {
+            throw new AccessDeniedException(Permission.class, "Delete", "Delete");
+        }
     }
 }
