@@ -2,6 +2,7 @@ package org.nomisng.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.DonorDTO;
@@ -25,8 +26,8 @@ public class DonorService {
     private final DonorRepository donorRepository;
     private final DonorMapper donorMapper;
 
-    public List getAllDonors() {
-        return donorMapper.toDonorDTOS(donorRepository.findAll());
+    public List<DonorDTO> getAllDonors() {
+        return donorMapper.toDonorDTOS(donorRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED));
     }
 
     public Donor save(DonorDTO donorDTO) {
@@ -34,7 +35,7 @@ public class DonorService {
             throw new RecordExistException(Donor.class, "Name", ""+donorDTO.getName());
         });
         //Temporary, will be replace with donor code
-        if(donorDTO.getCode() == null){
+        if(StringUtils.isBlank(donorDTO.getCode())){
             donorDTO.setCode(UUID.randomUUID().toString());
         }
         Donor donor = donorMapper.toDonor(donorDTO);

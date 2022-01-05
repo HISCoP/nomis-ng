@@ -47,6 +47,10 @@ public class CboService {
        return cboMapper.toCboDTO(cbo);
     }
 
+    public boolean existByCode(String code) {
+        return cboRepository.existsByCode(code);
+    }
+
 
     public Cbo update(Long id, CboDTO cboDTO) {
         Cbo cbo = cboRepository.findById(id)

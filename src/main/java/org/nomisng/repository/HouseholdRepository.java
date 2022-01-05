@@ -17,6 +17,8 @@ public interface HouseholdRepository extends JpaRepository<Household, Long>, Jpa
             "AND organisation_unit_id IN (?3) ORDER BY id DESC LIMIT 1", nativeQuery = true)
     Optional<Household> findByIdAndArchived(Long id, int archived, List<Long> organisationUnitIds);
 
+    Optional<Household> findByIdAndArchived(Long id, int archived);
+
     @Query(value = "SELECT * FROM household WHERE archived = ?1 " +
             "AND organisation_unit_id IN (?2) ORDER BY id DESC", nativeQuery = true)
     List<Household> findAllByArchivedOrderByIdDesc(int archived, List<Long> organisationUnitIds);

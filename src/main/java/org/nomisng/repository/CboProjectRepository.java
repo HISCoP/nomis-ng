@@ -25,7 +25,7 @@ public interface CboProjectRepository extends JpaRepository<CboProject, Long>, J
 
     @Query(value = "SELECT * FROM cbo_project WHERE cbo_id IN (?1) " +
             "AND donor_id IN (?2) AND implementer_id IN (?3) " +
-            "AND archived=0", nativeQuery = true)
+            "AND archived=0 ORDER BY id DESC", nativeQuery = true)
     Page<CboProject> findAllCboProjects(List<Long> cboId, List<Long> donorId,
                                                                 List<Long> implementerId, Pageable pageable);
 

@@ -28,7 +28,6 @@ public class DonorController {
     }
 
     @PostMapping
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Donor> save(@Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.save(donorDTO));
     }

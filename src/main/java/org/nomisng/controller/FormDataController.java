@@ -40,7 +40,6 @@ public class FormDataController {
     @PutMapping("{id}")
     public ResponseEntity<FormData> update(@PathVariable Long id, @Valid @RequestBody FormDataDTO formDataDTO) {
         return ResponseEntity.ok(formDataService.update(id, formDataDTO));
-
     }
 
     @DeleteMapping("/{id}")

@@ -25,6 +25,7 @@ public class OvcServiceService {
     private final OvcServiceRepository ovcServiceRepository;
     private final DomainRepository domainRepository;
     private final OvcServiceMapper ovcServiceMapper;
+    private final static Integer BOTH = 3;
 
     public OvcService save(OvcServiceDTO ovcServiceDTO) {
         Optional<OvcService> optionalOvcService = ovcServiceRepository.findByNameAndServiceTypeAndArchived(ovcServiceDTO.getName(), ovcServiceDTO.getServiceType(), UN_ARCHIVED);
@@ -101,7 +102,8 @@ public class OvcServiceService {
     }*/
 
     public List<OvcServiceDTO> getOvcServiceByServiceType(Integer serviceType){
-        List<OvcService> ovcServices = ovcServiceRepository.findByServiceTypeAndArchived(serviceType, UN_ARCHIVED).stream()
+        List<OvcService> ovcServices = ovcServiceRepository.findByArchived(UN_ARCHIVED).stream()
+                .filter(ovcService -> (ovcService.getServiceType() != null && ovcService.getServiceType() == serviceType || ovcService.getServiceType() == BOTH))
                 .sorted(Comparator.comparing(OvcService::getId).reversed())
                 .map(ovcService -> {ovcService.setDomainName(ovcService.getDomainByDomainId().getName()); return ovcService;}) //setting domain name of an ovcService
                 .collect(Collectors.toList());

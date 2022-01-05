@@ -196,4 +196,10 @@ public class UserService {
             this.update(id, user);
             return user.getRole();
     }
+
+    public void delete(Long id) {
+        applicationUserRoleRepository.deleteByUserId(id);
+        applicationUserCboProjectRepository.deleteByApplicationUserId(id);
+        userRepository.deleteById(id);
+    }
 }

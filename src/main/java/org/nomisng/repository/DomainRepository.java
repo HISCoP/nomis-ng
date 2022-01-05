@@ -13,6 +13,9 @@ import java.util.Optional;
 public interface DomainRepository extends JpaRepository<Domain, Long>, JpaSpecificationExecutor {
     List findAllByArchivedOrderByIdDesc(int archived);
 
+    //Order alphabetical Name
+    List findAllByArchivedOrderByNameAsc(int archived);
+
     Optional<Domain> findByNameAndArchived(String name, int archived);
 
     Optional<Domain> findByIdAndArchived(Long id, int archived);

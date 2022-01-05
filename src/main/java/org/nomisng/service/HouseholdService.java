@@ -122,6 +122,7 @@ public class HouseholdService {
         household.setStatus(ACTIVE);
         household.setCboProjectId(currentCboProjectId);
         if(household.getSerialNumber() == null){
+            //getting max household in the ward
             Optional<Long> optionalLong = householdRepository.findMaxSerialNumber(household.getWardId());
             if(optionalLong.isPresent()){
                 household.setSerialNumber(optionalLong.get());
@@ -178,6 +179,13 @@ public class HouseholdService {
         }
         return household;
     }
+
+    /*private Household update(Long id, HouseholdDTO householdDTO){
+        Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
+
+        return household;
+    }*/
 
     public List<HouseholdMemberDTO> getHouseholdMembersByHouseholdId(Long id, Integer memberType) {
         Household household = getHousehold(id);

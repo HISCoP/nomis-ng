@@ -27,14 +27,18 @@ public class CboController {
         return ResponseEntity.ok(cboService.getCbo(id));
     }
 
+    //To check if a cbo exist by code
+    @GetMapping("/code/{code}")
+    public ResponseEntity<Boolean> existByCode(@PathVariable String code) {
+        return ResponseEntity.ok(cboService.existByCode(code));
+    }
+
     @PostMapping
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Cbo> save(@Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.save(cboDTO));
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Cbo> update(@PathVariable Long id, @Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.update(id, cboDTO));
     }

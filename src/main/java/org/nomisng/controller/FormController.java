@@ -37,20 +37,17 @@ public class FormController {
     }
 
     @PostMapping
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Form> save(@Valid @RequestBody FormDTO formDTO) {
         return ResponseEntity.ok(formService.save(formDTO));
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Form> update(@PathVariable Long id, @Valid @RequestBody FormDTO formDTO) {
         return ResponseEntity.ok(formService.update(id, formDTO));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
     public void delete(@PathVariable Long id) {
         formService.delete(id);
     }

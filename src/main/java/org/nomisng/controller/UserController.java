@@ -62,4 +62,10 @@ public class UserController {
     public ResponseEntity<Set<Role>> updateRoles(@PathVariable Long id, @Valid @RequestBody List<Role> roles) throws Exception {
         return ResponseEntity.ok(userService.updateRoles(id, roles));
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        userService.delete(id);
+    }
 }

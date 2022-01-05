@@ -33,7 +33,6 @@ public class FormService {
     private static final String WRITE = "Write";
     private static final String DELETE = "Delete";
     private static final String UNDERSCORE = "_";
-    private final UserService userService;
 
     public List getAllForms() {
         List<Form> forms = formRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);

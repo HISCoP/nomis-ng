@@ -111,7 +111,14 @@ public class EncounterService {
         accessRight.grantAccessByAccessType(encounter.getFormCode(),
                 Encounter.class, DELETE, this.checkForEncounterAndGetPermission());
 
+        List<FormData> formData = new ArrayList<>();
         encounter.setArchived(ARCHIVED);
+        encounter.getFormData().forEach(formDatum -> {
+            formDatum.setArchived(ARCHIVED);
+            formData.add(formDatum);
+        });
+        //save all corresponding formData
+        formDataRepository.saveAll(formData);
         encounterRepository.save(encounter);
     }
 
@@ -152,25 +159,6 @@ public class EncounterService {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
         return formDataMapper.toFormDataDTOS(formData);
-    }
-
-    protected Encounter addFirstNameAndLastNameAndFormNameToEncounter(Encounter encounter){
-        encounter.setFormName(encounter.getFormByFormCode().getName());
-        if(encounter.getHouseholdMemberByHouseholdMemberId() != null) {
-            //TODO: throwing error sort it out
-            HouseholdMember householdMember = encounter.getHouseholdMemberByHouseholdMemberId();
-            String firstName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "firstName").replaceAll("^\"+|\"+$", "");
-            String lastName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName").replaceAll("^\"+|\"+$", "");
-            //String otherNames = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "otherNames");
-
-            encounter.setFirstName(firstName);
-            encounter.setLastName(lastName);
-        }
-        return encounter;
-    }
-
-    private Set<String> checkForEncounterAndGetPermission(){
-        return accessRight.getAllPermissionForCurrentUser();
     }
 
     public Page<Encounter> getEncounterByHouseholdIdAndFormCodeAndDateEncounter(Long householdId, String formCode, String dateFrom, String dateTo, Pageable pageable) {
@@ -215,5 +203,24 @@ public class EncounterService {
         localDateHashMap.put("dateFrom", localDateFrom);
         localDateHashMap.put("dateTo", localDateTo);
         return localDateHashMap;
+    }
+
+    protected Encounter addFirstNameAndLastNameAndFormNameToEncounter(Encounter encounter){
+        encounter.setFormName(encounter.getFormByFormCode().getName());
+        if(encounter.getHouseholdMemberByHouseholdMemberId() != null) {
+            //TODO: throwing error sort it out
+            HouseholdMember householdMember = encounter.getHouseholdMemberByHouseholdMemberId();
+            String firstName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "firstName").replaceAll("^\"+|\"+$", "");
+            String lastName = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "lastName").replaceAll("^\"+|\"+$", "");
+            //String otherNames = JsonUtil.traverse(JsonUtil.getJsonNode(householdMember.getDetails()), "otherNames");
+
+            encounter.setFirstName(firstName);
+            encounter.setLastName(lastName);
+        }
+        return encounter;
+    }
+
+    private Set<String> checkForEncounterAndGetPermission(){
+        return accessRight.getAllPermissionForCurrentUser();
     }
 }

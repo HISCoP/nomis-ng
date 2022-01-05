@@ -78,10 +78,17 @@ public class HouseholdMemberService {
         optionalHouseholdMember.ifPresent(householdMember -> {
             throw new RecordExistException(HouseholdMember.class, firstName + " " + lastName, "already exist in household");
         });
+
         Household household = householdRepository.findById(householdMemberDTO.getHouseholdId())
                 .orElseThrow(()-> new EntityNotFoundException(Household.class, "id", "" +householdMemberDTO.getHouseholdId()));
-        Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId()) + 1;
-        householdMemberDTO.setUniqueId(household.getUniqueId()+household.getSerialNumber() + "/" +serialNumber);
+
+        //Getting the uniqueId without the serial number
+        Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId());
+        //int index = household.getUniqueId().lastIndexOf("/");
+        //String householdUniqueId = household.getUniqueId().substring(0, index);
+
+        //adding new serial number
+        householdMemberDTO.setUniqueId(household.getUniqueId() + "/" +serialNumber+1);
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
         Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
