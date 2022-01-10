@@ -48,31 +48,31 @@ const NewCboProject = (props) => {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch();
     const defaultDetailValues = { name: "", description:""}
-    const defaultDetailValuesOtherDetails = { name: "", email:"", address:"", phone:""}
     const classes = useStyles()
     const [errors, setErrors] = useState({});
     const [otherDetailFields, setOtherDetailFields] = useState(false);
     const [locationList, setLocationList] = useState({ stateName:"", lga:""})
     const [otherDetails, setOtherDetails] = useState(defaultValues);
     const [details, setDetails] = useState(defaultDetailValues);
-    const [otherDetailsFields, setOtherDetailsFields] = useState(defaultDetailValuesOtherDetails);
     const [relativesLocation, setRelativesLocation] = useState([]);
     const [locationListArray2, setLocationListArray2] = useState([])
 
     const orgUnitIDParam = props.orgUnitID ? props.orgUnitID :{};
-    const [otherfields, setOtherFields] = useState({parentOrganisationUnitId:"", name:"", description:"", organisationUnitLevelId:""});
+    const [otherfields, setOtherFields] = useState({state:"", name:"", description:"", lga:""});
     const defaultValues = {name:"",id:"" }
     const [formData, setFormData] = useState(defaultValues)
     const [pcrOptions, setOptionPcr] = useState([]);
     const [orgUnitLevel, setOrgUnitLevel] = useState([]);
+    const [states, setStates] = useState([]);
+    const [provinces, setProvinces] = useState([]);
 
     const handleOtherFieldInputChange = e => {
-        setDetails ({ ...details, [e.target.name]: e.target.value });
+        setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
   }
 
 
     useEffect(() => {
-        //loadCboProjectList()
+        setStateByCountryId()
         setOtherDetails(props.formData ? props.formData : defaultValues);
         
     }, [props.formData]); //componentDidMount
@@ -87,41 +87,34 @@ const NewCboProject = (props) => {
         return Object.values(temp).every(x => x == "")
   }
   
-  useEffect(() => {
-      async function getCharacters() {
-          try {
-              const response = await axios(
-                  url + "organisation-unit-levels"
-              );
-              const body = response.data && response.data !==null ? response.data : {};
-              
-              setOptionPcr(
-                   body.map(({ name, id }) => ({ title: name, value: id }))
-               );
-          } catch (error) {
-          }
-      }
-      getCharacters();
-  }, []);
-  
-  const handleInputChangeOrgUnit = (e)=> {
-      const orgUnitID = e && e.value ? e.value : ""
-     
-      async function getCharacters() {
-          const response = await axios.get(`${url}organisation-units/organisation-unit-level/`+orgUnitID);
-          //
-          setOrgUnitLevel(
-              Object.entries(response.data).map(([key, value]) => ({
-                  label: value.name + " -  " + value.parentOrganisationUnitName,
-                  value: value.id,
-                }))
-             
-              
-              );
+//Get States from selected country
+const  setStateByCountryId=() =>{
+    async function getStateByCountryId() {
+        const response = await axios.get(url + 'organisation-units/hierarchy/1/2')
+        const stateList = response.data;
+       // console.log(stateList)
+        setStates(stateList);
     }
-      getCharacters();
+    getStateByCountryId();
+}
 
-  }
+const handleInputChange2 = e => {
+    const stateId = e.target.value ;
+    async function getCharacters() {
+        const response = await axios.get(`${url}organisation-units/hierarchy/`+stateId+"/3");
+        setProvinces(
+            Object.entries(response.data).map(([key, value]) => ({
+                label: value.name,
+                value: value.id,
+              }))
+           // response.data
+            
+            );
+    }
+    getCharacters();
+    
+}
+
   
   const createOrgUnit = (e) => {
       e.preventDefault();
@@ -143,13 +136,9 @@ const NewCboProject = (props) => {
   }
 
     const handleInputChange = e => {
-        //setDetails ({...details,  [e.target.name]: e.target.value});
-        setOtherFields({ ...otherfields, [e.target.name]: parseInt(e.target.value) })
+        setDetails ({...details,  [e.target.name]: e.target.value});
     }
-    const handleOtherDetailFields = e => {
-        setOtherDetailsFields ({...details,  [e.target.name]: e.target.value});
-    }
-    
+   
     const addLocations2 = e => { 
         if(validate()){
             const allRelativesLocation = [...relativesLocation, details];
@@ -172,22 +161,21 @@ const NewCboProject = (props) => {
     const organisationUnitIds = []
     const createCboAccountSetup = e => {
         e.preventDefault()
-        console.log(relativesLocation)
-        return console.log(otherfields)
-        // if(relativesLocation.length >0 && validate()){
-        // const orgunitlga= relativesLocation.map(item => { 
-        //     delete item['state'];
-            
-        //     item['lga'].map(itemLga => {
-        //         console.log(itemLga['value'])
-        //     organisationUnitIds.push(itemLga['value'])
 
-        //     return itemLga;
-        //     })
-        // })
-        // otherDetails['organisationUnitIds'] = organisationUnitIds
-        // delete otherDetails['lgaId'];
-        // delete otherDetails['stateId'];       
+        if(relativesLocation.length >0 && validate()){
+        const orgunitlga= relativesLocation.map(item => { 
+            delete item['state'];
+            
+            item['lga'].map(itemLga => {
+                console.log(itemLga['value'])
+            organisationUnitIds.push(itemLga['value'])
+
+            return itemLga;
+            })
+        })
+        otherDetails['organisationUnitIds'] = organisationUnitIds
+        delete otherDetails['lgaId'];
+        delete otherDetails['stateId'];       
         setLoading(true);
         const onSuccess = () => {
             setLoading(false)
@@ -209,11 +197,11 @@ const NewCboProject = (props) => {
         dispatch(createCboProject(otherDetails,onSuccess, onError));       
         return
 
-    // }else if(!validate()){
-    //     return
-    // }else{
-    //     toast.error("Location can't be empty")
-    // }
+    }else if(!validate()){
+        return
+    }else{
+        toast.error("Location can't be empty")
+    }
  
     }
     const handleCheckedBox = e => {
@@ -224,7 +212,7 @@ const NewCboProject = (props) => {
     }
     const closeModal = ()=>{
         resetForm()
-        props.togglestatus()
+        props.toggleModal()
         setDetails({name: "", description:""}) 
         setErrors({}) 
     }
@@ -233,9 +221,9 @@ const NewCboProject = (props) => {
 
         <div >
         <ToastContainer />
-            <CModal show={props.modalstatus}   size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
+            <CModal show={props.showModal}  size="lg" zIndex={"9999"} backdrop={false} >
                 <CForm >
-                    <CModalHeader >Create Org. Unit </CModalHeader>
+                    <CModalHeader toggle={props.toggleModal}>Create School</CModalHeader>
                     <CModalBody>
                         <Card >
                             <CardBody>
@@ -243,55 +231,49 @@ const NewCboProject = (props) => {
                                 
                                 <Col md={6}>
                                 <FormGroup>
-                                              <Label for="">Parent Organisation  Unit</Label>
+                                    <Label for="">State</Label>
 
-                                                  <Autocomplete
-                                                    id="filter-orgUnit"
-                                                    options={pcrOptions}
-                                                    getOptionLabel={(option) => option.title}
-                                                    filterOptions={filterOptions}
-                                                    size="small"
-                                                    onChange={(e, i) => {
-                                                        handleInputChangeOrgUnit(i)
-                                                        setOtherFields({ ...otherfields, parentOrganisationUnitId: i.value });
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} variant="outlined" />}
-                                                    />
-                                          </FormGroup>
+                                            <Input
+                                            type="select"
+                                            name="state"
+                                            id="state"
+                                            value={otherfields.state}
+                                            onChange={handleInputChange2}
+                                            required
+                                            >
+                                                <option >Please Select State</option>
+                                                {states.map((row) => (
+                                                    <option key={row.id} value={row.id}>
+                                                        {row.name}
+                                                    </option>
+                                                ))}
+                                        </Input>
+                                    </FormGroup>
                                     </Col>
                                     
                                     <Col md={6}>
                                             <FormGroup>
-                                              <Label for=""> Organisation  Unit </Label>
+                                              <Label for="">LGA </Label>
                                                    
-                                                    <Input
-                                                        type="select"
-                                                        name="organisationUnitLevelId"
-                                                        id="organisationUnitLevelId"
-                                                        value={otherfields.orgUnit} 
-                                                        onChange={handleInputChange}
-                                                        required
-                                                        >
-                                                            <option ></option>
-                                                            {orgUnitLevel.map((row) => (
-                                                                <option key={row.id} value={row.value}>
-                                                                    {row.label}
-                                                                </option>
-                                                            ))}
-                                                    </Input>
-                                                 
+                                              <Select
+                                                
+                                                options={provinces}
+                                                isMulti="true"
+                                                noOptionsMessage="true"
+                                            />
                                           </FormGroup>
                                     </Col>
                                
                                 
                                     <Col md={12}>
                                         <hr/>
-                                        <h5>Organisation Unit Level </h5>
+                                        <h5>Detail</h5>
+                                        <br/>
                                     </Col>
                                     
                                     <Col md={5}>
                                         <FormGroup>
-                                            <Label >Name</Label>
+                                            <Label >School Name</Label>
                                             <Input
                                                   type="text"
                                                   name="name"
@@ -307,12 +289,30 @@ const NewCboProject = (props) => {
                                             ) : "" }
                                         </FormGroup>
                                     </Col>
-                                    
                                     <Col md={5}>
+                                <FormGroup>
+                                    <Label for="">School Type</Label>
+
+                                            <Input
+                                            type="select"
+                                            name="state"
+                                            id="state"
+                                            value={otherfields.state}
+                                            
+                                            required
+                                            >
+                                                <option >Select School Type</option>
+                                                <option value="">Formal</option>
+                                                <option value="">Informal </option>
+                                                
+                                        </Input>
+                                    </FormGroup>
+                                    </Col>
+                                    <Col md={10}>
                                                 <CFormGroup>
-                                                    <Label >Description </Label>
+                                                    <Label >School Address </Label>
                                                     <Input
-                                                        type="text"
+                                                        type="textarea"
                                                         name="description"
                                                         id="description"
                                                         
@@ -370,101 +370,8 @@ const NewCboProject = (props) => {
                                                   }               
                                                   </div>
                                             </Col>
-                                            <Col md={12}>
-                                            <FormGroup check>
-                                                <Label check>
-                                                <Input 
-                                                type="checkbox"
-                                                name="status"
-                                                id="status" 
-                                            
-                                                onChange={handleCheckedBox}/>{' '}
-                                                    <span style={{color:'#892'}}>Has Detail/Code </span>
-                                                
-                                                </Label>
-                                            </FormGroup>
-                                        </Col>
-                                        {/* Other Detail Field for the Org. unit*/}
-                               {otherDetailFields===true ? ( 
-                                   <>
-                                    <Col md={12}>
-                                        <hr/>
-                                        <h5>Other Details </h5>
-                                    </Col>
-                                    
-                                    <Col md={6}>
-                                        <FormGroup>
-                                            <Label >Name</Label>
-                                            <Input
-                                                  type="text"
-                                                  name="name"
-                                                  id="name"
-                                                  
-                                                  value={otherDetailsFields.name}
-                                                  onChange={handleOtherDetailFields}
-                                                  {...(errors.name && { invalid: true})}
-                                                  
-                                              />
-                                            {errors.name !=="" ? (
-                                                <span className={classes.error}>{errors.name}</span>
-                                            ) : "" }
-                                        </FormGroup>
-                                    </Col>
-                                    
-                                    <Col md={6}>
-                                        <CFormGroup>
-                                            <Label >Email </Label>
-                                            <Input
-                                                type="text"
-                                                name="email"
-                                                id="email"
-                                                
-                                                value={otherDetailsFields.email}
-                                                onChange={handleOtherDetailFields}
-                                               
-                                                />
-                                                   
-                                        </CFormGroup>
-                                    </Col>
-                                    <Col md={6}>
-                                        <CFormGroup>
-                                            <Label >Phone Number </Label>
-                                            <Input
-                                                type="text"
-                                                name="phone"
-                                                id="phone"
-                                                
-                                                value={otherDetailsFields.phone}
-                                                onChange={handleOtherDetailFields}
-                                               
-                                                
-                                                />
-                                                   
-                                        </CFormGroup>
-
-                                    </Col>
-                                    <Col md={6}>
-                                        <CFormGroup>
-                                            <Label >Address </Label>
-                                            <Input
-                                                type="text"
-                                                name="address"
-                                                id="address"
-                                                
-                                                value={otherDetailsFields.address}
-                                                onChange={handleOtherDetailFields}
-                                               
-                                                />
-                                                  
-                                        </CFormGroup>
-
-                                    </Col>
-                                    </>
-                                )
-                                :
-                                ""
-                                }
-                                {/* End of the Other Detail Fields for the Org. Unit */}
+                                           
+                                       
                                 </Row>
 
                                 <MatButton

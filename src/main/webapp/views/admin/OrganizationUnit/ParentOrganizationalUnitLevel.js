@@ -187,6 +187,10 @@ return (
                                   color: "#000",
                                   margin: "auto"
                                   },
+                                  searchFieldStyle: {
+                                    width : '250%',
+                                    margingLeft: '250px',
+                                },
                                 filtering: true
                               }}
                             />

@@ -141,7 +141,7 @@ return (
                                               color="primary"
                                               startIcon={<FaPlus />}
                                               onClick={() => createParentOrgUnit()}>
-                                          <span style={{textTransform: 'capitalize'}}>Add Org. Unit</span>
+                                          <span style={{textTransform: 'capitalize'}}>New Org. Unit</span>
                                       </Button>
                                </div>
                             <MaterialTable
@@ -193,7 +193,7 @@ return (
                                   margin: "auto"
                                   },
                                   searchFieldStyle: {
-                                    width : '300%',
+                                    width : '250%',
                                     margingLeft: '250px',
                                 },
                                 filtering: true,

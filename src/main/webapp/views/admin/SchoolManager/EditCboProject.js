@@ -12,12 +12,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import Select from "react-select";
-import { createIp, updateIp  } from "../../../actions/ip";
+import { updateCboProject } from "../../../actions/cboProject";
 import { Spinner } from 'reactstrap';
 import { url as baseUrl } from "../../../api";
 import { CModal, CModalHeader, CModalBody,CForm} from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
-import { createCboProject } from '../../../actions/cboProject'
 import { useHistory } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -39,6 +38,7 @@ const NewCboProject = (props) => {
     let history = useHistory();
     const [loading, setLoading] = useState(false)
     const cboProjectList = useSelector(state => state.cboProjects.cboProjectList);
+   // console.log(props.formData)
     const dispatch = useDispatch();
     const defaultValues = { stateId: "", lgaId: "", description: "", cboId:"", implementerId: "", donorId: "", organisationUnitIds:""}
     const defaultLocationValues = { state: "", lga:""}
@@ -58,12 +58,18 @@ const NewCboProject = (props) => {
     const [lgaDetail, setLgaDetail] = useState();
     const [stateDetail, setStateDetail] = useState();
     const [states, setStates] = useState([]);
-   const [locationListArray2, setLocationListArray2] = useState([])
-
+    const [locationListArray2, setLocationListArray2] = useState([])
+    const [organisationUnits, setOrganisationUnits] = useState()
 
     useEffect(() => {
         //loadCboProjectList()
         setOtherDetails(props.formData ? props.formData : defaultValues);
+        setOrganisationUnits(props.formData ? props.formData.organisationUnits : [])
+        const getLocationList= Object.entries(props.formData ? props.formData && props.formData.organisationUnits : []).map(([key, value]) => ({
+            state: value.State,
+            lga: [{label: value.Name, value: value.id}],
+        }))
+        setRelativesLocation(getLocationList)
         
     }, [props.formData]); //componentDidMount
 
@@ -73,7 +79,6 @@ const NewCboProject = (props) => {
             axios
               .get(`${baseUrl}donors`)
               .then((response) => {
-                //console.log(Object.entries(response.data));
                 setdonorList(
                   Object.entries(response.data).map(([key, value]) => ({
                     label: value.name,
@@ -95,7 +100,6 @@ const NewCboProject = (props) => {
             axios
               .get(`${baseUrl}implementers`)
               .then((response) => {
-                //console.log(Object.entries(response.data));
                 setipList(
                   Object.entries(response.data).map(([key, value]) => ({
                     label: value.name,
@@ -117,7 +121,6 @@ const NewCboProject = (props) => {
             axios
               .get(`${baseUrl}cbos`)
               .then((response) => {
-                //console.log(Object.entries(response.data));
                 setcboList(
                   Object.entries(response.data).map(([key, value]) => ({
                     label: value.name,
@@ -139,12 +142,10 @@ const  setStateByCountryId=() =>{
     async function getStateByCountryId() {
         const response = await axios.get(baseUrl + 'organisation-units/hierarchy/1/2')
         const stateList = response.data;
-       // console.log(stateList)
         setStates(stateList);
     }
     getStateByCountryId();
 }
-
     const handleInputChange = e => {
         setOtherDetails ({...otherDetails,  [e.target.name]: e.target.value});
     }
@@ -168,7 +169,6 @@ const  setStateByCountryId=() =>{
 
     
     const addLocations2 = e => { 
-            console.log(selectedOption)
             if(locationDetails.state !="" && selectedOption && selectedOption.length > 0){
                 const newStates = states.filter(state => state.id == locationDetails.state)  
                 locationDetails['state']= newStates[0].name
@@ -192,9 +192,8 @@ const  setStateByCountryId=() =>{
         setOtherDetails(defaultValues)
         setRelativesLocation({state: "", lga:""})  
     }
-
-    /*****  Validation */
-    const validate = () => {
+     /*****  Validation */
+     const validate = () => {
         let temp = { ...errors };
             temp.donorId = otherDetails.donorId
             ? ""
@@ -249,11 +248,11 @@ const  setStateByCountryId=() =>{
             history.push('/cbo-donor-ip') 
             props.toggleModal() 
         }       
-        dispatch(createCboProject(otherDetails,onSuccess, onError));       
+        dispatch(updateCboProject(props.formData.id, otherDetails,onSuccess, onError));       
         return
 
     }else if(!validate()){
-        return
+
     }else{
         toast.error("Location can't be empty")
     }
@@ -263,7 +262,7 @@ const  setStateByCountryId=() =>{
     const closeModal = ()=>{
         resetForm()
         props.toggleModal()
-        setLocationList({stateName: "", lga:""}) 
+        setRelativesLocation(defaultLocationValues) 
         setErrors({}) 
     }
 
@@ -271,7 +270,7 @@ const  setStateByCountryId=() =>{
 
         <div >
         <ToastContainer />
-            <CModal show={props.showModal} onClose={props.toggleModal} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
+            <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
                 <CForm >
                     <CModalHeader toggle={props.toggleModal}>NEW CBO PROJECT SETUP </CModalHeader>
                     <CModalBody>
@@ -518,5 +517,5 @@ function RelativeList({
   }
 
 
-export default connect(null, {createIp, updateIp})(NewCboProject);
+export default connect(null, {updateCboProject})(NewCboProject);
 

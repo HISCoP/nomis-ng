@@ -65,7 +65,7 @@ const CreateParentOrgUnitByUpload = (props) => {
 
   return (      
       <div >
-              <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+              <Modal isOpen={props.modalstatus} toggle={props.togglestatus}   className={props.className} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
                   <ModalHeader toggle={props.togglestatus}>Create Organization Unit</ModalHeader>
                       <ModalBody>
                           <Card>

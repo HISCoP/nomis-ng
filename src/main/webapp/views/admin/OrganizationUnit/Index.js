@@ -203,7 +203,7 @@ return (
                                   margin: "auto"
                                   },
                                   searchFieldStyle: {
-                                    width : '300%',
+                                    width : '250%',
                                     margingLeft: '250px',
                                 },
                                 filtering: true,

@@ -3,6 +3,7 @@ import { CCol, CRow, CButton, CCard,
     CCardBody,CCardFooter} from "@coreui/react";
 import { Icon} from 'semantic-ui-react'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import NewOvc from './NewOvc';
 import NewCareGiver from './NewCareGiver';
@@ -86,21 +87,28 @@ const MemberCard = (props) => {
         setMemberId(memberId)
         setModal3(!modal3)
     } 
+
+    
     
     
     return (
         <>
         <CCard>
             <CCardBody className={'text-center'}>
-                <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "VC" || ''}</b></p>
-                <AccountCircleIcon fontSize="large" style={{padding:'5px'}}/><br/>
+                <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "VC" || ''}</b>
+                    {props.member.householdMemberType===1?<MdAdd size="15" style={{color:'red'}}/> : ""}
+  
+                </p>
+                <AccountCircleIcon fontSize="large" style={{padding:'5px', color:props.member.householdMemberType===1?'green':'blue'}} /><br/>
                 <Link color="inherit" to ={{
                     pathname: "/household-member/home", state: props.member.id, householdId:props.householdId }}  ><span>{props.member.details.firstName + " " + props.member.details.lastName } <br /> {props.member.uniqueId}</span></Link><br/>
                 <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {props.member.details.dateOfBirthType === 'estimated' ? '~' : ''} {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>
             <CCardFooter>
-                <CButton color="primary" block onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton>
+                <CButton color="primary"  onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton> {" "}
+                <CButton color="dark"  > <Link
+                      to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }} style={{color:'#fff'}}>Other Forms</Link></CButton>
             </CCardFooter>
         </CCard>
         <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} householdId={props.householdId}/>
