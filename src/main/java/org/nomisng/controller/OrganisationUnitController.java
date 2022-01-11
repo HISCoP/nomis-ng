@@ -29,8 +29,9 @@ public class OrganisationUnitController {
 
     @PostMapping
     //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
-    public ResponseEntity<OrganisationUnit> save(@Valid @RequestBody OrganisationUnitDTO organisationUnitDTO) {
-        return ResponseEntity.ok(organisationUnitService.save(organisationUnitDTO));
+    public ResponseEntity<List<OrganisationUnit>> save(@RequestParam Long parentOrganisationUnitId, @RequestParam Long organisationUnitLevelId,
+                                                       @Valid @RequestBody List<OrganisationUnitDTO> organisationUnitDTOS) {
+        return ResponseEntity.ok(organisationUnitService.save(parentOrganisationUnitId, organisationUnitLevelId, organisationUnitDTOS));
     }
 
     /*@PostMapping("/save-all")

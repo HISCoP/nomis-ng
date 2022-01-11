@@ -13,4 +13,8 @@ public interface OrganisationUnitLevelRepository extends JpaRepository<Organisat
     Optional<OrganisationUnitLevel> findByNameAndArchived(String name, int archived);
 
     List<OrganisationUnitLevel> findAllByArchivedOrderByIdAsc(int archived);
+
+    Optional<OrganisationUnitLevel> findByParentOrganisationUnitLevelIdAndArchived(Long parentOrganisationUnitLevelId, int archived);
+
+    List<OrganisationUnitLevel> findAllByStatusAndArchivedOrderByIdAsc(Integer status, int archived);
 }

@@ -14,12 +14,13 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode
 @Table(name = "organisation_unit_level")
-public class OrganisationUnitLevel implements Serializable {
+public class OrganisationUnitLevel extends Audit implements Serializable {
 
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Basic
     @Column(name = "name")
     private String name;
@@ -33,11 +34,28 @@ public class OrganisationUnitLevel implements Serializable {
     @Column(name = "status")
     private Integer status;
 
+    @Basic
+    @Column(name = "parent_organisation_unit_level_id")
+    private Long parentOrganisationUnitLevelId;
+
     @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")
+    @ToString.Exclude
+    @JsonIgnore
     public List<OrganisationUnit> organisationUnitsById;
 
     @OneToMany(mappedBy = "organisationUnitLevelByOrganisationUnitLevelId")
     @ToString.Exclude
     @JsonIgnore
     public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_organisation_unit_level_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private OrganisationUnitLevel parentOrganisationUnitLevelIdByOrganisationUnitLevelId;
+
+    @OneToMany(mappedBy = "parentOrganisationUnitLevelIdByOrganisationUnitLevelId")
+    @JsonIgnore
+    @ToString.Exclude
+    public List<OrganisationUnitLevel> ParentorganisationUnitLevelByOrganisationUnitLevelId;
 }

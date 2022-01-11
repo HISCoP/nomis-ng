@@ -28,9 +28,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class AccountController {
 
-    //private final UserService userService;
+    private final UserService userService;
 
-    /*@GetMapping("/account")
+    @GetMapping("/account")
     public UserDTO getAccount(Principal principal){
         UserDTO userDTO =  userService
                 .getUserWithRoles()
@@ -38,11 +38,10 @@ public class AccountController {
                 .orElseThrow(() -> new EntityNotFoundException(User.class, principal.getName()+"","" ));
         return userDTO;
     }
-*/
-    /*@PostMapping("/register")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
         userService.registerUser(managedUserVM, managedUserVM.getPassword(), false);
-    }*/
+    }
 }

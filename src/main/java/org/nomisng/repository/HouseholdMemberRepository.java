@@ -27,6 +27,7 @@ public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember
             "WHERE (h.details ->>'firstName' ilike ?1  " +
             "OR h.details ->>'lastName' ilike ?1 " +
             "OR h.details ->>'mobilePhoneNumber' ilike ?1) " +
+            "OR h.unique_id ilike ?1 " +
             "AND cbo_project_id = ?2 AND h.archived=?3", nativeQuery = true)
     Page<HouseholdMember> findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(String search, Long cboProjectId, int archived, Pageable pageable);
 

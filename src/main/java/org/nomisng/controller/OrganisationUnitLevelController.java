@@ -3,7 +3,9 @@ package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nomisng.domain.dto.OrganisationUnitDTO;
 import org.nomisng.domain.dto.OrganisationUnitLevelDTO;
+import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.service.OrganisationUnitLevelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +32,15 @@ public class OrganisationUnitLevelController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrganisationUnitLevelDTO>> getAllOrganizationUnitLevel() {
-        return ResponseEntity.ok(organisationUnitLevelService.getAllOrganizationUnitLevel());
+    public ResponseEntity<List<OrganisationUnitLevelDTO>> getAllOrganizationUnitLevel(@RequestParam(required = false, defaultValue = "2") Integer status) {
+        return ResponseEntity.ok(organisationUnitLevelService.getAllOrganizationUnitLevel(status));
     }
+
+    @GetMapping("{id}/organisation-units")
+    public ResponseEntity<List<OrganisationUnit>> getAllOrganisationUnitsByOrganizationUnitLevel(@PathVariable Long id) {
+        return ResponseEntity.ok(organisationUnitLevelService.getAllOrganisationUnitsByOrganizationUnitLevel(id));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<OrganisationUnitLevelDTO> getOrganizationUnitLevel(@PathVariable Long id) {

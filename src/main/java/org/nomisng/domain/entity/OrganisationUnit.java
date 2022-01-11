@@ -1,9 +1,7 @@
 package org.nomisng.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.nomisng.security.SecurityUtils;
 
@@ -17,6 +15,8 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode
 @Table(name = "organisation_unit")
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrganisationUnit extends JsonBEntity implements Serializable {
 
     @Id
@@ -104,4 +104,9 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     public List<OrganisationUnitHierarchy> organisationUnitHierarchiesById_0;
+
+    public OrganisationUnit(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }

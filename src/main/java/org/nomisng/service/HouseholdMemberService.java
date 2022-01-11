@@ -52,7 +52,7 @@ public class HouseholdMemberService {
         Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         if(search == null || search.equalsIgnoreCase("*")) {
             if(memberType != null && memberType > 0){
-
+                //TODO: complete
             }
             return householdMemberRepository.findAllByCboProjectIdAndArchivedOrderByIdDesc(currentCboProjectId, UN_ARCHIVED, pageable);
         }
