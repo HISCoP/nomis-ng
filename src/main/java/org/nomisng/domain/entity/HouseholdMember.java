@@ -90,4 +90,10 @@ public class HouseholdMember extends JsonBEntity {
     @Basic
     @Column(name = "unique_id")
     private String uniqueId;
+
+    @OneToMany(mappedBy = "memberByMemberId")
+    private List<MemberFlag> memberFlagsById;
+
+    @Transient
+    private List<Flag> flags;
 }

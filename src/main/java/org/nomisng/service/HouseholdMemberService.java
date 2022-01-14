@@ -11,6 +11,7 @@ import org.nomisng.domain.dto.EncounterDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
 import org.nomisng.domain.entity.Encounter;
+import org.nomisng.domain.entity.Flag;
 import org.nomisng.domain.entity.Household;
 import org.nomisng.domain.entity.HouseholdMember;
 import org.nomisng.domain.mapper.EncounterMapper;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +63,20 @@ public class HouseholdMemberService {
     }
 
     public List<HouseholdMemberDTO> getAllHouseholdMembersFromPage(Page<HouseholdMember> householdMembersPage) {
-        return householdMemberMapper.toHouseholdDTOS(householdMembersPage.getContent());
+        List<HouseholdMember> householdMembers = householdMembersPage.getContent().stream()
+                .map(householdMember -> addMemberFlag(householdMember))
+                .collect(Collectors.toList());
+        return householdMemberMapper.toHouseholdDTOS(householdMembers);
+    }
+
+    private HouseholdMember addMemberFlag(HouseholdMember householdMember){
+        List<Flag> flags = new ArrayList<>();
+
+        householdMember.getMemberFlagsById().forEach(memberFlag -> {
+            flags.add(memberFlag.getFlag());
+        });
+        householdMember.setFlags(flags);
+        return householdMember;
     }
 
     public HouseholdMember save(HouseholdMemberDTO householdMemberDTO) {

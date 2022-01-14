@@ -58,6 +58,7 @@ public class HouseholdService {
     }
 
     public List<HouseholdDTO> getAllHouseholdsFromPage(Page<Household> householdPage) {
+
         return householdMapper.toHouseholdDTOS(householdPage.getContent());
     }
 
