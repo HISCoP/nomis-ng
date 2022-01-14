@@ -32,7 +32,7 @@ import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitService {
-    private static final Long FIRST_ORG_LEVEL = 1L;
+    //private static final Long FIRST_ORG_LEVEL = 1L;
     public static final long WARD_LEVEL = 4L;
     private final OrganisationUnitRepository organisationUnitRepository;
     private final OrganisationUnitLevelRepository organisationUnitLevelRepository;
@@ -43,22 +43,28 @@ public class OrganisationUnitService {
     public List<OrganisationUnit> save(Long parentOrganisationUnitId, Long organisationUnitLevelId, List<OrganisationUnitDTO> organisationUnitDTOS) {
         List<OrganisationUnit> organisationUnits = new ArrayList<>();
 
-        OrganisationUnitLevel organisationUnitLevel = organisationUnitLevelRepository.findByIdAndArchived(organisationUnitLevelId,
-                UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(OrganisationUnitLevel.class, "organisationUnitLevelId", organisationUnitLevelId+""));
+        OrganisationUnit orgUnit = organisationUnitRepository.findByIdAndArchived(parentOrganisationUnitId,
+                UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(OrganisationUnitLevel.class, "parentOrganisationUnitId", parentOrganisationUnitId+""));
 
+        OrganisationUnitLevel organisationUnitLevel = orgUnit.getOrganisationUnitLevelByOrganisationUnitLevelId();
         //if has no subset is 0 while has subset is 1
         if(organisationUnitLevel.getStatus() == 0){
-            throw new IllegalTypeException(OrganisationUnitLevel.class, "organisationUnitLevel", "cannot have subset");
+            throw new IllegalTypeException(OrganisationUnitLevel.class, "parentOrganisationUnitLevel", organisationUnitLevel+" cannot have subset");
         }
 
+        //loop to extract organisationUnit from dto and save
         organisationUnitDTOS.forEach(organisationUnitDTO -> {
             Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UN_ARCHIVED);
             if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnit.class, "Name", organisationUnitDTO.getName() +"");
             final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
+            Long level = organisationUnitLevelId;
             //Set parentId
             organisationUnit.setParentOrganisationUnitId(parentOrganisationUnitId);
+            //Set organisation unit level
+            organisationUnit.setOrganisationUnitLevelId(organisationUnitLevelId);
+            //Save organisation unit
             OrganisationUnit organisationUnit1 = organisationUnitRepository.save(organisationUnit);
-            Long level = organisationUnitLevelId;
+
             List<OrganisationUnitHierarchy> organisationUnitHierarchies = new ArrayList<>();
             OrganisationUnit returnOrgUnit = organisationUnit1;
 

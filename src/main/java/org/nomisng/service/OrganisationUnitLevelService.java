@@ -34,11 +34,11 @@ public class OrganisationUnitLevelService {
         Optional<OrganisationUnitLevel> organizationOptional = organisationUnitLevelRepository.findByNameAndArchived(organisationUnitLevelDTO.getName(), UN_ARCHIVED);
         if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnitLevel.class, "Name", organisationUnitLevelDTO.getName() +"");
 
-        OrganisationUnitLevel organisationUnitLevel = organisationUnitLevelRepository.findByParentOrganisationUnitLevelIdAndArchived(organisationUnitLevelDTO.getParentOrganisationUnitLevelId(),
+        OrganisationUnitLevel organisationUnitLevel = organisationUnitLevelRepository.findByIdAndArchived(organisationUnitLevelDTO.getParentOrganisationUnitLevelId(),
                 UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(OrganisationUnitLevel.class, "ParentOrganisationUnitLevel", organisationUnitLevelDTO.getParentOrganisationUnitLevelId()+""));
 
         //if has no subset is 0 while has subset is 1
-        if(organisationUnitLevel.getStatus() != 0){
+        if(organisationUnitLevel.getStatus() == 0){
             throw new IllegalTypeException(OrganisationUnitLevel.class, "ParentOrganisationUnitLevel", "cannot have subset");
         }
 
