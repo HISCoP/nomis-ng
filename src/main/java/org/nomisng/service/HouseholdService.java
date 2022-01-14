@@ -48,13 +48,14 @@ public class HouseholdService {
 
 
     public Page<Household> getAllHouseholdsByPage(String search, Pageable pageable) {
+        Long cboProjectId = this.getCurrentCboProjectId();
         if(search == null || search.equalsIgnoreCase("*")) {
             return householdRepository
-                    .findByCboProjectIdAndArchivedOrderByIdDesc(getCurrentCboProjectId(), UN_ARCHIVED, pageable);
+                    .findByCboProjectIdAndArchivedOrderByIdDesc(cboProjectId, UN_ARCHIVED, pageable);
         }
         search = "%"+search+"%";
         return householdRepository
-                .findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(search, getCurrentCboProjectId(), UN_ARCHIVED, pageable);
+                .findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(search, cboProjectId, UN_ARCHIVED, pageable);
     }
 
     public List<HouseholdDTO> getAllHouseholdsFromPage(Page<Household> householdPage) {
