@@ -27,10 +27,10 @@ public interface HouseholdRepository extends JpaRepository<Household, Long>, Jpa
 
     Optional<Household> findByIdAndCboProjectIdAndArchived(Long id, Long cboProjectId, int archived);
 
-    @Query(value = "SELECT * FROM household WHERE details ->>'lga' ilike ?1 " +
-            "OR details ->>'ward' ilike ?1 OR details ->>'state' ilike ?1 " +
-            "OR details ->>'community' ilike ?1 OR details ->>'uniqueId' ilike ?1 " +
-            "OR cbo_project_id = ?2 AND archived = ?3", nativeQuery = true)
+    @Query(value = "SELECT * FROM household h WHERE (h.details ->>'lga' ilike ?1 " +
+            "OR h.details ->>'ward' ilike ?1 OR h.details ->>'state' ilike ?1 " +
+            "OR h.details ->>'community' ilike ?1 OR h.details ->>'uniqueId' ilike ?1) " +
+            "AND h.cbo_project_id = ?2 AND archived = ?3", nativeQuery = true)
     Page<Household> findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(String search, Long cboProjectId,
                                                                                     int archived, Pageable pageable);
 
