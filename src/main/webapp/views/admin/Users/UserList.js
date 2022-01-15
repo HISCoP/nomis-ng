@@ -23,6 +23,7 @@ import {
 } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import { MdModeEdit } from "react-icons/md";
+import {FaTrashAlt } from "react-icons/fa";
 import useForm from "../../Functions/UseForm";
 import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
@@ -82,6 +83,7 @@ const UserList = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [assignFacilityModal, setAssignFacilityModal] = useState(false);
   const [roles, setRoles] = useState([]);
   const [selectedRoles, setselectedRoles] = useState([]);
@@ -157,7 +159,24 @@ const UserList = (props) => {
         });
     }
   };
-
+  const toggleDeleteUser = (id) => {
+    userId = id;
+    setDeleteModal(!deleteModal);
+  };
+  const deleteUser = (id) => {
+      
+      axios
+        .delete(`${baseUrl}users/${id}/`)
+        .then((response) => {
+          const y = response
+          toast.success("User Deleted Successfully");
+          fetchUsers()
+          toggleDeleteUser()
+        })
+        .catch((error) => {
+          toast.error("Something went wrong");
+        });
+  }
   const handleEdit = (e) => {
     e.preventDefault();
     let roles = [];
@@ -215,26 +234,24 @@ const UserList = (props) => {
                   Actions <span aria-hidden>▾</span>
                 </MenuButton>
                 <MenuList style={{ color: "#000 !important" }}>
-                  <MenuItem style={{ color: "#000 !important" }} >
-                    <Button
-                      size="sm"
-                      color="link"
-                      onClick={() => toggleEditRoles(row.id)}
-                    >
+                  <MenuItem style={{ color: "#000 !important" }}  onClick={() => toggleEditRoles(row.id)}>
+                    
                       <MdModeEdit size="15" />{" "}
                       <span style={{ color: "#000" }}>Edit Roles </span>
-                    </Button>
+                   
                   </MenuItem>
                   
-                  <MenuItem style={{ color: "#000 !important" }}>
-                    <Button
-                        size="sm"
-                        color="link"
-                        onClick={() => toggleAssignModal(row)}
-                    >
+                  <MenuItem style={{ color: "#000 !important" }}  onClick={() => toggleAssignModal(row)}>
+                   
                       <MdModeEdit size="15" />{" "}
                       <span style={{ color: "#000" }}>Assign Project </span>
-                    </Button>
+                    
+                  </MenuItem>
+                  <MenuItem style={{ color: "#000 !important" }} onClick={() => toggleDeleteUser(row.id)}>
+                    
+                      <FaTrashAlt size="15" />{" "}
+                      <span style={{ color: "#000" }}>Delete User </span>
+                   
                   </MenuItem>
                 </MenuList>
               </Menu>
@@ -311,6 +328,50 @@ const UserList = (props) => {
                    
                 </Form>
               </Modal>
+              {/** Delete User Modal  */}
+              <Modal isOpen={deleteModal}  size="lg">
+                <Form >
+                  <ModalHeader>Delete User</ModalHeader>
+                  <ModalBody>
+                   <p>Are you sure you want to delete User</p> 
+                    <MatButton
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      
+                      className=" float-left mr-1"
+                      startIcon={<SaveIcon />}
+                      disabled={saving}
+                      onClick={()=>deleteUser(userId)}
+                    >
+                      {!saving ? (
+                        <span style={{ textTransform: "capitalize" }}>
+                          Delete
+                        </span>
+                      ) : (
+                        <span style={{ textTransform: "capitalize" }}>
+                          Deleting...
+                        </span>
+                      )}
+                    </MatButton>
+                    {"    "}
+                    <MatButton
+                      variant="contained"
+                      className=" float-left mr-1"
+                      startIcon={<CancelIcon />}
+                      onClick={() => toggleDeleteUser(userId)}
+                    >
+                      <span style={{ textTransform: "capitalize" }}>
+                        Cancel
+                      </span>
+                    </MatButton>
+                  <br/><br/>
+                  </ModalBody>
+                
+                   
+                </Form>
+              </Modal>
+              {/**End of Deleting User Modal  */}
     </div>
   );
 };

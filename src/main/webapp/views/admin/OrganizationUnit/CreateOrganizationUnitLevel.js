@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 
 const CreateOrgUnit = (props) => {
     const classes = useStyles()
-    const [otherfields, setOtherFields] = useState({name:"", description: "", status:""});
+    const [otherfields, setOtherFields] = useState({name:"", description: "", status:"", parentOrganisationUnitLevelId:""});
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false)
     const [modal3, setModal3] = useState(false) //
@@ -59,7 +59,7 @@ const CreateOrgUnit = (props) => {
         async function getCharacters() {
             try {
                 const response = await axios(
-                    url + "organisation-unit-levels"
+                    url + "organisation-unit-levels?status=1"
                 );
                 const body = response.data && response.data !==null ? response.data : {};
                 
@@ -107,13 +107,14 @@ const createUploadBatch = () => {
 const saveOrgName = (e) => {
     e.preventDefault();
     const status = otherfields.status===true ?  otherfields.status=1 :  otherfields.status=0
-    console.log(otherfields)
  
     if (validate()) {
         setLoading(true);        
         const onSuccess = () => {
             setLoading(false);
+            props.loadAllOrgUnitLevel()
             props.togglestatus();
+            
         };
         const onError = () => {
             setLoading(false);
@@ -140,8 +141,8 @@ const saveOrgName = (e) => {
 
                                               <Input
                                                         type="select"
-                                                        name="organisationUnitLevelId"
-                                                        id="organisationUnitLevelId"
+                                                        name="parentOrganisationUnitLevelId"
+                                                        id="parentOrganisationUnitLevelId"
                                                         value={otherfields.orgUnit} 
                                                         onChange={handleOtherFieldInputChange}
                                                         required
@@ -213,16 +214,7 @@ const saveOrgName = (e) => {
                             <Row>
                                 <Col sm={12}>
                                     
-                                    <MatButton
-                                        variant='contained'
-                                        color='default'
-                                        onClick={props.togglestatus}
-                                        className={classes.button}
-                                        
-                                        className=" float-left mr-1"
-                                    >
-                                        Cancel
-                                   </MatButton> { " "} { " "} { " "} { " "} { " "}
+                                    
                                    <MatButton
                                         type='submit'
                                         variant='contained'
@@ -233,7 +225,17 @@ const saveOrgName = (e) => {
                                         
                                     >
                                         Save 
-                                    </MatButton>
+                                    </MatButton> { " "} { " "} { " "} { " "} { " "}
+                                    <MatButton
+                                        variant='contained'
+                                        color='default'
+                                        onClick={props.togglestatus}
+                                        className={classes.button}
+                                        
+                                        className=" float-left mr-1"
+                                    >
+                                        Cancel
+                                   </MatButton>
                             </Col>
                             </Row>
                       </CardBody>

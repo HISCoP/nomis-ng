@@ -21,8 +21,8 @@ import { createCboProject } from '../../../actions/cboProject'
 import { useHistory } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import List from "@material-ui/core/List";
-
+//import List from "@material-ui/core/List";
+import { List } from 'semantic-ui-react'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import {createOrgUnitLevel} from './../../../actions/organizationalUnit'
@@ -43,11 +43,12 @@ const filterOptions = createFilterOptions({
   });
 
 
-const NewCboProject = (props) => {
+const CreateOrgUnit = (props) => {
     let history = useHistory();
     const [loading, setLoading] = useState(false)
+    const [hiddeDetail, setHiddeDetail] = useState(false)
     const dispatch = useDispatch();
-    const defaultDetailValues = { name: "", description:""}
+    const defaultDetailValues = { name: "", description:"", parentOrganisationUnitId:"", details:{}}
     const defaultDetailValuesOtherDetails = { name: "", email:"", address:"", phone:""}
     const classes = useStyles()
     const [errors, setErrors] = useState({});
@@ -68,7 +69,7 @@ const NewCboProject = (props) => {
 
     const handleOtherFieldInputChange = e => {
         setDetails ({ ...details, [e.target.name]: e.target.value });
-  }
+    }
 
 
     useEffect(() => {
@@ -91,18 +92,18 @@ const NewCboProject = (props) => {
       async function getCharacters() {
           try {
               const response = await axios(
-                  url + "organisation-unit-levels"
+                  url + "organisation-units/organisation-unit-level/"+orgUnitIDParam.parentOrganisationUnitLevelId +'?size=3000'
               );
               const body = response.data && response.data !==null ? response.data : {};
-              
+              console.log(body)
               setOptionPcr(
-                   body.map(({ name, id }) => ({ title: name, value: id }))
+                   body.map(({ name, id, parentOrganisationUnitName }) => ({ title: name +" -  " + parentOrganisationUnitName, value: id }))
                );
           } catch (error) {
           }
       }
       getCharacters();
-  }, []);
+  }, [orgUnitIDParam.parentOrganisationUnitLevelId]);
   
   const handleInputChangeOrgUnit = (e)=> {
       const orgUnitID = e && e.value ? e.value : ""
@@ -122,40 +123,23 @@ const NewCboProject = (props) => {
       getCharacters();
 
   }
-  
-  const createOrgUnit = (e) => {
-      e.preventDefault();
-      setOtherFields({ ...otherfields, organisationUnitLevelId: props.orgUnitID });
-      otherfields['organisationUnitLevelId'] = props.orgUnitID.id
-      otherfields['parentOrganisationUnitId'] = props.orgUnitID.id ===1 ? 0 : otherfields.parentOrganisationUnitId
-     //check if the Org Unit Level ID is 1 which is country
-   
-      const onSuccess = () => {
-          setLoading(false);
-          props.togglestatus();
-      };
-      const onError = () => {
-          setLoading(false);
-          props.togglestatus();
-      };
-  
-      props.createOrgUnitLevel(otherfields,onSuccess, onError);
-  }
+
 
     const handleInputChange = e => {
         //setDetails ({...details,  [e.target.name]: e.target.value});
         setOtherFields({ ...otherfields, [e.target.name]: parseInt(e.target.value) })
     }
     const handleOtherDetailFields = e => {
-        setOtherDetailsFields ({...details,  [e.target.name]: e.target.value});
+        setOtherDetailsFields ({...otherDetailsFields,  [e.target.name]: e.target.value});
     }
     
     const addLocations2 = e => { 
-        if(validate()){
+            if(validate()) 
+            // details['parentOrganisationUnitId']= otherfields.parentOrganisationUnitId
+            details['details']= otherDetailsFields    
             const allRelativesLocation = [...relativesLocation, details];
             setRelativesLocation(allRelativesLocation);
-        }
-    
+
    }
 
     /* Remove Relative Location function **/
@@ -170,43 +154,31 @@ const NewCboProject = (props) => {
     }
 
     const organisationUnitIds = []
-    const createCboAccountSetup = e => {
+    const createOrgUnittSetup = e => {
         e.preventDefault()
-        console.log(relativesLocation)
-        return console.log(otherfields)
-        // if(relativesLocation.length >0 && validate()){
-        // const orgunitlga= relativesLocation.map(item => { 
-        //     delete item['state'];
-            
-        //     item['lga'].map(itemLga => {
-        //         console.log(itemLga['value'])
-        //     organisationUnitIds.push(itemLga['value'])
-
-        //     return itemLga;
-        //     })
-        // })
-        // otherDetails['organisationUnitIds'] = organisationUnitIds
-        // delete otherDetails['lgaId'];
-        // delete otherDetails['stateId'];       
+        const parentOrganisationUnitId = otherfields.parentOrganisationUnitId
+        const orgUnitIDParam = props.orgUnitID.id
+        console.log(props.orgUnitID.id)
         setLoading(true);
         const onSuccess = () => {
+            props.loadOrgUnit() 
             setLoading(false)
+            setDetails(defaultDetailValues)
             setOtherDetails(defaultValues)  
             setLocationListArray2([]) 
-            history.push('/cbo-donor-ip')
-            props.toggleModal() 
-            props.loadIps() 
+            props.togglestatus() 
+            
             resetForm()
                   
         }
         const onError = () => {
             setLoading(false)  
-            setOtherDetails(defaultValues)  
+            setOtherDetails(defaultValues) 
+            setDetails(defaultDetailValues) 
             setLocationListArray2([])
-            history.push('/cbo-donor-ip') 
-            props.toggleModal() 
+            props.togglestatus() 
         }       
-        dispatch(createCboProject(otherDetails,onSuccess, onError));       
+        props.createOrgUnitLevel(relativesLocation,parentOrganisationUnitId,orgUnitIDParam, onSuccess, onError);      
         return
 
     // }else if(!validate()){
@@ -216,16 +188,14 @@ const NewCboProject = (props) => {
     // }
  
     }
-    const handleCheckedBox = e => {
-      
-        var isChecked = e.target.checked;
-        console.log(isChecked)
-        setOtherDetailFields(isChecked)
+    const showDetailFields = e => {
+        setHiddeDetail(!hiddeDetail);
+        
     }
     const closeModal = ()=>{
         resetForm()
         props.togglestatus()
-        setDetails({name: "", description:""}) 
+        setDetails(defaultDetailValues) 
         setErrors({}) 
     }
 
@@ -233,10 +203,10 @@ const NewCboProject = (props) => {
 
         <div >
         <ToastContainer />
-            <CModal show={props.modalstatus}   size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
+            <CModal show={props.modalstatus}   size="xl"  backdrop={true} >
                 <CForm >
-                    <CModalHeader >Create Org. Unit </CModalHeader>
-                    <CModalBody>
+                    <CModalHeader ><b>Create Org. Unit - {orgUnitIDParam.name} </b></CModalHeader>
+                    <CModalBody >
                         <Card >
                             <CardBody>
                                 <Row >
@@ -260,30 +230,7 @@ const NewCboProject = (props) => {
                                           </FormGroup>
                                     </Col>
                                     
-                                    <Col md={6}>
-                                            <FormGroup>
-                                              <Label for=""> Organisation  Unit </Label>
-                                                   
-                                                    <Input
-                                                        type="select"
-                                                        name="organisationUnitLevelId"
-                                                        id="organisationUnitLevelId"
-                                                        value={otherfields.orgUnit} 
-                                                        onChange={handleInputChange}
-                                                        required
-                                                        >
-                                                            <option ></option>
-                                                            {orgUnitLevel.map((row) => (
-                                                                <option key={row.id} value={row.value}>
-                                                                    {row.label}
-                                                                </option>
-                                                            ))}
-                                                    </Input>
-                                                 
-                                          </FormGroup>
-                                    </Col>
-                               
-                                
+                                   
                                     <Col md={12}>
                                         <hr/>
                                         <h5>Organisation Unit Level </h5>
@@ -340,6 +287,93 @@ const NewCboProject = (props) => {
                                     </Button>
                                     </Col>
                                     <Col md={12}>
+                                        <FormGroup >
+                                            <Label   onClick={showDetailFields}>
+                                            
+                                                <span style={{color:'#892'}}><b>Other Detail</b> </span>
+                                            
+                                            </Label>
+                                        </FormGroup>
+                                        </Col>
+                                        {/* Other Detail Field for the Org. unit*/}
+                                                {hiddeDetail===true ? ( 
+                                                <>
+                                                   
+                                                        <Col md={5}>
+                                                            <FormGroup>
+                                                                <Label >Name</Label>
+                                                                <Input
+                                                                    type="text"
+                                                                    name="name"
+                                                                    id="name"
+                                                                    
+                                                                    value={otherDetailsFields.name}
+                                                                    onChange={handleOtherDetailFields}
+                                                                    {...(errors.name && { invalid: true})}
+                                                                    
+                                                                />
+                                                            {errors.name !=="" ? (
+                                                                <span className={classes.error}>{errors.name}</span>
+                                                            ) : "" }
+                                                        </FormGroup>
+                                                    </Col>
+                                                    
+                                                <Col md={5}>
+                                                    <CFormGroup>
+                                                        <Label >Email </Label>
+                                                        <Input
+                                                            type="text"
+                                                            name="email"
+                                                            id="email"
+                                                            
+                                                            value={otherDetailsFields.email}
+                                                            onChange={handleOtherDetailFields}
+                                                        
+                                                            />
+                                                            
+                                                    </CFormGroup>
+                                                </Col>
+                                                <Col md={2}></Col>
+                                                <Col md={5}>
+                                                    <CFormGroup>
+                                                        <Label >Phone Number </Label>
+                                                        <Input
+                                                            type="text"
+                                                            name="phone"
+                                                            id="phone"
+                                                            
+                                                            value={otherDetailsFields.phone}
+                                                            onChange={handleOtherDetailFields}
+
+                                                            />
+                                                            
+                                                    </CFormGroup>
+
+                                                </Col>
+                                                <Col md={5}>
+                                                    <CFormGroup>
+                                                        <Label >Address </Label>
+                                                        <Input
+                                                            type="text"
+                                                            name="address"
+                                                            id="address"
+                                                            
+                                                            value={otherDetailsFields.address}
+                                                            onChange={handleOtherDetailFields}
+                                                        
+                                                            />
+                                                            
+                                                    </CFormGroup>
+
+                                                </Col>
+                                                <Col md={2}></Col>
+                                                </>
+                                            )
+                                            :
+                                            ""
+                                            }
+                                            {/* End of the Other Detail Fields for the Org. Unit */}
+                                         <Col md={12}>
                                                   <div className={classes.demo}>
                                                   {relativesLocation.length >0 
                                                     ?
@@ -349,7 +383,7 @@ const NewCboProject = (props) => {
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Description</th>
-                                                                    <th ></th>
+                                                                    <th >Details</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -370,101 +404,7 @@ const NewCboProject = (props) => {
                                                   }               
                                                   </div>
                                             </Col>
-                                            <Col md={12}>
-                                            <FormGroup check>
-                                                <Label check>
-                                                <Input 
-                                                type="checkbox"
-                                                name="status"
-                                                id="status" 
-                                            
-                                                onChange={handleCheckedBox}/>{' '}
-                                                    <span style={{color:'#892'}}>Has Detail/Code </span>
-                                                
-                                                </Label>
-                                            </FormGroup>
-                                        </Col>
-                                        {/* Other Detail Field for the Org. unit*/}
-                               {otherDetailFields===true ? ( 
-                                   <>
-                                    <Col md={12}>
-                                        <hr/>
-                                        <h5>Other Details </h5>
-                                    </Col>
-                                    
-                                    <Col md={6}>
-                                        <FormGroup>
-                                            <Label >Name</Label>
-                                            <Input
-                                                  type="text"
-                                                  name="name"
-                                                  id="name"
-                                                  
-                                                  value={otherDetailsFields.name}
-                                                  onChange={handleOtherDetailFields}
-                                                  {...(errors.name && { invalid: true})}
-                                                  
-                                              />
-                                            {errors.name !=="" ? (
-                                                <span className={classes.error}>{errors.name}</span>
-                                            ) : "" }
-                                        </FormGroup>
-                                    </Col>
-                                    
-                                    <Col md={6}>
-                                        <CFormGroup>
-                                            <Label >Email </Label>
-                                            <Input
-                                                type="text"
-                                                name="email"
-                                                id="email"
-                                                
-                                                value={otherDetailsFields.email}
-                                                onChange={handleOtherDetailFields}
-                                               
-                                                />
-                                                   
-                                        </CFormGroup>
-                                    </Col>
-                                    <Col md={6}>
-                                        <CFormGroup>
-                                            <Label >Phone Number </Label>
-                                            <Input
-                                                type="text"
-                                                name="phone"
-                                                id="phone"
-                                                
-                                                value={otherDetailsFields.phone}
-                                                onChange={handleOtherDetailFields}
-                                               
-                                                
-                                                />
-                                                   
-                                        </CFormGroup>
-
-                                    </Col>
-                                    <Col md={6}>
-                                        <CFormGroup>
-                                            <Label >Address </Label>
-                                            <Input
-                                                type="text"
-                                                name="address"
-                                                id="address"
-                                                
-                                                value={otherDetailsFields.address}
-                                                onChange={handleOtherDetailFields}
-                                               
-                                                />
-                                                  
-                                        </CFormGroup>
-
-                                    </Col>
-                                    </>
-                                )
-                                :
-                                ""
-                                }
-                                {/* End of the Other Detail Fields for the Org. Unit */}
+                                        
                                 </Row>
 
                                 <MatButton
@@ -474,7 +414,7 @@ const NewCboProject = (props) => {
                                     className={classes.button}
                                     startIcon={<SaveIcon />}
                                     disabled={loading}
-                                    onClick={createCboAccountSetup}
+                                    onClick={createOrgUnittSetup}
                                     
                                     >
                                     
@@ -502,24 +442,56 @@ function RelativeList({
     index,
     removeRelativeLocation,
   }) {
-    function LgaList (selectedOption){
-        const  maxVal = []
-        if (selectedOption != null && selectedOption.length > 0) {
-          for(var i=0; i<selectedOption.length; i++){
-             
-                  if ( selectedOption[i].label!==null && selectedOption[i].label)
-                        //console.log(selectedOption[i])
-                            maxVal.push(selectedOption[i].label)
-              
-          }
-        return maxVal.toString();
-        }
+    function displayDetail (detailObj){
+        console.log(detailObj)
+        return(
+            <>
+                  <List>
+                    {detailObj.name!==null && detailObj.name!=="" ? (
+                    <List.Item>
+                    <List.Icon name='user' />
+                    <List.Content>{detailObj.name}</List.Content>
+                    </List.Item>
+                    ) :
+                    ""
+                    }
+                    {detailObj.address!==null && detailObj.address!=="" ? (
+                    <List.Item>
+                    <List.Icon name='marker' />
+                    <List.Content> {detailObj.address}</List.Content>
+                    </List.Item>
+                    ) :
+                    ""
+                    }
+                    {detailObj.email!==null && detailObj.email!==""? (
+                    <List.Item>
+                    <List.Icon name='mail' />
+                    <List.Content>
+                        {detailObj.email}
+                    </List.Content>
+                    </List.Item>
+                    ) :
+                    ""
+                    }
+                    {detailObj.phone!==null && detailObj.phone!==""? (
+                    <List.Item>
+                    <List.Icon name='phone' />
+                    <List.Content>
+                        {detailObj.phone}
+                    </List.Content>
+                    </List.Item>
+                    ) :
+                    ""
+                    }
+                </List>  
+            </>
+        )
     }
     return (
             <tr>
                 <th>{relative.name}</th>
                 <th>{relative.description}</th>
-                
+                <th>{displayDetail(relative.details)}</th>
                 <th >
                     <IconButton aria-label="delete" size="small" color="error" onClick={() =>removeRelativeLocation(index)}>
                         <DeleteIcon fontSize="inherit" />
@@ -531,5 +503,5 @@ function RelativeList({
   }
 
 
-export default connect(null, {createIp, updateIp})(NewCboProject);
+export default connect(null, {createIp, updateIp, createOrgUnitLevel})(CreateOrgUnit);
 

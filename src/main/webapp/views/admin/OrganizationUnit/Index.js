@@ -91,17 +91,21 @@ const useStyles = makeStyles({
     const listOfAllOrgUnit = useSelector(state => state.organizationalUnitReducer.list);
 
     useEffect(() => {
-      setLoading(true);
-      const onSuccess = () => {
-          setLoading(false)
-          
-      }
-      const onError = () => {
-          setLoading(false)     
-      }
-        const fetchAllOrgUnit = dispatch(fetchAllOrganizationalUnit(onSuccess,onError ));
+      loadAllOrgUnitLevel()
 
     }, []); //componentDidMount
+
+    const loadAllOrgUnitLevel = () => {
+  
+      setLoading('true');
+          const onSuccess = () => {
+              setLoading(false)
+          }
+          const onError = () => {
+              setLoading(false)     
+          }
+          const fetchAllOrgUnit = dispatch(fetchAllOrganizationalUnit(onSuccess,onError ));
+      }; //componentDidMount
 
     const deleteModule = (row) => {  
       setcollectModal({...collectModal, ...row});
@@ -122,16 +126,16 @@ const useStyles = makeStyles({
     }
 console.log(listOfAllOrgUnit)
 return (
-    <div >
-      <ToastContainer autoClose={3000} hideProgressBar />
-                            <Card body>
-                              
-                            <Breadcrumbs aria-label="breadcrumb">
-                              <Link color="inherit" to={{pathname: "/admin"}} >
-                                  Admin
-                              </Link>
-                              <Typography color="textPrimary">Organisational Unit Level Setup </Typography>
-                             </Breadcrumbs>
+      <div >
+
+            <Card body>
+              
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link color="inherit" to={{pathname: "/admin"}} >
+                  Admin
+              </Link>
+              <Typography color="textPrimary">Organisational Unit Level Setup </Typography>
+              </Breadcrumbs>
                                
                                
                                 <br/>
@@ -203,7 +207,7 @@ return (
                                   margin: "auto"
                                   },
                                   searchFieldStyle: {
-                                    width : '250%',
+                                    width : '200%',
                                     margingLeft: '250px',
                                 },
                                 filtering: true,
@@ -216,9 +220,9 @@ return (
                             </Card>
                       
        <DeleteOrgUnitLevel modalstatus={modal} togglestatus={toggleModal} orgUnit={collectModal}/>
-       <CreateOrganizationUnitLevel modalstatus={modal2} togglestatus={toggleModal2}  />
-       <UpdateOrganisationUnitLevel modalstatus={modal3} togglestatus={toggleModal3}  orgUnit={collectModal}/>
-       <CreateParentOrgUnit modalstatus={modal4} togglestatus={toggleModal4}   orgUnitID={orgUnitID}/>
+       <CreateOrganizationUnitLevel modalstatus={modal2} togglestatus={toggleModal2}  loadAllOrgUnitLevel={loadAllOrgUnitLevel}/>
+       <UpdateOrganisationUnitLevel modalstatus={modal3} togglestatus={toggleModal3}  orgUnit={collectModal} loadAllOrgUnitLevel={loadAllOrgUnitLevel}/>
+       <CreateParentOrgUnit modalstatus={modal4} togglestatus={toggleModal4}   orgUnitID={orgUnitID} loadAllOrgUnitLevel={loadAllOrgUnitLevel}/>
                        
        
     </div>

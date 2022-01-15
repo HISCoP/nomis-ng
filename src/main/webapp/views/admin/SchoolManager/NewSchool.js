@@ -264,11 +264,12 @@ const handleInputChange2 = e => {
                                           </FormGroup>
                                     </Col>
                                
-                                
+                                    <br/>
+                                   
                                     <Col md={12}>
                                         <hr/>
-                                        <h5>Detail</h5>
-                                        <br/>
+                                        <h5>School Information</h5>
+                                        <hr/>
                                     </Col>
                                     
                                     <Col md={5}>
@@ -339,7 +340,7 @@ const handleInputChange2 = e => {
                                         <span style={{textTransform: 'capitalize'}}> Add </span>
                                     </Button>
                                     </Col>
-                                    <Col md={12}>
+                                        <Col md={12}>
                                                   <div className={classes.demo}>
                                                   {relativesLocation.length >0 
                                                     ?
@@ -370,8 +371,8 @@ const handleInputChange2 = e => {
                                                   }               
                                                   </div>
                                             </Col>
+
                                            
-                                       
                                 </Row>
 
                                 <MatButton

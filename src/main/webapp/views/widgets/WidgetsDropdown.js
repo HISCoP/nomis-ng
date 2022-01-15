@@ -4,9 +4,7 @@ import {
   CRow,
   CCol,
   CDropdown,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownToggle,
+
   CWidgetBrand
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'

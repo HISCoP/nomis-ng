@@ -110,10 +110,10 @@ console.log(data)
 };
 
 
-export const createOrgUnitLevel = (data, onSuccess,onError) => dispatch => {
+export const createOrgUnitLevel = (data,parentOrganisationUnitId,orgUnitIDParam, onSuccess,onError) => dispatch => {
   
     axios
-      .post(`${baseUrl}organisation-units`, data)
+      .post(`${baseUrl}organisation-units?parentOrganisationUnitId=${parentOrganisationUnitId}&organisationUnitLevelId=${orgUnitIDParam}`, data)
       .then(response => {
         dispatch({
           type: ACTION_TYPES.CREATE_ORGANISATION_UNIT_LEVELS,

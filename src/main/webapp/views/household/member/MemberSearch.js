@@ -74,9 +74,9 @@ const HouseholdMember = (props) => {
                       to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
                   name:  
                         row.householdMemberType === 1 ? 
-                      (<>{row.details.firstName + " " + row.details.lastName } <FaRegDotCircle size="10" style={{color:'green'}}/></>) : 
+                      (<><FaRegDotCircle size="10" style={{color:'green'}}/> {row.details.firstName + " " + row.details.lastName } </>) : 
                       
-                      (<>{row.details.firstName + " " + row.details.lastName } <FaRegDotCircle size="10" style={{color:'blue'}}/></>)
+                      (<><FaRegDotCircle size="10" style={{color:'blue'}}/> {row.details.firstName + " " + row.details.lastName } </>)
                       ,
                   date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
                   type: "",

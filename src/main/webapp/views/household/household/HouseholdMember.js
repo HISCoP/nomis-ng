@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { fetchAllHouseHoldMembersByHouseholdId } from "./../../../actions/houseHold";
 import { Alert } from 'reactstrap';
 import {calculateAge} from "./../../../utils/calculateAge";
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 const HouseholdMember = (props) => {
     //Getting the household Id from the props 
@@ -106,9 +107,23 @@ const MemberCard = (props) => {
 
             </CCardBody>
             <CCardFooter>
-                <CButton color="primary"  onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton> {" "}
+                {/* <CButton color="primary"  onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton> {" "}
                 <CButton color="dark"  > <Link
-                      to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }} style={{color:'#fff'}}>Other Forms</Link></CButton>
+                      to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }} style={{color:'#fff'}}>Other Forms</Link></CButton> */}
+                      <Menu vertical  style={{backgroundColor:'#3F51B5', color:'#ffffff'}}>
+                        <Dropdown item text='Provide Services' style={{ color:'#ffffff'}}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={() =>provideServiceModal(props.member.id)}>Provide Service</Dropdown.Item>
+                            <Dropdown.Item>
+                                <Link
+                                to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }}>
+                                    Other Forms
+                                </Link>
+                            </Dropdown.Item>
+                            
+                        </Dropdown.Menu>
+                        </Dropdown>
+                    </Menu>
             </CCardFooter>
         </CCard>
         <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} householdId={props.householdId}/>
