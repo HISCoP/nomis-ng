@@ -15,26 +15,50 @@ import {connect, useDispatch} from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import {calculateAge} from "./../../../utils/calculateAge";
 import NewOvc from "../household/NewOvc";
+import NewCareGiver from "../household/NewCareGiver";
 
 
 const HouseholdMember = (props) => {
 
-  const [loading, setLoading] = useState('')
+  const [loading, setLoading] = useState('');
+  const [currentHm, setCurrentHm] = useState('');
+    const [newOvcModal, setShowOvcModal] = React.useState(false);
+    const [newCaregiverModal, setShowCaregiverModal] = React.useState(false);
+    const [modal, setModal] = useState(false);
+
     const dispatch = useDispatch();
     React.useEffect(() => {
         //show side-menu when this page loads
         dispatch({type: 'MENU_MINIMIZE', payload: false });
     },[]);
+
+    const fetchMembers = () => {
+        setLoading('true');
+        const onSuccess = () => {
+            setLoading(false)
+        }
+        const onError = () => {
+            setLoading(false)
+        }
+        props.fetchAllMember(onSuccess, onError);
+    }
   useEffect(() => {
-  setLoading('true');
-      const onSuccess = () => {
-          setLoading(false)
-      }
-      const onError = () => {
-          setLoading(false)     
-      }
-          props.fetchAllMember(onSuccess, onError);
+    fetchMembers();
   }, []); //componentDidMount
+
+    const toggleOvc = () => setShowOvcModal(!newOvcModal);
+    const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
+
+    const toggleUpdate = (row) => {
+        setCurrentHm(row);
+        if(row.householdMemberType === 1){
+            toggleCaregiver();
+        }
+
+        if(row.householdMemberType === 2){
+            toggleOvc();
+        }
+    };
 
 
 
@@ -87,6 +111,7 @@ const HouseholdMember = (props) => {
                                 </Link>
                                 
                               </MenuItem>
+                                  <MenuItem onClick={() => toggleUpdate(row)}>{" "}Edit</MenuItem>
                               {/*<MenuItem >{" "}Delete</MenuItem>*/}
                               </MenuList>
                           </Menu>
@@ -94,14 +119,33 @@ const HouseholdMember = (props) => {
                 }))}              
                     
                 options={{
-                  search: true
+                    headerStyle: {
+                        backgroundColor: "#9F9FA5",
+                        color: "#000",
+                    },
+                    searchFieldStyle: {
+                        width : '300%',
+                        margingLeft: '250px',
+                    },
+                    filtering: true,
+                    exportButton: false,
+                    searchFieldAlignment: 'left',
+
                 }}
               />
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
-    </>
+        {newOvcModal ?
+            <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={currentHm ? currentHm.householdId : ""} reload={fetchMembers}  householdMember={currentHm && currentHm.householdMemberType == 2 ? currentHm : null}/>
+            : ""
+        }
+
+        {newCaregiverModal ?
+            <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={currentHm ? currentHm.householdId : ""} reload={fetchMembers} householdMember={currentHm && currentHm.householdMemberType  == 1 ? currentHm : null}/>
+            : ""
+        }   </>
   )
 }
 
