@@ -29,7 +29,7 @@ const TheSidebar = () => {
       onShowChange={(val) => {dispatch({type: 'set', sidebarShow: val })}}
       onMinimizeChange={(val) => dispatch({type: 'MENU_MINIMIZE', payload: val })}
     >
-      <CSidebarBrand className="d-md-down-none" to="/">
+      <CSidebarBrand className="d-md-down-none" >
         {"NOMIS"}
         
       </CSidebarBrand>

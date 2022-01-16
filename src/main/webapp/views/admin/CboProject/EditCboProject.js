@@ -270,7 +270,7 @@ const  setStateByCountryId=() =>{
 
         <div >
         <ToastContainer />
-            <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
+            <CModal show={props.showModal} onClose={props.toggleModal} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
                 <CForm >
                     <CModalHeader toggle={props.toggleModal}>NEW CBO PROJECT SETUP </CModalHeader>
                     <CModalBody>

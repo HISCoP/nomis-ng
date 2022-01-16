@@ -15,50 +15,26 @@ import {connect, useDispatch} from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import {calculateAge} from "./../../../utils/calculateAge";
 import NewOvc from "../household/NewOvc";
-import NewCareGiver from "../household/NewCareGiver";
-
+import { FaRegDotCircle } from 'react-icons/fa';
 
 const HouseholdMember = (props) => {
 
-  const [loading, setLoading] = useState('');
-  const [currentHm, setCurrentHm] = useState('');
-    const [newOvcModal, setShowOvcModal] = React.useState(false);
-    const [newCaregiverModal, setShowCaregiverModal] = React.useState(false);
-    const [modal, setModal] = useState(false);
-
+  const [loading, setLoading] = useState('')
     const dispatch = useDispatch();
     React.useEffect(() => {
         //show side-menu when this page loads
         dispatch({type: 'MENU_MINIMIZE', payload: false });
     },[]);
-
-    const fetchMembers = () => {
-        setLoading('true');
-        const onSuccess = () => {
-            setLoading(false)
-        }
-        const onError = () => {
-            setLoading(false)
-        }
-        props.fetchAllMember(onSuccess, onError);
-    }
   useEffect(() => {
-    fetchMembers();
+  setLoading('true');
+      const onSuccess = () => {
+          setLoading(false)
+      }
+      const onError = () => {
+          setLoading(false)     
+      }
+          props.fetchAllMember(onSuccess, onError);
   }, []); //componentDidMount
-
-    const toggleOvc = () => setShowOvcModal(!newOvcModal);
-    const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
-
-    const toggleUpdate = (row) => {
-        setCurrentHm(row);
-        if(row.householdMemberType === 1){
-            toggleCaregiver();
-        }
-
-        if(row.householdMemberType === 2){
-            toggleOvc();
-        }
-    };
 
 
 
@@ -76,14 +52,16 @@ const HouseholdMember = (props) => {
                 title="Household Member List"
                 columns={[
                   { title: 'Unique ID', field: 'id' },
-                    { title: 'Member Type', field: 'type' },
-                  { title: 'Date Assessed', field: 'date' },
                   { title: 'Name', field: 'name' },
+                  
+                  { title: 'Date Assessed', field: 'date' },
+                  
                   {
                     title: 'Age',
                     field: 'age',
                     
                   },
+                  { title: 'Status', field: 'type' },
                   {
                     title: 'Action',
                     field: 'action',
@@ -94,9 +72,16 @@ const HouseholdMember = (props) => {
                 data={props.houseMemberList.map((row) => ({
                   id: <span> <Link
                       to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
+                  name:  
+                        row.householdMemberType === 1 ? 
+                      (<><FaRegDotCircle size="10" style={{color:'green'}}/> {row.details.firstName + " " + row.details.lastName } </>) : 
+                      
+                      (<><FaRegDotCircle size="10" style={{color:'blue'}}/> {row.details.firstName + " " + row.details.lastName } </>)
+                      ,
                   date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
-                    type: row.householdMemberType === 1 ? "Caregiver" : "VC",
-                  name: row.details.firstName + " " + row.details.lastName,
+                  type: "",
+                  
+                      
                   age: (row.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(row.details.dob),
                   action:
                   <Menu>
@@ -111,7 +96,6 @@ const HouseholdMember = (props) => {
                                 </Link>
                                 
                               </MenuItem>
-                                  <MenuItem onClick={() => toggleUpdate(row)}>{" "}Edit</MenuItem>
                               {/*<MenuItem >{" "}Delete</MenuItem>*/}
                               </MenuList>
                           </Menu>
@@ -119,33 +103,14 @@ const HouseholdMember = (props) => {
                 }))}              
                     
                 options={{
-                    headerStyle: {
-                        backgroundColor: "#9F9FA5",
-                        color: "#000",
-                    },
-                    searchFieldStyle: {
-                        width : '300%',
-                        margingLeft: '250px',
-                    },
-                    filtering: true,
-                    exportButton: false,
-                    searchFieldAlignment: 'left',
-
+                  search: true
                 }}
               />
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
-        {newOvcModal ?
-            <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={currentHm ? currentHm.householdId : ""} reload={fetchMembers}  householdMember={currentHm && currentHm.householdMemberType == 2 ? currentHm : null}/>
-            : ""
-        }
-
-        {newCaregiverModal ?
-            <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={currentHm ? currentHm.householdId : ""} reload={fetchMembers} householdMember={currentHm && currentHm.householdMemberType  == 1 ? currentHm : null}/>
-            : ""
-        }   </>
+    </>
   )
 }
 

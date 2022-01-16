@@ -1,12 +1,13 @@
-import React, { useState }   from 'react';
+import React, { useState, useEffect }   from 'react';
 import { Form,Modal, ModalHeader, ModalBody,Row,Col,FormGroup,Input,FormFeedback,Label,Card,CardBody, Alert 
 } from 'reactstrap';
+import axios from "axios";
 import MatButton from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import CreatOrgUnitByUpload from "./CreatOrgUnitByUpload";
 import {createOrganisationUnit} from './../../../actions/organizationalUnit'
 import { connect } from "react-redux";
-
+import { url  } from "../../../api";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -47,12 +48,29 @@ const useStyles = makeStyles(theme => ({
 
 const CreateOrgUnit = (props) => {
     const classes = useStyles()
-    const [otherfields, setOtherFields] = useState({name:"", description: "", status:""});
+    const [otherfields, setOtherFields] = useState({name:"", description: "", status:"", parentOrganisationUnitLevelId:""});
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false)
     const [modal3, setModal3] = useState(false) //
     const toggleModal3 = () => setModal3(!modal3)
+    const [orgUnitLevel, setOrgUnitLevel] = useState([]);
 
+    useEffect(() => {
+        async function getCharacters() {
+            try {
+                const response = await axios(
+                    url + "organisation-unit-levels?status=1"
+                );
+                const body = response.data && response.data !==null ? response.data : {};
+                
+                setOrgUnitLevel(
+                     body.map(({ name, id }) => ({ title: name, value: id }))
+                 );
+            } catch (error) {
+            }
+        }
+        getCharacters();
+    }, []);
 
     const handleOtherFieldInputChange = e => {
       
@@ -67,9 +85,9 @@ const CreateOrgUnit = (props) => {
 
   const handleCheckedBox = e => {
       
-    var isChecked = e.target.checked;
-    setOtherFields ({ ...otherfields, status:isChecked });
-}
+        var isChecked = e.target.checked;
+        setOtherFields ({ ...otherfields, status:isChecked });
+ }
   const validate = () => {
       let temp = { ...errors }
       temp.name = otherfields.name ? "" : "This field is required"
@@ -89,13 +107,14 @@ const createUploadBatch = () => {
 const saveOrgName = (e) => {
     e.preventDefault();
     const status = otherfields.status===true ?  otherfields.status=1 :  otherfields.status=0
-    console.log(otherfields)
  
     if (validate()) {
         setLoading(true);        
         const onSuccess = () => {
             setLoading(false);
+            props.loadAllOrgUnitLevel()
             props.togglestatus();
+            
         };
         const onError = () => {
             setLoading(false);
@@ -108,7 +127,7 @@ const saveOrgName = (e) => {
 
   return (      
       <div >
-              <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+              <Modal isOpen={props.modalstatus} toggle={props.togglestatus}   className={props.className} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
               <Form onSubmit={saveOrgName}> 
                   <ModalHeader toggle={props.togglestatus}>Create Organization Unit Level</ModalHeader>
                       <ModalBody>
@@ -116,9 +135,27 @@ const saveOrgName = (e) => {
                             <CardBody>
                               <br />
                               <Row>
-                                  <Col>
-                                 
-                                </Col>
+                              <Col md={6}>
+                                <FormGroup>
+                                              <Label for="">Parent Organisation  Unit</Label>
+
+                                              <Input
+                                                        type="select"
+                                                        name="parentOrganisationUnitLevelId"
+                                                        id="parentOrganisationUnitLevelId"
+                                                        value={otherfields.orgUnit} 
+                                                        onChange={handleOtherFieldInputChange}
+                                                        required
+                                                        >
+                                                            <option ></option>
+                                                            {orgUnitLevel.map((row) => (
+                                                                <option key={row.id} value={row.value}>
+                                                                    {row.title}
+                                                                </option>
+                                                            ))}
+                                                    </Input>
+                                          </FormGroup>
+                                    </Col>
                               </Row>
                                 <Row>
                                   <Col md={6}>
@@ -163,7 +200,7 @@ const saveOrgName = (e) => {
                                         id="status" 
                                        
                                         onChange={handleCheckedBox}/>{' '}
-                                            Has no child 
+                                            Has no sublevel
                                             <br/>
                                             <Alert color="primary">
                                                  This organisational unit level has no lower level
@@ -177,27 +214,28 @@ const saveOrgName = (e) => {
                             <Row>
                                 <Col sm={12}>
                                     
-                                    <MatButton
-                                        variant='contained'
-                                        color='default'
-                                        onClick={props.togglestatus}
-                                        className={classes.button}
-                                        
-                                        className=" float-right mr-1"
-                                    >
-                                        Cancel
-                                   </MatButton> { " "} { " "} { " "} { " "} { " "}
+                                    
                                    <MatButton
                                         type='submit'
                                         variant='contained'
                                         color='primary'
                                         className={classes.button}
                                         disabled={loading}
-                                        className=" float-right mr-1"
+                                        className=" float-left mr-1"
                                         
                                     >
                                         Save 
-                                    </MatButton>
+                                    </MatButton> { " "} { " "} { " "} { " "} { " "}
+                                    <MatButton
+                                        variant='contained'
+                                        color='default'
+                                        onClick={props.togglestatus}
+                                        className={classes.button}
+                                        
+                                        className=" float-left mr-1"
+                                    >
+                                        Cancel
+                                   </MatButton>
                             </Col>
                             </Row>
                       </CardBody>

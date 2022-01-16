@@ -93,7 +93,7 @@ const closeModal = ()=>{
 
         <div >
          
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
+            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
 
                 <Form onSubmit={createGlobalDomain}>
                     <ModalHeader >New Domain </ModalHeader>

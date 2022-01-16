@@ -31,7 +31,7 @@ const HouseholdDashboard = (props) => {
     return (
         <>
                 <CRow>
-                    <CCol xs="12" sm="6" lg="4">
+                    <CCol xs="12" sm="6" lg="3">
                 <CWidgetIcon text="Total Enrolled VC" header={props.houseMemberList ? props.houseMemberList.filter(x => x.householdMemberType === 2).length : ''}  color="success" iconPadding={false}>
                     <CIcon width={24} name="cil-people"/>
                 </CWidgetIcon>
@@ -41,13 +41,18 @@ const HouseholdDashboard = (props) => {
                     {/*        <CIcon width={24} name="cil-notes"/>*/}
                     {/*    </CWidgetIcon>*/}
                     {/*</CCol>*/}
-                    <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total HIV Positive" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
+                    <CCol xs="12" sm="6" lg="3">
+                        <CWidgetIcon text="Total VC HIV Positive" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="danger" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
-                        </CCol>
-                    <CCol xs="12" sm="6" lg="4">
-                        <CWidgetIcon text="Total Virally Suppressed" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="success" iconPadding={false}>
+                    </CCol>
+                    <CCol xs="12" sm="6" lg="3">
+                        <CWidgetIcon text="Total Caregiver HIV Positive" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="danger" iconPadding={false}>
+                            <CIcon width={24} name="cil-user"/>
+                        </CWidgetIcon>
+                    </CCol>
+                    <CCol xs="12" sm="6" lg="3">
+                        <CWidgetIcon text="Total Virally Suppressed" header={props.houseMemberList.filter(x => x.details.hivStatus.display === "HIV Positive").length} color="warning" iconPadding={false}>
                             <CIcon width={24} name="cil-user"/>
                         </CWidgetIcon>
                     </CCol>

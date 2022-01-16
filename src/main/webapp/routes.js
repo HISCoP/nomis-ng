@@ -33,6 +33,7 @@ const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"
 const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
 const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
+const SchoolManager = React.lazy(() => import("./views/admin/SchoolManager/Schools"));
 const LoginPage = React.lazy(() => import("./views/pages/login/Login"));
 
 const routes = [
@@ -69,6 +70,7 @@ const routes = [
   { path: "/ip", name: 'Implementing Partner ', component: IpManager} ,
   //{ path: "/donor-ip", name: 'Donor-Implementing Partner ', component: DonorIpManager} ,
   { path: "/cbo-donor-ip", name: 'CBO Project ', component: CboDonorIpManager} ,
+  { path: "/schools", name: 'Schools ', component: SchoolManager} ,
   { path: "/visualisation", name: 'Data Visualisation', component: DataVisualisation} ,
 
   

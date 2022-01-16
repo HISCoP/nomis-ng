@@ -98,7 +98,6 @@ const UserRegistration = (props) => {
       axios
         .get(`${baseUrl}application-codesets/codesetGroup/GENDER`)
         .then((response) => {
-          console.log(Object.entries(response.data));
           setGender(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.display,
@@ -119,7 +118,6 @@ const UserRegistration = (props) => {
       axios
         .get(`${baseUrl}roles`)
         .then((response) => {
-          console.log(response.data)
           setRole(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
@@ -256,14 +254,14 @@ const UserRegistration = (props) => {
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for="email">Email *</Label>
+                    <Label for="email">Email </Label>
                     <Input
                       type="email"
                       name="email"
                       id="email"
                       onChange={handleInputChange}
                       value={values.email}
-                      required
+                      
                     />
                   </FormGroup>
                   <FormGroup>
@@ -318,14 +316,14 @@ const UserRegistration = (props) => {
                   </FormGroup>
                   
                   <FormGroup>
-                    <Label for="phoneNumber">Phone Number *</Label>
+                    <Label for="phoneNumber">Phone Number </Label>
                     <Input
                       type="number"
                       name="phoneNumber"
                       id="phoneNumber"
                       onChange={handleInputChange}
                       value={values.phoneNumber}
-                      required
+                      
                     />
                   </FormGroup>
                  
