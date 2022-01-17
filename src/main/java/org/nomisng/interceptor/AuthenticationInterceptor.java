@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.util.NoSuchElementException;
 
 @Component
 @Slf4j
@@ -26,10 +27,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        if (request.getRequestURI().contains("/api/") && !request.getRequestURI().contains("/api/cbo-projects/all")) {
+        if (request.getRequestURI().contains("/api/") &&  !request.getRequestURI().contains("/api/authenticate") && !request.getRequestURI().contains("/api/cbo-projects/all")) {
             log.info("User "+request.getRemoteUser() + " " + request.getMethod() + " Request URL {}", request.getRequestURI());
-            if(SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName).get().getCurrentCboProjectId() == null){
-                throw new IllegalTypeException(CboProject.class, "cboProjectId", "user cbo project id invalid, login  or switch to right cbo project");
+            try {
+                if (SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName).get().getCurrentCboProjectId() == null) {
+                    throw new IllegalTypeException(CboProject.class, "cboProjectId", "user cbo project id invalid, login  or switch to right cbo project");
+                }
+            } catch (NoSuchElementException e){
+                throw new NoSuchElementException(e.getMessage());
             }
 
             return true;
