@@ -89,10 +89,10 @@ const useStyles = makeStyles({
     const dispatch = useDispatch();
     const listOfAllParentOrgUnit = useSelector(state => state.organizationalUnitReducer.list);
     useEffect(() => {
-      loadOrgUnit()
+      loadOrgUnitById()
       
   }, []); //componentDidMount
-  const loadOrgUnit = () => {
+  const loadOrgUnitById = () => {
 
     setLoading(true);
       const onSuccess = () => {
@@ -210,9 +210,9 @@ return (
                             />
                             </Card>
                    
-       <DeleteOrgUnit modalstatus={modal} togglestatus={toggleModal} orgUnit={collectModal}  loadOrgUnit={loadOrgUnit}/>
-       <CreateParentOrgUnit modalstatus={modal2} togglestatus={toggleModal2} orgUnitID={orgUnitID} />
-       <UpdateOrganisationUnit modalstatus={modal3} togglestatus={toggleModal3} orgUnit={collectModal}  orgUnitID={orgUnitID}/>
+       <DeleteOrgUnit modalstatus={modal} togglestatus={toggleModal} orgUnit={collectModal}  loadOrgUnit={loadOrgUnitById}/>
+       <CreateParentOrgUnit modalstatus={modal2} togglestatus={toggleModal2} orgUnitID={orgUnitID} loadOrgUnit={loadOrgUnitById}/>
+       <UpdateOrganisationUnit modalstatus={modal3} togglestatus={toggleModal3} orgUnit={collectModal}  orgUnitID={orgUnitID} loadOrgUnit={loadOrgUnitById}/>
        
     </div>
   )
