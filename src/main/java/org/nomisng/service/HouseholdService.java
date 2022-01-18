@@ -44,6 +44,7 @@ public class HouseholdService {
     private static final int INACTIVE_HOUSEHOLD_ADDRESS = 0;
     private final EncounterService encounterService;
     private final UserService userService;
+    private final HouseholdMemberService householdMemberService;
     private final static String HH_ASSESSMENT_FORM_CODE = "5f451d7d-213c-4478-b700-69a262667b89";
 
 
@@ -196,12 +197,14 @@ public class HouseholdService {
         if(memberType == null || memberType == 0) {
             return householdMemberMapper.toHouseholdMemberDTOS(household.getHouseholdMembers().stream()
                     .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
+                    .map(householdMember -> householdMemberService.addMemberFlag(householdMember)) //setting flag of household flag
                     .collect(Collectors.toList()));
         }
         //return specified memberType
         return householdMemberMapper.toHouseholdMemberDTOS(household.getHouseholdMembers().stream()
                 .filter(householdMember -> householdMember.getHouseholdMemberType() == memberType)
                 .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
+                .map(householdMember -> householdMemberService.addMemberFlag(householdMember)) //setting flag of household flag
                 .collect(Collectors.toList()));
     }
 

@@ -69,7 +69,7 @@ public class HouseholdMemberService {
         return householdMemberMapper.toHouseholdDTOS(householdMembers);
     }
 
-    private HouseholdMember addMemberFlag(HouseholdMember householdMember){
+    public HouseholdMember addMemberFlag(HouseholdMember householdMember){
         List<Flag> flags = new ArrayList<>();
 
         householdMember.getMemberFlagsById().forEach(memberFlag -> {
@@ -113,9 +113,10 @@ public class HouseholdMemberService {
     }
 
     public HouseholdMemberDTO getHouseholdMemberById(Long id) {
-        HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
-                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
-       return householdMemberMapper.toHouseholdMemberDTO(householdMember);
+        HouseholdMember householdMember = this.addMemberFlag(householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+"")));
+
+        return householdMemberMapper.toHouseholdMemberDTO(householdMember);
     }
 
     public HouseholdDTO getHouseholdByHouseholdMemberId(Long id) {
