@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -30,6 +31,7 @@ public class HouseholdMemberController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<HouseholdMemberDTO>> getAllHouseholds(@RequestParam (required = false, defaultValue = "*") String search,
                                                                      @PageableDefault(value = 100) Pageable pageable,
                                                                      @RequestParam(required = false, defaultValue = "0")Integer memberType) {
@@ -39,21 +41,25 @@ public class HouseholdMemberController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<HouseholdMemberDTO> getHouseholdMemberById(@PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.getHouseholdMemberById(id));
     }
 
     @GetMapping("/{id}/household")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<HouseholdDTO> getHouseholdByHouseholdMemberId(@PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.getHouseholdByHouseholdMemberId(id));
     }
 
     @GetMapping("/{id}/encounters")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdMemberId(@PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.getEncountersByHouseholdMemberId(id));
     }
 
     @GetMapping("/{id}/{formCode}/encounters")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdMemberIdAndFormCode(@PathVariable Long id,
                                                                                           @PathVariable String formCode,
                                                                                           @RequestParam(required = false, defaultValue = "*")String dateFrom,
@@ -71,17 +77,20 @@ public class HouseholdMemberController {
 
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<HouseholdMember> save(@Valid @RequestBody HouseholdMemberDTO householdMemberDTO) {
         return ResponseEntity.ok(householdMemberService.save(householdMemberDTO));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<HouseholdMember> update(@Valid @RequestBody HouseholdMemberDTO householdMemberDTO, @PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.update(id, householdMemberDTO));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@PathVariable Long id) {
         householdMemberService.delete(id);
     }

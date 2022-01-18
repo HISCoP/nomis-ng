@@ -8,6 +8,7 @@ import org.nomisng.domain.entity.ApplicationCodeset;
 import org.nomisng.service.ApplicationCodesetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,12 +38,14 @@ public class ApplicationCodesetController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) //201
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public ResponseEntity<ApplicationCodeset> save(@Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.save(applicationCodesetDTO));
 
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public ResponseEntity<ApplicationCodeset> update(@PathVariable Long id, @Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.update(id, applicationCodesetDTO));
 
@@ -50,6 +53,7 @@ public class ApplicationCodesetController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
         return ResponseEntity.ok(applicationCodesetService.delete(id));
     }

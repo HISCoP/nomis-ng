@@ -8,6 +8,7 @@ import org.nomisng.domain.entity.FormData;
 import org.nomisng.service.FormDataService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,11 +23,13 @@ public class FormDataController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<FormData>> getAllFormData() {
         return ResponseEntity.ok(formDataService.getAllFormData());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<FormData> getFormData(@PathVariable Long id) {
         return ResponseEntity.ok(formDataService.getFormData(id));
     }
@@ -38,12 +41,14 @@ public class FormDataController {
     }*/
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<FormData> update(@PathVariable Long id, @Valid @RequestBody FormDataDTO formDataDTO) {
         return ResponseEntity.ok(formDataService.update(id, formDataDTO));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@PathVariable Long id) {
         formDataService.delete(id);
     }

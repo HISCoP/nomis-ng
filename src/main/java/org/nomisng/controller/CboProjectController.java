@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,6 +35,7 @@ public class CboProjectController {
     }*/
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<CboProjectDTO>> getCboProjects(@RequestParam(required = false, defaultValue = "0") Long cboId,
                                                                @RequestParam(required = false, defaultValue = "0") Long donorId,
                                                                @RequestParam(required = false, defaultValue = "0") Long implementerId,
@@ -47,23 +49,27 @@ public class CboProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) //201
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<CboProjectDTO> save(@Valid @RequestBody CboProjectDTO cboProjectDTO) {
         return ResponseEntity.ok(cboProjectService.save(cboProjectDTO));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void update(@Valid @RequestBody CboProjectDTO cboProjectDTO, @PathVariable Long id) {
         cboProjectService.update(id, cboProjectDTO);
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void switchCboProject(@PathVariable Long id) {
         cboProjectService.switchCboProject(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) //204
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@RequestBody CboProjectDTO cboProjectDTO, @PathVariable Long id) {
         cboProjectService.delete(id);
     }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,6 +34,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping("/account")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public UserDTO getAccount(Principal principal){
        return userService.getAccount(principal.getName());
     }

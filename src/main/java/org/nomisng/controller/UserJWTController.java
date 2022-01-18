@@ -14,6 +14,7 @@ import org.nomisng.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -37,6 +38,7 @@ public class UserJWTController {
 
 
     @PostMapping("/authenticate")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         String jwt = userJWTService.authorize(loginVM);
@@ -53,7 +55,7 @@ public class UserJWTController {
                 .map(ApplicationUserCboProject::getCboProjectId)
                 .collect(Collectors.toList());
 
-        //if cboProject does not exist default the cboProject to zero(0)
+        //if cboProject does not exist default the cboProject to null
         if (!cboProjectIds.contains(currentCboProjectId)) {
             currentCboProjectId = null;
         }

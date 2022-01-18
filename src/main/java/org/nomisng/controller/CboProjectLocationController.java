@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,20 +29,24 @@ public class CboProjectLocationController {
     private final CboProjectLocationService cboProjectLocationService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnit>> getOrganisationUnitByCboProjectId() {
         return ResponseEntity.ok(cboProjectLocationService.getOrganisationUnitByCboProjectId());
     }
 
     @GetMapping("/state")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnit>> getState() {
         return ResponseEntity.ok(cboProjectLocationService.getState());
     }
     @GetMapping("/state/{stateId}/lga")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnit>> getState(@PathVariable Long stateId) {
         return ResponseEntity.ok(cboProjectLocationService.getLga(stateId));
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<CboProjectLocation>> update(@Valid @RequestBody List<CboProjectLocationDTO> cboProjectLocationDTOS) {
         return ResponseEntity.ok(cboProjectLocationService.update(cboProjectLocationDTOS));
     }

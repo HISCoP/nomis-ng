@@ -18,21 +18,25 @@ public class DonorController {
     private final DonorService donorService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<DonorDTO>> getAllDonors() {
         return ResponseEntity.ok(donorService.getAllDonors());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<DonorDTO> getDonor(@PathVariable Long id) {
         return ResponseEntity.ok(donorService.getDonor(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Donor> save(@Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.save(donorDTO));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
     public ResponseEntity<Donor> update(@PathVariable Long id, @Valid @RequestBody DonorDTO donorDTO) {
         return ResponseEntity.ok(donorService.update(id, donorDTO));
