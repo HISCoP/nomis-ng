@@ -27,7 +27,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        if (request.getRequestURI().contains("/api/") &&  !request.getRequestURI().contains("/api/authenticate") && !request.getRequestURI().contains("/api/cbo-projects/all")) {
+        if (request.getRequestURI().contains("/api/") &&  !request.getRequestURI().contains("/api/authenticate") && !request.getRequestURI().contains("/api/cbo-projects/all") &&
+                !request.getRequestURI().contains("/api/application-codesets/codesetGroup")) {
             log.info("User "+request.getRemoteUser() + " " + request.getMethod() + " Request URL {}", request.getRequestURI());
             try {
                 if (SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName).get().getCurrentCboProjectId() == null) {
