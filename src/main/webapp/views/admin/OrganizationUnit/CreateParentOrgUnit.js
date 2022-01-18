@@ -134,12 +134,14 @@ const CreateOrgUnit = (props) => {
     }
     
     const addLocations2 = e => { 
-            if(validate()) 
+            if(validate()){
             // details['parentOrganisationUnitId']= otherfields.parentOrganisationUnitId
             details['details']= otherDetailsFields    
             const allRelativesLocation = [...relativesLocation, details];
             setRelativesLocation(allRelativesLocation);
-
+            }else{
+                return;
+            }
    }
 
     /* Remove Relative Location function **/
@@ -156,6 +158,7 @@ const CreateOrgUnit = (props) => {
     const organisationUnitIds = []
     const createOrgUnittSetup = e => {
         e.preventDefault()
+        if(relativesLocation.length >0 && validate()){
         const parentOrganisationUnitId = otherfields.parentOrganisationUnitId
         const orgUnitIDParam = props.orgUnitID.id
         console.log(props.orgUnitID.id)
@@ -181,11 +184,11 @@ const CreateOrgUnit = (props) => {
         props.createOrgUnitLevel(relativesLocation,parentOrganisationUnitId,orgUnitIDParam, onSuccess, onError);      
         return
 
-    // }else if(!validate()){
-    //     return
-    // }else{
-    //     toast.error("Location can't be empty")
-    // }
+    }else if(!validate()){
+        return
+    }else{
+        toast.error("Organisation Unit can't be empty")
+    }
  
     }
     const showDetailFields = e => {
@@ -418,14 +421,14 @@ const CreateOrgUnit = (props) => {
                                     
                                     >
                                     
-                                    Save  {loading ? <Spinner /> : ""}
+                                    <span style={{textTransform: 'capitalize'}}>Save  {loading ? <Spinner /> : ""}</span>
                                 </MatButton>
                                 <MatButton
                                     variant='contained'
                                     color='default'
                                     onClick={closeModal}
                                     startIcon={<CancelIcon />}>
-                                    Cancel
+                                     <span style={{textTransform: 'capitalize'}}>Cancel</span>
                                 </MatButton>
                             </CardBody>
                         </Card>

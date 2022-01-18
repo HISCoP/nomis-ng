@@ -152,7 +152,7 @@ return (
                                </div>
                             <MaterialTable
                             icons={tableIcons}
-                              title="Organisational Unit"
+                              title={parentOrganisationUnitId && parentOrganisationUnitId.name ? parentOrganisationUnitId.name : " "}
                               columns={[
                                 { title: 'Name', field: 'name' },
                                

@@ -107,7 +107,7 @@ const createUploadBatch = () => {
 const saveOrgName = (e) => {
     e.preventDefault();
     const status = otherfields.status===true ?  otherfields.status=1 :  otherfields.status=0
- 
+    //return console.log(otherfields)
     if (validate()) {
         setLoading(true);        
         const onSuccess = () => {
@@ -143,7 +143,7 @@ const saveOrgName = (e) => {
                                                         type="select"
                                                         name="parentOrganisationUnitLevelId"
                                                         id="parentOrganisationUnitLevelId"
-                                                        value={otherfields.orgUnit} 
+                                                        value={otherfields.parentOrganisationUnitLevelId} 
                                                         onChange={handleOtherFieldInputChange}
                                                         required
                                                         >
@@ -224,7 +224,7 @@ const saveOrgName = (e) => {
                                         className=" float-left mr-1"
                                         
                                     >
-                                        Save 
+                                        <span style={{textTransform: 'capitalize'}}>Save</span> 
                                     </MatButton> { " "} { " "} { " "} { " "} { " "}
                                     <MatButton
                                         variant='contained'
@@ -234,7 +234,7 @@ const saveOrgName = (e) => {
                                         
                                         className=" float-left mr-1"
                                     >
-                                        Cancel
+                                        <span style={{textTransform: 'capitalize'}}>Cancel</span> 
                                    </MatButton>
                             </Col>
                             </Row>

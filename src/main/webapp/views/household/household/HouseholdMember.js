@@ -12,7 +12,9 @@ import { connect } from "react-redux";
 import { fetchAllHouseHoldMembersByHouseholdId } from "./../../../actions/houseHold";
 import { Alert } from 'reactstrap';
 import {calculateAge} from "./../../../utils/calculateAge";
-import { Dropdown, Menu } from 'semantic-ui-react'
+//import { Dropdown, Menu } from 'semantic-ui-react'
+import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
 
 const HouseholdMember = (props) => {
     //Getting the household Id from the props 
@@ -106,24 +108,23 @@ const MemberCard = (props) => {
                 <span>{props.member.details.sex && props.member.details.sex.display ? props.member.details.sex.display  : '' } | {props.member.details.dateOfBirthType === 'estimated' ? '~' : ''} {calculateAge(props.member.details.dob)} </span>
 
             </CCardBody>
-            <CCardFooter>
-                {/* <CButton color="primary"  onClick={() =>provideServiceModal(props.member.id)}>Provide Services</CButton> {" "}
-                <CButton color="dark"  > <Link
-                      to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }} style={{color:'#fff'}}>Other Forms</Link></CButton> */}
-                      <Menu vertical  style={{backgroundColor:'#3F51B5', color:'#ffffff'}}>
-                        <Dropdown item text='Provide Services' style={{ color:'#ffffff'}}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={() =>provideServiceModal(props.member.id)}>Provide Service</Dropdown.Item>
-                            <Dropdown.Item>
-                                <Link
+            <CCardFooter className={'text-center'}>
+               
+                    <center>
+                    <Menu>
+                        <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px" }}>
+                            Provide Services <span aria-hidden>▾</span>
+                        </MenuButton>
+                            <MenuList style={{hover:"#eee"}}>
+                                                        
+                            <MenuItem onClick={() =>provideServiceModal(props.member.id)}>{" "}Provide Service</MenuItem>
+                            <Link
                                 to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }}>
-                                    Other Forms
-                                </Link>
-                            </Dropdown.Item>
-                            
-                        </Dropdown.Menu>
-                        </Dropdown>
+                                <MenuItem >{" "}Other Service Form</MenuItem>
+                            </Link>
+                            </MenuList>
                     </Menu>
+                </center>                   
             </CCardFooter>
         </CCard>
         <ProvideService  modal={modal3} toggle={toggle3} memberId={memberId} householdId={props.householdId}/>
