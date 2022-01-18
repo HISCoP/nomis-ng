@@ -38,7 +38,6 @@ public class UserJWTController {
 
 
     @PostMapping("/authenticate")
-    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         String jwt = userJWTService.authorize(loginVM);
