@@ -82,8 +82,8 @@ public class HouseholdMemberService {
     public HouseholdMember save(HouseholdMemberDTO householdMemberDTO) {
         try {
             String details = mapper.writeValueAsString(householdMemberDTO.getDetails());
-            firstName = getDetailsInfo(details, "firstName");
-            lastName = getDetailsInfo(details, "lastName");
+            firstName = this.getValueFromJsonField(details, "firstName");
+            lastName = this.getValueFromJsonField(details, "lastName");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -153,7 +153,7 @@ public class HouseholdMemberService {
         householdMemberRepository.save(householdMember);
     }
 
-    private String getDetailsInfo(String details, String field){
+    private String getValueFromJsonField(String details, String field){
         try {
             JsonNode tree = mapper.readTree(details).get(field);
             if(!tree.isNull()) {
