@@ -57,7 +57,7 @@ public class FlagService {
 
     public void checkForAndSaveMemberFlag(Long memberId, Object object, List<FormFlag> formFlags){
         formFlags.forEach(formFlag -> {
-            int flagDataType = formFlag.getFlag().getDatatype();// 0 - string, 1 - application codeset, 2 - integer
+            int flagDataType = formFlag.getFlag().getDatatype();// 0 - string, 1 - application codeset, 2 - integer, 3 - form level flag
             int type = formFlag.getFlag().getType(); // 2 - form level flag, 3 is form data level flag
             String fieldName = formFlag.getFlag().getFieldName().trim();
             String operator = formFlag.getFlag().getOperator().trim();
@@ -67,7 +67,7 @@ public class FlagService {
             String field = "";
             Integer fieldIntegerValue = 0;
             Integer formFlagFieldIntegerValue = 0;
-            OperatorType operatorType = OperatorType.from(operator);
+            //OperatorType operatorType = OperatorType.from(operator);
 
             try {
                 //if form level flag
