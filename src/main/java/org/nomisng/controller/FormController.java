@@ -23,8 +23,8 @@ public class FormController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<List<FormDTO>> getAllForms() {
-        return ResponseEntity.ok(formService.getAllForms());
+    public ResponseEntity<List<FormDTO>> getAllForms(@RequestParam(required = false, defaultValue = "3") Integer formType) {
+        return ResponseEntity.ok(formService.getAllForms(formType));
     }
 
     @GetMapping("/formCode")
@@ -38,6 +38,7 @@ public class FormController {
     public ResponseEntity<FormDTO> getForm(@PathVariable Long id) {
         return ResponseEntity.ok(formService.getForm(id));
     }
+
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")

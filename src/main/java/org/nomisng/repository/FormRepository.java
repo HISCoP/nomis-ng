@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface FormRepository extends JpaRepository<Form, Long>, JpaSpecificationExecutor {
@@ -19,7 +20,13 @@ public interface FormRepository extends JpaRepository<Form, Long>, JpaSpecificat
 
     Optional<Form> findByNameAndArchived(String name, int archived);
 
+    List<Form> findAllByArchivedAndFormTypeOrderByIdAsc(int archived, Integer formType);
+
     /*@Query(value = "SELECT code FROM form", nativeQuery = true)
     List<String> findAllPermissionCode();*/
+
+    @Query(value = "SELECT * FROM form WHERE archived=?1 " +
+            "AND form_type IN ?2", nativeQuery = true)
+    List<Form> findAllByArchivedAndFormTypeOrderByIdAsc(int archived, List<Integer> formType);
 }
 

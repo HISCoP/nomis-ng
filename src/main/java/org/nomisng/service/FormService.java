@@ -33,11 +33,26 @@ public class FormService {
     private static final String WRITE = "Write";
     private static final String DELETE = "Delete";
     private static final String UNDERSCORE = "_";
+    private static final int FORM_TYPE_CAREGIVER = 1;
+    private static final int FORM_TYPE_VC = 2;
+    private static final int FORM_TYPE_BOTH = 3;
 
-    public List getAllForms() {
-        List<Form> forms = formRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
+    public List getAllForms(Integer formType) {
+        List<Form> forms;
+        List<Integer> type = new ArrayList<>();
+        type.add(formType);
+        switch (formType){
+            case FORM_TYPE_CAREGIVER:
+            case FORM_TYPE_VC:
+                type.add(FORM_TYPE_BOTH);
+                forms = formRepository.findAllByArchivedAndFormTypeOrderByIdAsc(UN_ARCHIVED, type);
+                break;
+            default:
+                 forms = formRepository.findAllByArchivedAndFormTypeOrderByIdAsc(UN_ARCHIVED, formType);
+        }
+
         Set<String> permissions = accessRight.getAllPermissionForCurrentUser();
-        return getForms(forms, permissions);
+        return this.getForms(forms, permissions);
     }
 
     public Form save(FormDTO formDTO) {
