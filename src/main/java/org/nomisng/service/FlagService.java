@@ -62,7 +62,7 @@ public class FlagService {
             String fieldName = formFlag.getFlag().getFieldName().trim();
             String operator = formFlag.getFlag().getOperator().trim();
             Boolean continuous = formFlag.getFlag().getContinuous();
-            String formFlagFieldValue = formFlag.getFlag().getFieldValue().replaceAll("\\s", "").trim();
+            String formFlagFieldValue = formFlag.getFlag().getFieldValue().trim();
             JsonNode tree;
             String field = "";
             Integer fieldIntegerValue = 0;
