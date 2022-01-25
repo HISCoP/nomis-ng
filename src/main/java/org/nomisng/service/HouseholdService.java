@@ -61,7 +61,18 @@ public class HouseholdService {
 
     public List<HouseholdDTO> getAllHouseholdsFromPage(Page<Household> householdPage) {
 
-        return householdMapper.toHouseholdDTOS(householdPage.getContent());
+        return householdMapper.toHouseholdDTOS(householdPage.getContent().stream()
+                .map(household -> this.setHouseholdFlag(household))
+                .collect(Collectors.toList()));
+    }
+
+    private Household setHouseholdFlag(Household household){
+        List<Flag> flags = new ArrayList<>();
+        household.getHouseholdFlagsById().forEach(memberFlag -> {
+            flags.add(memberFlag.getFlag());
+        });
+        household.setFlags(flags);
+        return household;
     }
 
     public Household save(HouseholdDTO householdDTO) {

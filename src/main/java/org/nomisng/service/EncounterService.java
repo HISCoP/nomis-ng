@@ -86,11 +86,7 @@ public class EncounterService {
         encounter.setArchived(UN_ARCHIVED);
 
         //Start of flag operation for associated with (0)
-        List<FormFlag> formFlags = formFlagRepository.findByFormCodeAndStatusAndArchived(encounter.getFormCode(), ASSOCIATED_WITH, UN_ARCHIVED);
-        if(!formFlags.isEmpty()) {
-            final Object finalFormData = formDataRepository.findOneByEncounterIdOrderByIdDesc(encounter.getId()).get().getData();
-            flagService.checkForAndSaveMemberFlag(encounter.getHouseholdMemberId(), JsonUtil.getJsonNode(finalFormData), formFlags);
-        }
+        this.flagOperationInEncounter(encounter.getId(), encounter.getFormCode(), encounter.getHouseholdId(), encounter.getHouseholdMemberId());
 
         return encounterRepository.save(encounter);
     }
@@ -116,12 +112,18 @@ public class EncounterService {
         formDataRepository.saveAll(encounterDTO.getFormData());
 
         //Start of flag operation for associated with (0)
-        List<FormFlag> formFlags = formFlagRepository.findByFormCodeAndStatusAndArchived(encounter.getFormCode(), ASSOCIATED_WITH, UN_ARCHIVED);
-        if(!formFlags.isEmpty()) {
-            final Object finalFormData = formDataRepository.findOneByEncounterIdOrderByIdDesc(encounter.getId()).get().getData();
-            flagService.checkForAndSaveMemberFlag(encounter.getHouseholdMemberId(), JsonUtil.getJsonNode(finalFormData), formFlags);
-        }
+        this.flagOperationInEncounter(encounter.getId(), encounter.getFormCode(), encounter.getHouseholdId(), encounter.getHouseholdMemberId());
+
         return encounter;
+    }
+
+    private void flagOperationInEncounter(Long encounterId, String formCode, Long householdId, Long householdMemberId){
+        //Start of flag operation for associated with (0)
+        List<FormFlag> formFlags = formFlagRepository.findByFormCodeAndStatusAndArchived(formCode, ASSOCIATED_WITH, UN_ARCHIVED);
+        if(!formFlags.isEmpty()) {
+            final Object finalFormData = formDataRepository.findOneByEncounterIdOrderByIdDesc(encounterId).get().getData();
+            flagService.checkForAndSaveMemberFlag(householdId, householdMemberId, JsonUtil.getJsonNode(finalFormData), formFlags);
+        }
     }
 
     public void delete(Long id) {

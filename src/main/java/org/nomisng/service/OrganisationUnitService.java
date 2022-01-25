@@ -256,7 +256,7 @@ public class OrganisationUnitService {
 
     private Object getCellValue(Cell cell) {
         switch (cell.getCellType()) {
-            case STRING:
+            case STRING_FLAG_DATA_TYPE:
                 return cell.getStringCellValue();
             case BOOLEAN:
                 return cell.getBooleanCellValue();

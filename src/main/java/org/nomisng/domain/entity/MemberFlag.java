@@ -21,8 +21,12 @@ public class MemberFlag implements Serializable {
     private Long id;
 
     @Basic
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "household_member_id")
+    private Long householdMemberId;
+
+    @Basic
+    @Column(name = "household_id")
+    private Long householdId;
 
     @Basic
     @Column(name = "flag_id")
@@ -31,8 +35,14 @@ public class MemberFlag implements Serializable {
     @ManyToOne
     @JsonIgnore
     @ToStringExclude
-    @JoinColumn(name = "member_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "household_member_id", referencedColumnName = "id", insertable = false, updatable = false)
     private HouseholdMember memberByMemberId;
+
+    @ManyToOne
+    @JsonIgnore
+    @ToStringExclude
+    @JoinColumn(name = "household_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Household householdByHouseholdId;
 
     @ManyToOne
     @JsonIgnore

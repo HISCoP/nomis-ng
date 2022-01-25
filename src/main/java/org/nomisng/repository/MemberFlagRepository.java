@@ -10,9 +10,11 @@ import java.util.Optional;
 @Repository
 public interface MemberFlagRepository extends JpaRepository<MemberFlag, Long> {
 
-    Optional<MemberFlag> findByMemberIdAndFlagId(Long memberId, Long flagId);
+    Optional<MemberFlag> findByHouseholdIdAndHouseholdMemberIdAndFlagId(Long householdId,
+                                                                        Long householdMemberId, Long flagId);
 
-    List<MemberFlag> findAllByMemberId(Long patientId);
+    List<MemberFlag> findAllByHouseholdIdAndHouseholdMemberId(Long householdMemberId,
+                                                      Long householdId);
 
     void deleteByFlagId(Long flagId);
 }

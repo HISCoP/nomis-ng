@@ -1,6 +1,6 @@
 package org.nomisng.util;
 
-public enum OperatorType {
+public enum FlagOperatorType {
     EQUAL_T0("equal_to"),
     GREATER_THAN("greater_than"),
     LESS_THAN("less_than"),
@@ -10,12 +10,12 @@ public enum OperatorType {
     INVALID("invalid");
 
     String val;
-    OperatorType(String val) {
+    FlagOperatorType(String val) {
         this.val = val;
     }
 
-    public static OperatorType from(String text) {
-        for (OperatorType output : values()) {
+    public static FlagOperatorType from(String text) {
+        for (FlagOperatorType output : values()) {
             if(output.val.equalsIgnoreCase(text)) return output;
         }
         return INVALID;
