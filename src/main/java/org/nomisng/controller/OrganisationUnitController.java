@@ -47,14 +47,14 @@ public class OrganisationUnitController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<OrganisationUnit> getOrganizationUnit(@PathVariable Long id) {
-        return ResponseEntity.ok(organisationUnitService.getOrganizationUnit(id));
+    public ResponseEntity<OrganisationUnit> getOrganisationUnitById(@PathVariable Long id) {
+        return ResponseEntity.ok(organisationUnitService.getOrganisationUnitById(id));
     }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<List<OrganisationUnit>> getAllOrganizationUnit() {
-        return ResponseEntity.ok(organisationUnitService.getAllOrganizationUnit());
+    public ResponseEntity<List<OrganisationUnit>> getAllOrganisationUnit() {
+        return ResponseEntity.ok(organisationUnitService.getAllOrganisationUnit());
     }
 
     @GetMapping ("/parent-org-unit/{id}")

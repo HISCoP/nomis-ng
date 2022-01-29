@@ -41,9 +41,9 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public void save(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
-        userService.registerUser(managedUserVM, managedUserVM.getPassword(), false);
+        userService.save(managedUserVM, managedUserVM.getPassword(), false);
     }
 
     @GetMapping

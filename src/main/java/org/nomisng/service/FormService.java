@@ -37,7 +37,7 @@ public class FormService {
     private static final int FORM_TYPE_VC = 2;
     private static final int FORM_TYPE_BOTH = 3;
 
-    public List getAllForms(Integer formType) {
+    public List<FormDTO> getAllForms(Integer formType) {
         List<Form> forms;
         List<Integer> type = new ArrayList<>();
         type.add(formType);

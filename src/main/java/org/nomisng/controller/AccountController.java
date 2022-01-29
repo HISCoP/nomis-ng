@@ -44,6 +44,6 @@ public class AccountController {
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
-        userService.registerUser(managedUserVM, managedUserVM.getPassword(), false);
+        userService.save(managedUserVM, managedUserVM.getPassword(), false);
     }
 }

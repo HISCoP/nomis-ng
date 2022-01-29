@@ -8,15 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.EncounterDTO;
+import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
-import org.nomisng.domain.entity.Encounter;
-import org.nomisng.domain.entity.Flag;
-import org.nomisng.domain.entity.Household;
-import org.nomisng.domain.entity.HouseholdMember;
+import org.nomisng.domain.entity.*;
 import org.nomisng.domain.mapper.EncounterMapper;
+import org.nomisng.domain.mapper.FormMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
+import org.nomisng.repository.FormFlagRepository;
+import org.nomisng.repository.FormRepository;
 import org.nomisng.repository.HouseholdMemberRepository;
 import org.nomisng.repository.HouseholdRepository;
 import org.springframework.data.domain.Page;
@@ -37,12 +38,16 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 @Slf4j
 @RequiredArgsConstructor
 public class HouseholdMemberService {
+    public static final int APPLIED_TO_FORM = 1;
     private final HouseholdMemberRepository householdMemberRepository;
+    private final FormRepository formRepository;
     private final HouseholdRepository householdRepository;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdMapper householdMapper;
     private final EncounterMapper encounterMapper;
+    private final FormMapper formMapper;
     private final EncounterService encounterService;
+    private final FormService formService;
     private final UserService userService;
     private ObjectMapper mapper = new ObjectMapper();
     private String firstName = "firstName";
@@ -165,5 +170,31 @@ public class HouseholdMemberService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<FormDTO> getFormsByHouseholdMemberById(Long id) {
+        HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
+
+        //get for by member or form type
+        List<String> formCodes = formService.getAllForms(householdMember.getHouseholdMemberType())
+                .stream().map(FormDTO::getCode).collect(Collectors.toList());
+
+        //check for member flag
+        householdMember.getMemberFlagsById().forEach(memberFlag -> {
+            Optional<String> formCode = memberFlag.getFlag().getFormsByIdFlag().stream()
+                    .filter(formFlag -> formFlag.getStatus() == APPLIED_TO_FORM)
+                    .map(FormFlag::getFormCode)
+                    .findFirst();
+
+            //Compare formCodes
+            formCode.ifPresent(code ->{
+                if(!formCodes.contains(formCode)){
+                    formCodes.remove(formCode);
+                }
+            });
+        });
+
+        return formMapper.toFormDTOS(formRepository.findByCodeInList(UN_ARCHIVED, formCodes));
     }
 }

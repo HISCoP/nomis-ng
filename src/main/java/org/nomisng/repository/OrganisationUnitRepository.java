@@ -51,7 +51,7 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
     @Query(value = "SELECT * FROM organisation_unit WHERE id " +
             "IN (SELECT organisation_unit_id FROM cbo_project_location " +
             "WHERE cbo_project_id=?1 AND archived = 0)", nativeQuery = true)
-    List<OrganisationUnit> findAllByCboProjectIdId(Long cboProjectId);
+    List<OrganisationUnit> findAllByCboProjectId(Long cboProjectId);
 
     @Query(value = "SELECT * FROM organisation_unit WHERE id IN" +
             "(SELECT parent_organisation_unit_id FROM organisation_unit " +

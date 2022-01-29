@@ -103,17 +103,17 @@ public class OrganisationUnitService {
         return organizationOptional.get().getArchived();
     }
 
-    public OrganisationUnit getOrganizationUnit(Long id){
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
-        if (!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
-        return organizationOptional.get();
+    public OrganisationUnit getOrganisationUnitById(Long id){
+        Optional<OrganisationUnit> organisationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
+        if (!organisationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
+        return organisationOptional.get();
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitId(Long id) {
         return  organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived(id, UN_ARCHIVED);
     }
 
-    public List<OrganisationUnit> getAllOrganizationUnit() {
+    public List<OrganisationUnit> getAllOrganisationUnit() {
         return organisationUnitRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
     }
 

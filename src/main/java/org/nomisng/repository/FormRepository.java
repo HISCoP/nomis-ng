@@ -28,5 +28,9 @@ public interface FormRepository extends JpaRepository<Form, Long>, JpaSpecificat
     @Query(value = "SELECT * FROM form WHERE archived=?1 " +
             "AND form_type IN ?2", nativeQuery = true)
     List<Form> findAllByArchivedAndFormTypeOrderByIdAsc(int archived, List<Integer> formType);
+
+    @Query(value = "SELECT * FROM form WHERE archived=?1 " +
+            "AND code IN ?2", nativeQuery = true)
+    List<Form> findByCodeInList(int archived, List<String> formCodes);
 }
 

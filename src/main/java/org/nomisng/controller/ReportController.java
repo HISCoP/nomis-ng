@@ -60,7 +60,7 @@ public class ReportController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<ReportInfo> update(@PathVariable Long id) {
-        return ResponseEntity.ok(reportService.getReport(id));
+    public ResponseEntity<ReportInfo> getReportById(@PathVariable Long id) {
+        return ResponseEntity.ok(reportService.getReportId(id));
     }
 }

@@ -26,8 +26,8 @@ public class VisitController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<VisitDTO> getVisit(@PathVariable Long id) {
-        return ResponseEntity.ok(visitService.getVisit(id));
+    public ResponseEntity<VisitDTO> getVisitById(@PathVariable Long id) {
+        return ResponseEntity.ok(visitService.getVisitById(id));
     }
 
     @PostMapping
@@ -38,7 +38,7 @@ public class VisitController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<Visit> updateVisit(@Valid @RequestBody VisitDTO visitDTO, @PathVariable Long id) {
+    public ResponseEntity<Visit> update(@Valid @RequestBody VisitDTO visitDTO, @PathVariable Long id) {
         return ResponseEntity.ok(visitService.update(id, visitDTO));
     }
 

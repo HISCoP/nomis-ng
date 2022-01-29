@@ -52,7 +52,7 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName);
     }
 
-    public User registerUser(UserDTO userDTO, String password, Boolean updateUser) {
+    public User save(UserDTO userDTO, String password, Boolean updateUser) {
         Optional<User> optionalUser = userRepository.findOneByUserNameAndArchived(userDTO.getUserName().toLowerCase(), UN_ARCHIVED);
         User newUser = new User();
         if (updateUser) {

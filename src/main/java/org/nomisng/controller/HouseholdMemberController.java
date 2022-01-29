@@ -2,6 +2,7 @@ package org.nomisng.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.nomisng.domain.dto.EncounterDTO;
+import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
 import org.nomisng.domain.entity.Encounter;
@@ -44,6 +45,12 @@ public class HouseholdMemberController {
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<HouseholdMemberDTO> getHouseholdMemberById(@PathVariable Long id) {
         return ResponseEntity.ok(householdMemberService.getHouseholdMemberById(id));
+    }
+
+    @GetMapping("/{id}/forms")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public ResponseEntity<List<FormDTO>> getFormsByHouseholdMemberById(@PathVariable Long id) {
+        return ResponseEntity.ok(householdMemberService.getFormsByHouseholdMemberById(id));
     }
 
     @GetMapping("/{id}/household")

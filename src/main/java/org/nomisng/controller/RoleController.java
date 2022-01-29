@@ -40,7 +40,7 @@ public class RoleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
-    public Role addRole(@Valid @RequestBody RoleDTO roleDTO) throws Exception {
+    public Role save(@Valid @RequestBody RoleDTO roleDTO) throws Exception {
         return roleService.save(roleDTO);
     }
 
@@ -65,7 +65,8 @@ public class RoleController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public void deleteRole(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
+        //TODO: work on this...
         try {
             roleRepository.deleteById(id);
         } catch (Exception e) {

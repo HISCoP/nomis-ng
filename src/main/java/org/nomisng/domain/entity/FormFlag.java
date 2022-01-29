@@ -22,7 +22,7 @@ public class FormFlag extends Audit implements Serializable {
 
     @Basic
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Integer status; // 0 is associated with, 1 is applied to
 
     @Basic
     @Column(name = "form_code", nullable = false)

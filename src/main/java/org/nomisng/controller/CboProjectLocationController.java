@@ -41,7 +41,7 @@ public class CboProjectLocationController {
     }
     @GetMapping("/state/{stateId}/lga")
     @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
-    public ResponseEntity<List<OrganisationUnit>> getState(@PathVariable Long stateId) {
+    public ResponseEntity<List<OrganisationUnit>> getLga(@PathVariable Long stateId) {
         return ResponseEntity.ok(cboProjectLocationService.getLga(stateId));
     }
 
