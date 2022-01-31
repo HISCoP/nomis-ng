@@ -49,7 +49,7 @@ public class Flag extends Audit implements Serializable {
 
     @Basic
     @Column(name = "datatype")
-    private Integer datatype;
+    private Integer datatype; // 0 - string, 1 - application codeset, 2 - integer, 3 - form level flag
 
     @Basic
     @Column(name = "operator")
