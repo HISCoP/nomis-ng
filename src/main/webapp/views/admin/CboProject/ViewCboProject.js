@@ -79,7 +79,7 @@ const ViewCboProject = (props) => {
 
     return (
         <div >
-            <CModal show={props.showModal} onClose={props.toggleModal} size="lg">
+            <CModal show={props.showModal} onClose={props.toggleModal} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
                 <CForm >
                     <CModalHeader toggle={props.toggleModal}>CBO Project Detail </CModalHeader>
                     <CModalBody>

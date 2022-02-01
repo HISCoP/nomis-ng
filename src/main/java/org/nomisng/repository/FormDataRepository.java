@@ -1,6 +1,7 @@
 package org.nomisng.repository;
 
 import org.nomisng.domain.entity.FormData;
+import org.nomisng.service.RoleService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ public interface FormDataRepository extends JpaRepository<FormData, Long>, JpaSp
     //Optional<FormData> findByIdAndArchived(Long id, int archived, Long organisationUnitId);
 
     List<FormData> findAllByArchivedAndCboProjectIdOrderByIdDesc(int archived, Long cboProjectId);
+
+    Optional<FormData> findOneByEncounterIdOrderByIdDesc(Long id);
 
     //List<FormData> findAllByEncounterIdAndArchivedAndOrganisationUnitIdOrderByIdDesc(Long encounterId, int archived, Long organisationUnitId);
 

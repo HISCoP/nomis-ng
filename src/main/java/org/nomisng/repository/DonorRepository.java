@@ -17,5 +17,7 @@ public interface DonorRepository extends JpaRepository<Donor, Long>, JpaSpecific
 
     @Query(value = "SELECT id FROM donor WHERE archived=0", nativeQuery = true)
     List<Long> findAllId();
+
+    List<Donor> findAllByArchivedOrderByIdDesc(int archived);
 }
 

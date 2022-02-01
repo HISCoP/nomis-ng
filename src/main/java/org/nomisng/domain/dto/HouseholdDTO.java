@@ -2,6 +2,7 @@ package org.nomisng.domain.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.nomisng.domain.entity.Flag;
 import org.nomisng.domain.entity.OrganisationUnit;
 
 import javax.validation.constraints.NotNull;
@@ -35,4 +36,6 @@ public class HouseholdDTO {
     private Long wardId;
 
     private Long serialNumber;
+
+    private List<Flag> flags;
 }

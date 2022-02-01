@@ -26,4 +26,7 @@ public class FormDTO {
     private String version;
 
     private int archived;
+
+    @NotNull (message = "formType is mandatory") //1 - caregiver, 2 - ovc, 3 both
+    private Integer formType;
 }

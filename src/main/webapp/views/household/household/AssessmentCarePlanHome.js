@@ -14,7 +14,7 @@ const AssessmentCarePlanHome = (props) => {
             render: () => <CarePlan householdId={props.householdId}/>,
         },
         {
-            menuItem: { key: 'users', icon: 'folder open', content: 'Household Assessments' },
+            menuItem: { key: 'users', icon: 'folder open', content: 'Achievement Checklist' },
             render: () => <Assessment setIndex={setIndex} householdId={props.householdId}/>,
         }
 

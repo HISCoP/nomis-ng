@@ -91,7 +91,7 @@ const HouseholdHomePage = (props) => {
                     className={'text-center'}
                 >
                     <ListIcon fontSize="large" className={'text-center'}/>
-                    <p> Care Plan & Assessment Check List</p>
+                    <p> Care Plan & Achievement Checklist</p>
                 </Menu.Item>
                 <Menu.Item
                     name='services'

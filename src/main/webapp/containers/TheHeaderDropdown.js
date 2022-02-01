@@ -19,11 +19,7 @@ import store from "./../store";
 import { useHistory } from "react-router-dom";
 import { authentication } from "./../_services/authentication";
 //import AssignFacilityModal from './AssignFacilityModal'
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import {
 
-} from "react-icons/md";
 import {
    Modal, ModalHeader, Card, CardBody, Row, Col, ModalBody, Label, FormGroup, Alert
 } from "reactstrap";

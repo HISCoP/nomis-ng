@@ -6,6 +6,7 @@ import org.nomisng.domain.dto.UserDTO;
 import org.nomisng.domain.entity.CboProject;
 import org.nomisng.domain.entity.Role;
 import org.nomisng.domain.entity.User;
+import org.nomisng.repository.UserRepository;
 import org.nomisng.service.UserService;
 import org.nomisng.util.PaginationUtil;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,16 +31,19 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     @GetMapping("/account")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public UserDTO getAccount(Principal principal){
        return userService.getAccount(principal.getName());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public void save(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
-        userService.registerUser(managedUserVM, managedUserVM.getPassword(), false);
+        userService.save(managedUserVM, managedUserVM.getPassword(), false);
     }
 
     @GetMapping
@@ -61,5 +66,12 @@ public class UserController {
     @PutMapping("/{id}/roles")
     public ResponseEntity<Set<Role>> updateRoles(@PathVariable Long id, @Valid @RequestBody List<Role> roles) throws Exception {
         return ResponseEntity.ok(userService.updateRoles(id, roles));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        userService.delete(id);
+        userRepository.deleteById(id);
     }
 }

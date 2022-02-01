@@ -22,11 +22,10 @@ import CIcon from '@coreui/icons-react';
 import { authentication } from "./../../../_services/authentication";
 import logo from './../../../assets/images/arms.jpg';
 import {
- 
   Input,
-
 } from "reactstrap";
 import { url as baseUrl } from "../../../api";
+import backImage from "./../../../assets/images//backImage.jpeg"
 
 
 
@@ -107,8 +106,10 @@ useEffect(() => {
   };
   
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
-     
+    <div className="c-app c-default-layout flex-row align-items-center" 
+    //style={{ backgroundImage: `url(${backImage})` }}
+    >
+ 
       <CContainer >
       
         <CRow className="justify-content-center">

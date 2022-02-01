@@ -9,6 +9,7 @@ import org.nomisng.domain.entity.OvcService;
 import org.nomisng.service.OvcServiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,16 +22,19 @@ public class OvcServiceController {
     private final OvcServiceService ovcServiceService;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<OvcService> save(@Valid @RequestBody OvcServiceDTO ovcServiceDTO) {
         return ResponseEntity.ok(ovcServiceService.save(ovcServiceDTO));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public OvcService update(@PathVariable Long id, @Valid @RequestBody OvcServiceDTO ovcServiceDTO) {
         return ovcServiceService.update(id, ovcServiceDTO);
     }
 
     @GetMapping("{id}/domain")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Domain> getDomainByOvcServiceId(@PathVariable Long id) {
         return ResponseEntity.ok(ovcServiceService.getDomainByOvcServiceId(id));
     }
@@ -41,6 +45,7 @@ public class OvcServiceController {
     }*/
 
     @GetMapping("{serviceType}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OvcServiceDTO>> getAllOvcServices(@PathVariable(value = "serviceType", required = false) Integer serviceType) {
         if(serviceType != 0)return ResponseEntity.ok(ovcServiceService.getOvcServiceByServiceType(serviceType));
 
@@ -49,6 +54,7 @@ public class OvcServiceController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@PathVariable Long id) { ovcServiceService.delete(id); }
 
 }

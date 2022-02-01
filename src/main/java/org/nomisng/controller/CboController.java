@@ -18,23 +18,32 @@ public class CboController {
     private final CboService cboService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<CboDTO>> getAllCbos() {
         return ResponseEntity.ok(cboService.getAllCbos());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<CboDTO> getCbo(@PathVariable Long id) {
         return ResponseEntity.ok(cboService.getCbo(id));
     }
 
+    //To check if a cbo exist by code
+    @GetMapping("/code/{code}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public ResponseEntity<Boolean> existByCode(@PathVariable String code) {
+        return ResponseEntity.ok(cboService.existByCode(code));
+    }
+
     @PostMapping
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Cbo> save(@Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.save(cboDTO));
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Cbo> update(@PathVariable Long id, @Valid @RequestBody CboDTO cboDTO) {
         return ResponseEntity.ok(cboService.update(id, cboDTO));
     }

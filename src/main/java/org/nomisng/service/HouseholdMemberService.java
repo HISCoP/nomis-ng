@@ -8,14 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.nomisng.controller.apierror.EntityNotFoundException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.EncounterDTO;
+import org.nomisng.domain.dto.FormDTO;
 import org.nomisng.domain.dto.HouseholdDTO;
 import org.nomisng.domain.dto.HouseholdMemberDTO;
-import org.nomisng.domain.entity.Encounter;
-import org.nomisng.domain.entity.Household;
-import org.nomisng.domain.entity.HouseholdMember;
+import org.nomisng.domain.entity.*;
 import org.nomisng.domain.mapper.EncounterMapper;
+import org.nomisng.domain.mapper.FormMapper;
 import org.nomisng.domain.mapper.HouseholdMapper;
 import org.nomisng.domain.mapper.HouseholdMemberMapper;
+import org.nomisng.repository.FormFlagRepository;
+import org.nomisng.repository.FormRepository;
 import org.nomisng.repository.HouseholdMemberRepository;
 import org.nomisng.repository.HouseholdRepository;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -35,12 +38,16 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 @Slf4j
 @RequiredArgsConstructor
 public class HouseholdMemberService {
+    public static final int APPLIED_TO_FORM = 1;
     private final HouseholdMemberRepository householdMemberRepository;
+    private final FormRepository formRepository;
     private final HouseholdRepository householdRepository;
     private final HouseholdMemberMapper householdMemberMapper;
     private final HouseholdMapper householdMapper;
     private final EncounterMapper encounterMapper;
+    private final FormMapper formMapper;
     private final EncounterService encounterService;
+    private final FormService formService;
     private final UserService userService;
     private ObjectMapper mapper = new ObjectMapper();
     private String firstName = "firstName";
@@ -52,7 +59,7 @@ public class HouseholdMemberService {
         Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
         if(search == null || search.equalsIgnoreCase("*")) {
             if(memberType != null && memberType > 0){
-
+                //TODO: complete
             }
             return householdMemberRepository.findAllByCboProjectIdAndArchivedOrderByIdDesc(currentCboProjectId, UN_ARCHIVED, pageable);
         }
@@ -61,14 +68,27 @@ public class HouseholdMemberService {
     }
 
     public List<HouseholdMemberDTO> getAllHouseholdMembersFromPage(Page<HouseholdMember> householdMembersPage) {
-        return householdMemberMapper.toHouseholdDTOS(householdMembersPage.getContent());
+        List<HouseholdMember> householdMembers = householdMembersPage.getContent().stream()
+                .map(householdMember -> addMemberFlag(householdMember))
+                .collect(Collectors.toList());
+        return householdMemberMapper.toHouseholdDTOS(householdMembers);
+    }
+
+    public HouseholdMember addMemberFlag(HouseholdMember householdMember){
+        List<Flag> flags = new ArrayList<>();
+
+        householdMember.getMemberFlagsById().forEach(memberFlag -> {
+            flags.add(memberFlag.getFlag());
+        });
+        householdMember.setFlags(flags);
+        return householdMember;
     }
 
     public HouseholdMember save(HouseholdMemberDTO householdMemberDTO) {
         try {
             String details = mapper.writeValueAsString(householdMemberDTO.getDetails());
-            firstName = getDetailsInfo(details, "firstName");
-            lastName = getDetailsInfo(details, "lastName");
+            firstName = this.getValueFromJsonField(details, "firstName");
+            lastName = this.getValueFromJsonField(details, "lastName");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -78,10 +98,17 @@ public class HouseholdMemberService {
         optionalHouseholdMember.ifPresent(householdMember -> {
             throw new RecordExistException(HouseholdMember.class, firstName + " " + lastName, "already exist in household");
         });
+
         Household household = householdRepository.findById(householdMemberDTO.getHouseholdId())
                 .orElseThrow(()-> new EntityNotFoundException(Household.class, "id", "" +householdMemberDTO.getHouseholdId()));
-        Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId()) + 1;
-        householdMemberDTO.setUniqueId(household.getUniqueId()+household.getSerialNumber() + "/" +serialNumber);
+
+        //Getting the uniqueId without the serial number
+        Long serialNumber = householdMemberRepository.findHouseholdMemberCountOfHousehold(household.getId());
+        //int index = household.getUniqueId().lastIndexOf("/");
+        //String householdUniqueId = household.getUniqueId().substring(0, index);
+
+        //adding new serial number
+        householdMemberDTO.setUniqueId(household.getUniqueId() + "/" +serialNumber+1);
         HouseholdMember householdMember = householdMemberMapper.toHouseholdMember(householdMemberDTO);
 
         Long currentCboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
@@ -91,9 +118,10 @@ public class HouseholdMemberService {
     }
 
     public HouseholdMemberDTO getHouseholdMemberById(Long id) {
-        HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
-                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
-       return householdMemberMapper.toHouseholdMemberDTO(householdMember);
+        HouseholdMember householdMember = this.addMemberFlag(householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+"")));
+
+        return householdMemberMapper.toHouseholdMemberDTO(householdMember);
     }
 
     public HouseholdDTO getHouseholdByHouseholdMemberId(Long id) {
@@ -130,7 +158,7 @@ public class HouseholdMemberService {
         householdMemberRepository.save(householdMember);
     }
 
-    private String getDetailsInfo(String details, String field){
+    private String getValueFromJsonField(String details, String field){
         try {
             JsonNode tree = mapper.readTree(details).get(field);
             if(!tree.isNull()) {
@@ -142,5 +170,31 @@ public class HouseholdMemberService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<FormDTO> getFormsByHouseholdMemberById(Long id) {
+        HouseholdMember householdMember = householdMemberRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(HouseholdMember.class, "Id", id+""));
+
+        //get for by member or form type
+        List<String> formCodes = formService.getAllForms(householdMember.getHouseholdMemberType())
+                .stream().map(FormDTO::getCode).collect(Collectors.toList());
+
+        //check for member flag
+        householdMember.getMemberFlagsById().forEach(memberFlag -> {
+            Optional<String> formCode = memberFlag.getFlag().getFormsByIdFlag().stream()
+                    .filter(formFlag -> formFlag.getStatus() == APPLIED_TO_FORM)
+                    .map(FormFlag::getFormCode)
+                    .findFirst();
+
+            //Compare formCodes
+            formCode.ifPresent(code ->{
+                if(!formCodes.contains(formCode)){
+                    formCodes.remove(formCode);
+                }
+            });
+        });
+
+        return formMapper.toFormDTOS(formRepository.findByCodeInList(UN_ARCHIVED, formCodes));
     }
 }

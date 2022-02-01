@@ -18,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,32 +34,38 @@ public class EncounterController {
     private final EncounterService encounterService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<EncounterDTO>> getAllEncounters() {
         return ResponseEntity.ok(encounterService.getAllEncounters());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<EncounterDTO> getEncounterById(@PathVariable Long id) {
         return ResponseEntity.ok(encounterService.getEncounterById(id));
     }
 
     @GetMapping("{id}/FormData")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<FormDataDTO>> getFormDataByEncounterId(@PathVariable Long id) {
         return ResponseEntity.ok(encounterService.getFormDataByEncounterId(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Encounter> save(@Valid @RequestBody EncounterDTO encounterDTO) {
         return ResponseEntity.ok(encounterService.save(encounterDTO));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Encounter> update(@PathVariable Long id, @Valid @RequestBody EncounterDTO encounterDTO) {
         return ResponseEntity.ok(encounterService.update(id, encounterDTO));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@PathVariable Long id) {
         encounterService.delete(id);
     }

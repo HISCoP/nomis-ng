@@ -125,34 +125,6 @@ public class CboProjectService {
         cboProjectRepository.delete(cboProject);
     }
 
-    private CboProject transformCboProjectObject(CboProject cboProject){
-        String cboName = cboRepository.findById(cboProject.getCboId()).get().getName();
-        String donorName = donorRepository.findById(cboProject.getDonorId()).get().getName();
-        String implementerName = implementerRepository.findById(cboProject.getImplementerId()).get().getName();
-        List<Object> orgObject = new ArrayList<>();
-
-        cboProject.getCboProjectLocationsById().forEach(cboProjectLocation -> {
-            if(cboProjectLocation.getArchived() == UN_ARCHIVED) {
-                OrganisationUnit organisationUnit = cboProjectLocation.getOrganisationUnitByOrganisationUnitId();
-                OrganisationUnit parentOrgUnit = organisationUnitRepository.findByIdAndArchived(organisationUnit.getParentOrganisationUnitId(), UN_ARCHIVED).get();
-                HashMap<String, String> map = new HashMap<>();
-                map.put("id", String.valueOf(organisationUnit.getId()));
-                map.put("Name", organisationUnit.getName());
-                map.put("State", parentOrgUnit.getName());
-                map.put("cboProjectLocationId", String.valueOf(cboProjectLocation.getId()));
-                orgObject.add(map);
-            }
-        });
-
-
-        cboProject.setOrganisationUnits(orgObject);
-        cboProject.setCboName(cboName);
-        cboProject.setDonorName(donorName);
-        cboProject.setImplementerName(implementerName);
-
-        return cboProject;
-    }
-
     public Page<CboProject> getCboProjects(Long cboId, Long donorId, Long implementerId, Pageable pageable){
         List<Long> cboIds = getIds(cboId);
         List<Long> donorIds = getIds(donorId);
@@ -170,24 +142,7 @@ public class CboProjectService {
             implementerIds = implementerRepository.findAllId();
         }
 
-      return cboProjectRepository.findAllCboProjects(cboIds, donorIds, implementerIds, pageable);
-    }
-
-    public List<CboProjectDTO> getCboProjectsFromPage(Page<CboProject> page){
-        List<CboProject> cboProjectList = new ArrayList<>();
-
-        page.getContent().forEach(cboProject -> {
-            cboProjectList.add(this.transformCboProjectObject(cboProject));
-        });
-        return cboProjectMapper.toCboProjectDTOS(cboProjectList);
-    }
-
-    private List<Long> getIds(Long id) {
-        List<Long> ids = new ArrayList<>();
-        if (id != null && id != 0) {
-            ids.add(id);
-        }
-        return ids;
+        return cboProjectRepository.findAllCboProjects(cboIds, donorIds, implementerIds, pageable);
     }
 
     public void switchCboProject(Long id) {
@@ -207,5 +162,49 @@ public class CboProjectService {
 
     public List<CboProject> getAll() {
         return cboProjectRepository.findAllByArchived(UN_ARCHIVED);
+    }
+
+    public List<CboProjectDTO> getCboProjectsFromPage(Page<CboProject> page){
+        List<CboProject> cboProjectList = new ArrayList<>();
+
+        page.getContent().forEach(cboProject -> {
+            cboProjectList.add(this.transformCboProjectObject(cboProject));
+        });
+        return cboProjectMapper.toCboProjectDTOS(cboProjectList);
+    }
+
+    private CboProject transformCboProjectObject(CboProject cboProject){
+        String cboName = cboRepository.findById(cboProject.getCboId()).get().getName();
+        String donorName = donorRepository.findById(cboProject.getDonorId()).get().getName();
+        String implementerName = implementerRepository.findById(cboProject.getImplementerId()).get().getName();
+        List<Object> orgObject = new ArrayList<>();
+
+        cboProject.getCboProjectLocationsById().forEach(cboProjectLocation -> {
+            if(cboProjectLocation.getArchived() == UN_ARCHIVED) {
+                OrganisationUnit organisationUnit = cboProjectLocation.getOrganisationUnitByOrganisationUnitId();
+                OrganisationUnit parentOrgUnit = organisationUnitRepository.findByIdAndArchived(organisationUnit.getParentOrganisationUnitId(), UN_ARCHIVED).get();
+                HashMap<String, String> map = new HashMap<>();
+                map.put("id", String.valueOf(organisationUnit.getId()));
+                map.put("Name", organisationUnit.getName());
+                map.put("State", parentOrgUnit.getName());
+                map.put("cboProjectLocationId", String.valueOf(cboProjectLocation.getId()));
+                orgObject.add(map);
+            }
+        });
+
+        cboProject.setOrganisationUnits(orgObject);
+        cboProject.setCboName(cboName);
+        cboProject.setDonorName(donorName);
+        cboProject.setImplementerName(implementerName);
+
+        return cboProject;
+    }
+
+    private List<Long> getIds(Long id) {
+        List<Long> ids = new ArrayList<>();
+        if (id != null && id != 0) {
+            ids.add(id);
+        }
+        return ids;
     }
 }

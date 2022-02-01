@@ -89,7 +89,7 @@ const NewDonor = (props) => {
 
         <div >
            
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
+            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
 
                 <Form onSubmit={createDonorSetup}>
                     <ModalHeader toggle={props.toggleModal}>New Donor Setup </ModalHeader>
@@ -108,7 +108,7 @@ const NewDonor = (props) => {
                                                 placeholder=' '
                                                 value={formData.name}
                                                 onChange={handleInputChange}
-                                                
+                                                style={{textTransform: "upperCase" }} 
                                             />
                                             {errors.name !=="" ? (
                                                 <span className={classes.error}>{errors.name}</span>
@@ -120,7 +120,7 @@ const NewDonor = (props) => {
                                         <FormGroup>
                                             <Label>Description  (Address/Phone Number/Email)</Label>
                                             <Input
-                                                type='text'
+                                                type='textarea'
                                                 name='description'
                                                 id='description'
                                                 placeholder=' '

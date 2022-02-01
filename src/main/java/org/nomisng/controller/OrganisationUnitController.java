@@ -28,9 +28,10 @@ public class OrganisationUnitController {
     private final OrganisationUnitService organisationUnitService;
 
     @PostMapping
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
-    public ResponseEntity<OrganisationUnit> save(@Valid @RequestBody OrganisationUnitDTO organisationUnitDTO) {
-        return ResponseEntity.ok(organisationUnitService.save(organisationUnitDTO));
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public ResponseEntity<List<OrganisationUnit>> save(@RequestParam Long parentOrganisationUnitId, @RequestParam Long organisationUnitLevelId,
+                                                       @Valid @RequestBody List<OrganisationUnitDTO> organisationUnitDTOS) {
+        return ResponseEntity.ok(organisationUnitService.save(parentOrganisationUnitId, organisationUnitLevelId, organisationUnitDTOS));
     }
 
     /*@PostMapping("/save-all")
@@ -39,38 +40,39 @@ public class OrganisationUnitController {
     }*/
 
     @PutMapping("{id}")
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<OrganisationUnit> update(@PathVariable Long id, @Valid @RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.update(id, organisationUnitDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrganisationUnit> getOrganizationUnit(@PathVariable Long id) {
-        return ResponseEntity.ok(organisationUnitService.getOrganizationUnit(id));
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public ResponseEntity<OrganisationUnit> getOrganisationUnitById(@PathVariable Long id) {
+        return ResponseEntity.ok(organisationUnitService.getOrganisationUnitById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<OrganisationUnit>> getAllOrganizationUnit() {
-        return ResponseEntity.ok(organisationUnitService.getAllOrganizationUnit());
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public ResponseEntity<List<OrganisationUnit>> getAllOrganisationUnit() {
+        return ResponseEntity.ok(organisationUnitService.getAllOrganisationUnit());
     }
 
     @GetMapping ("/parent-org-unit/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByParentOrganisationUnitId(@PathVariable Long id) {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitId(id));
     }
 
     @GetMapping ("/{parentOrgUnitId}/{orgUnitLevelId}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(
             @PathVariable Long parentOrgUnitId, @PathVariable Long orgUnitLevelId) {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(parentOrgUnitId, orgUnitLevelId));
     }
 
-/*    @GetMapping ("/organisation-unit-level/{id}")
-    public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id) {
-        return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByOrganisationUnitLevelId(id));
-    }*/
 
     @GetMapping ("/organisation-unit-level/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id, @RequestParam(required = false, defaultValue = "*") String orgUnitName,
                                                                                                     @PageableDefault(value = 300) Pageable pageable) {
 
@@ -80,6 +82,7 @@ public class OrganisationUnitController {
     }
 
     @GetMapping ("/organisation-unit-levels/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public  ResponseEntity<List<OrganisationUnit>>  getAllOrganisationUnitByOrganisationUnitLevelId(@PathVariable Long id, @RequestParam(required = false, defaultValue = "*") String orgUnitName,
                                                                                                     @PageableDefault(value = 300) Pageable pageable) {
 
@@ -89,6 +92,7 @@ public class OrganisationUnitController {
     }
 
     @GetMapping ("/hierarchy/{parentOrgUnitId}/{orgUnitLevelId}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public  ResponseEntity<List<OrganisationUnitDTO>>  getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(
             @PathVariable Long parentOrgUnitId, @PathVariable Long orgUnitLevelId, @PageableDefault(value = 300) Pageable pageable) {
 

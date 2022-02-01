@@ -14,12 +14,19 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findOneByUserName(String userName);
+    Optional<User> findOneByUserNameAndArchived(String userName, int archived);
 
     @EntityGraph(attributePaths = "role")
     Optional<User> findOneWithRoleByUserName(String userName);
 
+    @EntityGraph(attributePaths = "role")
+    Optional<User> findOneWithRoleByUserNameAndArchived(String userName, int archived);
+
     Page<User> findAll(Pageable pageable);
 
     List<User>findAllByRoleIn(HashSet<Role> roles);
+
+    Optional<User> findByIdAndArchived(Long id, int archived);
+
+    Page<User> findAllByArchived(int archived, Pageable pageable);
 }

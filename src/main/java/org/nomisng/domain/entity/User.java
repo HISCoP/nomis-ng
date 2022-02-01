@@ -95,7 +95,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Role> role;
 
-    @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.REMOVE, orphanRemoval=true)
     private List<ApplicationUserCboProject> applicationUserCboProjects;
 
     @ManyToOne
@@ -109,6 +109,8 @@ public class User {
     @ToString.Exclude
     private List<ApplicationUserCboProject> applicationUserCboProjectsById;
 
-    @OneToMany(mappedBy = "applicationUserByUserId")
+    @OneToMany(mappedBy = "applicationUserByUserId", cascade = CascadeType.REMOVE, orphanRemoval=true)
+    @JsonIgnore
+    @ToString.Exclude
     private List<ApplicationUserRole> applicationUserRolesById;
 }

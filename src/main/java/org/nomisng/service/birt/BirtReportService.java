@@ -101,6 +101,11 @@ public class BirtReportService implements ApplicationContextAware, DisposableBea
 
     }
 
+    public ReportInfo getReport(Long id) {
+        return reportInfoRepository.findByIdAndArchived(id, UN_ARCHIVED).orElseThrow(() ->
+                new EntityNotFoundException(ReportInfo.class, "Id", id+""));
+    }
+
 
     public void generateReport(ReportDetailDTO reportDetailDTO, OutputType output, Map<String,Object> params, HttpServletResponse response, HttpServletRequest request) {
         ReportInfo reportInfo = getReport(reportDetailDTO.getReportId());
@@ -298,7 +303,7 @@ public class BirtReportService implements ApplicationContextAware, DisposableBea
         return reportInfoDTOS;
     }
 
-    public ReportInfo getReport(Long id) {
+    public ReportInfo getReportId(Long id) {
         return reportInfoRepository.findByIdAndArchived(id, UN_ARCHIVED).orElseThrow(() ->
                 new EntityNotFoundException(ReportInfo.class, "Id", id+""));
     }

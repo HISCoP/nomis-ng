@@ -27,16 +27,17 @@ const addRole = React.lazy(() => import("./views/admin/Roles/AddRole"))
 const ReportBuilderPage = React.lazy(() => import('./views/admin/Reports/ReportHome'));
 const ReportTemplate = React.lazy(() => import("./views/admin/Reports/ReportTemplate"));
 const ReportPage = React.lazy(() => import("./views/admin//Reports/ReportingPage"));
- const JasperTemplateUpdate = React.lazy(() => import("./views/admin/Reports/JasperTemplateUpdate"));
+const JasperTemplateUpdate = React.lazy(() => import("./views/admin/Reports/JasperTemplateUpdate"));
 const ReportView = React.lazy(() => import("./views/admin/Reports/ReportView"));
 const CboManager = React.lazy(() => import("./views/admin/CboManager/CboManager"));
 const DonorManager = React.lazy(() => import("./views/admin/DonorManager/DonorManager"));
 const IpManager = React.lazy(() => import("./views/admin/IpManager/IpManager"));
 const CboDonorIpManager = React.lazy(() => import("./views/admin/CboProject/CboProject"));
+const SchoolManager = React.lazy(() => import("./views/admin/SchoolManager/Schools"));
 const LoginPage = React.lazy(() => import("./views/pages/login/Login"));
 
 const routes = [
-  { path: '/', exact: true, name: 'Home', component: LoginPage , isPrivate: true},
+  { path: '/', exact: true, name: '', component: LoginPage , isPrivate: true},
   { path: '/dashboard', name: 'Dashboard', component: Dashboard, isPrivate: true },
   { path: '/households', name: 'Households', component: houseHoldAssessment , isPrivate: true},
   { path: '/household/home', name: 'Household Home', component: HouseholdHomePage , isPrivate: true},
@@ -69,6 +70,7 @@ const routes = [
   { path: "/ip", name: 'Implementing Partner ', component: IpManager} ,
   //{ path: "/donor-ip", name: 'Donor-Implementing Partner ', component: DonorIpManager} ,
   { path: "/cbo-donor-ip", name: 'CBO Project ', component: CboDonorIpManager} ,
+  { path: "/schools", name: 'Schools ', component: SchoolManager} ,
   { path: "/visualisation", name: 'Data Visualisation', component: DataVisualisation} ,
 
   

@@ -121,4 +121,10 @@ public class Household extends JsonBEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cbo_project_id", referencedColumnName = "id", updatable = false, insertable = false)
     private CboProject cboProjectByCboProjectId;
+
+    @OneToMany(mappedBy = "householdByHouseholdId")
+    private List<MemberFlag> householdFlagsById;
+
+    @Transient
+    private List<Flag> flags;
 }

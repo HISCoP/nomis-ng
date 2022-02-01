@@ -1,5 +1,5 @@
 import React, {createRef, useState} from 'react';
-import {Header, Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
+import { Menu, Icon, Dropdown, Input} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {CCol, CRow, CTabContent, CTabPane, } from "@coreui/react";
 import { Link } from 'react-router-dom'
@@ -30,6 +30,9 @@ const HomePage = (props) => {
         }
         else if(path=='donor'){
             props.history.push(`/donor`);
+        }
+        else if(path=='schools'){
+            props.history.push(`/schools`);
         }
         
     }
@@ -76,7 +79,7 @@ const HomePage = (props) => {
             <Dropdown.Item icon='settings' text='Donor Setup' onClick={() =>subMenu("donor")}/>
             <Dropdown.Item icon='settings' text='Implementing Partner Setup' onClick={() =>subMenu("ip")}/>
             <Dropdown.Item icon='settings' text='CBO Setup' onClick={() =>subMenu("cbo")}/>
-            
+            <Dropdown.Item icon='settings' text='School Setup' onClick={() =>subMenu("schools")}/>
             
           </Dropdown.Menu>
         </Dropdown>

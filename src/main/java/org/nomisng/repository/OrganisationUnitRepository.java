@@ -51,7 +51,7 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
     @Query(value = "SELECT * FROM organisation_unit WHERE id " +
             "IN (SELECT organisation_unit_id FROM cbo_project_location " +
             "WHERE cbo_project_id=?1 AND archived = 0)", nativeQuery = true)
-    List<OrganisationUnit> findAllByCboProjectIdId(Long cboProjectId);
+    List<OrganisationUnit> findAllByCboProjectId(Long cboProjectId);
 
     @Query(value = "SELECT * FROM organisation_unit WHERE id IN" +
             "(SELECT parent_organisation_unit_id FROM organisation_unit " +
@@ -63,5 +63,11 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
             "AND id IN (SELECT organisation_unit_id FROM cbo_project_location " +
             "WHERE cbo_project_id=?2 AND archived = 0)", nativeQuery = true)
     List<OrganisationUnit> findLgaByStateIdAndCboProjectId(Long stateId, Long cboProjectId);
+
+
+    //TODO: optimize to only give necessary fields ie id and name
+    @Query(value = "SELECT * FROM organisation_unit ou WHERE ou.organisation_unit_level_id = ?1 " +
+            "AND ou.archived = ?2", nativeQuery = true)
+    List<OrganisationUnit> findByOrganisationsByLevel(Long organisationUnitLevelId, int archived);
 
 }

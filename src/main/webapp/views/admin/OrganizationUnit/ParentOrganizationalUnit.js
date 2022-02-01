@@ -88,9 +88,13 @@ const useStyles = makeStyles({
     const [loading, setLoading] = useState('')
     const dispatch = useDispatch();
     const listOfAllParentOrgUnit = useSelector(state => state.organizationalUnitReducer.list);
-
     useEffect(() => {
-      setLoading(true);
+      loadOrgUnit()
+      
+  }, []); //componentDidMount
+  const loadOrgUnit = () => {
+
+    setLoading(true);
       const onSuccess = () => {
           setLoading(false)
           
@@ -98,9 +102,11 @@ const useStyles = makeStyles({
       const onError = () => {
           setLoading(false)     
       }
+      
         const fetchAllOrgUnit = dispatch(fetchAllParentOrganizationalUnitlevel(parentOrganisationUnitId.id, onSuccess,onError ));
 
-  }, []); //componentDidMount
+
+  }
     const deleteModule = (row) => {  
       setcollectModal({...collectModal, ...row});
       setModal(!modal) 
@@ -141,7 +147,7 @@ return (
                                               color="primary"
                                               startIcon={<FaPlus />}
                                               onClick={() => createParentOrgUnit()}>
-                                          <span style={{textTransform: 'capitalize'}}>Add Org. Unit</span>
+                                          <span style={{textTransform: 'capitalize'}}>New Org. Unit</span>
                                       </Button>
                                </div>
                             <MaterialTable
@@ -150,7 +156,7 @@ return (
                               columns={[
                                 { title: 'Name', field: 'name' },
                                
-                                { title: 'Org. Unit Level Name', field: 'ParentOrgUnitName' },
+                                { title: 'Parent Parent Org. Unit Name', field: 'ParentOrgUnitName' },
                                 { title: 'Parent Org. Unit name', field: 'ParentName' },
                                 { title: 'Description', field: 'description' },
                                 
@@ -193,7 +199,7 @@ return (
                                   margin: "auto"
                                   },
                                   searchFieldStyle: {
-                                    width : '300%',
+                                    width : '200%',
                                     margingLeft: '250px',
                                 },
                                 filtering: true,
@@ -204,7 +210,7 @@ return (
                             />
                             </Card>
                    
-       <DeleteOrgUnit modalstatus={modal} togglestatus={toggleModal} orgUnit={collectModal} />
+       <DeleteOrgUnit modalstatus={modal} togglestatus={toggleModal} orgUnit={collectModal}  loadOrgUnit={loadOrgUnit}/>
        <CreateParentOrgUnit modalstatus={modal2} togglestatus={toggleModal2} orgUnitID={orgUnitID} />
        <UpdateOrganisationUnit modalstatus={modal3} togglestatus={toggleModal3} orgUnit={collectModal}  orgUnitID={orgUnitID}/>
        

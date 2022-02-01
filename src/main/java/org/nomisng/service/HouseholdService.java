@@ -44,21 +44,35 @@ public class HouseholdService {
     private static final int INACTIVE_HOUSEHOLD_ADDRESS = 0;
     private final EncounterService encounterService;
     private final UserService userService;
+    private final HouseholdMemberService householdMemberService;
     private final static String HH_ASSESSMENT_FORM_CODE = "5f451d7d-213c-4478-b700-69a262667b89";
 
 
     public Page<Household> getAllHouseholdsByPage(String search, Pageable pageable) {
+        Long cboProjectId = this.getCurrentCboProjectId();
         if(search == null || search.equalsIgnoreCase("*")) {
             return householdRepository
-                    .findByCboProjectIdAndArchivedOrderByIdDesc(getCurrentCboProjectId(), UN_ARCHIVED, pageable);
+                    .findByCboProjectIdAndArchivedOrderByIdDesc(cboProjectId, UN_ARCHIVED, pageable);
         }
         search = "%"+search+"%";
         return householdRepository
-                .findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(search, getCurrentCboProjectId(), UN_ARCHIVED, pageable);
+                .findAllByCboProjectIdAndArchivedAndSearchParameterOrderByIdDesc(search, cboProjectId, UN_ARCHIVED, pageable);
     }
 
     public List<HouseholdDTO> getAllHouseholdsFromPage(Page<Household> householdPage) {
-        return householdMapper.toHouseholdDTOS(householdPage.getContent());
+
+        return householdMapper.toHouseholdDTOS(householdPage.getContent().stream()
+                .map(household -> this.setHouseholdFlag(household))
+                .collect(Collectors.toList()));
+    }
+
+    private Household setHouseholdFlag(Household household){
+        List<Flag> flags = new ArrayList<>();
+        household.getHouseholdFlagsById().forEach(memberFlag -> {
+            flags.add(memberFlag.getFlag());
+        });
+        household.setFlags(flags);
+        return household;
     }
 
     public Household save(HouseholdDTO householdDTO) {
@@ -122,6 +136,7 @@ public class HouseholdService {
         household.setStatus(ACTIVE);
         household.setCboProjectId(currentCboProjectId);
         if(household.getSerialNumber() == null){
+            //getting max household in the ward
             Optional<Long> optionalLong = householdRepository.findMaxSerialNumber(household.getWardId());
             if(optionalLong.isPresent()){
                 household.setSerialNumber(optionalLong.get());
@@ -179,6 +194,13 @@ public class HouseholdService {
         return household;
     }
 
+    /*private Household update(Long id, HouseholdDTO householdDTO){
+        Household household = householdRepository.findByIdAndArchived(id, UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Household.class, "Id", id+""));
+
+        return household;
+    }*/
+
     public List<HouseholdMemberDTO> getHouseholdMembersByHouseholdId(Long id, Integer memberType) {
         Household household = getHousehold(id);
 
@@ -186,12 +208,14 @@ public class HouseholdService {
         if(memberType == null || memberType == 0) {
             return householdMemberMapper.toHouseholdMemberDTOS(household.getHouseholdMembers().stream()
                     .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
+                    .map(householdMember -> householdMemberService.addMemberFlag(householdMember)) //setting flag of household flag
                     .collect(Collectors.toList()));
         }
         //return specified memberType
         return householdMemberMapper.toHouseholdMemberDTOS(household.getHouseholdMembers().stream()
                 .filter(householdMember -> householdMember.getHouseholdMemberType() == memberType)
                 .sorted(Comparator.comparingInt(HouseholdMember::getHouseholdMemberType))//sort by memberType
+                .map(householdMember -> householdMemberService.addMemberFlag(householdMember)) //setting flag of household flag
                 .collect(Collectors.toList()));
     }
 

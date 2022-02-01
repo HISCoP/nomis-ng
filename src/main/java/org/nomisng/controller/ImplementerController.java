@@ -18,23 +18,25 @@ public class ImplementerController {
     private final ImplementerService implementerService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<ImplementerDTO>> getAllImplementers() {
         return ResponseEntity.ok(implementerService.getAllImplementers());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<ImplementerDTO> getImplementer(@PathVariable Long id) {
         return ResponseEntity.ok(implementerService.getImplementer(id));
     }
 
     @PostMapping
-    //@PreAuthorize("hasAnyRole('System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Implementer> save(@Valid @RequestBody ImplementerDTO implementerDTO) {
         return ResponseEntity.ok(implementerService.save(implementerDTO));
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Implementer> update(@PathVariable Long id, @Valid @RequestBody ImplementerDTO implementerDTO) {
         return ResponseEntity.ok(implementerService.update(id, implementerDTO));
     }

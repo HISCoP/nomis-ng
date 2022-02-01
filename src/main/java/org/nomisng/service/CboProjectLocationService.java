@@ -31,7 +31,7 @@ public class CboProjectLocationService {
 
     public List<OrganisationUnit> getOrganisationUnitByCboProjectId() {
         Long cboProjectId = userService.getUserWithRoles().get().getCurrentCboProjectId();
-        return organisationUnitRepository.findAllByCboProjectIdId(cboProjectId);
+        return organisationUnitRepository.findAllByCboProjectId(cboProjectId);
     }
 
     public List<OrganisationUnit> getState() {

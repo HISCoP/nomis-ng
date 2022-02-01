@@ -12,5 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ApplicationUserRoleRepository extends JpaRepository<ApplicationUserRole, Long>, JpaSpecificationExecutor {
     List<ApplicationUserRole> findAllByUserId(Long id);
+
+    void deleteByUserId(Long userId);
 }
 

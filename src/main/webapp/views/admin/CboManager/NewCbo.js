@@ -11,14 +11,22 @@ import "react-widgets/dist/css/react-widgets.css";
 //import Select from "react-select/creatable";
 import { createCbosSetup, updateCbo  } from "./../../../actions/cbos";
 import { Spinner } from 'reactstrap';
-import { TextArea } from 'semantic-ui-react';
-
+import axios from "axios";
+import { url } from "../../../api";
 
 
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1)
-    }
+    },
+    error: {
+        color: "#f85032",
+        fontSize: "11px",
+    },
+    success: {
+        color: "#4BB543 ",
+        fontSize: "11px",
+    },
 }))
 
 const NewCbo = (props) => {
@@ -27,7 +35,8 @@ const NewCbo = (props) => {
     const defaultValues = { id:"",  name:"", description:"", code:""};
     const [formData, setFormData] = useState( defaultValues)
     const [errors, setErrors] = useState({});
-    //const [errors, setErrors] = useState({});
+    const [cboCodeStatus, setCboCodeStatus] = useState(false);
+    const [cboCodeStatus2, setCboCodeStatus2] = useState(false);
     const classes = useStyles()
   
     useEffect(() => {
@@ -39,7 +48,24 @@ const NewCbo = (props) => {
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
+
     }
+    const handleInputChange2 = e => {
+        const codeValue = e.target.value
+        setFormData ({ ...formData, [e.target.name]: codeValue});
+        async function getCharacters() {
+            const response = await axios.get(`${url}cbos/code/`+ codeValue.toUpperCase());
+            if(response.data===true){
+                setCboCodeStatus2(false)
+                setCboCodeStatus(true)
+            }else{
+                setCboCodeStatus(false)
+                setCboCodeStatus2(true)
+            }
+      }
+        getCharacters();
+    }
+
      /*****  Validation */
      const validate = () => {
         let temp = { ...errors };
@@ -52,7 +78,7 @@ const NewCbo = (props) => {
         setErrors({
             ...temp,
         });
-        return Object.values(temp).every((x) => x == "");
+        return Object.values(temp).every((x) => x === "");
     };
 
     const createCbo = e => {
@@ -82,7 +108,7 @@ const NewCbo = (props) => {
 
         <div >
             <ToastContainer />
-            <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg">
+            <Modal isOpen={props.showModal}  size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
 
                 <Form onSubmit={createCbo}>
                     <ModalHeader toggle={props.toggleModal}>New CBO Setup </ModalHeader>
@@ -117,12 +143,20 @@ const NewCbo = (props) => {
                                                 id='code'
                                                 placeholder=' '
                                                 value={formData.code}
-                                                onChange={handleInputChange}
-                                                
+                                                onChange={handleInputChange2}
+                                                maxlength="3"
+                                                minlength="3"
+                                                style={{textTransform: "upperCase" }} 
                                             />
                                              {errors.code !=="" ? (
                                                 <span className={classes.error}>{errors.code}</span>
                                             ) : "" }
+                                            {cboCodeStatus===true ? (
+                                                <span className={classes.error}>{"CBO Code already exist"}</span>
+                                            ) : "" }
+                                            {cboCodeStatus2===true ? (
+                                                <span className={classes.success}>{"CBO Code is OK."}</span>
+                                            ) :""}
                                         </FormGroup>
                                     </Col>
 

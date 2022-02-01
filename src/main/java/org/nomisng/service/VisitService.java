@@ -28,7 +28,7 @@ public class VisitService {
         return visitRepository.save(visitMapper.toVisit(visitDTO));
     }
 
-    public VisitDTO getVisit(Long id) {
+    public VisitDTO getVisitById(Long id) {
         Visit visit = visitRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Visit.class, "Id", id+""));
        return visitMapper.toVisitDTO(visit);

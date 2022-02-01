@@ -36,12 +36,11 @@ const HomePage = (props) => {
     const householdId = props.location.householdId;
     const [fetchingMember, setFetchingMember] = useState(true);
     const [fetchingHousehold, setFetchingHousehold] = useState(true);
-    const [activeItem, setActiveItem] = React.useState('dashboard');
+    const [activeItem, setActiveItem] = React.useState(props.location && props.location.activeItem!=null ? props.location.activeItem : 'dashboard');
     const [showServiceModal, setShowServiceModal] = useState(false);
     const toggleServiceModal = () => setShowServiceModal(!showServiceModal);
     const [showPreventiveServiceModal, setShowPreventiveServiceModal] = useState(false);
     const togglePreventiveServiceModal = () => setShowPreventiveServiceModal(!showPreventiveServiceModal);
-
     const dispatch = useDispatch();
     const menu = useSelector(state => state.menu).minimize;
 

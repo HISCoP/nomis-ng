@@ -19,5 +19,7 @@ public interface CboRepository extends JpaRepository<Cbo, Long>, JpaSpecificatio
 
     @Query(value = "SELECT id FROM cbo WHERE archived=0", nativeQuery = true)
     List<Long> findAllId();
+
+    boolean existsByCode(String code);
 }
 

@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,6 +32,7 @@ public class HouseholdController {
 
     //@RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<HouseholdDTO>> getAllHouseholds(@RequestParam (required = false, defaultValue = "*") String search,
                                                                @PageableDefault(value = 100) Pageable pageable) {
         Page<Household> householdPage = householdService.getAllHouseholdsByPage(search, pageable);
@@ -39,11 +41,13 @@ public class HouseholdController {
     }
 
     @GetMapping("/{id}/encounters")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getEncounterByHouseholdId(id));
     }
 
     @GetMapping("/{id}/{formCode}/encounters")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<EncounterDTO>> getEncountersByHouseholdIdAndFormCode(@PathVariable Long id, @PathVariable String formCode,
                                                                                     @RequestParam(required = false, defaultValue = "*")String dateFrom,
                                                                                     @RequestParam(required = false, defaultValue = "*")String dateTo,
@@ -59,6 +63,7 @@ public class HouseholdController {
     }
 
     @GetMapping("/{id}/{formCode}/formData")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<FormDataDTO>> getFormDataByHouseholdIdAndFormCode(@PathVariable Long id,
                                                                                     @PathVariable String formCode,
                                                                                     @PageableDefault(value = 100) Pageable pageable) {
@@ -69,11 +74,13 @@ public class HouseholdController {
 
     //@RequestMapping(method = RequestMethod.GET, value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<HouseholdDTO> getHouseholdById(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdById(id));
     }
 
     @GetMapping("/{id}/householdMembers")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<HouseholdMemberDTO>> getHouseholdMembersByHouseholdId(@PathVariable Long id,
                                                                                      @RequestParam(required = false, defaultValue = "0") Integer memberType) {
         return ResponseEntity.ok(householdService.getHouseholdMembersByHouseholdId(id, memberType));
@@ -81,29 +88,34 @@ public class HouseholdController {
 
 
     @GetMapping("/{id}/householdAddress")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<HouseholdMigrationDTO>> getHouseholdAddressesByHouseholdId(@PathVariable Long id) {
         return ResponseEntity.ok(householdService.getHouseholdAddressesByHouseholdId(id));
     }
 
     //@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Household> save(@RequestBody @Valid HouseholdDTO householdDTO) {
         return ResponseEntity.ok(householdService.save(householdDTO));
     }
 
     @PostMapping("/{id}/householdMigration")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<HouseholdMigrationDTO>> saveHouseholdAddress(@PathVariable Long id, @Valid @RequestBody HouseholdMigration householdMigration) {
         return ResponseEntity.ok(householdService.saveHouseholdMigration(id, householdMigration));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Household> update(@Valid @RequestBody HouseholdDTO householdDTO, @PathVariable Long id) {
         return ResponseEntity.ok(householdService.update(id, householdDTO));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@PathVariable Long id) {
         householdService.delete(id);
     }

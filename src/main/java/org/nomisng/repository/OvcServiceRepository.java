@@ -19,6 +19,6 @@ public interface OvcServiceRepository extends JpaRepository<OvcService, Long>, J
 
     Optional<OvcService> findByNameAndServiceTypeAndArchived(String name, int serviceType, int archived);
 
-    List<OvcService> findByServiceTypeAndArchived(Integer serviceType, int archived);
+    List<OvcService> findByArchived(int archived);
 }
 

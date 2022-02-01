@@ -7,6 +7,7 @@ import org.nomisng.repository.RoleRepository;
 import org.nomisng.service.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,11 +25,13 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public ResponseEntity<Role> getById(@PathVariable Long id) {
         return ResponseEntity.ok(roleRepository.findById(id).get());
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public ResponseEntity<List<Role>> getAll() {
         List<Role> roles = roleRepository.findAll();
         return ResponseEntity.ok(roles);
@@ -36,11 +39,13 @@ public class RoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Role addRole(@Valid @RequestBody RoleDTO roleDTO) throws Exception {
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
+    public Role save(@Valid @RequestBody RoleDTO roleDTO) throws Exception {
         return roleService.save(roleDTO);
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC')")
     public ResponseEntity<Role> update(@Valid @RequestBody RoleDTO role, @PathVariable Long id) {
         try {
             Role updatedRole = new Role();
@@ -59,7 +64,9 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteRole(@PathVariable Long id) {
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public void delete(@PathVariable Long id) {
+        //TODO: work on this...
         try {
             roleRepository.deleteById(id);
         } catch (Exception e) {

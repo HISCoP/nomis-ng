@@ -5,13 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 /*import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;*/
 import org.nomisng.controller.apierror.EntityNotFoundException;
+import org.nomisng.controller.apierror.IllegalTypeException;
 import org.nomisng.controller.apierror.RecordExistException;
 import org.nomisng.domain.dto.OrganisationUnitDTO;
 import org.nomisng.domain.entity.OrganisationUnit;
 import org.nomisng.domain.entity.OrganisationUnitHierarchy;
+import org.nomisng.domain.entity.OrganisationUnitLevel;
 import org.nomisng.domain.mapper.OrganisationUnitMapper;
 import org.nomisng.repository.HouseholdRepository;
 import org.nomisng.repository.OrganisationUnitHierarchyRepository;
+import org.nomisng.repository.OrganisationUnitLevelRepository;
 import org.nomisng.repository.OrganisationUnitRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,38 +32,58 @@ import static org.nomisng.util.Constants.ArchiveStatus.UN_ARCHIVED;
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitService {
-    private static final Long FIRST_ORG_LEVEL = 1L;
+    //private static final Long FIRST_ORG_LEVEL = 1L;
     public static final long WARD_LEVEL = 4L;
     private final OrganisationUnitRepository organisationUnitRepository;
-    private final HouseholdRepository householdRepository;
+    private final OrganisationUnitLevelRepository organisationUnitLevelRepository;
     private final OrganisationUnitMapper organisationUnitMapper;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
     private final HouseholdService householdService;
 
-    public OrganisationUnit save(OrganisationUnitDTO organisationUnitDTO) {
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UN_ARCHIVED);
-        if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnit.class, "Name", organisationUnitDTO.getName() +"");
-        final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
+    public List<OrganisationUnit> save(Long parentOrganisationUnitId, Long organisationUnitLevelId, List<OrganisationUnitDTO> organisationUnitDTOS) {
+        List<OrganisationUnit> organisationUnits = new ArrayList<>();
 
-        OrganisationUnit organisationUnit1 = organisationUnitRepository.save(organisationUnit);
-        Long level = organisationUnit1.getOrganisationUnitLevelId();
-        List<OrganisationUnitHierarchy> organisationUnitHierarchies = new ArrayList<>();
-        OrganisationUnit returnOrgUnit = organisationUnit1;
+        OrganisationUnit orgUnit = organisationUnitRepository.findByIdAndArchived(parentOrganisationUnitId,
+                UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(OrganisationUnitLevel.class, "parentOrganisationUnitId", parentOrganisationUnitId+""));
 
-        Long parent_org_unit_id = 1L;
-        while(parent_org_unit_id > 0){
-            parent_org_unit_id = organisationUnit1.getParentOrganisationUnitId();
-            organisationUnitHierarchies.add(new OrganisationUnitHierarchy(null, returnOrgUnit.getId(), organisationUnit1.getParentOrganisationUnitId(),
-                    level, null, null, null));
-
-            Optional<OrganisationUnit> organisationUnitOptional = organisationUnitRepository.findById(organisationUnit1.getParentOrganisationUnitId());
-            if(organisationUnitOptional.isPresent()){
-                organisationUnit1 = organisationUnitOptional.get();
-            }
-            --parent_org_unit_id;
+        OrganisationUnitLevel organisationUnitLevel = orgUnit.getOrganisationUnitLevelByOrganisationUnitLevelId();
+        //if has no subset is 0 while has subset is 1
+        if(organisationUnitLevel.getStatus() == 0){
+            throw new IllegalTypeException(OrganisationUnitLevel.class, "parentOrganisationUnitLevel", organisationUnitLevel+" cannot have subset");
         }
-        organisationUnitHierarchyRepository.saveAll(organisationUnitHierarchies);
-        return returnOrgUnit;
+
+        //loop to extract organisationUnit from dto and save
+        organisationUnitDTOS.forEach(organisationUnitDTO -> {
+            Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), UN_ARCHIVED);
+            if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnit.class, "Name", organisationUnitDTO.getName() +"");
+            final OrganisationUnit organisationUnit = organisationUnitMapper.toOrganisationUnit(organisationUnitDTO);
+            Long level = organisationUnitLevelId;
+            //Set parentId
+            organisationUnit.setParentOrganisationUnitId(parentOrganisationUnitId);
+            //Set organisation unit level
+            organisationUnit.setOrganisationUnitLevelId(organisationUnitLevelId);
+            //Save organisation unit
+            OrganisationUnit organisationUnit1 = organisationUnitRepository.save(organisationUnit);
+
+            List<OrganisationUnitHierarchy> organisationUnitHierarchies = new ArrayList<>();
+            OrganisationUnit returnOrgUnit = organisationUnit1;
+
+            Long parent_org_unit_id = 1L;
+            while(parent_org_unit_id > 0){
+                parent_org_unit_id = organisationUnit1.getParentOrganisationUnitId();
+                organisationUnitHierarchies.add(new OrganisationUnitHierarchy(null, returnOrgUnit.getId(), organisationUnit1.getParentOrganisationUnitId(),
+                        level, null, null, null));
+
+                Optional<OrganisationUnit> organisationUnitOptional = organisationUnitRepository.findById(organisationUnit1.getParentOrganisationUnitId());
+                if(organisationUnitOptional.isPresent()){
+                    organisationUnit1 = organisationUnitOptional.get();
+                }
+                --parent_org_unit_id;
+            }
+            organisationUnitHierarchyRepository.saveAll(organisationUnitHierarchies);
+            organisationUnits.add(returnOrgUnit);
+        });
+        return organisationUnits;
     }
 
     //TODO: work on this
@@ -80,17 +103,17 @@ public class OrganisationUnitService {
         return organizationOptional.get().getArchived();
     }
 
-    public OrganisationUnit getOrganizationUnit(Long id){
-        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
-        if (!organizationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
-        return organizationOptional.get();
+    public OrganisationUnit getOrganisationUnitById(Long id){
+        Optional<OrganisationUnit> organisationOptional = organisationUnitRepository.findByIdAndArchived(id, UN_ARCHIVED);
+        if (!organisationOptional.isPresent())throw new EntityNotFoundException(OrganisationUnit.class, "Id", id +"");
+        return organisationOptional.get();
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitId(Long id) {
         return  organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived(id, UN_ARCHIVED);
     }
 
-    public List<OrganisationUnit> getAllOrganizationUnit() {
+    public List<OrganisationUnit> getAllOrganisationUnit() {
         return organisationUnitRepository.findAllByArchivedOrderByIdAsc(UN_ARCHIVED);
     }
 
@@ -233,7 +256,7 @@ public class OrganisationUnitService {
 
     private Object getCellValue(Cell cell) {
         switch (cell.getCellType()) {
-            case STRING:
+            case STRING_FLAG_DATA_TYPE:
                 return cell.getStringCellValue();
             case BOOLEAN:
                 return cell.getBooleanCellValue();

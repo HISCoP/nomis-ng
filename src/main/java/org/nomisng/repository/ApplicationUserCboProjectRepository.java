@@ -29,5 +29,7 @@ public interface ApplicationUserCboProjectRepository extends JpaRepository<Appli
     List<ApplicationUserCboProject> findAllByApplicationUserIdOrderByIdAsc(Long userId);
 
     List<ApplicationUserCboProject> findAllByApplicationUserIdAndArchivedOrderByIdAsc(Long applicationUserId, int archived);
+
+    void deleteByApplicationUserId(Long id);
 }
 

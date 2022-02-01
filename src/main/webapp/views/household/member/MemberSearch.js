@@ -15,7 +15,7 @@ import {connect, useDispatch} from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import {calculateAge} from "./../../../utils/calculateAge";
 import NewOvc from "../household/NewOvc";
-
+import { FaRegDotCircle } from 'react-icons/fa';
 
 const HouseholdMember = (props) => {
 
@@ -52,14 +52,16 @@ const HouseholdMember = (props) => {
                 title="Household Member List"
                 columns={[
                   { title: 'Unique ID', field: 'id' },
-                    { title: 'Member Type', field: 'type' },
-                  { title: 'Date Assessed', field: 'date' },
                   { title: 'Name', field: 'name' },
+                  
+                  { title: 'Date Assessed', field: 'date' },
+                  
                   {
                     title: 'Age',
                     field: 'age',
                     
                   },
+                  { title: 'Status', field: 'type' },
                   {
                     title: 'Action',
                     field: 'action',
@@ -70,9 +72,16 @@ const HouseholdMember = (props) => {
                 data={props.houseMemberList.map((row) => ({
                   id: <span> <Link
                       to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
+                  name:  
+                        row.householdMemberType === 1 ? 
+                      (<><FaRegDotCircle size="10" style={{color:'green'}}/> {row.details.firstName + " " + row.details.lastName } </>) : 
+                      
+                      (<><FaRegDotCircle size="10" style={{color:'blue'}}/> {row.details.firstName + " " + row.details.lastName } </>)
+                      ,
                   date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
-                    type: row.householdMemberType === 1 ? "Caregiver" : "VC",
-                  name: row.details.firstName + " " + row.details.lastName,
+                  type: "",
+                  
+                      
                   age: (row.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(row.details.dob),
                   action:
                   <Menu>

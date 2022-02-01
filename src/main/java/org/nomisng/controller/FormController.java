@@ -22,35 +22,39 @@ public class FormController {
     private final FormService formService;
 
     @GetMapping
-    public ResponseEntity<List<FormDTO>> getAllForms() {
-        return ResponseEntity.ok(formService.getAllForms());
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
+    public ResponseEntity<List<FormDTO>> getAllForms(@RequestParam(required = false, defaultValue = "3") Integer formType) {
+        return ResponseEntity.ok(formService.getAllForms(formType));
     }
 
     @GetMapping("/formCode")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<FormDTO> getFormByFormCode(@RequestParam String formCode) {
             return ResponseEntity.ok(formService.getFormByFormCode(formCode));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<FormDTO> getForm(@PathVariable Long id) {
         return ResponseEntity.ok(formService.getForm(id));
     }
 
+
     @PostMapping
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Form> save(@Valid @RequestBody FormDTO formDTO) {
         return ResponseEntity.ok(formService.save(formDTO));
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public ResponseEntity<Form> update(@PathVariable Long id, @Valid @RequestBody FormDTO formDTO) {
         return ResponseEntity.ok(formService.update(id, formDTO));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasAnyRole('DEC', 'System Administrator', 'Administrator', 'Admin')")
+    @PreAuthorize("hasAnyAuthority('System Administrator','Administrator', 'DEC', 'M&E Officer')")
     public void delete(@PathVariable Long id) {
         formService.delete(id);
     }

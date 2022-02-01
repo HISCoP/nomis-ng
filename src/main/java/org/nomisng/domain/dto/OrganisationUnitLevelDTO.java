@@ -17,4 +17,7 @@ public class OrganisationUnitLevelDTO {
 
     @NotNull(message = "status is mandatory")
     private Integer status;
+
+    @NotNull(message = "parentOrganisationUnitLevelId is mandatory")
+    private Long parentOrganisationUnitLevelId;
 }

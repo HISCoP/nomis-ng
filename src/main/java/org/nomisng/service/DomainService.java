@@ -35,7 +35,7 @@ public class DomainService {
 
 
     public List getAllDomains() {
-        return domainRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED);
+        return domainRepository.findAllByArchivedOrderByNameAsc(UN_ARCHIVED);
     }
 
     public Domain save(DomainDTO domainDTO) {
@@ -88,6 +88,7 @@ public class DomainService {
     public List<OvcServiceDTO> getOvcServicesByDomainId(Long domainId){
         Domain domain = domainRepository.findByIdAndArchived(domainId, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Id", domainId +""));
+
         List<OvcService> ovcServices = domain.getServicesById().stream()
                 .filter(ovcService ->ovcService.getArchived()!= null && ovcService.getArchived()== UN_ARCHIVED)
                 .sorted(Comparator.comparing(OvcService::getId).reversed())
