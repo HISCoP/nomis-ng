@@ -22,7 +22,6 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "flag")
 public class Flag extends Audit implements Serializable {
 
@@ -73,28 +72,4 @@ public class Flag extends Audit implements Serializable {
     @JsonIgnore
     @ToStringExclude
     private List<FormFlag> formsByIdFlag;
-
-    /*@CreatedBy
-    @Column(name = "created_by", nullable = false, updatable = false)
-    @JsonIgnore
-    @ToString.Exclude
-    private String createdBy = SecurityUtils.getCurrentUserLogin().orElse(null);
-
-    @CreatedDate
-    @Column(name = "date_created", nullable = false, updatable = false)
-    @JsonIgnore
-    @ToString.Exclude
-    private LocalDateTime dateCreated = LocalDateTime.now();
-
-    @LastModifiedBy
-    @Column(name = "modified_by")
-    @JsonIgnore
-    @ToString.Exclude
-    private String modifiedBy = SecurityUtils.getCurrentUserLogin().orElse(null);
-
-    @LastModifiedDate
-    @Column(name = "date_modified")
-    @JsonIgnore
-    @ToString.Exclude
-    private LocalDateTime dateModified = LocalDateTime.now();*/
 }
