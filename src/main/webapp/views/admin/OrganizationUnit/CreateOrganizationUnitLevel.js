@@ -137,7 +137,7 @@ const saveOrgName = (e) => {
                               <Row>
                               <Col md={6}>
                                 <FormGroup>
-                                              <Label for="">Parent Organisation  Unit</Label>
+                                              <Label for="">Parent Organisation  Unit Level</Label>
 
                                               <Input
                                                         type="select"

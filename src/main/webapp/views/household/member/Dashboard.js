@@ -18,6 +18,7 @@ import axios from "axios";
 import {url} from "../../../api";
 import { Link } from 'react-router-dom';
 import * as CODES from "../../../api/codes";
+import ReAssignCaregiver from './ReAssignCaregiver';
 
 
 const Dashboard = (props) => {
@@ -25,7 +26,7 @@ const Dashboard = (props) => {
     return (
         <>
             <TopDashboardStats household={props.household} member={props.member}/>
-            < MidDashboardStats member={props.member} household={props.household} fetchingHousehold={props.fetchingHousehold} />
+            <MidDashboardStats member={props.member} household={props.household} fetchingHousehold={props.fetchingHousehold} />
                 <CRow>
                 <CCol xs="12" >
                 <RecentServiceOffered memberId={props.member.id}/>
@@ -165,7 +166,9 @@ const TopDashboardStats = (props) => {
 
 const MidDashboardStats = (props) => {
     const [fetchingMember, setFetchingMember] = useState(true);
-    const [caregiver, setCaregiver] = useState(null);
+    const [caregiver, setCaregiver] = useState({});
+    const [showModal, setShowModal] = React.useState(false);
+    const toggleModal = () => setShowModal(!showModal)
     const caregiverId = props.member && props.member.details && props.member.details.caregiver ? props.member.details.caregiver.id : null;
     React.useEffect(() => {
         fetchCaregiver();
@@ -184,6 +187,35 @@ const MidDashboardStats = (props) => {
                 }
 
             );
+    }
+    
+    function checkFlag (flags) {
+        const careGiverFlag =flags && flags.flags!==null ? flags.flags : []
+        if(careGiverFlag!==null && careGiverFlag!==undefined && careGiverFlag.length > 0 ){
+
+            const flagObj = careGiverFlag
+            for(var i=0; i<flagObj.length; i++){
+                    if (flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Transferred'){
+                        return <span style={{color:"red"}}>Transferred</span>
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Lost to follow-up'){
+                        return <span style={{color:"red"}}>Lost to follow-up</span>
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Migrated'){
+                        return <span style={{color:"red"}}>Migrated</span>
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Known death'){
+                        return <span style={{color:"red"}}>Known death</span>
+                    }else{
+                        return "Active"
+                    }
+                                
+            }
+        }else{
+            return "Active"
+        }
+    }
+
+    const openReAssignModal = (row) => {
+       
+        toggleModal();
     }
     return (
         <>
@@ -233,9 +265,16 @@ const MidDashboardStats = (props) => {
                 <CCol xs="12" sm="6" lg="6">
                     <CCard style={{backgroundColor: "rgb(235 243 232)"}}>
                         <CCardHeader> <Icon name='user'/> Caregiver Information
-                            <Link title="Go to caregiver dashboard" to={{pathname: "/household-member/home", state: caregiverId, householdId:props.household.id  }} className="float-right"> <CButton
-                                color="info"
-                                className="float-right">Go to Caregiver's Page </CButton></Link>
+                        {/* {checkFlag(caregiver) ==='Active' ? 
+                            (
+                                <>
+                                <Link title="Go to caregiver dashboard" to={{pathname: "/household-member/home", state: caregiverId, householdId:props.household.id }} className="float-right"> <CButton
+                                    color="info"
+                                    className="float-right">Go to Caregiver Page </CButton></Link>
+                                </>
+                            ) : ""
+                            
+                        }   */}
                         </CCardHeader>
                         <CCardBody>
                             {fetchingMember &&
@@ -245,11 +284,21 @@ const MidDashboardStats = (props) => {
                             <span>Age: <small>{caregiver && caregiver.details && caregiver.details.dob ? (caregiver.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(caregiver.details.dob) : 'Nil'}</small></span><br/>
                             <span>Sex: <small>{caregiver && caregiver.details && caregiver.details.sex ? caregiver.details.sex.display : 'Nil'}</small> </span><br/>
                             <span>Phone Number: <small>{caregiver && caregiver.details ? caregiver.details.mobilePhoneNumber : 'Nil'} </small></span><br/>
+                            <span>Status: <small>{checkFlag(caregiver)}</small></span><br/>
+                            {checkFlag(caregiver) !=='Active' ? 
+                            (
+                                <>
+                                     <CButton color="info" className="float-right" onClick={() => openReAssignModal(null)}>Reassign Caregiver </CButton>
+                                </>
+                            ) : ""
+                            
+                        }  
                         </CCardBody>
                     </CCard>
                 </CCol>
             </CRow>
             }
+            <ReAssignCaregiver toggleModal={toggleModal} showModal={showModal}/>
         </>
     )
 }

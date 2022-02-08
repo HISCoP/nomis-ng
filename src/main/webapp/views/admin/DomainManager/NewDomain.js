@@ -128,14 +128,17 @@ const closeModal = ()=>{
                                     className={classes.button}
                                     startIcon={<SaveIcon />}
                                     disabled={loading}>
-                                    Save  {loading ? <Spinner /> : ""}
+
+                                    <span style={{textTransform: 'capitalize'}}>Save </span> 
+                                    {loading ? <Spinner />
+                                     : ""}
                                 </MatButton>
                                 <MatButton
                                     variant='contained'
                                     color='default'
                                     onClick={closeModal}
                                     startIcon={<CancelIcon />}>
-                                    Cancel
+                                    <span style={{textTransform: 'capitalize'}}>Cancel</span>
                                 </MatButton>
                             </CardBody>
                         </Card>

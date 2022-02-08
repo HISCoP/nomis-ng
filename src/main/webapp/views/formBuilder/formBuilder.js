@@ -63,7 +63,7 @@ const Create = props => {
                 setform(
                     body.map(({ name, code }) => ({ title: name, value: code }))
                 );
-                body !==null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
+                //body !==null ? setdisabledCheckBox(false) : setdisabledCheckBox(true)
 
             } catch (error) {
             }
@@ -149,6 +149,16 @@ const Create = props => {
                                 <Label class="sr-only">Version</Label>
                                 <Input type="text" class="form-control" id="version" name="version" value={formData.version}   onChange={e => setFormData({...formData, version:e.target.value})} required/>
                             </FormGroup> </Col>
+                            <Col md={4}> <FormGroup>
+                                <Label class="sr-only">Form Type</Label>
+                                <Input type="select"  id="formType"  name="formType" value={formData.formType} onChange={e => setFormData({...formData, formType:e.target.value})}>
+                                    <option></option>
+                                    
+                                    <option value="1">VC</option>
+                                    <option value="2">Care Giver</option>
+                                    <option value="3"> Both</option>
+                                </Input>
+                            </FormGroup></Col>
                             <Col md={12} className={"pb-2"}>
                             <FormGroup check>
                                 <Label check>
@@ -173,19 +183,7 @@ const Create = props => {
                                         <option>No Domain found</option>
                                     </Input>}
                             </FormGroup></Col>
-                            <Col md={4}> <FormGroup>
-                                <Label class="sr-only">Service Type</Label>
-                                <Input type="select"  id="formType" value={formType} onChange={e => {
-                                    setformType(e.target.value);
-                                    fetchServices(domainCode, e.target.value);
-                                }}>
-                                    <option></option>
-                                    
-                                    <option value="1">VC</option>
-                                    <option value="2">Care Giver</option>
-                                    <option value="3"> Both</option>
-                                </Input>
-                            </FormGroup></Col>
+                            
                             <Col md={4}> <FormGroup>
                                 <Label class="sr-only">Service</Label>
                                 {props.services && props.services.length && props.services.length > 0 ?

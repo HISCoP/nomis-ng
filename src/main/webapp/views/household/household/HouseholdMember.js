@@ -85,13 +85,47 @@ const MemberCard = (props) => {
     const [modal3, setModal3] = useState(false);
     const [memberId, setMemberId] = useState(null);
     const toggle3 = () => setModal3(!modal3);
+    //Get the Member flag array and check for the HIV status
+    const flags=  props.member.flags
+
+    function checkHivStatus (flags) {
+        for(var i=0; i<flags.length; i++){
+            if (flags[i]!==null && flags[i].fieldName==='hiv_test_result' && flags[i].fieldValue==='Positive'){
+                return true
+            }
+                
+            
+        }
+    }
     //Provide Service To Household Member Action Button to Load the Modal Form 
     const provideServiceModal = (memberId) =>{
         setMemberId(memberId)
         setModal3(!modal3)
     } 
 
-    
+    function checkFlag (flags) {
+        const careGiverFlag =flags && flags.flags!==null ? flags.flags : []
+        if(careGiverFlag!==null && careGiverFlag!==undefined && careGiverFlag.length > 0 ){
+
+            const flagObj = careGiverFlag
+            for(var i=0; i<flagObj.length; i++){
+                    if (flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Transferred'){
+                        return true
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Lost to follow-up'){
+                        return true
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Migrated'){
+                        return true
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Known death'){
+                        return true
+                    }else{
+                        return false
+                    }
+                                
+            }
+        }else{
+            return false
+        }
+    }
     
     
     return (
@@ -99,7 +133,7 @@ const MemberCard = (props) => {
         <CCard>
             <CCardBody className={'text-center'}>
                 <p className={'text-left'}><b>{props.member.householdMemberType===1?"Caregiver": "VC" || ''}</b>
-                    {props.member.householdMemberType===1?<MdAdd size="15" style={{color:'red'}}/> : ""}
+                    {checkHivStatus(props.member.flags)===true?<MdAdd size="15" style={{color:'red'}}/> : ""}
   
                 </p>
                 <AccountCircleIcon fontSize="large" style={{padding:'5px', color:props.member.householdMemberType===1?'green':'blue'}} /><br/>
@@ -117,10 +151,10 @@ const MemberCard = (props) => {
                         </MenuButton>
                             <MenuList style={{hover:"#eee"}}>
                                                         
-                            <MenuItem onClick={() =>provideServiceModal(props.member.id)}>{" "}Provide Service</MenuItem>
+                            <MenuItem className="blue-highlight" onClick={() =>provideServiceModal(props.member.id)} disabled={checkFlag(props.member)===true ? true :false}>{" "}Provide Service</MenuItem>
                             <Link
                                 to={{pathname: "/household-member/home", state: props.member.id, householdId: props.householdId, activeItem:'forms' }}>
-                                <MenuItem >{" "}Other Service Form</MenuItem>
+                                <MenuItem  className="blue-highlight" >{" "}Other Service Form</MenuItem>
                             </Link>
                             </MenuList>
                     </Menu>

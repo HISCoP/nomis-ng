@@ -92,7 +92,7 @@ const NewDonor = (props) => {
             <Modal isOpen={props.showModal} toggle={props.toggleModal} size="lg" zIndex={"9999"} backdrop={false} backdrop="static">
 
                 <Form onSubmit={createDonorSetup}>
-                    <ModalHeader toggle={props.toggleModal}>New Donor Setup </ModalHeader>
+                    <ModalHeader toggle={props.toggleModal}>Reassign Caregiver </ModalHeader>
                     <ModalBody>
                         <Card >
                             <CardBody>
@@ -100,39 +100,25 @@ const NewDonor = (props) => {
                                     
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label>Name</Label>
+                                            <Label>Caregiver's</Label>
                                             <Input
-                                                type='text'
-                                                name='name'
-                                                id='name'
-                                                placeholder=' '
-                                                value={formData.name}
-                                                onChange={handleInputChange}
-                                                style={{textTransform: "upperCase" }} 
-                                            />
-                                            {errors.name !=="" ? (
-                                                <span className={classes.error}>{errors.name}</span>
-                                            ) : "" }
+                                                type="select"
+                                                name="serviceType"
+                                                id="serviceType"
+                                                value={formData.serviceType}
+                                               
+                                                required
+                                                >
+                                                <option value=""> </option>
+                                                
+                                                <option value="1">james Peter</option>
+                                                <option value="2"> John John </option>
+                                                <option value="3"> Musa Ahmed</option>
+                                            </Input>
                                         </FormGroup>
                                     </Col>
 
-                                    <Col md={12}>
-                                        <FormGroup>
-                                            <Label>Description  (Address/Phone Number/Email)</Label>
-                                            <Input
-                                                type='textarea'
-                                                name='description'
-                                                id='description'
-                                                placeholder=' '
-                                                value={formData.description}
-                                                onChange={handleInputChange}
-                                                
-                                            />
-                                            {errors.description !=="" ? (
-                                                <span className={classes.error}>{errors.description}</span>
-                                            ) : "" }
-                                        </FormGroup>
-                                    </Col>
+                                   
 
                                    
                                     

@@ -33,6 +33,7 @@ const HomePage = (props) => {
     console.log(props)
     const classes = useStyles();
     const memberId = props.location.state;
+    const [disabled, setDisabled] = useState("");
     const householdId = props.location.householdId;
     const [fetchingMember, setFetchingMember] = useState(true);
     const [fetchingHousehold, setFetchingHousehold] = useState(true);
@@ -43,6 +44,7 @@ const HomePage = (props) => {
     const togglePreventiveServiceModal = () => setShowPreventiveServiceModal(!showPreventiveServiceModal);
     const dispatch = useDispatch();
     const menu = useSelector(state => state.menu).minimize;
+
 
     const handleItemClick = (e, { name }) => {
         setActiveItem(name);
@@ -79,6 +81,29 @@ const HomePage = (props) => {
         props.fetchHouseHoldById(householdId, onSuccess, onError);
     }, [householdId]);
 
+    function checkFlag (flags) {
+        const careGiverFlag =flags && flags.flags!==null ? flags.flags : []
+        if(careGiverFlag!==null && careGiverFlag!==undefined && careGiverFlag.length > 0 ){
+
+            const flagObj = careGiverFlag
+            for(var i=0; i<flagObj.length; i++){
+                    if (flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Transferred'){
+                        return true
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Lost to follow-up'){
+                        return true
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Migrated'){
+                        return true
+                    }else if(flagObj[i]!==null && flagObj[i].fieldName==='beneficiary_status' && flagObj[i].fieldValue==='Known death'){
+                        return true
+                    }else{
+                        return false
+                    }
+                                
+            }
+        }else{
+            return false
+        }
+    }
     return (
         <>
             {fetchingMember &&
@@ -104,6 +129,7 @@ const HomePage = (props) => {
                             active={activeItem === 'provide_services'}
                             onClick={toggleServiceModal}
                             className={'text-center'}
+                            disabled={checkFlag(props.member)===true ? true :false}
                         >
                             <DescriptionIcon fontSize="large" className={'text-center'}/>
                             <p>Provide Service</p>
@@ -115,6 +141,9 @@ const HomePage = (props) => {
                             active={activeItem === 'provide_preventive_services'}
                             onClick={togglePreventiveServiceModal}
                             className={'text-center'}
+                          
+                          
+                           
                         >
                             <DescriptionIcon fontSize="large" className={'text-center'}/>
                             <p>Provide Preventive Service</p>
@@ -126,6 +155,7 @@ const HomePage = (props) => {
                             active={activeItem === 'forms'}
                             className={'text-center'}
                             onClick={handleItemClick}
+                            
                         >
                            
                                 <FolderIcon fontSize="large" className={'text-center'}/>

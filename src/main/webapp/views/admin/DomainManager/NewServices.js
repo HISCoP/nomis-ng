@@ -156,14 +156,14 @@ const getServices = () => {
                                     className={classes.button}
                                     startIcon={<SaveIcon />}
                                     disabled={loading}>
-                                    Save  {loading ? <Spinner /> : ""}
+                                    <span style={{textTransform: 'capitalize'}}>Save</span>  {loading ? <Spinner /> : ""}
                                 </MatButton>
                                 <MatButton
                                     variant='contained'
                                     color='default'
                                     onClick={props.toggleModal}
                                     startIcon={<CancelIcon />}>
-                                    Cancel
+                                    <span style={{textTransform: 'capitalize'}}>Cancel</span>
                                 </MatButton>
                             </CardBody>
                         </Card>
