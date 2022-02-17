@@ -15,66 +15,50 @@ import {connect, useDispatch} from "react-redux";
 import { fetchAllHouseHoldMember } from "./../../../actions/houseHoldMember";
 import {calculateAge} from "./../../../utils/calculateAge";
 import NewOvc from "../household/NewOvc";
-import { FaRegDotCircle } from 'react-icons/fa';
-
-import { forwardRef } from 'react';
-import axios from "axios";
-import {url as baseUrl} from "./../../../api";
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-
-const tableIcons = {
-Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
-ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-};
+import NewCareGiver from "../household/NewCareGiver";
 
 
 const HouseholdMember = (props) => {
 
-  const [loading, setLoading] = useState('')
+  const [loading, setLoading] = useState('');
+  const [currentHm, setCurrentHm] = useState('');
+    const [newOvcModal, setShowOvcModal] = React.useState(false);
+    const [newCaregiverModal, setShowCaregiverModal] = React.useState(false);
+    const [modal, setModal] = useState(false);
+
     const dispatch = useDispatch();
     React.useEffect(() => {
         //show side-menu when this page loads
         dispatch({type: 'MENU_MINIMIZE', payload: false });
     },[]);
+
+    const fetchMembers = () => {
+        setLoading('true');
+        const onSuccess = () => {
+            setLoading(false)
+        }
+        const onError = () => {
+            setLoading(false)
+        }
+        props.fetchAllMember(onSuccess, onError);
+    }
   useEffect(() => {
-  setLoading('true');
-      const onSuccess = () => {
-          setLoading(false)
-      }
-      const onError = () => {
-          setLoading(false)     
-      }
-          props.fetchAllMember(onSuccess, onError);
+    fetchMembers();
   }, []); //componentDidMount
+
+    const toggleOvc = () => setShowOvcModal(!newOvcModal);
+    const toggleCaregiver = () => setShowCaregiverModal(!newCaregiverModal);
+
+    const toggleUpdate = (row) => {
+        setCurrentHm(row);
+        if(row.householdMemberType === 1){
+            toggleCaregiver();
+        }
+
+        if(row.householdMemberType === 2){
+            toggleOvc();
+        }
+    };
 
 
 
@@ -90,19 +74,16 @@ const HouseholdMember = (props) => {
             <CCardBody>
             <MaterialTable
                 title="Household Member List"
-                icons={tableIcons}
                 columns={[
                   { title: 'Unique ID', field: 'id' },
-                  { title: 'Name', field: 'name' },
-                  
+                    { title: 'Member Type', field: 'type' },
                   { title: 'Date Assessed', field: 'date' },
-                  
+                  { title: 'Name', field: 'name' },
                   {
                     title: 'Age',
                     field: 'age',
                     
                   },
-                  { title: 'Status', field: 'type' },
                   {
                     title: 'Action',
                     field: 'action',
@@ -110,70 +91,61 @@ const HouseholdMember = (props) => {
                   },
                 ]}
                 isLoading={loading}
-               
-                data={query =>
-                  new Promise((resolve, reject) =>
-                      axios.get(`${baseUrl}household-members/?size=${query.pageSize}&page=${query.page}&search=${query.search}`)
-                          .then(response => response)
-                          .then(result => {
-                            
-                              resolve({
-                                  data: result.data.map((row) => ({
-                                    id: <span> <Link
-                            to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
-                            name:  
-                                  row.householdMemberType === 1 ? 
-                                (<><FaRegDotCircle size="10" style={{color:'green'}}/> {row.details.firstName + " " + row.details.lastName } </>) : 
+                data={props.houseMemberList.map((row) => ({
+                  id: <span> <Link
+                      to={{pathname: "/household-member/home", state: row.id, householdId:row.householdId }}>{row.details.uniqueId}</Link></span>,
+                  date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
+                    type: row.householdMemberType === 1 ? "Caregiver" : "VC",
+                  name: row.details.firstName + " " + row.details.lastName,
+                  age: (row.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(row.details.dob),
+                  action:
+                  <Menu>
+                          <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                              Action <span aria-hidden>▾</span>
+                            </MenuButton>
+                              <MenuList style={{hover:"#eee"}}>
+                              <MenuItem >
+                                <Link
+                                      to={{pathname: "/household-member/home" , state:row.id, householdId:row.householdId}}>
+                                      View Dashboard
+                                </Link>
                                 
-                                (<><FaRegDotCircle size="10" style={{color:'blue'}}/> {row.details.firstName + " " + row.details.lastName } </>)
-                                ,
-                            date: row.details && row.details.dateOfEnrolment ? row.details.dateOfEnrolment : null,
-                            type: "",
-                        
-                            
-                            age: (row.details.dateOfBirthType === 'estimated' ? '~' : '') + calculateAge(row.details.dob),
-                            action:
-                                    <Menu>
-                                      <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                                          Action <span aria-hidden>▾</span>
-                                        </MenuButton>
-                                          <MenuList style={{hover:"#eee"}}>
-                                          <MenuItem >
-                                            <Link
-                                                  to={{pathname: "/household-member/home" , state:row.id, householdId:row.householdId}}>
-                                                  View Dashboard
-                                            </Link>
-                                            
-                                          </MenuItem>
-                                          {/*<MenuItem >{" "}Delete</MenuItem>*/}
-                                          </MenuList>
-                                      </Menu>
-                                     
-                                  })),
-                                  page: query.page,
-                                  totalCount: result.headers['x-total-count'],
-                              })
-                          })
-                  )}      
-                  options={{
-                   
+                              </MenuItem>
+                                  <MenuItem onClick={() => toggleUpdate(row)}>{" "}Edit</MenuItem>
+                              {/*<MenuItem >{" "}Delete</MenuItem>*/}
+                              </MenuList>
+                          </Menu>
+                  
+                }))}              
+                    
+                options={{
+                    headerStyle: {
+                        backgroundColor: "#9F9FA5",
+                        color: "#000",
+                    },
                     searchFieldStyle: {
-                        width : '200%',
+                        width : '300%',
                         margingLeft: '250px',
                     },
-                    filtering: false,
+                    filtering: true,
                     exportButton: false,
                     searchFieldAlignment: 'left',
-                    pageSizeOptions:[10,20,100],
-                    pageSize:10,
-                    debounceInterval: 400
+
                 }}
               />
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
-    </>
+        {newOvcModal ?
+            <NewOvc  modal={newOvcModal} toggle={toggleOvc} householdId={currentHm ? currentHm.householdId : ""} reload={fetchMembers}  householdMember={currentHm && currentHm.householdMemberType == 2 ? currentHm : null}/>
+            : ""
+        }
+
+        {newCaregiverModal ?
+            <NewCareGiver  modal={newCaregiverModal} toggle={toggleCaregiver} householdId={currentHm ? currentHm.householdId : ""} reload={fetchMembers} householdMember={currentHm && currentHm.householdMemberType  == 1 ? currentHm : null}/>
+            : ""
+        }   </>
   )
 }
 

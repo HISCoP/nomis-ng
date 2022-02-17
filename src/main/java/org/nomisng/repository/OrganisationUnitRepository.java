@@ -14,7 +14,7 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
 
     List<OrganisationUnit> findAllByParentOrganisationUnitIdAndOrganisationUnitLevelId(Long parentOrgUnitId, Long orgUnitLevelId);
 
-    //List<OrganisationUnit> findAllByOrganisationUnitLevelId(Long id, Pageable pageable);
+    //List<OrganisationUnit> findAllByOrganisationUnitLevelIdOrderByIdDesc(Long id, Pageable pageable);
 
     Optional<OrganisationUnit> findByNameAndParentOrganisationUnitIdAndArchived(String name, Long parentOrganisationUnitId, int archived);
 
@@ -22,7 +22,7 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
 
     List<OrganisationUnit> findAllByArchivedOrderByIdAsc(int unarchived);
 
-    Page<OrganisationUnit> findAllByOrganisationUnitLevelId(Long organisationUnitLevelId, Pageable pageable);
+    Page<OrganisationUnit> findAllByOrganisationUnitLevelIdOrderByIdDesc(Long organisationUnitLevelId, Pageable pageable);
 
     @Query(value = "SELECT id from organisation_unit WHERE name ilike ?1" +
             " AND description ilike '%local%'AND " +

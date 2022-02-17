@@ -114,7 +114,7 @@ const saveAssessment = (e) => {
     <div>
         {props.household && props.household.id ?
             <CModal show={props.modal} onClose={props.toggle} className={className} backdrop={true} size='xl'>
-                <CModalHeader closeButton>Edit HouseHold</CModalHeader>
+                <CModalHeader closeButton>Edit HouseHold  Vulnerability Assessment</CModalHeader>
                 <CModalBody>
                     <ToastContainer/>
                     <FormRenderer
@@ -130,7 +130,7 @@ const saveAssessment = (e) => {
             </CModal>
             :
             <CModal show={props.modal} onClose={props.toggle} className={className} backdrop={true} size='xl'>
-                <CModalHeader closeButton>New HouseHold</CModalHeader>
+                <CModalHeader closeButton>New HouseHold  Vulnerability Assessment</CModalHeader>
                 <CModalBody>
                     <ToastContainer/>
                     <FormRenderer

@@ -10,13 +10,14 @@ const AssessmentCarePlanHome = (props) => {
     const handleTabChange = (e, { activeIndex }) => setIndex(activeIndex);
     const panes = [
         {
-            menuItem: { key: 'users', icon: 'folder open', content: 'Household Assessments' },
-            render: () => <Assessment setIndex={setIndex} householdId={props.householdId}/>,
-        },
-        {
             menuItem: { key: 'careplan', icon: 'medkit', content: 'Care Plans' },
             render: () => <CarePlan householdId={props.householdId}/>,
+        },
+        {
+            menuItem: { key: 'users', icon: 'folder open', content: 'Achievement Checklist' },
+            render: () => <Assessment setIndex={setIndex} householdId={props.householdId}/>,
         }
+
     ]
 
     return (

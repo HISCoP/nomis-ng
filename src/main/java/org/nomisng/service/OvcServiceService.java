@@ -8,6 +8,7 @@ import org.nomisng.domain.dto.OvcServiceDTO;
 import org.nomisng.domain.entity.Domain;
 import org.nomisng.domain.entity.OvcService;
 import org.nomisng.domain.mapper.OvcServiceMapper;
+import org.nomisng.repository.DomainRepository;
 import org.nomisng.repository.OvcServiceRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import static org.nomisng.util.Constants.ArchiveStatus.*;
 @RequiredArgsConstructor
 public class OvcServiceService {
     private final OvcServiceRepository ovcServiceRepository;
+    private final DomainRepository domainRepository;
     private final OvcServiceMapper ovcServiceMapper;
 
     public OvcService save(OvcServiceDTO ovcServiceDTO) {
@@ -83,7 +85,10 @@ public class OvcServiceService {
         }
         final OvcService ovcService = ovcServiceMapper.toOvcService(ovcServiceDTO);
         ovcService.setId(id);
-        ovcService.setDomainName(ovcService.getDomainByDomainId().getName());
+        String domainName = domainRepository.findByIdAndArchived(ovcServiceDTO.getDomainId(), UN_ARCHIVED)
+                .orElseThrow(() -> new EntityNotFoundException(Domain.class, "Domain Id", ovcServiceDTO.getDomainId() + ""))
+                .getName();
+        ovcService.setDomainName(domainName);
         return ovcServiceRepository.save(ovcService);
     }
 

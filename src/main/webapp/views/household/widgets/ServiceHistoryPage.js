@@ -64,7 +64,7 @@ const ServiceHistoryPage = (props) => {
         //check if it is service provision page (static html) else use formio view
         if(row.formCode == HOUSEHOLD_MEMBER_SERVICE_PROVISION){
             const formData = row.formData[0];
-            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id};
+            const selectedService = {serviceList : formData.data.serviceOffered, serviceDate: formData.data.serviceDate, type:"VIEW", formDataId: formData.id, memberId: row.householdMemberId};
             console.log(selectedService);
             setProvideServiceData(selectedService);
             toggleServiceModal();
@@ -141,7 +141,7 @@ const ServiceHistoryPage = (props) => {
                 options={{modalSize:"xl"}}
             />
 
-            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal}  householdId={props.householdId} reloadSearch={fetchHouseholdServiceHistory}
+            <ProvideService  modal={showServiceModal} toggle={toggleServiceModal} memberId={provideServiceData.memberId}  householdId={props.householdId} reloadSearch={fetchHouseholdServiceHistory}
                              serviceList={provideServiceData.serviceList} serviceDate={provideServiceData.serviceDate}
                              formDataId={provideServiceData.formDataId} encounterId={provideServiceData.encounterId} type={provideServiceData.type}/>
 

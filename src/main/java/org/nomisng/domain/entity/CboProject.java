@@ -34,7 +34,6 @@ public class CboProject {
     private String description;
     @Basic
     @Column(name = "archived")
-    @JsonIgnore
     private Integer archived;
 
     @ManyToOne
@@ -68,10 +67,6 @@ public class CboProject {
     @JsonIgnore
     private String organisationUnitName;
 
-    /*@OneToMany(mappedBy = "cboProjectByCboId")
-    @ToString.Exclude
-    private List<User> usersById;*/
-
     @Transient
     @JsonIgnore
     private List organisationUnits;
@@ -104,11 +99,6 @@ public class CboProject {
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
     @JsonIgnore
     private List<ApplicationUserCboProject> applicationUserCboProjectsById;
-
-    @OneToMany(mappedBy = "cboProjectByCboProjectId")
-    @JsonIgnore
-    @ToString.Exclude
-    public List<HouseholdUniqueIdCboProjectHistory> householdUniqueIdCboProjectHistoriesById;
 
     @OneToMany(mappedBy = "cboProjectByCboProjectId")
     @JsonIgnore

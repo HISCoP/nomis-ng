@@ -111,7 +111,7 @@ const HouseHoldList = (props) => {
                   color="primary" 
                   className="float-right"
                   onClick={toggleNew}
-                >New Household </CButton>
+                >New Household Vulnerability Assessment </CButton>
             </CCardHeader>
             <CCardBody>
             <MaterialTable

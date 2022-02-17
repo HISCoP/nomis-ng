@@ -38,4 +38,6 @@ public class HouseholdMigrationDTO {
     private Long householdId;
 
     private Integer active;
+
+    private int archived;
 }
